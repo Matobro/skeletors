@@ -30,11 +30,11 @@ func _input(event: InputEvent):
 			
 func spawn_unit():
 	var spawned_unit = unit.instantiate()
+	spawned_unit.global_position = mouse_pos
 	get_tree().current_scene.add_child(spawned_unit)
 	spawned_unit.init_unit(unitdata)
 	spawned_unit.commands = commandsData
 	spawned_unit.owner_id = owner_id
-	spawned_unit.global_position = mouse_pos
 	spawned_unit.color_tag.modulate = temp_color
 	player_input.selectable_units.append(spawned_unit)
 	show_unit_on_mouse(false)

@@ -87,7 +87,7 @@ func state_logic(delta): #Actual state logic, what to do in states
 
 func enter_state(new_state, old_state): #mostly for animations
 	state_id += 1
-	if parent.data != null:
+	if parent.data != null: #display state changes in console
 		if parent.owner_id == 1:
 			print("Entering: [", new_state, "] from [", old_state, "] ", state_id)
 	match state:

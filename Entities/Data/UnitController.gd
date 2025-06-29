@@ -8,6 +8,7 @@ class_name Unit
 @onready var color_tag = $Polygon2D
 @onready var state_machine = $UnitStateMachine
 @onready var animation_player = $AnimatedSprite2D
+@onready var aggro_collision = $AggroRange/CollisionShape2D
 var owner_id: int
 var data : UnitData
 var commands: CommandsData
@@ -37,6 +38,7 @@ func init_unit(unit_data):
 	data = unit_data.duplicate()
 	dead = false
 	set_selected(false)
+	aggro_collision.set_deferred("disabled", false)
 	
 	await get_tree().process_frame
 	
