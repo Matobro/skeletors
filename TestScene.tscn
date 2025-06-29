@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dv3rvon240ulo"]
 
-[ext_resource type="Script" uid="uid://dwtk4qqasp13b" path="res://PlayerInput.gd" id="1_mncer"]
-[ext_resource type="Script" uid="uid://cyy8ru024m6fd" path="res://DevSpawnUnit.gd" id="2_cguwc"]
+[ext_resource type="Script" uid="uid://dwtk4qqasp13b" path="res://Player/PlayerInput.gd" id="1_mncer"]
+[ext_resource type="Script" uid="uid://cyy8ru024m6fd" path="res://Dev/Tools/DevSpawnUnit.gd" id="2_cguwc"]
 [ext_resource type="Resource" uid="uid://duorjaur3q5tj" path="res://Commands/DefaultCommands.tres" id="2_wicfy"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wicfy"]
