@@ -27,7 +27,6 @@ animations = [{
 radius = 342.067
 
 [node name="Unit" type="CharacterBody2D" groups=["unit"]]
-y_sort_enabled = true
 input_pickable = true
 script = ExtResource("1_fgnkd")
 
@@ -38,6 +37,7 @@ position = Vector2(0, 6.5)
 shape = SubResource("RectangleShape2D_r47uv")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_vb87f")
 script = ExtResource("4_r47uv")
 

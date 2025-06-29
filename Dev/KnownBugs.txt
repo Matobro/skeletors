@@ -5,6 +5,6 @@ Selecting multiple units and issuing queued commands create multiple visuals(ral
 Drag threshold fucks up if you 'go back' and select in different direction, it should only check it before starting drag x
 
 Weird box select behaviour sometimes x
-Sometimes when you spawn unit, enemy aggroes it out of range, same happens when spawning enemy
-Multiple units fighting is buggy as fuck
-First time idle is called (SOMETIMES) it throws error that idle animation doesnt exist
+Sometimes when you spawn unit, enemy aggroes it out of range, same happens when spawning enemy x
+Multiple units fighting is buggy as fuck x
+First time idle is called (SOMETIMES) it throws error that idle animation doesnt exist o

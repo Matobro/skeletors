@@ -73,8 +73,9 @@ func enter_state(new_state, old_state): #mostly for animations
 		states.attack_moving:
 			animation_player.play("walk")
 		states.aggroing:
-			pass
+			animation_player.play("walk")
 		states.attacking:
+			animation_player.play("idle")
 			if parent.attack_timer <= 0:
 				parent.attack_timer = 0
 		states.dying:

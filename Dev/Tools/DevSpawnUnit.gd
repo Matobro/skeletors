@@ -42,6 +42,7 @@ func spawn_unit():
 
 func show_unit_on_mouse(value):
 	spawn_visual.visible = value
+	spawn_visual.texture = unitdata.avatar
 	
 func _on_create_unit_button_pressed():
 	temp_color = Color(0.5, 2.0, 0.5)
