@@ -2,6 +2,7 @@ extends Resource
 
 class_name UnitData
 
+@export var unit_model_data: UnitModelData
 @export var name: String
 @export var description: String
 @export var avatar: Texture2D
@@ -18,5 +19,6 @@ class_name UnitData
 	"mana_regen": 0.1, 
 	"attack_speed": 1.0, 
 	"base_damage": 1,
+	"attack_damage": 1,
 	"range": 1
 	}

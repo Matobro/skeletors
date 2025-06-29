@@ -2,18 +2,32 @@ extends Node
 
 class_name StateMachine
 
+var frame_counter := 0
+const FRAME_INTERVAL := 2
 var state: String = ""
 var prev_state = null
 var states = {}
 
+var restrict_speed: bool = false
+
 @onready var parent = get_parent()
+@onready var animation_player = get_parent().get_node("AnimatedSprite2D")
 
 func _physics_process(delta):
+	if restrict_speed:
+		frame_counter += 1
+		if frame_counter >= FRAME_INTERVAL:
+			frame_counter = 0
+			update_state_machine(delta)
+	else:
+		update_state_machine(delta)
+			
+func update_state_machine(delta):
 	var new_state = get_transition(delta)
 	if new_state != null:
 		set_state(new_state)
 	state_logic(delta)
-			
+	
 func state_logic(delta):
 	pass
 	

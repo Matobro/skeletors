@@ -1,7 +1,7 @@
 extends Node2D
 
 var unit = preload("res://Entities/Unit.tscn")
-var unitdata = preload("res://Entities/Heroes/Skeletor/SkeletorUnitData.tres")
+var unitdata = preload("res://Entities/Units/Test_Unit.tres")
 var commandsData = preload("res://Commands/DefaultCommands.tres")
 
 var spawning_unit: bool
@@ -10,8 +10,8 @@ var mouse_pos = null
 var temp_color: Color
 
 @onready var spawn_visual = $"../TextureRect"
-@onready var create_unit_button = $"../CanvasLayer/Panel/CreateUnitButton"
-@onready var create_enemy_button = $"../CanvasLayer/Panel/CreateEnemyButton"
+#@onready var create_unit_button = $"../CanvasLayer/DevBox/CreateUnitButton"
+#@onready var create_enemy_button = $"../CanvasLayer/DevBox/CreateEnemyButton"
 @onready var player_input = $"../PlayerInput"
 
 func _ready():
@@ -31,13 +31,11 @@ func _input(event: InputEvent):
 func spawn_unit():
 	var spawned_unit = unit.instantiate()
 	get_tree().current_scene.add_child(spawned_unit)
-	spawned_unit.data = unitdata
+	spawned_unit.init_unit(unitdata)
 	spawned_unit.commands = commandsData
-	spawned_unit.init_unit()
 	spawned_unit.owner_id = owner_id
 	spawned_unit.global_position = mouse_pos
 	spawned_unit.color_tag.modulate = temp_color
-	print(spawned_unit.self_modulate)
 	player_input.selectable_units.append(spawned_unit)
 	show_unit_on_mouse(false)
 	spawning_unit = false

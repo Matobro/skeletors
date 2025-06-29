@@ -14,6 +14,16 @@ const DRAG_THRESHOLD := 50.0
 @onready var selection_box = $"../CanvasLayer/BoxSelection"
 @onready var camera := get_viewport().get_camera_2d()
 
+func _physics_process(delta):
+	if selectable_units.size() > 0:
+		for unit in selectable_units:
+			if unit.dead:
+				selectable_units.erase(unit)
+	if selected_units.size() > 0:
+		for unit in selected_units:
+			if unit.dead:
+				selected_units.erase(unit)
+				
 func _unhandled_input(event):
 	var shift = Input.is_key_pressed(KEY_SHIFT)
 	var pos = get_global_mouse_position()

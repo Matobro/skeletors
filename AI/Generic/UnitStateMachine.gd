@@ -1,5 +1,16 @@
 extends StateMachine
 
+###################################################################################
+#Unit intended behaviour:
+#1. if idle, aka no player input/issued commands -> aggro if enemy comes on range
+#2. commands override every action/state 
+#3. aggro -> move to attack range of CLOSEST FIRST enemy, once unit aggroes,
+# it doesnt change the target anymore, if another unit comes closer just ignore it
+#4. once aggroed unit dies, go back to issued command, for example if it was attack move
+# return to attack move, if no command aka was idle, go back to where you were idling
+#5. if idling and unit attacks (out of aggro range) -> aggro that target
+####################################################################################
+
 func _ready():
 	add_state("idle")
 	add_state("moving")
@@ -12,8 +23,8 @@ func _ready():
 func state_logic(delta): #Actual state logic, what to do in states
 	#print("Player: ", parent.owner_id, " ", parent.data.name, " ", state) #print unit state, eg; "Player 1 Skeletor Idle"
 	### show state over unit ###
-	if parent.command_queue.size() > 0:
-		parent.dev_state.text = parent.command_queue[0].type
+	if parent.data != null:
+		parent.dev_state.text = str("HP: ", parent.data.stats.current_health, "\n", state)
 	############################
 	var command = parent.get_current_command()
 	
@@ -42,26 +53,43 @@ func state_logic(delta): #Actual state logic, what to do in states
 				parent.move_to_target(parent.attack_target.position)
 				
 		states.attacking:
-			pass
-			
+			if parent.attack_target and !parent.attack_target.dead:
+				if parent.attack_timer <= 0:
+					parent.perform_attack()
+					parent.attack_timer = parent.data.stats.attack_speed
+					
+					animation_player.stop()
+					animation_player.play("attack")
 		states.dying:
 			pass
 
 func enter_state(new_state, old_state): #mostly for animations
 	match state:
 		states.idle:
-			pass
+			animation_player.play("idle")
 		states.moving:
-			pass
+			animation_player.play("walk")
+		states.attack_moving:
+			animation_player.play("walk")
 		states.aggroing:
 			pass
 		states.attacking:
-			pass
+			animation_player.play("attack")
 		states.dying:
-			pass
+			print("calling dying state")
+			parent.set_physics_process(false)
+			parent.set_collision_layer(0)
+			parent.set_collision_mask(0)
+			animation_player.connect("animation_finished", Callable(self, "_on_death_animation_finished"), CONNECT_ONE_SHOT)
+			animation_player.play("dying")
 			
 func get_transition(delta): #Handle transitions, if x happens go to state y
+	if parent.dead and state != states.dying:
+		return states.dying
+		
 	match state:
+		states.dying:
+			return null
 		states.idle:
 			if parent.closest_enemy_in_aggro_range() != null:
 				parent.attack_target = parent.closest_enemy_in_aggro_range()
@@ -99,11 +127,21 @@ func get_transition(delta): #Handle transitions, if x happens go to state y
 			return null
 			
 		states.attacking:
-			if parent.attack_target != null:
-				if parent.closest_enemy_in_attack_range() != null:
-					return states.attacking
+			if parent.attack_target == null or parent.attack_target.dead:
+				parent.attack_target = null
+				
+				if parent.is_attack_moving:
+					return states.attack_moving
+				elif parent.get_current_command() != null:
+					return states.idle
+				else:
+					return states.idle
+			
+			if parent.closest_enemy_in_attack_range() == null:
 				return states.aggroing
-			return states.idle
+			
+			return null
 				
 				
-				
+func _on_death_animation_finished():
+	parent.queue_free()

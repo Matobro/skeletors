@@ -3,3 +3,6 @@
 Units bump to eachother and launch themselves into space (no pathfinding) x
 Selecting multiple units and issuing queued commands create multiple visuals(rally points), this is 100% intented feature x
 Drag threshold fucks up if you 'go back' and select in different direction, it should only check it before starting drag x
+
+Weird box select behaviour sometimes x
+Sometimes when you spawn unit, enemy aggroes it out of range, same happens when spawning enemy

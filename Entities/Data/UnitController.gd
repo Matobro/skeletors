@@ -2,13 +2,14 @@ extends CharacterBody2D
 
 class_name Unit
 
-@onready var color_tag = $Polygon2D
-@onready var state_machine = $UnitStateMachine
 @onready var dev_state = $DevState
 
 ###UNIT DATA###
+@onready var color_tag = $Polygon2D
+@onready var state_machine = $UnitStateMachine
+@onready var animation_player = $AnimatedSprite2D
 var owner_id: int
-var data: UnitData
+var data : UnitData
 var commands: CommandsData
 
 ###MOVEMENT###
@@ -23,13 +24,24 @@ var attack_move_target = null
 var attack_target = null
 var possible_targets = [] #all enemies inside aggro range
 var dead: bool
+var attack_timer := 0.0
 
 ### UNIT INITIALIZATION ###
-func init_unit():
+func init_unit(unit_data):
 	await get_tree().process_frame
-	data.stats.current_health = data.stats.max_health
+	
+	animation_player.init_animations(unit_data.unit_model_data)
+	data = unit_data.duplicate()
 	dead = false
 	set_selected(false)
+	
+	await get_tree().process_frame
+	
+	init_stats()
+	
+func init_stats():
+	data.stats.current_health = data.stats.max_health
+	data.stats.attack_damage = data.stats.base_damage
 ### UNIT INITIALIZATION END ###
 
 ### HEALTH LOGIC ###
@@ -39,13 +51,22 @@ func take_damage(damage):
 	data.stats.current_health -= damage
 	clamp(data.stats.current_health, 0, data.stats.max_health)
 	
-	#if data.stats.current_health <= 0:
-		#die()
-		
-func die():
-	pass
+	if data.stats.current_health <= 0:
+		set_selected(false)
+		dead = true
+	
 ### HEALTH LOGIC END ###
 
+### COMBAT LOGIC ###
+func _physics_process(delta):
+	if attack_timer > 0:
+		attack_timer -= delta
+		
+func perform_attack():
+	if attack_target != null:
+		attack_target.take_damage(data.stats.attack_damage)
+		
+### COMBAT LOGIC END ###
 func set_selected(value: bool):
 	selected = value
 	if selected:

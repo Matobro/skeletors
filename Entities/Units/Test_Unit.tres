@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=5 format=3 uid="uid://w5ojk43vfpsa"]
+
+[ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://Entities/Data/UnitData.gd" id="1_ch207"]
+[ext_resource type="Texture2D" uid="uid://dk6w6lq288o7f" path="res://Entities/Units/TestUnit/Test_Unit_Attack.png" id="1_yfety"]
+[ext_resource type="Resource" uid="uid://dbn2rgqy5pauf" path="res://Entities/Units/TestUnit/Test_Unit_Model_Data.tres" id="3_xfr3j"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xfr3j"]
+atlas = ExtResource("1_yfety")
+region = Rect2(8, 8, 32, 32)
+
+[resource]
+script = ExtResource("1_ch207")
+unit_model_data = ExtResource("3_xfr3j")
+name = "Test_Unit"
+description = "Unit for testing"
+avatar = SubResource("AtlasTexture_xfr3j")
+stats = {
+"agility": 1,
+"armor": 1,
+"attack_speed": 2.0,
+"base_damage": 1,
+"current_health": 1,
+"health_regen": 0.1,
+"intelligence": 1,
+"mana_regen": 0.1,
+"max_health": 4,
+"max_mana": 1,
+"movement_speed": 330,
+"range": 20,
+"strength": 1
+}
+metadata/_custom_type_script = "uid://oeoy2vl8vgue"
