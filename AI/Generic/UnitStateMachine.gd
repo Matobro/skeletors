@@ -21,7 +21,6 @@ func _ready():
 	call_deferred("set_state", states.idle)
 
 func state_logic(delta): #Actual state logic, what to do in states
-	#print("Player: ", parent.owner_id, " ", parent.data.name, " ", state) #print unit state, eg; "Player 1 Skeletor Idle"
 	### show state over unit ###
 	if parent.data != null:
 		parent.dev_state.text = str("HP: ", parent.data.stats.current_health, "\n", state)
@@ -57,16 +56,18 @@ func state_logic(delta): #Actual state logic, what to do in states
 				if parent.attack_timer <= 0:
 					parent.perform_attack()
 					parent.attack_timer = parent.data.stats.attack_speed
-					
 					animation_player.stop()
 					animation_player.play("attack")
+			else:
+				parent.attack_target = null
 		states.dying:
 			pass
 
 func enter_state(new_state, old_state): #mostly for animations
 	match state:
 		states.idle:
-			animation_player.play("idle")
+			if animation_player.sprite_frames.has_animation("idle"):
+				animation_player.play("idle")
 		states.moving:
 			animation_player.play("walk")
 		states.attack_moving:
@@ -74,9 +75,9 @@ func enter_state(new_state, old_state): #mostly for animations
 		states.aggroing:
 			pass
 		states.attacking:
-			animation_player.play("attack")
+			if parent.attack_timer <= 0:
+				parent.attack_timer = 0
 		states.dying:
-			print("calling dying state")
 			parent.set_physics_process(false)
 			parent.set_collision_layer(0)
 			parent.set_collision_mask(0)
@@ -86,14 +87,18 @@ func enter_state(new_state, old_state): #mostly for animations
 func get_transition(delta): #Handle transitions, if x happens go to state y
 	if parent.dead and state != states.dying:
 		return states.dying
-		
+	
+	var aggro_target = parent.closest_enemy_in_aggro_range()
+	var target_in_range = parent.closest_enemy_in_attack_range()
+	
 	match state:
 		states.dying:
 			return null
 		states.idle:
-			if parent.closest_enemy_in_aggro_range() != null:
-				parent.attack_target = parent.closest_enemy_in_aggro_range()
-				return states.aggroing
+			if aggro_target != null:
+				if !aggro_target.dead:
+					parent.attack_target = aggro_target
+					return states.aggroing
 			return null #good to know that if you dont return null / have return value for each path it doesnt just 'stay in current state' but instead do nothing sometimes
 			
 		states.moving:
@@ -107,9 +112,8 @@ func get_transition(delta): #Handle transitions, if x happens go to state y
 			
 		states.attack_moving:
 			if parent.attack_target == null:
-				var target_in_aggro_range = parent.closest_enemy_in_aggro_range()
-				if target_in_aggro_range != null:
-					parent.attack_target = target_in_aggro_range
+				if aggro_target != null:
+					parent.attack_target = aggro_target
 					return states.aggroing
 			if parent.attack_move_target != null:
 				if parent.position.distance_to(parent.attack_move_target) < 5.0:
@@ -122,8 +126,10 @@ func get_transition(delta): #Handle transitions, if x happens go to state y
 			
 		states.aggroing:
 			if parent.attack_target != null:
-				if parent.closest_enemy_in_attack_range() != null:
+				if target_in_range != null:
 					return states.attacking
+			elif parent.attack_target == null:
+				return states.idle
 			return null
 			
 		states.attacking:
@@ -137,7 +143,7 @@ func get_transition(delta): #Handle transitions, if x happens go to state y
 				else:
 					return states.idle
 			
-			if parent.closest_enemy_in_attack_range() == null:
+			if target_in_range == null:
 				return states.aggroing
 			
 			return null

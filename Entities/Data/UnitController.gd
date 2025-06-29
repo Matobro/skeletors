@@ -162,6 +162,11 @@ func compare_distance(target_a, target_b):
 	return position.distance_to(target_a.position) < position.distance_to(target_b.position)
 
 func closest_enemy_in_aggro_range() -> Unit: #closest enemy target in aggro range
+	for unit in possible_targets:
+		if unit.dead:
+			if attack_target == unit:
+				attack_target = null
+				possible_targets.erase(unit)
 	if possible_targets.size() > 0:
 		possible_targets.sort_custom(Callable(self, "compare_distance"))
 		return possible_targets[0]

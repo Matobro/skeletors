@@ -26,7 +26,7 @@ stats = {
 "max_health": 4,
 "max_mana": 1,
 "movement_speed": 330,
-"range": 20,
+"range": 35,
 "strength": 1
 }
 metadata/_custom_type_script = "uid://oeoy2vl8vgue"
