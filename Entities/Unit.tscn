@@ -1,0 +1,63 @@
+[gd_scene load_steps=8 format=3 uid="uid://bj7ef3mp2wfwp"]
+
+[ext_resource type="Script" uid="uid://u4nos087wdfr" path="res://Entities/Data/UnitController.gd" id="1_fgnkd"]
+[ext_resource type="Texture2D" uid="uid://cgy3ygrb0xwcm" path="res://Entities/Data/Sprites/Skeleton worker.png" id="2_ofevo"]
+[ext_resource type="PackedScene" uid="uid://dyju2wf1d0htn" path="res://AI/Generic/UnitStateMachine.tscn" id="2_r47uv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r47uv"]
+size = Vector2(20, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e4orr"]
+atlas = ExtResource("2_ofevo")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vb87f"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e4orr")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fgnkd"]
+radius = 342.067
+
+[node name="Unit" type="CharacterBody2D" groups=["unit"]]
+input_pickable = true
+script = ExtResource("1_fgnkd")
+
+[node name="UnitStateMachine" parent="." instance=ExtResource("2_r47uv")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 6.5)
+shape = SubResource("RectangleShape2D_r47uv")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_vb87f")
+
+[node name="AggroRange" type="Area2D" parent="."]
+modulate = Color(1, 1, 1, 0.25)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AggroRange"]
+z_index = -1
+shape = SubResource("CircleShape2D_fgnkd")
+debug_color = Color(0.995729, 0, 0.200035, 0.42)
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+position = Vector2(84, 26)
+polygon = PackedVector2Array(-114, -56, -100, -56, -100, -44, -114, -44)
+
+[node name="DevState" type="Label" parent="."]
+offset_left = -32.0
+offset_top = -214.0
+offset_right = 31.0
+offset_bottom = -32.0
+text = "null"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[connection signal="body_entered" from="AggroRange" to="." method="_on_aggro_range_body_entered"]
+[connection signal="body_exited" from="AggroRange" to="." method="_on_aggro_range_body_exited"]

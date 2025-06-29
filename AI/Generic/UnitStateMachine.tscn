@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dyju2wf1d0htn"]
+
+[ext_resource type="Script" uid="uid://b6je5oe7328sv" path="res://AI/Generic/UnitStateMachine.gd" id="1_dokdv"]
+
+[node name="UnitStateMachine" type="Node2D"]
+script = ExtResource("1_dokdv")

@@ -1,0 +1,69 @@
+[gd_scene load_steps=6 format=3 uid="uid://dv3rvon240ulo"]
+
+[ext_resource type="Script" uid="uid://dwtk4qqasp13b" path="res://PlayerInput.gd" id="1_mncer"]
+[ext_resource type="Script" uid="uid://cyy8ru024m6fd" path="res://DevSpawnUnit.gd" id="2_cguwc"]
+[ext_resource type="Resource" uid="uid://duorjaur3q5tj" path="res://Commands/DefaultCommands.tres" id="2_wicfy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wicfy"]
+bg_color = Color(0, 0, 0.203922, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.223529, 0.184314, 0.670588, 1)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_wicfy"]
+
+[node name="World" type="Node2D"]
+
+[node name="PlayerInput" type="Node2D" parent="."]
+script = ExtResource("1_mncer")
+commands = ExtResource("2_wicfy")
+
+[node name="DevSpawnUnit" type="Node2D" parent="."]
+script = ExtResource("2_cguwc")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="Panel" parent="CanvasLayer"]
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 237.0
+offset_bottom = 160.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_wicfy")
+
+[node name="CreateUnitButton" type="Button" parent="CanvasLayer/Panel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 9.0
+offset_right = 126.0
+offset_bottom = 40.0
+text = "Create Unit"
+
+[node name="CreateEnemyButton" type="Button" parent="CanvasLayer/Panel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 45.0
+offset_right = 126.0
+offset_bottom = 76.0
+text = "Create Enemy"
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+color = Color(1, 1, 1, 0.0980392)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+offset_left = 282.0
+offset_top = 153.0
+offset_right = 297.0
+offset_bottom = 168.0
+texture = SubResource("PlaceholderTexture2D_wicfy")
+
+[connection signal="pressed" from="CanvasLayer/Panel/CreateUnitButton" to="DevSpawnUnit" method="_on_create_unit_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Panel/CreateEnemyButton" to="DevSpawnUnit" method="_on_create_enemy_button_pressed"]

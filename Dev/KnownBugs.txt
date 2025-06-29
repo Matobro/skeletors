@@ -1,0 +1,5 @@
+26/06/2025 x-not fixed o-fixed
+----------mato
+Units bump to eachother and launch themselves into space (no pathfinding) x
+Selecting multiple units and issuing queued commands create multiple visuals(rally points), this is 100% intented feature x
+Drag threshold fucks up if you 'go back' and select in different direction, it should only check it before starting drag x
