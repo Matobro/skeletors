@@ -4,6 +4,8 @@ class_name StateMachine
 
 var frame_counter := 0
 const FRAME_INTERVAL := 2
+
+var state_id: int = 0
 var state: String = ""
 var prev_state = null
 var states = {}

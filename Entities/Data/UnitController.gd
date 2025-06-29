@@ -24,6 +24,8 @@ var attack_move_target = null
 var attack_target = null
 var possible_targets = [] #all enemies inside aggro range
 var dead: bool
+var has_attacked: bool
+var attack_anim_timer := 0.0
 var attack_timer := 0.0
 
 ### UNIT INITIALIZATION ###
@@ -59,7 +61,7 @@ func take_damage(damage):
 
 ### COMBAT LOGIC ###
 func _physics_process(delta):
-	if attack_timer > 0:
+	if attack_timer >= 0:
 		attack_timer -= delta
 		
 func perform_attack():

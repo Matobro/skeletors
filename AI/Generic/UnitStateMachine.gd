@@ -24,6 +24,9 @@ func state_logic(delta): #Actual state logic, what to do in states
 	### show state over unit ###
 	if parent.data != null:
 		parent.dev_state.text = str("HP: ", parent.data.stats.current_health, "\n", state)
+		
+		#if parent.owner_id == 1:
+			#print(parent.attack_timer)
 	############################
 	var command = parent.get_current_command()
 	
@@ -53,17 +56,36 @@ func state_logic(delta): #Actual state logic, what to do in states
 				
 		states.attacking:
 			if parent.attack_target and !parent.attack_target.dead:
+				parent.attack_anim_timer += delta
+				
 				if parent.attack_timer <= 0:
+					if animation_player.animation != "attack":
+						parent.attack_anim_timer = 0.0
+						parent.attack_timer = parent.data.stats.attack_speed
+						parent.has_attacked = false
+						animation_player.play("attack")
+						print("stage 1")
+	
+				if !parent.has_attacked and parent.attack_anim_timer >= parent.data.unit_model_data.animation_attack_point:
 					parent.perform_attack()
-					parent.attack_timer = parent.data.stats.attack_speed
-					animation_player.stop()
-					animation_player.play("attack")
+					parent.has_attacked = true
+					print("stage 2")
+						
+				if parent.attack_anim_timer >= parent.data.unit_model_data.animation_attack_duration:
+					parent.attack_anim_timer = 0.0
+					animation_player.play("idle")
+					parent.has_attacked = false
+					print("stage 3")
 			else:
 				parent.attack_target = null
 		states.dying:
 			pass
 
 func enter_state(new_state, old_state): #mostly for animations
+	state_id += 1
+	if parent.data != null:
+		if parent.owner_id == 1:
+			print("Entering: [", new_state, "] from [", old_state, "] ", state_id)
 	match state:
 		states.idle:
 			if animation_player.sprite_frames.has_animation("idle"):
@@ -76,8 +98,6 @@ func enter_state(new_state, old_state): #mostly for animations
 			animation_player.play("walk")
 		states.attacking:
 			animation_player.play("idle")
-			if parent.attack_timer <= 0:
-				parent.attack_timer = 0
 		states.dying:
 			parent.set_physics_process(false)
 			parent.set_collision_layer(0)
