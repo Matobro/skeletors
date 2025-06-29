@@ -19,12 +19,13 @@ var command_queue := [] #stores commands, "type" "position" eg, "attack_move" "V
 var rally_points: = [] #holds visuals of rally points from queued commands
 
 ###COMBAT###
-var is_attack_moving: bool = false
 var attack_move_target = null
 var attack_target = null
 var possible_targets = [] #all enemies inside aggro range
+var is_attack_moving: bool = false
 var dead: bool
 var has_attacked: bool
+var is_attack_committed: bool
 var attack_anim_timer := 0.0
 var attack_timer := 0.0
 
@@ -85,10 +86,11 @@ func set_selected(value: bool):
 ### COMMAND LOGIC ###
 func issue_command(command_type: String, pos: Vector2, queue: bool, player_id: int) -> void:
 	if owner_id != player_id: return
-	
+
 	if queue:
 		command_queue.append({"type": command_type, "position": pos})
 	else:
+		is_attack_committed = false
 		command_queue.clear()
 		movement_target = null
 		attack_move_target = null

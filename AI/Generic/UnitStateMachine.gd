@@ -55,29 +55,33 @@ func state_logic(delta): #Actual state logic, what to do in states
 				parent.move_to_target(parent.attack_target.position)
 				
 		states.attacking:
-			if parent.attack_target and !parent.attack_target.dead:
+			if parent.is_attack_committed:
 				parent.attack_anim_timer += delta
 				
-				if parent.attack_timer <= 0:
-					if animation_player.animation != "attack":
-						parent.attack_anim_timer = 0.0
-						parent.attack_timer = parent.data.stats.attack_speed
-						parent.has_attacked = false
-						animation_player.play("attack")
-						print("stage 1")
-	
+				###Deal damage --- stage 2
 				if !parent.has_attacked and parent.attack_anim_timer >= parent.data.unit_model_data.animation_attack_point:
 					parent.perform_attack()
 					parent.has_attacked = true
-					print("stage 2")
-						
+				
+				###Finish attack animation --- stage 3
 				if parent.attack_anim_timer >= parent.data.unit_model_data.animation_attack_duration:
 					parent.attack_anim_timer = 0.0
-					animation_player.play("idle")
 					parent.has_attacked = false
-					print("stage 3")
+					parent.is_attack_committed = false
+					animation_player.play("idle")
+					
 			else:
-				parent.attack_target = null
+				###Finish attack
+				if parent.attack_target == null or parent.attack_target.dead:
+					parent.attack_target = null
+					return
+					##Start new attack
+				elif parent.attack_timer <= 0:
+					parent.is_attack_committed = true
+					parent.has_attacked = false
+					parent.attack_anim_timer = 0.0
+					parent.attack_timer = parent.data.stats.attack_speed
+					animation_player.play("attack")
 		states.dying:
 			pass
 
@@ -164,7 +168,7 @@ func get_transition(delta): #Handle transitions, if x happens go to state y
 				else:
 					return states.idle
 			
-			if target_in_range == null:
+			if target_in_range == null and !parent.is_attack_committed:
 				return states.aggroing
 			
 			return null
