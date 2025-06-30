@@ -33,14 +33,8 @@ var has_attacked: bool
 var is_attack_committed: bool
 var attack_anim_timer := 0.0
 var attack_timer := 0.0
+var attackers := []
 
-func _draw():
-	print("drawing")
-	if movement_target:
-		draw_circle(movement_target, 50, Color.RED)
-func _process(delta: float):
-	NOTIFICATION_DRAW
-	
 ### UNIT INITIALIZATION ###
 func init_unit(unit_data):
 	await get_tree().process_frame
@@ -73,16 +67,36 @@ func take_damage(damage):
 	
 ### HEALTH LOGIC END ###
 
-### COMBAT LOGIC ###
 func _physics_process(delta):
 	if attack_timer >= 0:
 		attack_timer -= delta
 		
+### COMBAT LOGIC ###
+func register_attacker(unit: Node2D):
+	if !attackers.has(unit):
+		attackers.append(unit)
+		
+func unregister_attacker(unit: Node2D):
+	attackers.erase(unit)
+
+func get_attack_index(unit: Node2D) -> int:
+	return attackers.find(unit)
+	
 func perform_attack():
 	if attack_target != null:
 		attack_target.take_damage(data.stats.attack_damage)
-		
-### COMBAT LOGIC END ###
+
+func on_attack_start():
+	if attack_target:
+		attack_target.register_attacker(self)
+
+func on_attack_stop():
+	if attack_target:
+		attack_target.unregister_attacker(self)
+	is_attack_committed = false
+	has_attacked = false
+	attack_anim_timer = 0.0
+	
 func set_selected(value: bool):
 	selected = value
 	if selected:
@@ -184,17 +198,41 @@ func get_current_command():
 ### COMMAND LOGIC END ###
 
 ### MOVEMENT LOGIC ###
-func move_to_target(target_pos):
-	if pathfinding_agent.target_position != target_pos:
-		pathfinding_agent.target_position = target_pos
-
+func move_to_target():
+	if pathfinding_agent.is_navigation_finished():
+		if attack_target != null and position.distance_to(pathfinding_agent.target_position) > data.stats.range:
+			print("getting new path")
+			var new_orbit = get_orbital_position()
+			pathfinding_agent.target_position = new_orbit
+			return
+			
 	var next_path_point = pathfinding_agent.get_next_path_position()
 	var direction = (next_path_point - global_position).normalized()
 	velocity = direction * data.stats.movement_speed
+	velocity += get_separation_force()
 	move_and_slide()
 	#var direction = (tar - position)
 	#velocity = direction.normalized() * data.stats.movement_speed
 	#move_and_slide()
+	
+func get_separation_force():
+	var force = Vector2.ZERO
+	for other in get_tree().get_nodes_in_group("unit"):
+		if other == self: continue
+		var diff = global_position - other.global_position
+		var distance = diff.length()
+		if distance < 50 and distance > 0:
+			force += diff.normalized() / distance
+	return force * 5000
+	
+func get_orbital_position():
+	var idx = attack_target.get_attack_index(self)
+	var total = attack_target.attackers.size()
+	var angle_offset = TAU / total
+	var angle = idx * angle_offset
+	var radius = data.stats.range * 0.9
+
+	return attack_target.global_position + Vector2.RIGHT.rotated(angle) * radius
 ### MOVEMENT LOGIC END ###
 
 ### AGGRO LOGIC ###

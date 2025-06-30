@@ -104,24 +104,24 @@ func handle_commands(unit, pos, shift, click_target):
 				
 func calculate_unit_formation(total_units, pos):
 	var unit_targets := []
+	var spacing := 82 
+	var columns = int(ceil(sqrt(total_units)))
+	var rows := int(ceil(total_units / float(columns)))
+	
+	var total_width = (columns - 1) * spacing
+	var total_height = (rows - 1) * spacing
+	
 	for i in range(total_units):
-		var unit = selected_units[i]
-					
-		var offset := Vector2.ZERO
-		if total_units > 1:
-			var columns = int(ceil(sqrt(total_units)))
-			var spacing := 32 
-			var row = i / columns
-			var column = i % columns
-						
-			var formation_center_offset := Vector2(
-				(columns - i) * spacing / 2,
-				(columns - i) * spacing / 2
-			)
-						
-			offset = Vector2(column * spacing, row * spacing) - formation_center_offset
-		var target_pos = pos + offset
-		unit_targets.append(target_pos)
+		var row = i / columns
+		var column = i % columns
+		
+		var offset := Vector2(
+			column * spacing - total_width / 2,
+			row * spacing - total_height / 2
+		)
+		
+		offset += Vector2(randf_range(-20, 20), randf_range(-20, 20))
+		unit_targets.append(pos + offset)
 	
 	return unit_targets
 		

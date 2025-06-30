@@ -46,11 +46,12 @@ func state_logic(delta): #Actual state logic, what to do in states
 		states.moving:
 			if parent.movement_target != null:
 				parent.pathfinding_agent.target_position = parent.movement_target
-				parent.move_to_target(parent.movement_target)
+				parent.move_to_target()
 				
 		states.attack_moving:
 			if parent.attack_move_target != null:
-				parent.move_to_target(parent.attack_move_target)
+				parent.pathfinding_agent.target_position = parent.attack_move_target
+				parent.move_to_target()
 		
 		states.following:
 			if parent.follow_target == null or parent.follow_target.dead:
@@ -62,13 +63,13 @@ func state_logic(delta): #Actual state logic, what to do in states
 				else:
 					animation_player.play("walk")
 					parent.pathfinding_agent.target_position = parent.follow_target.global_position
-					parent.move_to_target(parent.follow_target.position)
+				parent.move_to_target()
 					
 		states.aggroing:
 			if parent.attack_target != null:
-				parent.pathfinding_agent.target_position = parent.attack_target.global_position
-				parent.move_to_target(parent.attack_target.global_position)
-				
+				var orbital_pos = parent.get_orbital_position()
+				parent.pathfinding_agent.target_position = orbital_pos
+				parent.move_to_target()
 		states.attacking:
 			if parent.is_attack_committed:
 				parent.attack_anim_timer += delta
@@ -114,6 +115,8 @@ func enter_state(new_state, old_state): #mostly for animations
 		states.attack_moving:
 			animation_player.play("walk")
 		states.aggroing:
+			if parent.attack_target != null:
+				parent.attack_target.register_attacker(parent)
 			animation_player.play("walk")
 		states.attacking:
 			animation_player.play("idle")
@@ -123,7 +126,12 @@ func enter_state(new_state, old_state): #mostly for animations
 			parent.set_collision_mask(0)
 			animation_player.connect("animation_finished", Callable(self, "_on_death_animation_finished"), CONNECT_ONE_SHOT)
 			animation_player.play("dying")
-			
+
+func exit_state(old_state, new_state):
+	match state:
+		states.attacking:
+			if parent.attack_target != null:
+				parent.attack_target.unregister_attacker(parent)
 func get_transition(delta): #Handle transitions, if x happens go to state y
 	if parent.dead and state != states.dying:
 		return states.dying
@@ -167,15 +175,17 @@ func get_transition(delta): #Handle transitions, if x happens go to state y
 			return null
 			
 		states.aggroing:
-			if parent.attack_target != null:
+			if parent.attack_target != null and !parent.attack_target.dead:
 				if target_in_range != null:
 					return states.attacking
-			elif parent.attack_target == null:
+			elif parent.attack_target == null or parent.attack_target.dead:
+				parent.attack_target = null
 				return states.idle
 			return null
 			
 		states.attacking:
 			if parent.attack_target == null or parent.attack_target.dead:
+				parent.on_attack_stop()
 				parent.attack_target = null
 				
 				if parent.is_attack_moving:
@@ -186,6 +196,7 @@ func get_transition(delta): #Handle transitions, if x happens go to state y
 					return states.idle
 			
 			if target_in_range == null and !parent.is_attack_committed:
+				parent.on_attack_stop()
 				return states.aggroing
 			
 			return null

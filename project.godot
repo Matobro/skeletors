@@ -14,6 +14,10 @@ config/name="Skeletors"
 run/main_scene="uid://dv3rvon240ulo"
 config/features=PackedStringArray("4.4", "Forward Plus")
 
+[autoload]
+
+FormationUtils="*res://AI/Generic/FormationUtils.gd"
+
 [global_group]
 
 unit=""

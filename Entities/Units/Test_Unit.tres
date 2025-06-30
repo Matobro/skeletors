@@ -23,7 +23,7 @@ stats = {
 "health_regen": 0.1,
 "intelligence": 1,
 "mana_regen": 0.1,
-"max_health": 4,
+"max_health": 100,
 "max_mana": 1,
 "movement_speed": 330,
 "range": 50,
