@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://b78guoeubqseh"]
+
+[ext_resource type="Script" uid="uid://dwtk4qqasp13b" path="res://Player/PlayerInput.gd" id="1_ib60y"]
+[ext_resource type="Script" uid="uid://d2y2w3vn7wtfw" path="res://Player/CameraController.gd" id="2_cliar"]
+
+[node name="PlayerObject" type="Node2D"]
+
+[node name="PlayerInput" type="Node2D" parent="."]
+script = ExtResource("1_ib60y")
+
+[node name="PlayerCameraController" type="Node2D" parent="."]
+script = ExtResource("2_cliar")
+
+[node name="PlayerCamera" type="Camera2D" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="BoxSelection" type="ColorRect" parent="CanvasLayer"]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+color = Color(1, 1, 1, 0.0980392)

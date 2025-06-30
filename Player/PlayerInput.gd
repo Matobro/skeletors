@@ -56,10 +56,8 @@ func _unhandled_input(event):
 			var click_target = check_click_hit(pos)
 			if selected_units.size() > 0:
 			#Issue move command to every valid selected unit
-				var valid_units = 0
 				for unit in selected_units:
 					if unit.owner_id != player_id: continue
-					valid_units += 1
 					#attack
 					if click_target != null:
 						if click_target.owner_id == 10:
@@ -70,12 +68,12 @@ func _unhandled_input(event):
 					else:
 						#move
 						unit.issue_command("move", pos, shift, player_id, null)
-				#Create move command visual at clicked position	
-				if valid_units > 0:
-					var command_instance = commands.command_object.instantiate()
-					command_instance.position = pos
-					get_tree().current_scene.add_child(command_instance)
-					command_instance.init_node(commands.move_command, true)		
+				##Create move command visual at clicked position	- why is this here
+				#if valid_units > 0:
+					#var command_instance = commands.command_object.instantiate()
+					#command_instance.position = pos
+					#get_tree().current_scene.add_child(command_instance)
+					#command_instance.init_node(commands.move_command, true)		
 	
 	#Mouse movement + leftclick behaviour	
 	elif event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
@@ -94,6 +92,7 @@ func start_drag():
 	selection_box.size = Vector2.ZERO
 	
 func update_drag(current_pos: Vector2):
+	print("box select active")
 	var top_left = Vector2(
 		min(drag_start.x, current_pos.x),
 		min(drag_start.y, current_pos.y)
@@ -111,6 +110,7 @@ func end_drag(mouse_pos: Vector2, shift):
 	select_units_in_box(Rect2(selection_box.global_position, selection_box.size), shift)
 	
 func select_units_in_box(box: Rect2, shift):
+	print("box selecting")
 	if !shift:
 		for unit in selected_units:
 			unit.set_selected(false)
@@ -128,7 +128,7 @@ func select_units_in_box(box: Rect2, shift):
 func check_click_hit(mouse_pos: Vector2):
 	var space_state = get_world_2d().direct_space_state
 	var shape := CircleShape2D.new()
-	shape.radius = 10.0
+	shape.radius = 30.0
 	
 	var query = PhysicsShapeQueryParameters2D.new()
 	query.shape = shape
@@ -148,13 +148,19 @@ func check_click_hit(mouse_pos: Vector2):
 func select_unit_at_mouse_pos(mouse_pos: Vector2, shift):
 	var result = check_click_hit(mouse_pos)
 	if result:
+		print("single selecting - target [", result,"]")
 		if !shift:
 			for unit in selected_units:
 				unit.set_selected(false)
-				selected_units.clear()
-				selected_units.append(result)
-				result.set_selected(true)
-	#else: -deselect everything if clicking nothing, disabled for now
+			
+			selected_units.clear()
+		
+		result.set_selected(true)
+		selected_units.append(result)
+		
+		#unselect all units if clicking ground, disabled for now cause it fucks up selecting multiple units
+		#when you first select one and then add more with box select
+	#elif result == null:
 		#for unit in selected_units:
 			#unit.set_selected(false)
 		#selected_units.clear()
