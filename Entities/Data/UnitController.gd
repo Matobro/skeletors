@@ -13,6 +13,8 @@ var owner_id: int
 var data : UnitData
 var commands: CommandsData
 
+##NAVIGATION##
+@onready var pathfinding_agent : NavigationAgent2D = $Pathfinding
 ###MOVEMENT###
 var selected: bool
 var following: bool
@@ -32,6 +34,13 @@ var is_attack_committed: bool
 var attack_anim_timer := 0.0
 var attack_timer := 0.0
 
+func _draw():
+	print("drawing")
+	if movement_target:
+		draw_circle(movement_target, 50, Color.RED)
+func _process(delta: float):
+	NOTIFICATION_DRAW
+	
 ### UNIT INITIALIZATION ###
 func init_unit(unit_data):
 	await get_tree().process_frame
@@ -112,9 +121,11 @@ func issue_command(command_type: String, pos: Vector2, queue: bool, player_id: i
 		
 		if command_type == "move":
 			movement_target = pos
+			pathfinding_agent.target_position = pos
 			state_machine.set_state(state_machine.states.moving)
 		elif command_type == "attack_move":
 			attack_move_target = pos
+			pathfinding_agent.target_position = pos
 			is_attack_moving = true
 			state_machine.set_state(state_machine.states.attack_moving)
 		elif command_type == "attack":
@@ -173,11 +184,17 @@ func get_current_command():
 ### COMMAND LOGIC END ###
 
 ### MOVEMENT LOGIC ###
-func move_to_target(tar):
-	#if tar == null: return
-	var direction = (tar - position)
-	velocity = direction.normalized() * data.stats.movement_speed
+func move_to_target(target_pos):
+	if pathfinding_agent.target_position != target_pos:
+		pathfinding_agent.target_position = target_pos
+
+	var next_path_point = pathfinding_agent.get_next_path_position()
+	var direction = (next_path_point - global_position).normalized()
+	velocity = direction * data.stats.movement_speed
 	move_and_slide()
+	#var direction = (tar - position)
+	#velocity = direction.normalized() * data.stats.movement_speed
+	#move_and_slide()
 ### MOVEMENT LOGIC END ###
 
 ### AGGRO LOGIC ###

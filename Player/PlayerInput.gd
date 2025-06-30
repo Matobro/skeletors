@@ -27,6 +27,8 @@ func _physics_process(delta):
 func _unhandled_input(event):
 	var shift = Input.is_key_pressed(KEY_SHIFT)
 	var pos = get_global_mouse_position()
+	var click_target = check_click_hit(pos)
+	var total_units := selected_units.size()
 	
 	if event.is_action_pressed("a"):
 		attack_moving = true
@@ -36,11 +38,21 @@ func _unhandled_input(event):
 	#Leftclick behaviour
 	if event.is_action_pressed("mouse_left"):
 		if attack_moving:
-			if selected_units.size() > 0:
-				for unit in selected_units:
-					unit.issue_command("attack_move", pos, shift, player_id, null)
-				dragging = false
-				selection_box.visible = false
+			if total_units == 0: return
+			
+			#calculate formation in which units arrive at target so they dont clump up
+			var formation_targets = calculate_unit_formation(total_units, pos)
+			
+			#issue commands to units with altered end position based on formation
+			for i in range(total_units):
+				var unit = selected_units[i]
+				var target_pos = formation_targets[i]
+				if target_pos == null: continue
+				
+				unit.issue_command("attack_move", target_pos, shift, player_id, null)
+				
+			dragging = false
+			selection_box.visible = false
 		else:
 			drag_start = event.position
 			select_unit_at_mouse_pos(pos, shift)
@@ -53,27 +65,20 @@ func _unhandled_input(event):
 	#Rightclick behaviour			
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
 		if event.pressed:
-			var click_target = check_click_hit(pos)
-			if selected_units.size() > 0:
-			#Issue move command to every valid selected unit
-				for unit in selected_units:
-					if unit.owner_id != player_id: continue
-					#attack
-					if click_target != null:
-						if click_target.owner_id == 10:
-							unit.issue_command("attack", click_target.position, shift, player_id, click_target)
-						else:
-							#follow
-							unit.issue_command("follow", pos, shift, player_id, click_target)
-					else:
-						#move
-						unit.issue_command("move", pos, shift, player_id, null)
-				##Create move command visual at clicked position	- why is this here
-				#if valid_units > 0:
-					#var command_instance = commands.command_object.instantiate()
-					#command_instance.position = pos
-					#get_tree().current_scene.add_child(command_instance)
-					#command_instance.init_node(commands.move_command, true)		
+			#return if no units selected
+			if total_units == 0: return
+			
+			#calculate formation in which units arrive at target so they dont clump up
+			var formation_targets = calculate_unit_formation(total_units, pos)
+			
+			#issue commands to units with altered end position based on formation
+			for i in range(total_units):
+				var unit = selected_units[i]
+				var target_pos = formation_targets[i]
+				if target_pos == null: continue
+				
+				handle_commands(unit, target_pos, shift, click_target)
+
 	
 	#Mouse movement + leftclick behaviour	
 	elif event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
@@ -84,6 +89,43 @@ func _unhandled_input(event):
 				start_drag() #Start box select
 			update_drag(event.position)
 
+func handle_commands(unit, pos, shift, click_target):
+	if unit.owner_id == player_id:
+		#attack
+		if click_target != null:
+			if click_target.owner_id == 10:
+				unit.issue_command("attack", pos, shift, player_id, click_target)
+			else:
+				#follow
+				unit.issue_command("follow", pos, shift, player_id, click_target)
+		else:
+			#move
+			unit.issue_command("move", pos, shift, player_id, null)
+				
+func calculate_unit_formation(total_units, pos):
+	var unit_targets := []
+	for i in range(total_units):
+		var unit = selected_units[i]
+					
+		var offset := Vector2.ZERO
+		if total_units > 1:
+			var columns = int(ceil(sqrt(total_units)))
+			var spacing := 32 
+			var row = i / columns
+			var column = i % columns
+						
+			var formation_center_offset := Vector2(
+				(columns - i) * spacing / 2,
+				(columns - i) * spacing / 2
+			)
+						
+			offset = Vector2(column * spacing, row * spacing) - formation_center_offset
+		var target_pos = pos + offset
+		unit_targets.append(target_pos)
+	
+	return unit_targets
+		
+			#final_target = pos + offset
 ###Box select logic###
 func start_drag():
 	dragging = true

@@ -45,6 +45,7 @@ func state_logic(delta): #Actual state logic, what to do in states
 						
 		states.moving:
 			if parent.movement_target != null:
+				parent.pathfinding_agent.target_position = parent.movement_target
 				parent.move_to_target(parent.movement_target)
 				
 		states.attack_moving:
@@ -60,11 +61,13 @@ func state_logic(delta): #Actual state logic, what to do in states
 					animation_player.play("idle")
 				else:
 					animation_player.play("walk")
+					parent.pathfinding_agent.target_position = parent.follow_target.global_position
 					parent.move_to_target(parent.follow_target.position)
 					
 		states.aggroing:
 			if parent.attack_target != null:
-				parent.move_to_target(parent.attack_target.position)
+				parent.pathfinding_agent.target_position = parent.attack_target.global_position
+				parent.move_to_target(parent.attack_target.global_position)
 				
 		states.attacking:
 			if parent.is_attack_committed:

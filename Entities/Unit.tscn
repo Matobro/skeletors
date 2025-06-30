@@ -63,5 +63,11 @@ text = "null"
 horizontal_alignment = 1
 vertical_alignment = 2
 
+[node name="Pathfinding" type="NavigationAgent2D" parent="."]
+avoidance_enabled = true
+radius = 100.0
+time_horizon_agents = 5.0
+debug_path_custom_color = Color(1, 1, 1, 0.2)
+
 [connection signal="body_entered" from="AggroRange" to="." method="_on_aggro_range_body_entered"]
 [connection signal="body_exited" from="AggroRange" to="." method="_on_aggro_range_body_exited"]

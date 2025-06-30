@@ -1,7 +1,7 @@
 extends Node2D
 
 const CAMERA_BORDER_SIZE = 20
-var edge_scroll_speed: int = 800
+var edge_scroll_speed: int = 1000
 var min_zoom := 0.25
 var max_zoom := 2.0
 var zoom_speed := 0.1
