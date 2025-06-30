@@ -38,7 +38,7 @@ func _unhandled_input(event):
 		if attack_moving:
 			if selected_units.size() > 0:
 				for unit in selected_units:
-					unit.issue_command("attack_move", pos, shift, player_id)
+					unit.issue_command("attack_move", pos, shift, player_id, null)
 				dragging = false
 				selection_box.visible = false
 		else:
@@ -53,14 +53,23 @@ func _unhandled_input(event):
 	#Rightclick behaviour			
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
 		if event.pressed:
+			var click_target = check_click_hit(pos)
 			if selected_units.size() > 0:
 			#Issue move command to every valid selected unit
 				var valid_units = 0
 				for unit in selected_units:
 					if unit.owner_id != player_id: continue
 					valid_units += 1
-					unit.issue_command("move", pos, shift, player_id)
-				
+					#attack
+					if click_target != null:
+						if click_target.owner_id == 10:
+							unit.issue_command("attack", click_target.position, shift, player_id, click_target)
+						else:
+							#follow
+							unit.issue_command("follow", pos, shift, player_id, click_target)
+					else:
+						#move
+						unit.issue_command("move", pos, shift, player_id, null)
 				#Create move command visual at clicked position	
 				if valid_units > 0:
 					var command_instance = commands.command_object.instantiate()
@@ -116,8 +125,7 @@ func select_units_in_box(box: Rect2, shift):
 				unit.set_selected(true)
 ###Box select logic end###		
 
-###Single select logic###
-func select_unit_at_mouse_pos(mouse_pos: Vector2, shift):
+func check_click_hit(mouse_pos: Vector2):
 	var space_state = get_world_2d().direct_space_state
 	var shape := CircleShape2D.new()
 	shape.radius = 10.0
@@ -133,12 +141,19 @@ func select_unit_at_mouse_pos(mouse_pos: Vector2, shift):
 	if results.size() > 0:
 		var collider = results[0].collider
 		if collider and collider.has_method("set_selected"):
-			if !shift:
-				for unit in selected_units:
-					unit.set_selected(false)
+			return collider
+		return false
+		
+###Single select logic###
+func select_unit_at_mouse_pos(mouse_pos: Vector2, shift):
+	var result = check_click_hit(mouse_pos)
+	if result:
+		if !shift:
+			for unit in selected_units:
+				unit.set_selected(false)
 				selected_units.clear()
-				selected_units.append(collider)
-				collider.set_selected(true)
+				selected_units.append(result)
+				result.set_selected(true)
 	#else: -deselect everything if clicking nothing, disabled for now
 		#for unit in selected_units:
 			#unit.set_selected(false)

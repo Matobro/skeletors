@@ -18,6 +18,7 @@ func _ready():
 	add_state("attacking")
 	add_state("dying")
 	add_state("attack_moving")
+	add_state("following")
 	call_deferred("set_state", states.idle)
 
 func state_logic(delta): #Actual state logic, what to do in states
@@ -49,7 +50,18 @@ func state_logic(delta): #Actual state logic, what to do in states
 		states.attack_moving:
 			if parent.attack_move_target != null:
 				parent.move_to_target(parent.attack_move_target)
-				
+		
+		states.following:
+			if parent.follow_target == null or parent.follow_target.dead:
+				parent.follow_target = null
+				set_state(states.idle)
+			if parent.follow_target != null:
+				if parent.position.distance_to(parent.follow_target.position) < 50.0:
+					animation_player.play("idle")
+				else:
+					animation_player.play("walk")
+					parent.move_to_target(parent.follow_target.position)
+					
 		states.aggroing:
 			if parent.attack_target != null:
 				parent.move_to_target(parent.attack_target.position)
@@ -134,7 +146,9 @@ func get_transition(delta): #Handle transitions, if x happens go to state y
 					parent.command_queue.pop_front()
 					return states.idle
 			return null
-			
+		
+		states.following:
+			return null
 		states.attack_moving:
 			if parent.attack_target == null:
 				if aggro_target != null:

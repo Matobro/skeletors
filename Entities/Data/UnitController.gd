@@ -15,7 +15,9 @@ var commands: CommandsData
 
 ###MOVEMENT###
 var selected: bool
+var following: bool
 var movement_target = null
+var follow_target = null
 var command_queue := [] #stores commands, "type" "position" eg, "attack_move" "Vector2(0, 0)"
 var rally_points: = [] #holds visuals of rally points from queued commands
 
@@ -86,7 +88,7 @@ func set_selected(value: bool):
 		modulate = Color (0.5,0.5,0.5)
 
 ### COMMAND LOGIC ###
-func issue_command(command_type: String, pos: Vector2, queue: bool, player_id: int) -> void:
+func issue_command(command_type: String, pos: Vector2, queue: bool, player_id: int, target) -> void:
 	if owner_id != player_id: return
 
 	if queue:
@@ -98,6 +100,8 @@ func issue_command(command_type: String, pos: Vector2, queue: bool, player_id: i
 		attack_move_target = null
 		is_attack_moving = false
 		attack_target = null
+		following = false
+		follow_target = null
 		for rally_point in rally_points:
 			if is_instance_valid(rally_point): 
 				rally_point.queue_free()
@@ -113,6 +117,12 @@ func issue_command(command_type: String, pos: Vector2, queue: bool, player_id: i
 			attack_move_target = pos
 			is_attack_moving = true
 			state_machine.set_state(state_machine.states.attack_moving)
+		elif command_type == "attack":
+			attack_target = target
+			state_machine.set_state(state_machine.states.aggroing)
+		elif command_type == "follow":
+			follow_target = target
+			state_machine.set_state(state_machine.states.following)
 	add_rally_point(command_type, pos, queue)
 			
 func add_rally_point(command_type: String, pos, queue):
@@ -131,6 +141,13 @@ func add_rally_point(command_type: String, pos, queue):
 			else:
 				command = commands.attack_move_command
 				timed = true
+		"attack":
+			command = commands.attack_move_command
+			timed = true
+		"follow":
+			command = commands.move_command
+			timed = true
+			
 	create_command_visual(pos, command, timed, queue)
 	
 func create_command_visual(pos, command, timed, queue):
