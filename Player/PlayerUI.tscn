@@ -1,0 +1,121 @@
+[gd_scene load_steps=8 format=3 uid="uid://44m1veg1thkm"]
+
+[ext_resource type="Texture2D" uid="uid://f8758o682hq6" path="res://Commands/UI/Move.png" id="1_qbo8c"]
+[ext_resource type="Texture2D" uid="uid://wg4ahtxtfu3a" path="res://Commands/UI/Stop.png" id="2_2ncyk"]
+[ext_resource type="Texture2D" uid="uid://dj0gxf8y644j7" path="res://Commands/UI/Hold_Position.png" id="3_1i0l3"]
+[ext_resource type="Texture2D" uid="uid://cj72b3uo7vdg1" path="res://Commands/UI/AttackMove.png" id="4_mb3tw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0sfn1"]
+bg_color = Color(0.136826, 0.136826, 0.136826, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.286954, 0.220201, 0.0573185, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0hjsp"]
+bg_color = Color(0.114897, 0.114897, 0.114897, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_usimh"]
+bg_color = Color(0.0846899, 0.0846899, 0.0846899, 1)
+border_width_left = 3
+border_width_top = 4
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.187454, 0.151084, 0.0470374, 1)
+
+[node name="PlayerUI" type="Node2D"]
+
+[node name="BottomBar" type="Panel" parent="."]
+offset_left = -960.0
+offset_top = 254.0
+offset_right = 960.0
+offset_bottom = 540.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_0sfn1")
+
+[node name="Minimap" type="Panel" parent="."]
+offset_left = -940.0
+offset_top = 280.0
+offset_right = -700.0
+offset_bottom = 520.0
+
+[node name="ActionMenu" type="Panel" parent="."]
+offset_left = 617.0
+offset_top = 270.0
+offset_right = 941.0
+offset_bottom = 520.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_0hjsp")
+
+[node name="GridContainer" type="GridContainer" parent="ActionMenu"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 7.0
+offset_right = 46.0
+offset_bottom = 47.0
+columns = 4
+
+[node name="Panel" type="Panel" parent="ActionMenu/GridContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_usimh")
+
+[node name="Move" type="TextureRect" parent="ActionMenu/GridContainer/Panel"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 74.0
+offset_bottom = 73.0
+texture = ExtResource("1_qbo8c")
+expand_mode = 2
+stretch_mode = 3
+
+[node name="Panel2" type="Panel" parent="ActionMenu/GridContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_usimh")
+
+[node name="Move" type="TextureRect" parent="ActionMenu/GridContainer/Panel2"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 74.0
+offset_bottom = 73.0
+texture = ExtResource("2_2ncyk")
+expand_mode = 2
+stretch_mode = 3
+
+[node name="Panel3" type="Panel" parent="ActionMenu/GridContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_usimh")
+
+[node name="Move" type="TextureRect" parent="ActionMenu/GridContainer/Panel3"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 74.0
+offset_bottom = 73.0
+texture = ExtResource("3_1i0l3")
+expand_mode = 2
+stretch_mode = 3
+
+[node name="Panel4" type="Panel" parent="ActionMenu/GridContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_usimh")
+
+[node name="Move" type="TextureRect" parent="ActionMenu/GridContainer/Panel4"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 74.0
+offset_bottom = 73.0
+texture = ExtResource("4_mb3tw")
+expand_mode = 2
+stretch_mode = 3
+
+[node name="Camera2D" type="Camera2D" parent="."]

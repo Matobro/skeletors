@@ -19,6 +19,8 @@ func _ready():
 	add_state("dying")
 	add_state("attack_moving")
 	add_state("following")
+	add_state("stop")
+	add_state("hold")
 	call_deferred("set_state", states.idle)
 
 func state_logic(delta): #Actual state logic, what to do in states
@@ -42,15 +44,22 @@ func state_logic(delta): #Actual state logic, what to do in states
 						parent.attack_move_target = command.position
 						parent.is_attack_moving = true
 						set_state(states.attack_moving)
+					"stop":
+						set_state(states.stop)
+					"hold":
+						set_state(states.hold)
 						
 		states.moving:
 			if parent.movement_target != null:
-				parent.pathfinding_agent.target_position = parent.movement_target
+				if parent.pathfinding_timer > parent.pathfinding_speed:
+					print("new path")
+					parent.pathfinding_agent.target_position = parent.movement_target
 				parent.move_to_target()
 				
 		states.attack_moving:
 			if parent.attack_move_target != null:
-				parent.pathfinding_agent.target_position = parent.attack_move_target
+				if parent.pathfinding_timer > parent.pathfinding_speed:
+					parent.pathfinding_agent.target_position = parent.attack_move_target
 				parent.move_to_target()
 		
 		states.following:
@@ -58,17 +67,22 @@ func state_logic(delta): #Actual state logic, what to do in states
 				parent.follow_target = null
 				set_state(states.idle)
 			if parent.follow_target != null:
-				if parent.position.distance_to(parent.follow_target.position) < 50.0:
+				if parent.position.distance_to(parent.follow_target.global_position) < 50.0:
 					animation_player.play("idle")
 				else:
 					animation_player.play("walk")
-					parent.pathfinding_agent.target_position = parent.follow_target.global_position
-				parent.move_to_target()
-					
+					if parent.pathfinding_timer > parent.pathfinding_speed:
+						parent.pathfinding_agent.target_position = parent.follow_target.global_position
+					parent.move_to_target()
+		
+		states.stop:
+			pass
+			
 		states.aggroing:
 			if parent.attack_target != null:
-				var orbital_pos = parent.get_orbital_position()
-				parent.pathfinding_agent.target_position = orbital_pos
+				if parent.pathfinding_timer > parent.pathfinding_speed:
+					if parent.pathfinding_timer > parent.pathfinding_speed:
+						parent.pathfinding_agent.target_position = parent.attack_target.global_position
 				parent.move_to_target()
 		states.attacking:
 			if parent.is_attack_committed:
@@ -103,17 +117,27 @@ func state_logic(delta): #Actual state logic, what to do in states
 
 func enter_state(new_state, old_state): #mostly for animations
 	state_id += 1
-	if parent.data != null: #display state changes in console
-		if parent.owner_id == 1:
-			print("Entering: [", new_state, "] from [", old_state, "] ", state_id)
+	#if parent.data != null: ##display state changes in console
+		#if parent.owner_id == 1:
+			#print("Entering: [", new_state, "] from [", old_state, "] ", state_id)
 	match state:
 		states.idle:
 			if animation_player.sprite_frames.has_animation("idle"):
 				animation_player.play("idle")
 		states.moving:
-			animation_player.play("walk")
+			animation_player.play("walk")				
 		states.attack_moving:
 			animation_player.play("walk")
+		states.stop:
+			parent.command_queue.pop_front()
+			parent.clear_rally_point()
+			parent.clear_unit_state()
+			set_state(states.idle)
+		states.hold:
+			parent.command_queue.pop_front()
+			parent.clear_rally_point()
+			parent.clear_unit_state()
+			animation_player.play("idle")
 		states.aggroing:
 			if parent.attack_target != null:
 				parent.attack_target.register_attacker(parent)
@@ -132,6 +156,7 @@ func exit_state(old_state, new_state):
 		states.attacking:
 			if parent.attack_target != null:
 				parent.attack_target.unregister_attacker(parent)
+				
 func get_transition(delta): #Handle transitions, if x happens go to state y
 	if parent.dead and state != states.dying:
 		return states.dying
@@ -158,8 +183,15 @@ func get_transition(delta): #Handle transitions, if x happens go to state y
 					return states.idle
 			return null
 		
+		states.stop:
+			return null
+			
+		states.hold:
+			return states.hold
+			
 		states.following:
 			return null
+			
 		states.attack_moving:
 			if parent.attack_target == null:
 				if aggro_target != null:
@@ -200,7 +232,6 @@ func get_transition(delta): #Handle transitions, if x happens go to state y
 				return states.aggroing
 			
 			return null
-				
-				
+	
 func _on_death_animation_finished():
 	parent.queue_free()

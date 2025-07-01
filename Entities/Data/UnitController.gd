@@ -12,9 +12,15 @@ class_name Unit
 var owner_id: int
 var data : UnitData
 var commands: CommandsData
+var facing_right: bool = true
+
+###DEV###
+var dev_counter := 0
 
 ##NAVIGATION##
 @onready var pathfinding_agent : NavigationAgent2D = $Pathfinding
+var pathfinding_timer = 20
+var pathfinding_speed = 20
 ###MOVEMENT###
 var selected: bool
 var following: bool
@@ -22,6 +28,7 @@ var movement_target = null
 var follow_target = null
 var command_queue := [] #stores commands, "type" "position" eg, "attack_move" "Vector2(0, 0)"
 var rally_points: = [] #holds visuals of rally points from queued commands
+
 
 ###COMBAT###
 var attack_move_target = null
@@ -36,6 +43,10 @@ var attack_timer := 0.0
 var attackers := []
 
 ### UNIT INITIALIZATION ###
+func _ready():
+	pathfinding_timer = randi() % pathfinding_speed + 1
+	
+	
 func init_unit(unit_data):
 	await get_tree().process_frame
 	
@@ -70,6 +81,12 @@ func take_damage(damage):
 func _physics_process(delta):
 	if attack_timer >= 0:
 		attack_timer -= delta
+		
+	#if owner_id == 1:
+		#dev_counter += 1
+		#if dev_counter >= 10:
+			#dev_counter = 0
+			#print("Unit current commands amount: ", command_queue.size())
 		
 ### COMBAT LOGIC ###
 func register_attacker(unit: Node2D):
@@ -113,18 +130,12 @@ func set_selected(value: bool):
 ### COMMAND LOGIC ###
 func issue_command(command_type: String, pos: Vector2, queue: bool, player_id: int, target) -> void:
 	if owner_id != player_id: return
-
+	
 	if queue:
 		command_queue.append({"type": command_type, "position": pos})
 	else:
-		is_attack_committed = false
+		clear_unit_state()
 		command_queue.clear()
-		movement_target = null
-		attack_move_target = null
-		is_attack_moving = false
-		attack_target = null
-		following = false
-		follow_target = null
 		for rally_point in rally_points:
 			if is_instance_valid(rally_point): 
 				rally_point.queue_free()
@@ -148,8 +159,22 @@ func issue_command(command_type: String, pos: Vector2, queue: bool, player_id: i
 		elif command_type == "follow":
 			follow_target = target
 			state_machine.set_state(state_machine.states.following)
+		elif command_type == "stop":
+			state_machine.set_state(state_machine.states.idle)
+		elif command_type == "hold":
+			state_machine.set_state(state_machine.states.hold)
+	
 	add_rally_point(command_type, pos, queue)
-			
+
+func clear_unit_state():
+		is_attack_committed = false
+		movement_target = null
+		attack_move_target = null
+		is_attack_moving = false
+		attack_target = null
+		following = false
+		follow_target = null
+		
 func add_rally_point(command_type: String, pos, queue):
 	var command = null
 	var timed = false
@@ -172,6 +197,10 @@ func add_rally_point(command_type: String, pos, queue):
 		"follow":
 			command = commands.move_command
 			timed = true
+		"stop":
+			command = commands.empty_command
+		"hold":
+			command = commands.empty_command
 			
 	create_command_visual(pos, command, timed, queue)
 	
@@ -199,40 +228,67 @@ func get_current_command():
 
 ### MOVEMENT LOGIC ###
 func move_to_target():
-	if pathfinding_agent.is_navigation_finished():
-		if attack_target != null and position.distance_to(pathfinding_agent.target_position) > data.stats.range:
-			print("getting new path")
-			var new_orbit = get_orbital_position()
-			pathfinding_agent.target_position = new_orbit
-			return
-			
+	pathfinding_timer += 1
+	
+	var target_pos = pathfinding_agent.target_position
+	#if pathfinding_agent.is_navigation_finished():
+		#velocity = Vector2.ZERO
+		#return
+	
 	var next_path_point = pathfinding_agent.get_next_path_position()
-	var direction = (next_path_point - global_position).normalized()
-	velocity = direction * data.stats.movement_speed
-	velocity += get_separation_force()
+	var to_target = (next_path_point - global_position).normalized()
+	var separation = get_separation_force()
+	var push = get_body_push()
+	
+	var final_direction = (to_target + separation).normalized()
+	
+	handle_orientation(final_direction)
+	velocity = final_direction * data.stats.movement_speed
+	velocity += push
 	move_and_slide()
-	#var direction = (tar - position)
-	#velocity = direction.normalized() * data.stats.movement_speed
-	#move_and_slide()
+	
+	if pathfinding_timer > pathfinding_speed + 1:
+		pathfinding_timer = 0
+
+func handle_orientation(direction):
+	if direction.x > 0.0 and !facing_right:
+		animation_player.flip_h = false
+		#scale.x *= -1
+		facing_right = true
+	elif direction.x < 0.0 and facing_right:
+		animation_player.flip_h = true
+		#scale.x *= -1
+		facing_right = false
 	
 func get_separation_force():
 	var force = Vector2.ZERO
+	var separation_radius = 15.0
+	
 	for other in get_tree().get_nodes_in_group("unit"):
 		if other == self: continue
-		var diff = global_position - other.global_position
-		var distance = diff.length()
-		if distance < 50 and distance > 0:
-			force += diff.normalized() / distance
-	return force * 5000
-	
-func get_orbital_position():
-	var idx = attack_target.get_attack_index(self)
-	var total = attack_target.attackers.size()
-	var angle_offset = TAU / total
-	var angle = idx * angle_offset
-	var radius = data.stats.range * 0.9
+		if other.dead: continue
 
-	return attack_target.global_position + Vector2.RIGHT.rotated(angle) * radius
+		var to_other = global_position - other.global_position
+		var dist = to_other.length()
+		
+		if dist < separation_radius and dist > 0:
+			var push_strength = 1.0 - (dist / separation_radius)
+			force += to_other.normalized() * push_strength
+	
+	return force.normalized() * 2.0
+
+func get_body_push() -> Vector2:
+	var push = Vector2.ZERO
+	for other in get_tree().get_nodes_in_group("unit"):
+		if other == self or other.dead:
+			continue
+
+		var offset = global_position - other.global_position
+		var dist = offset.length()
+		if dist < 30 and dist > 0:
+			push += offset.normalized() * (1.0 / dist)
+
+	return push.normalized() * 50.0
 ### MOVEMENT LOGIC END ###
 
 ### AGGRO LOGIC ###

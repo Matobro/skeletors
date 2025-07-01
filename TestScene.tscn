@@ -37,6 +37,7 @@ navigation_layer_0/layers = 1
 sources/0 = SubResource("TileSetAtlasSource_tq6uv")
 
 [node name="World" type="Node2D"]
+y_sort_enabled = true
 
 [node name="PlayerObject" parent="." instance=ExtResource("1_cguwc")]
 
@@ -93,6 +94,7 @@ Mouse right + shift = queue command"
 navigation_polygon = SubResource("NavigationPolygon_go42g")
 
 [node name="Map" type="TileMap" parent="NavigationRegion2D"]
+z_index = -1
 scale = Vector2(5, 5)
 tile_set = SubResource("TileSet_12c36")
 format = 2

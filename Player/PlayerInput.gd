@@ -34,6 +34,12 @@ func _unhandled_input(event):
 		attack_moving = true
 	if event.is_action_released("a"):
 		attack_moving = false
+	if event.is_action_pressed("s"):
+		for unit in selected_units:
+			unit.issue_command("stop", pos, shift, player_id, null)
+	if event.is_action_pressed("h"):
+		for unit in selected_units:
+			unit.issue_command("hold", pos, shift, player_id, null)
 		
 	#Leftclick behaviour
 	if event.is_action_pressed("mouse_left"):
@@ -60,7 +66,7 @@ func _unhandled_input(event):
 	#Leftclick released behaviour
 	if event.is_action_released("mouse_left"):
 		if dragging and !attack_moving: #Stop box select
-			end_drag(event.position, shift)
+			end_drag(shift)
 			
 	#Rightclick behaviour			
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
@@ -112,8 +118,8 @@ func calculate_unit_formation(total_units, pos):
 	var total_height = (rows - 1) * spacing
 	
 	for i in range(total_units):
-		var row = i / columns
-		var column = i % columns
+		var row: int = i / columns
+		var column: int = i % columns
 		
 		var offset := Vector2(
 			column * spacing - total_width / 2,
@@ -144,11 +150,10 @@ func update_drag(current_pos: Vector2):
 	selection_box.global_position = top_left
 	selection_box.size = size
 	
-func end_drag(mouse_pos: Vector2, shift):
+func end_drag(shift):
 	dragging = false
 	selection_box.visible = false
 	
-	var drag_rect = Rect2(selection_box.global_position, selection_box.size)
 	select_units_in_box(Rect2(selection_box.global_position, selection_box.size), shift)
 	
 func select_units_in_box(box: Rect2, shift):

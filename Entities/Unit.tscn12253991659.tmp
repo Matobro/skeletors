@@ -27,7 +27,6 @@ animations = [{
 radius = 342.067
 
 [node name="Unit" type="CharacterBody2D" groups=["unit"]]
-collision_mask = 2
 input_pickable = true
 script = ExtResource("1_fgnkd")
 
@@ -43,11 +42,11 @@ script = ExtResource("4_r47uv")
 
 [node name="AggroRange" type="Area2D" parent="."]
 modulate = Color(1, 1, 1, 0.25)
-collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AggroRange"]
 z_index = -1
 shape = SubResource("CircleShape2D_fgnkd")
+disabled = true
 debug_color = Color(0.995729, 0, 0.200035, 0.42)
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
@@ -68,6 +67,7 @@ path_desired_distance = 5.0
 radius = 20.0
 time_horizon_agents = 0.25
 avoidance_priority = 0.5
+debug_enabled = true
 debug_path_custom_color = Color(1, 1, 1, 0.2)
 
 [connection signal="body_entered" from="AggroRange" to="." method="_on_aggro_range_body_entered"]
