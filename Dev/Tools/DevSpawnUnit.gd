@@ -38,6 +38,7 @@ func spawn_unit():
 	spawned_unit.commands = commandsData
 	spawned_unit.owner_id = owner_id
 	player_input.selectable_units.append(spawned_unit)
+	spawned_unit.died.connect(player_input._on_unit_died)
 	show_unit_on_mouse(false)
 	spawning_unit = false
 

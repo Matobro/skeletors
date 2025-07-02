@@ -11,6 +11,7 @@ var selected_units: Array = []
 var selectable_units: Array = []
 const DRAG_THRESHOLD := 50.0
 
+@onready var player_ui = $"../CanvasLayer/PlayerUI"
 @onready var selection_box = $"../CanvasLayer/BoxSelection"
 @onready var camera := get_viewport().get_camera_2d()
 
@@ -140,7 +141,6 @@ func start_drag():
 	selection_box.size = Vector2.ZERO
 	
 func update_drag(current_pos: Vector2):
-	print("box select active")
 	var top_left = Vector2(
 		min(drag_start.x, current_pos.x),
 		min(drag_start.y, current_pos.y)
@@ -156,18 +156,25 @@ func end_drag(shift):
 	
 	select_units_in_box(Rect2(selection_box.global_position, selection_box.size), shift)
 	
+	if selected_units.size() > 0:
+		for unit in selected_units:
+			if unit.owner_id != player_id: continue
+			
 func select_units_in_box(box: Rect2, shift):
-	print("box selecting")
 	if !shift:
 		for unit in selected_units:
 			unit.set_selected(false)
 		selected_units.clear()
+		player_ui.clear_control_group()
 		
 	for unit in selectable_units:
 		if unit.owner_id != player_id: continue
 		var screen_pos = camera.get_viewport_transform() * unit.global_position
+		### if hits unit
 		if box.has_point(screen_pos):
+			### if hits and not already selected
 			if unit not in selected_units:
+				player_ui.add_unit_to_control(unit)
 				selected_units.append(unit)
 				unit.set_selected(true)
 ###Box select logic end###		
@@ -195,20 +202,24 @@ func check_click_hit(mouse_pos: Vector2):
 func select_unit_at_mouse_pos(mouse_pos: Vector2, shift):
 	var result = check_click_hit(mouse_pos)
 	if result:
-		print("single selecting - target [", result,"]")
 		if !shift:
 			for unit in selected_units:
 				unit.set_selected(false)
-			
 			selected_units.clear()
-		
+			player_ui.clear_control_group()
+	
 		result.set_selected(true)
 		selected_units.append(result)
-		
-		#unselect all units if clicking ground, disabled for now cause it fucks up selecting multiple units
-		#when you first select one and then add more with box select
+		player_ui.add_unit_to_control(result)
 	#elif result == null:
+		#player_ui.show_stats(false)
 		#for unit in selected_units:
 			#unit.set_selected(false)
 		#selected_units.clear()
+		#player_ui.clear_control_group()
 ###Single select logic end###
+
+func _on_unit_died(unit):
+	if unit in selectable_units:
+		selectable_units.erase(unit)
+		player_ui.remove_unit_from_group(unit)

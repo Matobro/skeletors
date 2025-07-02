@@ -44,6 +44,8 @@ var attack_anim_timer := 0.0
 var attack_timer := 0.0
 var attackers := []
 
+signal died(unit)
+
 ### UNIT INITIALIZATION ###
 func _ready():
 	pathfinding_timer = randi() % pathfinding_speed + 1
@@ -66,6 +68,7 @@ func init_stats():
 	data.stats.current_health = data.stats.max_health
 	data.stats.attack_damage = data.stats.base_damage
 	hp_bar.init_hp_bar(data.stats.current_health, data.stats.max_health)
+	check_if_valid_stats()
 	
 func set_unit_color():
 	var sprite_material = animation_player.material
@@ -81,6 +84,16 @@ func set_unit_color():
 			8: sprite_material.set_shader_parameter("outline_color", Color.HOT_PINK)
 			9: sprite_material.set_shader_parameter("outline_color", Color.GRAY)
 			10: sprite_material.set_shader_parameter("outline_color", Color.RED)
+
+func check_if_valid_stats():
+	for key in data.stats.keys():
+		var min_value = data.min_stat_values[key]
+		var value = data.stats.get(key, null)
+		
+		if value == null:
+			push_error("Missing stat: ", key)
+		elif value < min_value:
+			push_error("Stat '%s' too low: %s (min: %s)" % [key, value, min_value])
 ### UNIT INITIALIZATION END ###
 
 ### HEALTH LOGIC ###
@@ -95,6 +108,7 @@ func take_damage(damage):
 		set_selected(false)
 		hp_bar.set_bar_visible(false)
 		dead = true
+		emit_signal("died", self)
 	
 ### HEALTH LOGIC END ###
 
@@ -287,7 +301,7 @@ func handle_orientation(direction):
 	
 func get_separation_force():
 	var force = Vector2.ZERO
-	var separation_radius = 15.0
+	var separation_radius = 10.0
 	
 	for other in get_tree().get_nodes_in_group("unit"):
 		if other == self: continue
@@ -310,7 +324,7 @@ func get_body_push() -> Vector2:
 
 		var offset = global_position - other.global_position
 		var dist = offset.length()
-		if dist < 30 and dist > 0:
+		if dist < 20 and dist > 0:
 			push += offset.normalized() * (1.0 / dist)
 
 	return push.normalized() * 50.0

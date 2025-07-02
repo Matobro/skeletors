@@ -30,16 +30,18 @@ extends Resource
 class_name UnitData
 
 @export var unit_model_data: UnitModelData
+@export var unit_type: String
 @export var name: String
 @export var description: String
-@export var avatar: Texture2D
+@export var avatar: SpriteFrames
 @export var stats: Dictionary = {
 	"strength": 1, 
 	"agility": 1, 
 	"intelligence": 1, 
 	"max_health": 1,
 	"current_health": 1,
-	"max_mana": 1, 
+	"max_mana": 1,
+	"current_mana": 1,
 	"armor": 1,
 	"movement_speed": 1, 
 	"health_regen": 0.1, 
@@ -49,4 +51,23 @@ class_name UnitData
 	"attack_damage": 1,
 	"attack_dice_roll": 1,
 	"range": 1
+	}
+	
+var min_stat_values: Dictionary = {
+	"strength": 1, 
+	"agility": 1, 
+	"intelligence": 1, 
+	"max_health": 1,
+	"current_health": 1,
+	"max_mana": 1,
+	"current_mana": 1,
+	"armor": 0,
+	"movement_speed": 100, 
+	"health_regen": 0, 
+	"mana_regen": 0, 
+	"attack_speed": 0.1, 
+	"base_damage": 1,
+	"attack_damage": 1,
+	"attack_dice_roll": 1,
+	"range": 30
 	}

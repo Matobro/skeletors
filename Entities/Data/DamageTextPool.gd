@@ -13,7 +13,6 @@ func show_text(text: String, pos: Vector2):
 			break
 			
 	if instance == null:
-		print("creating new")
 		instance = damage_text.instantiate()
 		pool.append(instance)
 		add_child(instance)
@@ -22,4 +21,3 @@ func show_text(text: String, pos: Vector2):
 	instance.global_position = Vector2(pos.x -10, pos.y - 25)
 	instance.show()
 	instance.timer = 0.0
-	print(instance.text)

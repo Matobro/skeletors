@@ -98,7 +98,6 @@ Mouse right + shift = queue command"
 navigation_polygon = SubResource("NavigationPolygon_go42g")
 
 [node name="Map" type="TileMap" parent="NavigationRegion2D"]
-visible = false
 z_index = -1
 scale = Vector2(5, 5)
 tile_set = SubResource("TileSet_12c36")

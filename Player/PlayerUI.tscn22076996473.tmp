@@ -365,20 +365,7 @@ text = "10"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CurrentControlGrid" type="GridContainer" parent="."]
-offset_left = -187.0
-offset_top = 292.0
-offset_right = 187.0
-offset_bottom = 342.0
-columns = 7
-
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="HpBar" type="ProgressBar" parent="Control"]
+[node name="HpBar" type="ProgressBar" parent="UnitStats"]
 offset_left = -393.0
 offset_top = 460.0
 offset_right = -218.0
@@ -389,7 +376,7 @@ step = 1.0
 value = 75.0
 show_percentage = false
 
-[node name="HpValue" type="Label" parent="Control"]
+[node name="HpValue" type="Label" parent="UnitStats"]
 offset_left = -398.0
 offset_top = 459.0
 offset_right = -213.0
@@ -399,7 +386,7 @@ label_settings = SubResource("LabelSettings_sxr4j")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ManaBar" type="ProgressBar" parent="Control"]
+[node name="ManaBar" type="ProgressBar" parent="UnitStats"]
 offset_left = -393.0
 offset_top = 488.0
 offset_right = -218.0
@@ -410,7 +397,7 @@ step = 1.0
 value = 75.0
 show_percentage = false
 
-[node name="ManaValue" type="Label" parent="Control"]
+[node name="ManaValue" type="Label" parent="UnitStats"]
 offset_left = -398.0
 offset_top = 488.0
 offset_right = -213.0
@@ -419,3 +406,10 @@ text = "32/142"
 label_settings = SubResource("LabelSettings_sxr4j")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CurrentControlGrid" type="GridContainer" parent="."]
+offset_left = -187.0
+offset_top = 292.0
+offset_right = 187.0
+offset_bottom = 342.0
+columns = 7

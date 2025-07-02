@@ -1,31 +1,51 @@
-[gd_resource type="Resource" script_class="UnitData" load_steps=5 format=3 uid="uid://w5ojk43vfpsa"]
+[gd_resource type="Resource" script_class="UnitData" load_steps=7 format=3 uid="uid://w5ojk43vfpsa"]
 
 [ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://Entities/Data/UnitData.gd" id="1_ch207"]
-[ext_resource type="Texture2D" uid="uid://dk6w6lq288o7f" path="res://Entities/Units/TestUnit/Test_Unit_Attack.png" id="1_yfety"]
+[ext_resource type="Texture2D" uid="uid://bn4iacwgx5k81" path="res://Entities/Units/TestUnit/Test_Unit_Portrait.png" id="1_xfr3j"]
 [ext_resource type="Resource" uid="uid://dbn2rgqy5pauf" path="res://Entities/Units/TestUnit/Test_Unit_Model_Data.tres" id="3_xfr3j"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xfr3j"]
-atlas = ExtResource("1_yfety")
-region = Rect2(8, 8, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_ueghq"]
+atlas = ExtResource("1_xfr3j")
+region = Rect2(0, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yrwtp"]
+atlas = ExtResource("1_xfr3j")
+region = Rect2(20, 0, 20, 20)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0dsbb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ueghq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yrwtp")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 1.0
+}]
 
 [resource]
 script = ExtResource("1_ch207")
 unit_model_data = ExtResource("3_xfr3j")
+unit_type = "unit"
 name = "Test_Unit"
 description = "Unit for testing"
-avatar = SubResource("AtlasTexture_xfr3j")
+avatar = SubResource("SpriteFrames_0dsbb")
 stats = {
 "agility": 1,
-"armor": 1,
+"armor": 2,
 "attack_damage": 1,
-"attack_dice_roll": 3,
+"attack_dice_roll": 2,
 "attack_speed": 1.0,
-"base_damage": 1,
+"base_damage": 4,
 "current_health": 1,
+"current_mana": 1,
 "health_regen": 0.1,
 "intelligence": 1,
 "mana_regen": 0.1,
-"max_health": 30,
+"max_health": 10,
 "max_mana": 1,
 "movement_speed": 330,
 "range": 30,

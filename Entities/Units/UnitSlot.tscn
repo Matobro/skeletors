@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://54p4rbg1lbko"]
+
+[ext_resource type="Texture2D" uid="uid://bn4iacwgx5k81" path="res://Entities/Units/TestUnit/Test_Unit_Portrait.png" id="1_b8l55"]
+[ext_resource type="Script" uid="uid://rlfeb02p7qb2" path="res://Entities/Units/UnitSlot.gd" id="1_wb4y5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wb4y5"]
+atlas = ExtResource("1_b8l55")
+region = Rect2(0, 0, 20, 20)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5yuhv"]
+bg_color = Color(0.194349, 0.194349, 0.194349, 1)
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wb4y5"]
+bg_color = Color(0.741176, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eh8vd"]
+bg_color = Color(0, 0.780392, 0, 1)
+
+[node name="UnitSlot" type="Control"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_wb4y5")
+
+[node name="Avatar" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("AtlasTexture_wb4y5")
+
+[node name="Box" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5yuhv")
+
+[node name="HpBar" type="ProgressBar" parent="."]
+offset_top = 40.0
+offset_right = 40.0
+offset_bottom = 47.0
+theme_override_styles/background = SubResource("StyleBoxFlat_wb4y5")
+theme_override_styles/fill = SubResource("StyleBoxFlat_eh8vd")
+step = 1.0
+value = 75.0
+show_percentage = false
