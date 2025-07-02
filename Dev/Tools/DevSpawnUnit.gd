@@ -3,6 +3,7 @@ extends Node2D
 var unit = preload("res://Entities/Unit.tscn")
 var unitdata = preload("res://Entities/Units/Test_Unit.tres")
 var commandsData = preload("res://Commands/DefaultCommands.tres")
+@onready var damage_text = $"../DamageTextPool"
 
 var spawning_unit: bool
 var owner_id: int
@@ -33,9 +34,9 @@ func spawn_unit():
 	spawned_unit.global_position = mouse_pos
 	get_tree().current_scene.add_child(spawned_unit)
 	spawned_unit.init_unit(unitdata)
+	spawned_unit.damage_text = damage_text
 	spawned_unit.commands = commandsData
 	spawned_unit.owner_id = owner_id
-	spawned_unit.color_tag.modulate = temp_color
 	player_input.selectable_units.append(spawned_unit)
 	show_unit_on_mouse(false)
 	spawning_unit = false

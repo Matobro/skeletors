@@ -4,11 +4,13 @@ class_name Unit
 
 @onready var dev_state = $DevState
 
+###############
+var damage_text: DamageTextPool
 ###UNIT DATA###
-@onready var color_tag = $Polygon2D
 @onready var state_machine = $UnitStateMachine
 @onready var animation_player = $AnimatedSprite2D
 @onready var aggro_collision = $AggroRange/CollisionShape2D
+@onready var hp_bar = $HpBar/Control
 var owner_id: int
 var data : UnitData
 var commands: CommandsData
@@ -55,7 +57,7 @@ func init_unit(unit_data):
 	dead = false
 	set_selected(false)
 	aggro_collision.set_deferred("disabled", false)
-	
+	set_unit_color()
 	await get_tree().process_frame
 	
 	init_stats()
@@ -63,17 +65,35 @@ func init_unit(unit_data):
 func init_stats():
 	data.stats.current_health = data.stats.max_health
 	data.stats.attack_damage = data.stats.base_damage
+	hp_bar.init_hp_bar(data.stats.current_health, data.stats.max_health)
+	
+func set_unit_color():
+	var sprite_material = animation_player.material
+	if sprite_material and sprite_material is ShaderMaterial:
+		match owner_id:
+			1: sprite_material.set_shader_parameter("outline_color", Color.GREEN)
+			2: sprite_material.set_shader_parameter("outline_color", Color.BLUE)
+			3: sprite_material.set_shader_parameter("outline_color", Color.SANDY_BROWN)
+			4: sprite_material.set_shader_parameter("outline_color", Color.TEAL)
+			5: sprite_material.set_shader_parameter("outline_color", Color.YELLOW)
+			6: sprite_material.set_shader_parameter("outline_color", Color.ORANGE)
+			7: sprite_material.set_shader_parameter("outline_color", Color.PURPLE)
+			8: sprite_material.set_shader_parameter("outline_color", Color.HOT_PINK)
+			9: sprite_material.set_shader_parameter("outline_color", Color.GRAY)
+			10: sprite_material.set_shader_parameter("outline_color", Color.RED)
 ### UNIT INITIALIZATION END ###
 
 ### HEALTH LOGIC ###
 func take_damage(damage):
 	if dead: return
-	
+
 	data.stats.current_health -= damage
 	clamp(data.stats.current_health, 0, data.stats.max_health)
-	
+	hp_bar.set_hp_bar(data.stats.current_health)
+	damage_text.show_text(str(damage), animation_player.global_position)
 	if data.stats.current_health <= 0:
 		set_selected(false)
+		hp_bar.set_bar_visible(false)
 		dead = true
 	
 ### HEALTH LOGIC END ###
@@ -101,7 +121,12 @@ func get_attack_index(unit: Node2D) -> int:
 	
 func perform_attack():
 	if attack_target != null:
-		attack_target.take_damage(data.stats.attack_damage)
+		var dice = data.stats.attack_dice_roll
+		var dmg = data.stats.attack_damage
+		var dice_roll = randi_range(-dice, dice)
+		var result = dmg + dice_roll
+		var damage = clampi(result, 1, 9999)
+		attack_target.take_damage(damage)
 
 func on_attack_start():
 	if attack_target:

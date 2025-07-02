@@ -23,7 +23,6 @@ extends Resource
 ### var spawned_unit = unit.instantiate() <- unit is Unit.tscn
 ### spawned_unit.init_unit(UnitData) <- sets unit data from UnitData.tres resource
 ### spawned_unit.commands = CommandsData <- DefaultCommands.tres resource
-### spawned_unit.color_tag.modulate = playercolor <- color for tag, probly changed in future, should be the color for player
 ### spawned_unit.owner_id = player_id <- currently 1-9, 10 is ai. In future this would be unique multiplayer id
 ### player_input.selectable_units.append(spawned_unit)
 #######################################################
@@ -48,5 +47,6 @@ class_name UnitData
 	"attack_speed": 1.0, 
 	"base_damage": 1,
 	"attack_damage": 1,
+	"attack_dice_roll": 1,
 	"range": 1
 	}

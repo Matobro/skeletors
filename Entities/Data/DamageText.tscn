@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://dbgjf10q68v5o"]
+
+[ext_resource type="Script" uid="uid://ii5vwekjteiw" path="res://Entities/Data/DamageText.gd" id="1_4you6"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_nm105"]
+font_size = 32
+font_color = Color(0.988141, 0, 0.10482, 1)
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[node name="DamageText" type="Label"]
+z_index = 1000
+z_as_relative = false
+offset_left = -28.0
+offset_top = -22.0
+offset_right = 27.0
+offset_bottom = 23.0
+label_settings = SubResource("LabelSettings_nm105")
+script = ExtResource("1_4you6")

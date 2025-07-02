@@ -17,16 +17,18 @@ avatar = SubResource("AtlasTexture_xfr3j")
 stats = {
 "agility": 1,
 "armor": 1,
-"attack_speed": 2.0,
+"attack_damage": 1,
+"attack_dice_roll": 3,
+"attack_speed": 1.0,
 "base_damage": 1,
 "current_health": 1,
 "health_regen": 0.1,
 "intelligence": 1,
 "mana_regen": 0.1,
-"max_health": 100,
+"max_health": 30,
 "max_mana": 1,
 "movement_speed": 330,
-"range": 50,
+"range": 30,
 "strength": 1
 }
 metadata/_custom_type_script = "uid://oeoy2vl8vgue"
