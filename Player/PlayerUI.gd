@@ -67,12 +67,12 @@ func check_group():
 func remove_unit_from_group(unit):
 	var next_unit = get_next_in_group()
 	var was_first = null
-	if control_group_array[0] and control_group_array[0].unit == unit:
-		was_first = true
+	if control_group_array.size() > 0 and is_instance_valid(control_group_array[0]):
+		if control_group_array[0].unit == unit:
+			was_first = true
 	
 	for i in control_group_array.size():
 		if control_group_array[i] and control_group_array[i].unit == unit:
-			print("REMOVING")
 			control_group_array.remove_at(i)
 			break
 			

@@ -86,13 +86,18 @@ offset_left = 6.0
 offset_top = 160.0
 offset_right = 210.0
 offset_bottom = 264.0
-text = "Mouse left = select
-Mouse left + drag = box select
-Mouse left + a = attack move
-Mouse left + shift + command = queue command
+text = "A - Attack
+H - Hold
+S - Stop
+Shift - queue command
 
-Mouse right = move command
-Mouse right + shift = queue command"
+Mouse left
+-select
+-attack move
+
+Mouse right
+-move
+-attack target"
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 navigation_polygon = SubResource("NavigationPolygon_go42g")

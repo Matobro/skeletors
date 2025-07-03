@@ -41,6 +41,7 @@ offset_bottom = 40.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_5yuhv")
 
 [node name="HpBar" type="ProgressBar" parent="."]
+layout_mode = 0
 offset_top = 40.0
 offset_right = 40.0
 offset_bottom = 47.0

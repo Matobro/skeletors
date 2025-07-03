@@ -2,11 +2,14 @@ extends Node2D
 
 @export var commands: CommandsData
 
+var dev_disable_input: bool = false
+
 var player_id = 1
 var drag_start = Vector2.ZERO
 var dragging = false
 var attack_moving: bool = false
 
+var block_input_frames: int = 0
 var selected_units: Array = []
 var selectable_units: Array = []
 const DRAG_THRESHOLD := 50.0
@@ -16,6 +19,9 @@ const DRAG_THRESHOLD := 50.0
 @onready var camera := get_viewport().get_camera_2d()
 
 func _physics_process(delta):
+	if block_input_frames > 0:
+		block_input_frames -= 1
+		
 	if selectable_units.size() > 0:
 		for unit in selectable_units:
 			if unit.dead:
@@ -26,6 +32,18 @@ func _physics_process(delta):
 				selected_units.erase(unit)
 				
 func _unhandled_input(event):
+	if get_viewport().gui_get_hovered_control() != null:
+		dragging = false
+		selection_box.visible = false
+		selection_box.size = Vector2.ZERO
+		return
+		
+	if block_input_frames > 0:
+		dragging = false
+		selection_box.visible = false
+		selection_box.size = Vector2.ZERO
+		return
+		
 	var shift = Input.is_key_pressed(KEY_SHIFT)
 	var pos = get_global_mouse_position()
 	var click_target = check_click_hit(pos)
@@ -222,4 +240,5 @@ func select_unit_at_mouse_pos(mouse_pos: Vector2, shift):
 func _on_unit_died(unit):
 	if unit in selectable_units:
 		selectable_units.erase(unit)
-		player_ui.remove_unit_from_group(unit)
+		if unit.owner_id == player_id:
+			player_ui.remove_unit_from_group(unit)

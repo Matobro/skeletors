@@ -30,6 +30,7 @@ func _input(event: InputEvent):
 			spawn_unit()
 			
 func spawn_unit():
+	player_input.block_input_frames = 5
 	var spawned_unit = unit.instantiate()
 	spawned_unit.global_position = mouse_pos
 	get_tree().current_scene.add_child(spawned_unit)

@@ -21,9 +21,10 @@ var dev_counter := 0
 
 ##NAVIGATION##
 @onready var pathfinding_agent : NavigationAgent2D = $Pathfinding
-var pathfinding_timer = 20
-var pathfinding_speed = 20
+var pathfinding_timer = 10
+var pathfinding_speed = 10
 ###MOVEMENT###
+var smoothed_direction := Vector2.ZERO
 var selected: bool
 var following: bool
 var movement_target = null
@@ -268,40 +269,48 @@ func get_current_command():
 ### MOVEMENT LOGIC ###
 func move_to_target():
 	pathfinding_timer += 1
-	
-	var target_pos = pathfinding_agent.target_position
-	#if pathfinding_agent.is_navigation_finished():
-		#velocity = Vector2.ZERO
-		#return
-	
+
 	var next_path_point = pathfinding_agent.get_next_path_position()
 	var to_target = (next_path_point - global_position).normalized()
 	var separation = get_separation_force()
 	var push = get_body_push()
+
+	var final_force = to_target * 1.0 + separation * 0.5 + push * 0.3
 	
-	var final_direction = (to_target + separation).normalized()
+	#reduce jittering
+	if final_force.length() > 0:
+		smoothed_direction = smoothed_direction.lerp(final_force.normalized(), 0.25)
+	else:
+		smoothed_direction = smoothed_direction.lerp(Vector2.ZERO, 0.1)
+
+	if smoothed_direction.length() < 0.01:
+		smoothed_direction = Vector2.ZERO
+   	# # # # # # # # 
 	
-	handle_orientation(final_direction)
-	velocity = final_direction * data.stats.movement_speed
-	velocity += push
+	handle_orientation(smoothed_direction)
+	velocity = smoothed_direction * data.stats.movement_speed
 	move_and_slide()
-	
+
 	if pathfinding_timer > pathfinding_speed + 1:
 		pathfinding_timer = 0
+		
+func handle_orientation(direction: Vector2):
+	if direction.x == 0:
+		return  # ignore if going straight up/down
 
-func handle_orientation(direction):
-	if direction.x > 0.0 and !facing_right:
+	if abs(direction.x) < 0.4:
+		return  # ignore small movements
+
+	if direction.x > 0 and !facing_right:
 		animation_player.flip_h = false
-		#scale.x *= -1
 		facing_right = true
-	elif direction.x < 0.0 and facing_right:
+	elif direction.x < 0 and facing_right:
 		animation_player.flip_h = true
-		#scale.x *= -1
 		facing_right = false
 	
 func get_separation_force():
 	var force = Vector2.ZERO
-	var separation_radius = 10.0
+	var separation_radius = 15.0
 	
 	for other in get_tree().get_nodes_in_group("unit"):
 		if other == self: continue
@@ -314,7 +323,7 @@ func get_separation_force():
 			var push_strength = 1.0 - (dist / separation_radius)
 			force += to_other.normalized() * push_strength
 	
-	return force.normalized() * 2.0
+	return force * 3.0
 
 func get_body_push() -> Vector2:
 	var push = Vector2.ZERO
@@ -324,10 +333,13 @@ func get_body_push() -> Vector2:
 
 		var offset = global_position - other.global_position
 		var dist = offset.length()
-		if dist < 20 and dist > 0:
-			push += offset.normalized() * (1.0 / dist)
+		if dist > 25 or dist < 5:
+			continue
 
-	return push.normalized() * 50.0
+		var strength = 1.0 - (dist / 25.0)
+		push += offset.normalized() * strength
+
+	return push * 25.0
 ### MOVEMENT LOGIC END ###
 
 ### AGGRO LOGIC ###

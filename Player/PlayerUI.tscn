@@ -238,6 +238,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Str" type="Label" parent="HeroStats"]
+layout_mode = 0
 offset_left = 27.0
 offset_top = 356.0
 offset_right = 94.0
@@ -247,6 +248,7 @@ label_settings = SubResource("LabelSettings_lvs6t")
 vertical_alignment = 1
 
 [node name="StrValue" type="Label" parent="HeroStats"]
+layout_mode = 0
 offset_left = 133.0
 offset_top = 356.0
 offset_right = 197.0
@@ -256,6 +258,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Agi" type="Label" parent="HeroStats"]
+layout_mode = 0
 offset_left = 27.0
 offset_top = 402.0
 offset_right = 94.0
@@ -265,6 +268,7 @@ label_settings = SubResource("LabelSettings_42bxf")
 vertical_alignment = 1
 
 [node name="AgiValue" type="Label" parent="HeroStats"]
+layout_mode = 0
 offset_left = 134.0
 offset_top = 402.0
 offset_right = 198.0
@@ -274,6 +278,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Int" type="Label" parent="HeroStats"]
+layout_mode = 0
 offset_left = 27.0
 offset_top = 448.0
 offset_right = 117.0
@@ -283,6 +288,7 @@ label_settings = SubResource("LabelSettings_3tuem")
 vertical_alignment = 1
 
 [node name="IntValue" type="Label" parent="HeroStats"]
+layout_mode = 0
 offset_left = 134.0
 offset_top = 448.0
 offset_right = 198.0
@@ -292,6 +298,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="XpBar" type="ProgressBar" parent="HeroStats"]
+layout_mode = 0
 offset_left = -118.0
 offset_top = 305.0
 offset_right = 117.0
@@ -303,6 +310,7 @@ value = 57.0
 show_percentage = false
 
 [node name="Level" type="Label" parent="HeroStats"]
+layout_mode = 0
 offset_left = -118.0
 offset_top = 305.0
 offset_right = 116.0
@@ -318,6 +326,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Name" type="Label" parent="UnitStats"]
+layout_mode = 0
 offset_left = -131.0
 offset_top = 282.0
 offset_right = 132.0
@@ -328,6 +337,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Damage" type="Label" parent="UnitStats"]
+layout_mode = 0
 offset_left = -163.0
 offset_top = 355.0
 offset_right = -99.0
@@ -338,6 +348,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DamageValue" type="Label" parent="UnitStats"]
+layout_mode = 0
 offset_left = -163.0
 offset_top = 383.0
 offset_right = -99.0
@@ -347,6 +358,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Armor" type="Label" parent="UnitStats"]
+layout_mode = 0
 offset_left = -163.0
 offset_top = 429.0
 offset_right = -99.0
@@ -357,6 +369,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ArmorValue" type="Label" parent="UnitStats"]
+layout_mode = 0
 offset_left = -163.0
 offset_top = 457.0
 offset_right = -99.0
@@ -379,6 +392,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="HpBar" type="ProgressBar" parent="Control"]
+layout_mode = 0
 offset_left = -393.0
 offset_top = 460.0
 offset_right = -218.0
@@ -390,6 +404,7 @@ value = 75.0
 show_percentage = false
 
 [node name="HpValue" type="Label" parent="Control"]
+layout_mode = 0
 offset_left = -398.0
 offset_top = 459.0
 offset_right = -213.0
@@ -400,6 +415,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ManaBar" type="ProgressBar" parent="Control"]
+layout_mode = 0
 offset_left = -393.0
 offset_top = 488.0
 offset_right = -218.0
@@ -411,6 +427,7 @@ value = 75.0
 show_percentage = false
 
 [node name="ManaValue" type="Label" parent="Control"]
+layout_mode = 0
 offset_left = -398.0
 offset_top = 488.0
 offset_right = -213.0
