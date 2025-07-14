@@ -38,19 +38,19 @@ class_name UnitData
 	"strength": 1, 
 	"agility": 1, 
 	"intelligence": 1, 
-	"max_health": 1,
+	"max_health": 10,
 	"current_health": 1,
 	"max_mana": 1,
 	"current_mana": 1,
 	"armor": 1,
-	"movement_speed": 1, 
+	"movement_speed": 330, 
 	"health_regen": 0.1, 
 	"mana_regen": 0.1, 
 	"attack_speed": 1.0, 
 	"base_damage": 1,
-	"attack_damage": 1,
-	"attack_dice_roll": 1,
-	"range": 1
+	"attack_damage": 2,
+	"attack_dice_roll": 2,
+	"range": 50
 	}
 	
 var min_stat_values: Dictionary = {

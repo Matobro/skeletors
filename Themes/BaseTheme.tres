@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://c7dngud5lnlv5"]
+
+[ext_resource type="FontFile" uid="uid://hryht1uvr8i8" path="res://Fonts/8-bit-snobbery/8 Bit Snobbery.ttf" id="1_m3ybu"]
+
+[resource]
+default_font = ExtResource("1_m3ybu")
+default_font_size = 16

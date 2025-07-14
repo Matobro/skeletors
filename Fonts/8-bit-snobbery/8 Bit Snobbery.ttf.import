@@ -1,0 +1,41 @@
+[remap]
+
+importer="font_data_dynamic"
+type="FontFile"
+uid="uid://hryht1uvr8i8"
+path="res://.godot/imported/8 Bit Snobbery.ttf-ffe2eca48455248fc17fedc79f2f20ce.fontdata"
+
+[deps]
+
+source_file="res://Fonts/8-bit-snobbery/8 Bit Snobbery.ttf"
+dest_files=["res://.godot/imported/8 Bit Snobbery.ttf-ffe2eca48455248fc17fedc79f2f20ce.fontdata"]
+
+[params]
+
+Rendering=null
+antialiasing=0
+generate_mipmaps=false
+disable_embedded_bitmaps=true
+multichannel_signed_distance_field=true
+msdf_pixel_range=32
+msdf_size=128
+allow_system_fallback=true
+force_autohinter=false
+hinting=1
+subpixel_positioning=4
+keep_rounding_remainders=true
+oversampling=0.0
+Fallbacks=null
+fallbacks=[]
+Compress=null
+compress=true
+preload=[{
+"chars": [],
+"glyphs": [],
+"name": "New Configuration",
+"size": Vector2i(16, 0),
+&"variation_embolden": 0.0
+}]
+language_support={}
+script_support={}
+opentype_features={}

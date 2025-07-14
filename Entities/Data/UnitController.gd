@@ -54,7 +54,7 @@ func _ready():
 	
 func init_unit(unit_data):
 	await get_tree().process_frame
-	
+		
 	animation_player.init_animations(unit_data.unit_model_data)
 	data = unit_data.duplicate()
 	dead = false

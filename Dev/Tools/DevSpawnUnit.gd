@@ -11,8 +11,6 @@ var mouse_pos = null
 var temp_color: Color
 
 @onready var spawn_visual = $"../CanvasLayer/TextureRect"
-#@onready var create_unit_button = $"../CanvasLayer/DevBox/CreateUnitButton"
-#@onready var create_enemy_button = $"../CanvasLayer/DevBox/CreateEnemyButton"
 @onready var player_input = $"../PlayerObject/PlayerInput"
 
 func _ready():

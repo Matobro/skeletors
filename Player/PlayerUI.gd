@@ -2,6 +2,7 @@ extends Node2D
 
 var unit_slot = preload("res://Entities/Units/UnitSlot.tscn")
 @onready var portrait = $Portrait/AnimatedSprite2D
+@onready var portrait_box = $Portrait
 @onready var name_label = $UnitStats/Name
 @onready var xp_bar = $HeroStats/XpBar
 @onready var damage_label = $UnitStats/DamageValue
@@ -37,8 +38,10 @@ func _process(delta: float) -> void:
 
 func add_unit_to_control(unit):
 	var instance = unit_slot.instantiate()
+	var port = unit.data.avatar.get_frame_texture("idle", 0)
 	instance.unit = unit
 	current_control_group.add_child(instance)
+	instance.init_unit(port)
 	control_group_array.append(instance)
 	if control_group_array and control_group_array[0].unit == unit:
 		update_unit_ui(unit.data)
@@ -47,7 +50,6 @@ func add_unit_to_control(unit):
 
 func check_group():
 	var units = control_group_array.size()
-	print(units)
 	if units > 1:
 		show_stats(false)
 		portrait.visible = true
@@ -118,6 +120,14 @@ func show_bars(value):
 	
 func update_ui():
 	update_unit_ui(current_data)
+
+func fit_portrait():
+	var frame_texture = portrait.sprite_frames.get_frame_texture("idle", 0)
+	var frame_size = frame_texture.get_size()
+	
+	var scale_ratio = portrait_box / frame_size
+	var final_scale = min(scale_ratio.x, scale_ratio.y)
+	portrait.scale = Vector2.ONE * final_scale
 	
 func update_unit_ui(data):
 	if data == null:

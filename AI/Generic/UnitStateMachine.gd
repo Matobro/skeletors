@@ -52,7 +52,6 @@ func state_logic(delta): #Actual state logic, what to do in states
 		states.moving:
 			if parent.movement_target != null:
 				if parent.pathfinding_timer > parent.pathfinding_speed:
-					print("new path")
 					parent.pathfinding_agent.target_position = parent.movement_target
 				parent.move_to_target()
 				
