@@ -67,10 +67,11 @@ func init_unit(unit_data):
 	init_stats()
 	
 func init_stats():
+	data.stats = data.stats.duplicate()
 	data.stats.current_health = data.stats.max_health
 	data.stats.attack_damage = data.stats.base_damage
 	hp_bar.init_hp_bar(data.stats.current_health, data.stats.max_health)
-	check_if_valid_stats()
+	# check_if_valid_stats()
 	
 func set_unit_color():
 	var sprite_material = animation_player.material
@@ -87,15 +88,15 @@ func set_unit_color():
 			9: sprite_material.set_shader_parameter("outline_color", Color.GRAY)
 			10: sprite_material.set_shader_parameter("outline_color", Color.RED)
 
-func check_if_valid_stats():
-	for key in data.stats.keys():
-		var min_value = data.min_stat_values[key]
-		var value = data.stats.get(key, null)
+# func check_if_valid_stats():
+# 	for key in data.stats.keys():
+# 		var min_value = data.min_stat_values[key]
+# 		var value = data.stats.get(key, null)
 		
-		if value == null:
-			push_error("Missing stat: ", key)
-		elif value < min_value:
-			push_error("Stat '%s' too low: %s (min: %s)" % [key, value, min_value])
+# 		if value == null:
+# 			push_error("Missing stat: ", key)
+# 		elif value < min_value:
+# 			push_error("Stat '%s' too low: %s (min: %s)" % [key, value, min_value])
 ### UNIT INITIALIZATION END ###
 
 ### HEALTH LOGIC ###
@@ -302,6 +303,7 @@ func move_to_target():
 	
 	handle_orientation(smoothed_direction)
 	velocity = smoothed_direction * data.stats.movement_speed
+	print(data.stats.movement_speed)
 	move_and_slide()
 
 	if pathfinding_timer > pathfinding_speed + 1:
@@ -373,7 +375,7 @@ func closest_enemy_in_aggro_range() -> Unit: #closest enemy target in aggro rang
 
 func closest_enemy_in_attack_range() -> Unit: #closest enemy in attack range
 	if closest_enemy_in_aggro_range() != null:
-		if closest_enemy_in_aggro_range().position.distance_to(position) < data.stats.range:
+		if closest_enemy_in_aggro_range().position.distance_to(position) < data.stats.attack_range:
 			return closest_enemy_in_aggro_range()
 	
 	return null

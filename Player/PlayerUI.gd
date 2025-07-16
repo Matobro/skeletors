@@ -23,7 +23,6 @@ var unit_slot = preload("res://Entities/Units/Data/UnitSlot.tscn")
 @onready var portrait = $Portrait/AnimatedSprite2D
 @onready var portrait_box = $Portrait
 @onready var name_label = $UnitStats/Name
-@onready var hero_name_label = $HeroStats/Name
 @onready var xp_bar = $HeroStats/XpBar
 @onready var damage_label = $UnitStats/DamageValue
 @onready var str_label = $HeroStats/StrValue
@@ -196,7 +195,7 @@ func update_unit_ui(data):
 			unit_stats.visible = true
 			hero_stats.visible = false
 		"hero":
-			unit_stats.visible = false
+			unit_stats.visible = true
 			hero_stats.visible = true
 			str_label.text = str(stats.strength)
 			agi_label.text = str(stats.agility)

@@ -1,8 +1,29 @@
-[gd_resource type="Resource" script_class="UnitData" load_steps=4 format=3 uid="uid://brkhykt73uw54"]
+[gd_resource type="Resource" script_class="UnitData" load_steps=6 format=3 uid="uid://brkhykt73uw54"]
 
 [ext_resource type="SpriteFrames" uid="uid://b7drij1vhiw1p" path="res://Entities/Heroes/TestHero/TestHero_spriteframes.tres" id="1_o1be4"]
 [ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://Entities/Data/UnitData.gd" id="2_gw4jj"]
+[ext_resource type="Script" uid="uid://dqe50qceubild" path="res://Entities/Data/HeroStatData.gd" id="3_gw4jj"]
 [ext_resource type="Resource" uid="uid://dcesvheohla5h" path="res://Entities/Heroes/TestHero/TestHero_modeldata.tres" id="3_iu2uk"]
+
+[sub_resource type="Resource" id="Resource_iu2uk"]
+script = ExtResource("3_gw4jj")
+strength = 0
+agility = 0
+intelligence = 0
+max_health = 5
+max_mana = 0
+armor = 1
+movement_speed = 330
+health_regen = 0.1
+mana_regen = 0.1
+attack_speed = 1.0
+base_damage = 2
+attack_dice_roll = 2
+attack_range = 50
+current_health = 0
+current_mana = 0
+attack_damage = 0
+metadata/_custom_type_script = "uid://dqe50qceubild"
 
 [resource]
 script = ExtResource("2_gw4jj")
@@ -11,22 +32,5 @@ unit_type = "hero"
 name = "Test Hero"
 description = "Im a test hero"
 avatar = ExtResource("1_o1be4")
-stats = {
-"agility": 1,
-"armor": 1,
-"attack_damage": 2,
-"attack_dice_roll": 2,
-"attack_speed": 1.0,
-"base_damage": 1,
-"current_health": 1,
-"current_mana": 1,
-"health_regen": 0.1,
-"intelligence": 1,
-"mana_regen": 0.1,
-"max_health": 10,
-"max_mana": 1,
-"movement_speed": 330,
-"range": 50,
-"strength": 1
-}
+stats = SubResource("Resource_iu2uk")
 metadata/_custom_type_script = "uid://oeoy2vl8vgue"

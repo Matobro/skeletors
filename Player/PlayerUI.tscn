@@ -48,10 +48,6 @@ border_color = Color(0.407843, 0.313726, 0.121569, 1)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_3tuem"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_1i0l3"]
-outline_size = 5
-outline_color = Color(0, 0, 0, 1)
-
 [sub_resource type="LabelSettings" id="LabelSettings_lvs6t"]
 font_color = Color(0.886275, 0.192157, 0.172549, 1)
 outline_size = 6
@@ -72,6 +68,10 @@ bg_color = Color(0.188609, 0.00707214, 0.188723, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ahhui"]
 bg_color = Color(0.343531, 0.0258959, 0.343524, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_1i0l3"]
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_sxr4j"]
 outline_size = 6
@@ -215,17 +215,6 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-
-[node name="Name" type="Label" parent="HeroStats"]
-layout_mode = 0
-offset_left = -131.0
-offset_top = 282.0
-offset_right = 132.0
-offset_bottom = 305.0
-text = "Unit Name"
-label_settings = SubResource("LabelSettings_1i0l3")
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="Str" type="Label" parent="HeroStats"]
 layout_mode = 0
