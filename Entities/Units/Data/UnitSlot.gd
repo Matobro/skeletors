@@ -14,7 +14,7 @@ func _ready() -> void:
 	hp_bar.max_value = unit.data.stats.max_health
 	hp_bar.value = unit.data.stats.current_health
 		
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	current_frame += 1
 	if current_frame > update_speed:
 		current_frame = 0

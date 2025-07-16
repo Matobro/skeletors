@@ -114,7 +114,7 @@ func state_logic(delta): #Actual state logic, what to do in states
 		states.dying:
 			pass
 
-func enter_state(new_state, old_state): #mostly for animations
+func enter_state(_new_state, _old_state): #mostly for animations
 	state_id += 1
 	#if parent.data != null: ##display state changes in console
 		#if parent.owner_id == 1:
@@ -150,13 +150,13 @@ func enter_state(new_state, old_state): #mostly for animations
 			animation_player.connect("animation_finished", Callable(self, "_on_death_animation_finished"), CONNECT_ONE_SHOT)
 			animation_player.play("dying")
 
-func exit_state(old_state, new_state):
+func exit_state(_old_state, _new_state):
 	match state:
 		states.attacking:
 			if parent.attack_target != null:
 				parent.attack_target.unregister_attacker(parent)
 				
-func get_transition(delta): #Handle transitions, if x happens go to state y
+func get_transition(_delta): #Handle transitions, if x happens go to state y
 	if parent.dead and state != states.dying:
 		return states.dying
 	

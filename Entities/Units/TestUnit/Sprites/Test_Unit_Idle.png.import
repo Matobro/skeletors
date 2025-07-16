@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dk6w6lq288o7f"
-path="res://.godot/imported/Test_Unit_Attack.png-d503b828614adea0252a6ff51acf8ee7.ctex"
+uid="uid://crp7vreakmdh7"
+path="res://.godot/imported/Test_Unit_Idle.png-357966aa90fa2d2ca4ecceb341ff043c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Units/TestUnit/Test_Unit_Attack.png"
-dest_files=["res://.godot/imported/Test_Unit_Attack.png-d503b828614adea0252a6ff51acf8ee7.ctex"]
+source_file="res://Entities/Units/TestUnit/Sprites/Test_Unit_Idle.png"
+dest_files=["res://.godot/imported/Test_Unit_Idle.png-357966aa90fa2d2ca4ecceb341ff043c.ctex"]
 
 [params]
 

@@ -129,7 +129,7 @@ func handle_commands(unit, pos, shift, click_target):
 				
 func calculate_unit_formation(total_units, pos):
 	var unit_targets := []
-	var spacing := 82 
+	var spacing := 82.0
 	var columns = int(ceil(sqrt(total_units)))
 	var rows := int(ceil(total_units / float(columns)))
 	
@@ -137,7 +137,7 @@ func calculate_unit_formation(total_units, pos):
 	var total_height = (rows - 1) * spacing
 	
 	for i in range(total_units):
-		var row: int = i / columns
+		var row = float(i) / columns
 		var column: int = i % columns
 		
 		var offset := Vector2(

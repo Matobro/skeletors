@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bn4iacwgx5k81"
-path="res://.godot/imported/Test_Unit_Portrait.png-a227c9f8a3272889ffc62751de3e9faf.ctex"
+uid="uid://bjp14t015lfw6"
+path="res://.godot/imported/Test_Unit_Walk.png-094eba433512a5fb79c7743c8382df26.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Units/TestUnit/Test_Unit_Portrait.png"
-dest_files=["res://.godot/imported/Test_Unit_Portrait.png-a227c9f8a3272889ffc62751de3e9faf.ctex"]
+source_file="res://Entities/Units/TestUnit/Sprites/Test_Unit_Walk.png"
+dest_files=["res://.godot/imported/Test_Unit_Walk.png-094eba433512a5fb79c7743c8382df26.ctex"]
 
 [params]
 

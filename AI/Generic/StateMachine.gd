@@ -30,16 +30,16 @@ func update_state_machine(delta):
 		set_state(new_state)
 	state_logic(delta)
 	
-func state_logic(delta):
+func state_logic(_delta):
 	pass
 	
-func get_transition(delta):
+func get_transition(_delta):
 	pass
 	
-func enter_state(new_state, old_state):
+func enter_state(_new_state, _old_state):
 	pass
 	
-func exit_state(old_state, new_state):
+func exit_state(_old_state, _new_state):
 	pass
 	
 func set_state(new_state: String):

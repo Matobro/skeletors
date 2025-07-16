@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=4 format=3 uid="uid://w5ojk43vfpsa"]
+
+[ext_resource type="SpriteFrames" uid="uid://j3ueq03cf5sq" path="res://Entities/Units/TestUnit/Test_Unit_Spriteframes.tres" id="1_wgatk"]
+[ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://Entities/Data/UnitData.gd" id="2_ywxjw"]
+[ext_resource type="Resource" uid="uid://dbn2rgqy5pauf" path="res://Entities/Units/TestUnit/Test_Unit_Model_Data.tres" id="3_7jcky"]
+
+[resource]
+script = ExtResource("2_ywxjw")
+unit_model_data = ExtResource("3_7jcky")
+unit_type = "unit"
+name = "Test_Unit"
+description = "Unit for testing"
+avatar = ExtResource("1_wgatk")
+stats = {
+"agility": 1,
+"armor": 2,
+"attack_damage": 1,
+"attack_dice_roll": 2,
+"attack_speed": 1.0,
+"base_damage": 4,
+"current_health": 1,
+"current_mana": 1,
+"health_regen": 0.1,
+"intelligence": 1,
+"mana_regen": 0.1,
+"max_health": 10,
+"max_mana": 1,
+"movement_speed": 330,
+"range": 30,
+"strength": 1
+}
+metadata/_custom_type_script = "uid://oeoy2vl8vgue"

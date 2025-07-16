@@ -1,6 +1,6 @@
 extends Node2D
 
-var unit_slot = preload("res://Entities/Units/UnitSlot.tscn")
+var unit_slot = preload("res://Entities/Units/Data/UnitSlot.tscn")
 @onready var portrait = $Portrait/AnimatedSprite2D
 @onready var portrait_box = $Portrait
 @onready var name_label = $UnitStats/Name
@@ -30,7 +30,7 @@ func _ready():
 	check_group()
 	hero_stats.visible = false
 	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	current_frame += 1
 	if current_frame > update_speed:
 		current_frame = 0
@@ -143,9 +143,9 @@ func update_unit_ui(data):
 			hero_stats.visible = false
 		"hero":
 			hero_stats.visible = true
-			str_label.text = stats.strength
-			agi_label.text = stats.agility
-			int_label.text = stats.intelligence
+			str_label.text = str(stats.strength)
+			agi_label.text = str(stats.agility)
+			int_label.text = str(stats.intelligence)
 			
 	portrait.sprite_frames = data.avatar
 	portrait.play("idle")
@@ -165,8 +165,8 @@ func update_unit_ui(data):
 func get_damage(data):
 	var damage = data.attack_damage
 	var dice = data.attack_dice_roll
-	var min = damage - dice
-	var max = damage + dice
-	var clamp_min = clamp(min, 1, 9999)
-	var arr = [clamp_min, max]
+	var _min = damage - dice
+	var _max = damage + dice
+	var clamp_min = clamp(_min, 1, 9999)
+	var arr = [clamp_min, _max]
 	return arr

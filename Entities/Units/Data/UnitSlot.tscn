@@ -1,10 +1,11 @@
 [gd_scene load_steps=7 format=3 uid="uid://54p4rbg1lbko"]
 
-[ext_resource type="Texture2D" uid="uid://bn4iacwgx5k81" path="res://Entities/Units/TestUnit/Test_Unit_Portrait.png" id="1_b8l55"]
-[ext_resource type="Script" uid="uid://rlfeb02p7qb2" path="res://Entities/Units/UnitSlot.gd" id="1_wb4y5"]
+[ext_resource type="Script" uid="uid://rlfeb02p7qb2" path="res://Entities/Units/Data/UnitSlot.gd" id="1_wb4y5"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_b8l55"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wb4y5"]
-atlas = ExtResource("1_b8l55")
+atlas = SubResource("CompressedTexture2D_b8l55")
 region = Rect2(0, 0, 20, 20)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5yuhv"]
