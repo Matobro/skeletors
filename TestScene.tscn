@@ -81,10 +81,18 @@ layout_mode = 2
 
 [node name="OptionButton" type="OptionButton" parent="CanvasLayer/DevBox"]
 layout_mode = 0
-offset_left = 198.0
-offset_top = 14.0
-offset_right = 230.0
+offset_left = 197.0
+offset_top = 44.0
+offset_right = 229.0
+offset_bottom = 64.0
+
+[node name="Label" type="Label" parent="CanvasLayer/DevBox"]
+layout_mode = 0
+offset_left = 190.0
+offset_top = 11.0
+offset_right = 239.0
 offset_bottom = 34.0
+text = "Player"
 
 [node name="Label" type="Label" parent="CanvasLayer"]
 visible = false

@@ -27,7 +27,7 @@ func _ready():
 	for data in unit_data_list:
 		unit_list.add_item(data.name)
 
-	for i in range(1, 13):
+	for i in range(1, 11):
 		owner_select.add_item(str(i))
 
 	owner_select.item_selected.connect(_on_owner_id_selected)
