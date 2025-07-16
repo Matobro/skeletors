@@ -18,7 +18,7 @@ const DRAG_THRESHOLD := 50.0
 @onready var selection_box = $"../CanvasLayer/BoxSelection"
 @onready var camera := get_viewport().get_camera_2d()
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if block_input_frames > 0:
 		block_input_frames -= 1
 		

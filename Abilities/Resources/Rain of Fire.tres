@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AoeRainAbility" load_steps=3 format=3 uid="uid://dbmfys26ty1pb"]
+
+[ext_resource type="Script" uid="uid://dndt3a0urcey0" path="res://Abilities/Data/AoeRainAbility.gd" id="1_n14ki"]
+[ext_resource type="Texture2D" uid="uid://bnpibg1likgcq" path="res://Abilities/Icons/RainofFire_Icon.png" id="1_rw545"]
+
+[resource]
+script = ExtResource("1_n14ki")
+wave_count = 0
+duration = 0.0
+damage_per_wave = 0
+area_radius = 0.0
+name = ""
+icon = ExtResource("1_rw545")
+cooldown = 0.1
+mana_cost = 0
+metadata/_custom_type_script = "uid://dndt3a0urcey0"
