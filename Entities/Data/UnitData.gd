@@ -35,3 +35,6 @@ class_name UnitData
 @export var description: String
 @export var avatar: SpriteFrames
 @export var stats: BaseStatData
+
+func get_unit_type() -> String:
+	return unit_type

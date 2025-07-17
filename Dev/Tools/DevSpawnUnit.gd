@@ -1,6 +1,9 @@
 extends Node2D
 
-var unit = preload("res://Entities/Units/Data/Unit.tscn")
+var unit_scenes = {
+	"hero": preload("res://Entities/Heroes/Data/Hero.tscn"),
+	"unit": preload("res://Entities/Units/Data/Unit.tscn")
+}
 var commandsData = preload("res://Commands/DefaultCommands.tres")
 
 var spawning_unit: bool
@@ -46,6 +49,7 @@ func _input(event: InputEvent):
 			spawn_unit(current_data)
 			
 func spawn_unit(data):
+	var unit = unit_scenes.get(data.unit_type, unit_scenes["unit"])
 	player_input.block_input_frames = 5
 	var spawned_unit = unit.instantiate()
 	spawned_unit.global_position = mouse_pos

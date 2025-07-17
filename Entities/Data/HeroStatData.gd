@@ -6,11 +6,14 @@ class_name HeroStatData
 @export var strength: int
 @export var agility: int
 @export var intelligence: int
+@export var level: int
+@export var xp: int
+@export var xp_to_level: int
 
 ### Multipliers ###
-var str_multiplier: int
-var agi_multiplier: int
-var int_multiplier: int
+var str_multiplier: int = 2
+var agi_multiplier: float = 0.01
+var int_multiplier: int = 2
 
 func get_bonus_health() -> int:
     return strength * str_multiplier

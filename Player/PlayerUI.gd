@@ -9,7 +9,7 @@ extends Node2D
 ### I DONT WANT TO TOUCH THIS SHIT EVER AGAIN       ###
 ### 17/07/2025                                      ###
 ### MATO                                            ###
-###                                                 ###
+### FUUUUUUUU I HAD TO TOUCH THIS (xp bar)          ###
 ###                                                 ###
 ###                                                 ###
 ###                                                 ###
@@ -200,6 +200,9 @@ func update_unit_ui(data):
 			str_label.text = str(stats.strength)
 			agi_label.text = str(stats.agility)
 			int_label.text = str(stats.intelligence)
+			xp_bar.max_value = str(stats.xp_to_level)
+			xp_bar.value = stats.xp
+			level_label.text = str(stats.level)
 			
 	portrait.sprite_frames = data.avatar
 	portrait.play("idle")
