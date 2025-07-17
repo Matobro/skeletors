@@ -1,10 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://b78guoeubqseh"]
+[gd_scene load_steps=5 format=3 uid="uid://b78guoeubqseh"]
 
 [ext_resource type="Script" uid="uid://dwtk4qqasp13b" path="res://Player/PlayerInput.gd" id="1_ib60y"]
+[ext_resource type="Script" uid="uid://bhdxffem17s30" path="res://Player/Player.gd" id="1_qjed2"]
 [ext_resource type="Script" uid="uid://d2y2w3vn7wtfw" path="res://Player/CameraController.gd" id="2_cliar"]
 [ext_resource type="PackedScene" uid="uid://44m1veg1thkm" path="res://Player/PlayerUI.tscn" id="3_cliar"]
 
 [node name="PlayerObject" type="Node2D"]
+script = ExtResource("1_qjed2")
 
 [node name="PlayerInput" type="Node2D" parent="."]
 script = ExtResource("1_ib60y")

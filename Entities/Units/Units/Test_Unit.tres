@@ -17,6 +17,7 @@ attack_speed = 1.0
 base_damage = 2
 attack_dice_roll = 2
 attack_range = 50
+xp_yield = 50
 current_health = 0
 current_mana = 0
 attack_damage = 0

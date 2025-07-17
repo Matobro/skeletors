@@ -4,7 +4,7 @@ extends Node2D
 
 var dev_disable_input: bool = false
 
-var player_id = 1
+var player_id = null
 var drag_start = Vector2.ZERO
 var dragging = false
 var attack_moving: bool = false
@@ -17,6 +17,10 @@ const DRAG_THRESHOLD := 50.0
 @onready var player_ui = $"../CanvasLayer/PlayerUI"
 @onready var selection_box = $"../CanvasLayer/BoxSelection"
 @onready var camera := get_viewport().get_camera_2d()
+@onready var player = get_parent()
+
+func _ready() -> void:
+	player_id = player.player_id
 
 func _physics_process(_delta):
 	if block_input_frames > 0:

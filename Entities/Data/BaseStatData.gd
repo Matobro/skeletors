@@ -13,6 +13,7 @@ class_name BaseStatData
 @export var base_damage: int = 2
 @export var attack_dice_roll: int = 2
 @export var attack_range: int = 50
+@export var xp_yield: int = 50
 
 ### 'Current' Values ###
 @export var current_health: int

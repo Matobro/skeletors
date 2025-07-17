@@ -70,7 +70,6 @@ func init_stats():
 	data.stats = data.stats.duplicate()
 	data.stats.current_health = data.stats.max_health
 	data.stats.current_mana = data.stats.max_mana
-	data.stats.attack_damage = data.stats.base_damage
 	hp_bar.init_hp_bar(data.stats.current_health, data.stats.max_health)
 	# check_if_valid_stats()
 	

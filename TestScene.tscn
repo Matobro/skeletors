@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=4 uid="uid://dv3rvon240ulo"]
 
-[ext_resource type="PackedScene" uid="uid://b78guoeubqseh" path="res://Player/PlayerObject.tscn" id="1_cguwc"]
+[ext_resource type="Script" uid="uid://30hv0rapwc73" path="res://Entities/Data/GameManager.gd" id="1_go42g"]
 [ext_resource type="Script" uid="uid://cyy8ru024m6fd" path="res://Dev/Tools/DevSpawnUnit.gd" id="2_cguwc"]
 [ext_resource type="Script" uid="uid://b0rkh5k3kav3u" path="res://Entities/Data/DamageTextPool.gd" id="3_go42g"]
 [ext_resource type="Texture2D" uid="uid://cbbfeajwrgr1c" path="res://Terrain/Tilesets/Test_Ground_Tile.png" id="3_wicfy"]
@@ -39,11 +39,10 @@ sources/0 = SubResource("TileSetAtlasSource_tq6uv")
 
 [node name="World" type="Node2D"]
 y_sort_enabled = true
+script = ExtResource("1_go42g")
 
 [node name="DamageTextPool" type="Node" parent="."]
 script = ExtResource("3_go42g")
-
-[node name="PlayerObject" parent="." instance=ExtResource("1_cguwc")]
 
 [node name="DevSpawnUnit" type="Node2D" parent="."]
 script = ExtResource("2_cguwc")

@@ -3,6 +3,8 @@ extends BaseStatData
 class_name HeroStatData
 
 ### Stats ###
+@export_enum("strength", "agility", "intelligence") var main_stat: String = ""
+
 @export var strength: int
 @export var agility: int
 @export var intelligence: int
@@ -23,3 +25,15 @@ func get_bonus_attack_speed() -> float:
     
 func get_bonus_mana() -> int:
     return intelligence * int_multiplier
+
+func get_bonus_attack_damage() -> int:
+    match main_stat:
+        "strength":
+            return max (1, int(floor(strength / 3)))
+        "agility":
+            return max (1, int(floor(strength / 3)))
+        "intelligence":
+            return max (1, int(floor(strength / 3)))
+        _:
+            return 0
+            

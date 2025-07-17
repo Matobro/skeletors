@@ -11,6 +11,7 @@ func init_hp_bar(hp, _max_hp):
 	max_hp = _max_hp
 	hp_bar_label.text = str(hp)
 	hp_bar.max_value = max_hp
+	set_hp_bar(hp)
 	queue_redraw()
 	
 func set_hp_bar(hp):

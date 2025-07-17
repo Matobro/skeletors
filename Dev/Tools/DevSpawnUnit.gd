@@ -14,15 +14,26 @@ var current_data = null
 
 var unit_data_list: Array = []
 
-@onready var unit_list = $"../CanvasLayer/DevBox/VBoxContainer/OptionButton"
-@onready var spawn_button = $"../CanvasLayer/DevBox/VBoxContainer/Button"
-@onready var spawn_visual = $"../CanvasLayer/TextureRect"
-@onready var player_input = $"../PlayerObject/PlayerInput"
-@onready var damage_text = $"../DamageTextPool"
-@onready var owner_select = $"../CanvasLayer/DevBox/OptionButton"
+@onready var manager = null
+@onready var unit_list = null
+@onready var spawn_button = null
+@onready var spawn_visual = null
+@onready var player_input = null
+@onready var damage_text = null
+@onready var owner_select = null
 
 
-func _ready():
+func init_node() -> void:
+	manager = get_parent()
+	unit_list = $"../CanvasLayer/DevBox/VBoxContainer/OptionButton"
+	spawn_button = $"../CanvasLayer/DevBox/VBoxContainer/Button"
+	spawn_visual = $"../CanvasLayer/TextureRect"
+	player_input = $"../PlayerObject/PlayerInput"
+	damage_text = $"../DamageTextPool"
+	owner_select = $"../CanvasLayer/DevBox/OptionButton"
+	on_ready()
+
+func on_ready():
 	spawning_unit = false
 	unit_data_list = load_units_from_folder("res://Entities/Units/Units/", "unit")
 	unit_data_list += load_units_from_folder("res://Entities/Heroes/Heroes/", "hero")
@@ -60,8 +71,11 @@ func spawn_unit(data):
 	spawned_unit.owner_id = owner_id
 	player_input.selectable_units.append(spawned_unit)
 	spawned_unit.died.connect(player_input._on_unit_died)
+	spawned_unit.died.connect(manager._on_unit_died)
 	show_unit_on_mouse(false)
 	spawning_unit = false
+	if data.unit_type == "hero":
+		manager.get_player(owner_id).hero = spawned_unit
 
 func show_unit_on_mouse(value):
 	spawn_visual.visible = value

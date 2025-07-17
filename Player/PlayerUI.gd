@@ -200,8 +200,8 @@ func update_unit_ui(data):
 			str_label.text = str(stats.strength)
 			agi_label.text = str(stats.agility)
 			int_label.text = str(stats.intelligence)
-			xp_bar.max_value = str(stats.xp_to_level)
-			xp_bar.value = stats.xp
+			xp_bar.max_value = data.hero.get_xp_for_next_level() - data.hero.get_xp_for_current_level()
+			xp_bar.value = data.stats.xp - data.hero.get_xp_for_current_level()
 			level_label.text = str(stats.level)
 			
 	portrait.sprite_frames = data.avatar
@@ -216,7 +216,7 @@ func update_unit_ui(data):
 
 	hp_bar.max_value = stats.max_health
 
-	var hp = clamp(stats.current_health, 0, 9999)
+	var hp = clamp(stats.current_health, 0, 99999)
 	hp_bar.value = stats.current_health
 	hp_bar_label.text = str(hp, "/", stats.max_health)
 
