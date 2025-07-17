@@ -28,7 +28,7 @@ func init_node() -> void:
 	unit_list = $"../CanvasLayer/DevBox/VBoxContainer/OptionButton"
 	spawn_button = $"../CanvasLayer/DevBox/VBoxContainer/Button"
 	spawn_visual = $"../CanvasLayer/TextureRect"
-	player_input = $"../PlayerObject/PlayerInput"
+	#player_input = $"../PlayerObject/PlayerInput"
 	damage_text = $"../DamageTextPool"
 	owner_select = $"../CanvasLayer/DevBox/OptionButton"
 	on_ready()
@@ -53,6 +53,9 @@ func _process(_delta: float):
 	
 	if spawning_unit:
 		spawn_visual.position = mouse_pos
+
+		if !player_input.dev_disable_input:
+			player_input.dev_disable_input = true
 	
 func _input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -60,6 +63,8 @@ func _input(event: InputEvent):
 			spawn_unit(current_data)
 			
 func spawn_unit(data):
+	print("spawned")
+	player_input.block_input_frames = 5
 	var unit = unit_scenes.get(data.unit_type, unit_scenes["unit"])
 	player_input.block_input_frames = 5
 	var spawned_unit = unit.instantiate()
@@ -74,6 +79,7 @@ func spawn_unit(data):
 	spawned_unit.died.connect(manager._on_unit_died)
 	show_unit_on_mouse(false)
 	spawning_unit = false
+	player_input.dev_disable_input = false
 	if data.unit_type == "hero":
 		manager.get_player(owner_id).hero = spawned_unit
 
@@ -98,7 +104,6 @@ func load_units_from_folder(folder_path: String, unit_type: String) -> Array:
 	return units
 
 func _on_owner_id_selected(index):
-	print("called")
 	owner_id = index + 1
 
 func _on_spawn_button_pressed():

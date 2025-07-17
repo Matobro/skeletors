@@ -44,7 +44,7 @@ var current_data: UnitData
 var update_speed = 5
 var current_frame = 0
 
-func _ready():
+func init_node():
 	show_stats(false)
 	check_group()
 	hero_stats.visible = false

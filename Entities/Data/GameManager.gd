@@ -5,7 +5,8 @@ extends Node
 var player_scene = preload("res://Player/PlayerObject.tscn")
 
 var players_to_spawn = [
-	{ "id": 1, "is_ai": false, "hero": null }
+	{ "id": 1, "is_ai": false, "hero": null },
+	{ "id": 10, "is_ai": true, "hero": null }
 ]
 
 var players = {}
@@ -13,6 +14,7 @@ var players = {}
 func _ready() -> void:
 	spawn_players()
 	await get_tree().process_frame
+	dev_spawner.player_input = get_player(1).player_input
 	dev_spawner.init_node()
 
 func spawn_players():

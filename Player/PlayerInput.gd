@@ -8,21 +8,32 @@ var player_id = null
 var drag_start = Vector2.ZERO
 var dragging = false
 var attack_moving: bool = false
+var is_local_player: bool
 
 var block_input_frames: int = 0
 var selected_units: Array = []
 var selectable_units: Array = []
 const DRAG_THRESHOLD := 50.0
 
-@onready var player_ui = $"../CanvasLayer/PlayerUI"
 @onready var selection_box = $"../CanvasLayer/BoxSelection"
-@onready var camera := get_viewport().get_camera_2d()
 @onready var player = get_parent()
 
-func _ready() -> void:
-	player_id = player.player_id
+var player_ui = null
+var camera = null
 
+func init_node() -> void:
+	if !player.is_local_player:
+		return
+	
+	print(player_id)
+	player_id = player.player_id
+	camera = player.player_camera
+	player_ui = player.player_ui
+	
 func _physics_process(_delta):
+	if !player.is_local_player:
+		return
+
 	if block_input_frames > 0:
 		block_input_frames -= 1
 		
@@ -34,8 +45,14 @@ func _physics_process(_delta):
 		for unit in selected_units:
 			if unit.dead:
 				selected_units.erase(unit)
-				
+
 func _unhandled_input(event):
+	if !player.is_local_player:
+		return
+
+	if dev_disable_input:
+		return
+
 	if get_viewport().gui_get_hovered_control() != null:
 		dragging = false
 		selection_box.visible = false
@@ -47,7 +64,7 @@ func _unhandled_input(event):
 		selection_box.visible = false
 		selection_box.size = Vector2.ZERO
 		return
-		
+
 	var shift = Input.is_key_pressed(KEY_SHIFT)
 	var pos = get_global_mouse_position()
 	var click_target = check_click_hit(pos)
@@ -244,5 +261,4 @@ func select_unit_at_mouse_pos(mouse_pos: Vector2, shift):
 func _on_unit_died(unit):
 	if unit in selectable_units:
 		selectable_units.erase(unit)
-		if unit.owner_id == player_id:
-			player_ui.remove_unit_from_group(unit)
+		player_ui.remove_unit_from_group(unit)

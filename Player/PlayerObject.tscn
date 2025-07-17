@@ -15,6 +15,7 @@ script = ExtResource("1_ib60y")
 script = ExtResource("2_cliar")
 
 [node name="PlayerCamera" type="Camera2D" parent="."]
+enabled = false
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
