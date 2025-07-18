@@ -11,28 +11,27 @@ func init_unit(unit_data):
 	if data.stats is HeroStatData:
 		data.stats = data.stats.duplicate()
 	else:
-		push_warning("Hero UnitData is wrong type (BaseStatData), should be (HeroStatData")
+		push_warning("Hero Stats is wrong type (BaseStatData), should be (HeroStatData")
 		data.stats = data.stats.duplicate()
 
-	var hero_stats = data.stats as HeroStatData
 	data.hero = self
-	data.stats.max_health += hero_stats.get_bonus_health()
-	data.stats.attack_speed += hero_stats.get_bonus_attack_speed()
-	data.stats.max_mana += hero_stats.get_bonus_mana()
-	data.stats.attack_damage += hero_stats.get_bonus_attack_damage()
-
+	data.stats.recalculate_stats()
 	### Unit class ###
 	await get_tree().process_frame
-		
+
+	animation_library.add_animation_library("animations", data.unit_library)	
 	animation_player.init_animations(data.unit_model_data)
+	state_machine.animation_player = animation_player
+	state_machine.animation_library = animation_library
 	dead = false
 	set_selected(false)
 	aggro_collision.set_deferred("disabled", false)
 	set_unit_color()
 	await get_tree().process_frame
-	
-	init_stats()
 
+	hp_bar.init_hp_bar(data.stats.current_health, data.stats.max_health)
+	state_machine.set_ready()
+	
 func get_xp(amount):
 	data.stats.xp += amount
 	while data.stats.xp >= get_xp_for_level(data.stats.level + 1):
@@ -58,4 +57,4 @@ func get_xp_for_level(lvl: int) -> int:
 	return round(100 * pow(lvl, 1.5))
 
 func level_up():
-	pass
+	data.stats.gain_stats(data.stats.strength_per_level, data.stats.agility_per_level, data.stats.intelligence_per_level)

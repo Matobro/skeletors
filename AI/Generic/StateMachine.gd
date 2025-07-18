@@ -9,13 +9,20 @@ var state_id: int = 0
 var state: String = ""
 var prev_state = null
 var states = {}
-
+var initialized: bool = false
 var restrict_speed: bool = false
 
 @onready var parent = get_parent()
-@onready var animation_player = get_parent().get_node("AnimatedSprite2D")
+var animation_player = null
+var animation_library = null
+
+func set_ready():
+	initialized = true
 
 func _physics_process(delta):
+	if !initialized:
+		return
+		
 	if restrict_speed:
 		frame_counter += 1
 		if frame_counter >= FRAME_INTERVAL:

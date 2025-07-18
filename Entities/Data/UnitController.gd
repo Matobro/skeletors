@@ -9,6 +9,7 @@ var damage_text: DamageTextPool
 ###UNIT DATA###
 @onready var state_machine = $UnitStateMachine
 @onready var animation_player = $AnimatedSprite2D
+@onready var animation_library = $AnimationPlayer
 @onready var aggro_collision = $AggroRange/CollisionShape2D
 @onready var hp_bar = $HpBar/Control
 var owner_id: int
@@ -55,8 +56,11 @@ func _ready():
 	
 func init_unit(unit_data):
 	await get_tree().process_frame
-		
+
+	animation_library.add_animation_library("animations", unit_data.unit_library)
 	animation_player.init_animations(unit_data.unit_model_data)
+	state_machine.animation_player = animation_player
+	state_machine.animation_library = animation_library
 	data = unit_data.duplicate()
 	dead = false
 	set_selected(false)
@@ -64,12 +68,25 @@ func init_unit(unit_data):
 	set_unit_color()
 	await get_tree().process_frame
 	
+	state_machine.set_ready()
 	init_stats()
 	
 func init_stats():
 	data.stats = data.stats.duplicate()
+
+	#lol
+	data.stats.max_health = data.stats.base_max_hp
+	data.stats.max_mana = data.stats.base_max_mana
+	data.stats.armor = data.stats.base_armor
+	data.stats.movement_speed = data.stats.base_movement_speed
+	data.stats.health_regen = data.stats.base_health_regen
+	data.stats.mana_regen = data.stats.base_mana_regen
+	data.stats.attack_speed = data.stats.base_attack_speed
+	data.stats.attack_range = data.stats.base_range
 	data.stats.current_health = data.stats.max_health
 	data.stats.current_mana = data.stats.max_mana
+	data.stats.attack_damage = data.stats.base_damage
+
 	hp_bar.init_hp_bar(data.stats.current_health, data.stats.max_health)
 	# check_if_valid_stats()
 	
@@ -116,7 +133,7 @@ func take_damage(damage):
 ### HEALTH LOGIC END ###
 
 func _physics_process(delta):
-	if attack_timer >= 0:
+	if attack_timer > 0:
 		attack_timer -= delta
 		
 	#if owner_id == 1:
@@ -126,6 +143,9 @@ func _physics_process(delta):
 			#print("Unit current commands amount: ", command_queue.size())
 		
 ### COMBAT LOGIC ###
+
+func get_attack_delay() -> float:
+	return 1.0 / data.stats.attack_speed
 
 func cast_ability(index: int, pos: Vector2, world_node: Node):
 	if index < 0 or index >= abilities.size():

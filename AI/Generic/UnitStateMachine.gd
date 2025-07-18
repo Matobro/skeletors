@@ -11,7 +11,8 @@ extends StateMachine
 #5. if idling and unit attacks (out of aggro range) -> aggro that target
 ####################################################################################
 
-func _ready():
+func set_ready():
+	initialized = true
 	add_state("idle")
 	add_state("moving")
 	add_state("aggroing")
@@ -84,20 +85,23 @@ func state_logic(delta): #Actual state logic, what to do in states
 						parent.pathfinding_agent.target_position = parent.attack_target.global_position
 				parent.move_to_target()
 		states.attacking:
+			var anim_speed = parent.data.stats.attack_speed
+			var attack_point_scaled = parent.data.unit_model_data.animation_attack_point / anim_speed
+			var attack_duration_scaled = parent.data.unit_model_data.animation_attack_duration / anim_speed
+
 			if parent.is_attack_committed:
 				parent.attack_anim_timer += delta
 				
 				###Deal damage --- stage 2
-				if !parent.has_attacked and parent.attack_anim_timer >= parent.data.unit_model_data.animation_attack_point:
+				if !parent.has_attacked and parent.attack_anim_timer >= attack_point_scaled:
 					parent.perform_attack()
 					parent.has_attacked = true
 				
 				###Finish attack animation --- stage 3
-				if parent.attack_anim_timer >= parent.data.unit_model_data.animation_attack_duration:
+				if parent.attack_anim_timer >= attack_duration_scaled:
 					parent.attack_anim_timer = 0.0
 					parent.has_attacked = false
 					parent.is_attack_committed = false
-					animation_player.play("idle")
 					
 			else:
 				###Finish attack
@@ -105,13 +109,15 @@ func state_logic(delta): #Actual state logic, what to do in states
 					parent.attack_target = null
 					return
 					##Start new attack
-				elif parent.attack_timer <= 0:
+				elif parent.attack_timer <= 0 and !parent.is_attack_committed:
 					parent.is_attack_committed = true
 					parent.has_attacked = false
 					parent.attack_anim_timer = 0.0
-					parent.attack_timer = parent.data.stats.attack_speed
-					animation_player.play("attack")
-		states.dying:
+					parent.attack_timer = parent.get_attack_delay()
+					animation_player.stop()
+					animation_library.play("animations/attack")
+					animation_library.speed_scale = anim_speed + 0.05
+					### adding slight speed boost to animation so it finishes before attack finishes
 			pass
 
 func enter_state(_new_state, _old_state): #mostly for animations

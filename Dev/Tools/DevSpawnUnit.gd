@@ -63,7 +63,11 @@ func _input(event: InputEvent):
 			spawn_unit(current_data)
 			
 func spawn_unit(data):
-	print("spawned")
+	if !manager.get_player(owner_id):
+		push_warning("Player: ", owner_id, " does not exist")
+		finish_spawn()
+		return
+	
 	player_input.block_input_frames = 5
 	var unit = unit_scenes.get(data.unit_type, unit_scenes["unit"])
 	player_input.block_input_frames = 5
@@ -77,11 +81,15 @@ func spawn_unit(data):
 	player_input.selectable_units.append(spawned_unit)
 	spawned_unit.died.connect(player_input._on_unit_died)
 	spawned_unit.died.connect(manager._on_unit_died)
+	if data.unit_type == "hero":
+		manager.get_player(owner_id).hero = spawned_unit
+
+	finish_spawn()
+
+func finish_spawn():
 	show_unit_on_mouse(false)
 	spawning_unit = false
 	player_input.dev_disable_input = false
-	if data.unit_type == "hero":
-		manager.get_player(owner_id).hero = spawned_unit
 
 func show_unit_on_mouse(value):
 	spawn_visual.visible = value

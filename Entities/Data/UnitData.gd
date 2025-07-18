@@ -30,6 +30,7 @@ extends Resource
 class_name UnitData
 
 @export var unit_model_data: UnitModelData
+@export var unit_library: AnimationLibrary
 @export var unit_type: String
 @export var name: String
 @export var description: String
