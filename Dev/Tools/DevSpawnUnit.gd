@@ -81,7 +81,7 @@ func spawn_unit(data):
 	player_input.selectable_units.append(spawned_unit)
 	spawned_unit.died.connect(player_input._on_unit_died)
 	spawned_unit.died.connect(manager._on_unit_died)
-	if data.unit_type == "hero":
+	if data.unit_type == "hero" and !manager.get_player(owner_id).hero:
 		manager.get_player(owner_id).hero = spawned_unit
 
 	finish_spawn()

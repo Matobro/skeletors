@@ -19,12 +19,19 @@ var facing_right: bool = true
 
 ###DEV###
 var dev_counter := 0
+var frame_skip: int = 0
 
 ##NAVIGATION##
 @onready var pathfinding_agent : NavigationAgent2D = $Pathfinding
 var pathfinding_timer = 10
 var pathfinding_speed = 10
+
 ###MOVEMENT###
+var max_push_checks: int = 2
+var push_mass: float = 1.0
+var push_vectors = {}
+var push_velocity: Vector2 = Vector2.ZERO
+var push_min_distance: float = 16
 var smoothed_direction := Vector2.ZERO
 var selected: bool
 var following: bool
@@ -32,13 +39,14 @@ var movement_target = null
 var follow_target = null
 var command_queue := [] #stores commands, "type" "position" eg, "attack_move" "Vector2(0, 0)"
 var rally_points: = [] #holds visuals of rally points from queued commands
-
+var holding_position: bool = false
 
 ###COMBAT###
 var abilities: Array[Ability]
 var attack_move_target = null
 var attack_target = null
 var possible_targets = [] #all enemies inside aggro range
+var friendly_targets = []
 var is_attack_moving: bool = false
 var dead: bool
 var has_attacked: bool
@@ -66,6 +74,8 @@ func init_unit(unit_data):
 	set_selected(false)
 	aggro_collision.set_deferred("disabled", false)
 	set_unit_color()
+	push_min_distance = 8 * (data.unit_model_data.scale.y)
+	push_mass = (data.unit_model_data.scale.y) * data.unit_model_data.extra_mass
 	await get_tree().process_frame
 	
 	state_machine.set_ready()
@@ -87,6 +97,12 @@ func init_stats():
 	data.stats.current_mana = data.stats.max_mana
 	data.stats.attack_damage = data.stats.base_damage
 
+	###reduces lag (maybe)
+	if data.unit_type == "unit":
+		var rng = randi_range(-10, 10)
+		data.stats.attack_range += rng
+		
+
 	hp_bar.init_hp_bar(data.stats.current_health, data.stats.max_health)
 	# check_if_valid_stats()
 	
@@ -105,15 +121,6 @@ func set_unit_color():
 			9: sprite_material.set_shader_parameter("outline_color", Color.GRAY)
 			10: sprite_material.set_shader_parameter("outline_color", Color.RED)
 
-# func check_if_valid_stats():
-# 	for key in data.stats.keys():
-# 		var min_value = data.min_stat_values[key]
-# 		var value = data.stats.get(key, null)
-		
-# 		if value == null:
-# 			push_error("Missing stat: ", key)
-# 		elif value < min_value:
-# 			push_error("Stat '%s' too low: %s (min: %s)" % [key, value, min_value])
 ### UNIT INITIALIZATION END ###
 
 ### HEALTH LOGIC ###
@@ -133,14 +140,43 @@ func take_damage(damage):
 ### HEALTH LOGIC END ###
 
 func _physics_process(delta):
+	if frame_skip > 0:
+		push_vectors.clear()
+		frame_skip = 0
+		if friendly_targets.size() > 0 or possible_targets.size() > 0:
+			for unit in friendly_targets:
+				if unit.dead:
+					friendly_targets.erase(unit)
+					continue
+				if !holding_position:
+					unit.get_body_push(friendly_targets)
+		
+			for unit in possible_targets:
+				if unit.dead:
+					possible_targets.erase(unit)
+					continue
+				if !holding_position:
+					unit.get_body_push(possible_targets)
+
+			for unit in friendly_targets:
+				if unit.dead:
+					friendly_targets.erase(unit)
+					continue
+				if !holding_position:
+					unit.apply_body_push(delta)
+
+			for unit in possible_targets:
+				if unit.dead:
+					possible_targets.erase(unit)
+					continue
+				if !holding_position:
+					unit.apply_body_push(delta)
+
 	if attack_timer > 0:
 		attack_timer -= delta
-		
-	#if owner_id == 1:
-		#dev_counter += 1
-		#if dev_counter >= 10:
-			#dev_counter = 0
-			#print("Unit current commands amount: ", command_queue.size())
+
+	frame_skip += 1
+
 		
 ### COMBAT LOGIC ###
 
@@ -203,7 +239,7 @@ func set_selected(value: bool):
 
 ### COMMAND LOGIC ###
 func issue_command(command_type: String, pos: Vector2, queue: bool, player_id: int, target) -> void:
-	if owner_id != player_id: return
+	if owner_id != player_id or command_type == null: return
 	
 	if queue:
 		command_queue.append({"type": command_type, "position": pos})
@@ -304,25 +340,30 @@ func get_current_command():
 func move_to_target():
 	pathfinding_timer += 1
 
-	var next_path_point = pathfinding_agent.get_next_path_position()
-	var to_target = (next_path_point - global_position).normalized()
-	var separation = get_separation_force()
-	var push = get_body_push()
-
-	var final_force = to_target * 1.0 + separation * 0.5 + push * 0.3
+	var to_target = Vector2.ZERO
+	if pathfinding_agent.target_position != Vector2.ZERO:
+		var next_path_point = pathfinding_agent.get_next_path_position()
+		to_target = (next_path_point - global_position).normalized()
 	
-	#reduce jittering
-	if final_force.length() > 0:
-		smoothed_direction = smoothed_direction.lerp(final_force.normalized(), 0.25)
+	var adjusted_direction = get_avoidance_adjustment(to_target, friendly_targets)
+
+	if adjusted_direction.length() > 0.01:
+		smoothed_direction = smoothed_direction.lerp(adjusted_direction, 0.2)
 	else:
 		smoothed_direction = smoothed_direction.lerp(Vector2.ZERO, 0.1)
 
 	if smoothed_direction.length() < 0.01:
 		smoothed_direction = Vector2.ZERO
-   	# # # # # # # # 
-	
+
 	handle_orientation(smoothed_direction)
-	velocity = smoothed_direction * data.stats.movement_speed
+
+	var raw_velocity = smoothed_direction * data.stats.movement_speed
+
+	if smoothed_direction.dot(to_target) < 0.3:
+		velocity = (raw_velocity + push_velocity) / 4
+	else:
+		velocity = raw_velocity + push_velocity
+
 	move_and_slide()
 
 	if pathfinding_timer > pathfinding_speed + 1:
@@ -341,39 +382,66 @@ func handle_orientation(direction: Vector2):
 	elif direction.x < 0 and facing_right:
 		animation_player.flip_h = true
 		facing_right = false
-	
-func get_separation_force():
-	var force = Vector2.ZERO
-	var separation_radius = 15.0
-	
-	for other in get_tree().get_nodes_in_group("unit"):
-		if other == self: continue
-		if other.dead: continue
+				
+func get_body_push(other_units: Array):
+	var push_checks := 0
+	for other in other_units:
+		if other == self:
+			continue
 
+		if push_checks >= max_push_checks:
+			break
+
+		push_checks += 1
 		var to_other = global_position - other.global_position
-		var dist = to_other.length()
-		
-		if dist < separation_radius and dist > 0:
-			var push_strength = 1.0 - (dist / separation_radius)
-			force += to_other.normalized() * push_strength
+		var distance = to_other.length()
+
+		var combined_push_distance = max(push_min_distance, other.push_min_distance)
+
+		if distance < combined_push_distance and distance > 0:
+			var push_strength = (combined_push_distance - distance) * 100.0
+
+			var push_dir = to_other.normalized()
+			var push_self = push_dir * (push_strength / push_mass)
+			var push_other = -push_dir * (push_strength / other.push_mass)
+
+			push_velocity += push_self
+
+			if !other.holding_position:
+				other.push_velocity += push_other
+
+func get_avoidance_adjustment(target_direction: Vector2, blocking_units: Array) -> Vector2:
+	var avoidance_force := Vector2.ZERO
+	var min_separation := 32.0
 	
-	return force * 3.0
-
-func get_body_push() -> Vector2:
-	var push = Vector2.ZERO
-	for other in get_tree().get_nodes_in_group("unit"):
-		if other == self or other.dead:
+	for other in blocking_units:
+		if other == self:
 			continue
+		
+		if other.holding_position:
+			var to_other = global_position - other.global_position
+			var distance = to_other.length()
+			if distance < min_separation and distance > 0:
+				var strength = ((min_separation - distance) / min_separation) * 2.0
+				avoidance_force += to_other.normalized() * strength
+	
+	if avoidance_force.length() > 0.01:
+		var avoidance_weight = clamp(avoidance_force.length(), 1.0, 5.9)
+		return (target_direction.normalized() * (1.0 - avoidance_weight) + avoidance_force.normalized() * avoidance_weight).normalized()
+	else:
+		return target_direction.normalized()
+	
+func apply_body_push(delta):
+	if push_velocity.length() > 0.01:
+		push_velocity = push_velocity.lerp(Vector2.ZERO, 1.0 * delta)
+		var max_push_speed = 150.0
+		if push_velocity.length() > max_push_speed:
+			push_velocity = push_velocity.normalized() * max_push_speed
 
-		var offset = global_position - other.global_position
-		var dist = offset.length()
-		if dist > 25 or dist < 5:
-			continue
+	else:
+		push_velocity = Vector2.ZERO
 
-		var strength = 1.0 - (dist / 25.0)
-		push += offset.normalized() * strength
 
-	return push * 25.0
 ### MOVEMENT LOGIC END ###
 
 ### AGGRO LOGIC ###
@@ -403,8 +471,14 @@ func _on_aggro_range_body_entered(body: Node2D):
 	if body.is_in_group("unit"):
 		if body.owner_id != self.owner_id:
 			possible_targets.append(body)
+		if body.owner_id == self.owner_id:
+			friendly_targets.append(body)
 			
 func _on_aggro_range_body_exited(body: Node2D):
 	if possible_targets.has(body):
-		possible_targets.erase(body)
+		if body.owner_id != self.owner_id:
+			possible_targets.erase(body)
+
+		if body.owner_id == self.owner_id:
+			friendly_targets.erase(body)
 ### AGGRO LOGIC END ###

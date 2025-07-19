@@ -25,11 +25,11 @@ func init_node() -> void:
 	if !player.is_local_player:
 		return
 	
-	print(player_id)
 	player_id = player.player_id
 	camera = player.player_camera
 	player_ui = player.player_ui
-	
+	print(player_id)
+
 func _physics_process(_delta):
 	if !player.is_local_player:
 		return

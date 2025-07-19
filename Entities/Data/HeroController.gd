@@ -27,11 +27,14 @@ func init_unit(unit_data):
 	set_selected(false)
 	aggro_collision.set_deferred("disabled", false)
 	set_unit_color()
+	push_min_distance = 16 * (data.unit_model_data.scale.y)
+	push_mass = data.unit_model_data.scale.y * data.unit_model_data.extra_mass
 	await get_tree().process_frame
 
-	hp_bar.init_hp_bar(data.stats.current_health, data.stats.max_health)
+	max_push_checks = 5
 	state_machine.set_ready()
-	
+	hp_bar.init_hp_bar(data.stats.current_health, data.stats.max_health)
+
 func get_xp(amount):
 	data.stats.xp += amount
 	while data.stats.xp >= get_xp_for_level(data.stats.level + 1):

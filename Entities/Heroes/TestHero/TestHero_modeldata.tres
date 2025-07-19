@@ -8,6 +8,7 @@ script = ExtResource("1_xrowm")
 sprite_frames = ExtResource("2_2bed7")
 offset = Vector2(0, 0)
 scale = Vector2(4, 4)
+extra_mass = 30.0
 animation_attack_point = 0.5
 animation_attack_duration = 0.8
 metadata/_custom_type_script = "uid://dq4e1yj8njkif"

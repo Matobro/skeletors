@@ -25,13 +25,7 @@ func set_ready():
 	call_deferred("set_state", states.idle)
 
 func state_logic(delta): #Actual state logic, what to do in states
-	### show state over unit ###
-	if parent.data != null:
-		parent.dev_state.text = str("HP: ", parent.data.stats.current_health, "\n", state)
-		
-		#if parent.owner_id == 1:
-			#print(parent.attack_timer)
-	############################
+
 	var command = parent.get_current_command()
 	
 	match state:
@@ -49,6 +43,10 @@ func state_logic(delta): #Actual state logic, what to do in states
 						set_state(states.stop)
 					"hold":
 						set_state(states.hold)
+			else:
+				parent.movement_target = null
+				parent.pathfinding_agent.target_position = Vector2.ZERO
+				parent.move_to_target()
 						
 		states.moving:
 			if parent.movement_target != null:
@@ -121,10 +119,6 @@ func state_logic(delta): #Actual state logic, what to do in states
 			pass
 
 func enter_state(_new_state, _old_state): #mostly for animations
-	state_id += 1
-	#if parent.data != null: ##display state changes in console
-		#if parent.owner_id == 1:
-			#print("Entering: [", new_state, "] from [", old_state, "] ", state_id)
 	match state:
 		states.idle:
 			if animation_player.sprite_frames.has_animation("idle"):
@@ -143,6 +137,7 @@ func enter_state(_new_state, _old_state): #mostly for animations
 			parent.clear_rally_point()
 			parent.clear_unit_state()
 			animation_player.play("idle")
+			parent.holding_position = true
 		states.aggroing:
 			if parent.attack_target != null:
 				parent.attack_target.register_attacker(parent)
@@ -158,6 +153,8 @@ func enter_state(_new_state, _old_state): #mostly for animations
 
 func exit_state(_old_state, _new_state):
 	match state:
+		states.hold:
+			parent.holding_position = false
 		states.attacking:
 			if parent.attack_target != null:
 				parent.attack_target.unregister_attacker(parent)

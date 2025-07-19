@@ -37,5 +37,5 @@ func get_all_players():
 func _on_unit_died(unit):
 	if unit.owner_id == 10:
 		for player in get_all_players():
-			if player.player_id != 10:
+			if player.player_id != 10 and player.hero:
 				player.hero.get_xp(unit.data.stats.xp_yield)
