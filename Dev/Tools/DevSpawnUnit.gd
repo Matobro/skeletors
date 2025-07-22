@@ -21,6 +21,8 @@ var unit_data_list: Array = []
 @onready var player_input = null
 @onready var damage_text = null
 @onready var owner_select = null
+@onready var spawn_popup = null
+@onready var spatial_grid = null
 
 
 func init_node() -> void:
@@ -31,6 +33,8 @@ func init_node() -> void:
 	#player_input = $"../PlayerObject/PlayerInput"
 	damage_text = $"../DamageTextPool"
 	owner_select = $"../CanvasLayer/DevBox/OptionButton"
+	spawn_popup = $"../CanvasLayer/SpawnPopUp"
+	spatial_grid = $"../SpatialGrid"
 	on_ready()
 
 func on_ready():
@@ -58,6 +62,10 @@ func _input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed and spawning_unit:
 			spawn_unit(current_data)
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
+		if event.pressed and spawning_unit:
+			finish_spawn()
+
 			
 func spawn_unit(data):
 	if !manager.get_player(owner_id):
@@ -72,6 +80,7 @@ func spawn_unit(data):
 	spawned_unit.init_unit(data)
 	spawned_unit.damage_text = damage_text
 	spawned_unit.owner_id = owner_id
+	spawned_unit.spatial_grid = spatial_grid
 	player_input.selectable_units.append(spawned_unit)
 	player_input.command_issued.connect(spawned_unit.command_component.issue_command)
 	spawned_unit.died.connect(player_input._on_unit_died)
@@ -79,9 +88,8 @@ func spawn_unit(data):
 	if data.unit_type == "hero" and !manager.get_player(owner_id).hero:
 		manager.get_player(owner_id).hero = spawned_unit
 
-	finish_spawn()
-
 func finish_spawn():
+	spawn_popup.visible = false
 	player_input.block_input_frames = 10
 	show_unit_on_mouse(false)
 	spawning_unit = false
@@ -120,6 +128,7 @@ func _on_spawn_button_pressed():
 	current_data = selected_data
 	spawning_unit = true
 	show_unit_on_mouse(true)
+	spawn_popup.visible = true
 
 	player_input.is_input_enabled = false
 	player_input.block_input_frames = 0

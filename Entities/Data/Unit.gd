@@ -14,6 +14,7 @@ var damage_text: DamageTextPool
 @onready var aggro_collision: CollisionShape2D = $AggroRange/CollisionShape2D
 @onready var hp_bar: Control = $HpBar/Control
 @onready var navigation_agent = $"Pathfinding"
+var spatial_grid = null
 
 var owner_id: int
 var data : UnitData
@@ -60,10 +61,7 @@ func assign_stuff():
 func connect_signals():
 	command_component.command_issued.connect(state_machine._on_command_issued)
 	state_machine.command_completed.connect(command_component._on_command_completed)
-
-	if has_node("/root/SpatialGrid"):
-		get_node("/root/SpatialGrid").register_unit(self)
-
+	spatial_grid.register_unit(self)
 # func _on_command_issued(command_type: String, target_unit: Node, target_position: Vector2, is_queued: bool):
 # 	if state_machine:
 # 		state_machine.receive_command(command_type, target_unit, target_position, is_queued)
@@ -188,23 +186,30 @@ func handle_orientation(direction: Vector2):
 func compare_distance(target_a, target_b):
 	return position.distance_to(target_a.position) < position.distance_to(target_b.position)
 
-func closest_enemy_in_aggro_range() -> Unit: #closest enemy target in aggro range
+func closest_enemy_in_aggro_range() -> Unit:
+	if possible_targets.size() <= 0:
+		return null
+		
+	var closest_unit: Unit = null
+	var closest_distance := INF
+
 	for unit in possible_targets:
 		if unit.dead:
 			if attack_target == unit:
 				attack_target = null
-				possible_targets.erase(unit)
-	if possible_targets.size() > 0:
-		possible_targets.sort_custom(Callable(self, "compare_distance"))
-		return possible_targets[0]
-	else:
-		return null
+			possible_targets.erase(unit)
+		else:
+			var dist := position.distance_to(unit.position)
+			if dist < closest_distance:
+				closest_distance = dist
+				closest_unit = unit
 
-func closest_enemy_in_attack_range() -> Unit: #closest enemy in attack range
-	if closest_enemy_in_aggro_range() != null:
-		if closest_enemy_in_aggro_range().position.distance_to(position) < data.stats.attack_range:
-			return closest_enemy_in_aggro_range()
-	
+	return closest_unit
+
+func closest_enemy_in_attack_range() -> Unit:
+	var closest_unit = closest_enemy_in_aggro_range()
+	if closest_unit and position.distance_to(closest_unit.position) < data.stats.attack_range:
+		return closest_unit
 	return null
 		
 func _on_aggro_range_body_entered(body: Node2D):

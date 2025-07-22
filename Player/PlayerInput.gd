@@ -146,19 +146,25 @@ func on_left_click_pressed(event_info):
 	### Attack move if holding A
 	drag_start = event_info.pos
 	if event_info.total_units > 0 and event_info.attack_moving:
-		issue_attack_move_command(event_info)
+		if event_info.click_target and event_info.click_target.owner_id == 10:
+			issue_attack_command(event_info)
+		else:
+			issue_attack_move_command(event_info)
 		return
 
 	### If not A moving: select clicked target
-	if event_info.click_target:
+	elif event_info.click_target and !event_info.attack_moving:
 		select_unit_at_mouse_pos(event_info.pos, event_info.is_queued)
 
 func on_left_click_released(event_info):
+	if event_info.attack_moving:
+		return
+
 	if dragging:
 		end_drag(event_info.is_queued)
-	else:
-		### If not dragging and no click target the clear selection if not holding shift
-		if !event_info.click_target and !event_info.is_queued:
+
+	### If not dragging and no click target the clear selection if not holding shift
+	elif !event_info.click_target and !event_info.is_queued:
 			for unit in selected_units:
 				unit.set_selected(false)
 			selected_units.clear()
@@ -182,7 +188,7 @@ func on_mouse_drag(event_info):
 			start_drag()
 
 	### Update if draggin
-	if dragging:
+	if dragging and !event_info.attack_moving:
 		update_drag(event_info.pos)
 
 func on_mouse_drag_end(event_info):
@@ -212,12 +218,18 @@ func issue_attack_command(event_info):
 		unit.command_component.issue_command("Attack", event_info.click_target, event_info.pos, event_info.is_queued, player_id)
 	
 func issue_attack_move_command(event_info):
-	for unit in selected_units:
-		unit.command_component.issue_command("Attack_move", event_info.click_target, event_info.pos, event_info.is_queued, player_id)
+	var formation_positions = calculate_unit_formation(event_info.total_units, event_info.pos)
+	for i in range(selected_units.size()):
+		var unit = selected_units[i]
+		var target_pos = formation_positions[i]
+		unit.command_component.issue_command("Attack_move", event_info.click_target, target_pos, event_info.is_queued, player_id)
 
 func issue_move_command(event_info):
-	for unit in selected_units:
-		unit.command_component.issue_command("Move", event_info.click_target, event_info.pos, event_info.is_queued, player_id)
+	var formation_positions = calculate_unit_formation(event_info.total_units, event_info.pos)
+	for i in range(selected_units.size()):
+		var unit = selected_units[i]
+		var target_pos = formation_positions[i]
+		unit.command_component.issue_command("Move", event_info.click_target, target_pos, event_info.is_queued, player_id)
 
 func calculate_unit_formation(total_units, pos):
 	var unit_targets := []

@@ -37,7 +37,6 @@ font_size = 12
 
 [node name="Unit" type="CharacterBody2D" groups=["unit"]]
 z_index = 10
-collision_mask = 3
 input_pickable = true
 script = ExtResource("1_fgnkd")
 
@@ -79,9 +78,14 @@ vertical_alignment = 2
 
 [node name="Pathfinding" type="NavigationAgent2D" parent="."]
 path_desired_distance = 5.0
-radius = 20.0
-time_horizon_agents = 0.25
+radius = 8.0
+neighbor_distance = 1000.0
+max_neighbors = 5
+time_horizon_agents = 5.0
+time_horizon_obstacles = 5.0
+max_speed = 50.0
 avoidance_priority = 0.5
+debug_enabled = true
 debug_path_custom_color = Color(1, 1, 1, 0.2)
 
 [node name="HpBar" type="ProgressBar" parent="."]
