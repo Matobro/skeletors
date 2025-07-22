@@ -6,7 +6,7 @@ extends Node2D
 
 var player_id: int
 var hero: Hero = null
-var is_local_player: bool
+var is_local_player: bool = false
 
 func _ready():
 	await get_tree().process_frame
@@ -20,6 +20,7 @@ func _ready():
 		player_camera.enabled = true
 		player_camera.make_current()
 		player_ui.visible = true
+		player_input.is_local_player = true
 		player_input.init_node()
 		player_ui.init_node()
 	else:

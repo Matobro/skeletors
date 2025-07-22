@@ -2,8 +2,8 @@ extends Resource
 
 #######################################################
 ### Unit.tscn(scene) is base for all units (heroes bosses etc)
-### It holds UnitController which has UnitData, UnitStateMachine, CommandsData
-### UnitController is logic for the unit, like 'die' 'move here' 'get closest enemy' etc
+### It holds Unit.gd which has UnitData, UnitStateMachine, CommandsData
+### Unit.gd is logic for the unit, like 'die' 'move here' 'get closest enemy' etc
 ### UnitData holds all the data for the unit, like stats, name, model
 ### UnitStateMachine is 'AI' for the unit, which tells it what to do
 ### For example if you attack move, then you go to states.moving and move to x position

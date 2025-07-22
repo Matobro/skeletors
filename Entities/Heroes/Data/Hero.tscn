@@ -1,17 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://s7d6nc8er2me"]
+[gd_scene load_steps=4 format=3 uid="uid://bkjat5hp6pjna"]
 
-[ext_resource type="PackedScene" uid="uid://bj7ef3mp2wfwp" path="res://Entities/Units/Data/Unit.tscn" id="1_o256i"]
-[ext_resource type="Script" uid="uid://csgrpv6exo6e6" path="res://Entities/Data/HeroController.gd" id="2_ox2e2"]
+[ext_resource type="PackedScene" uid="uid://bj7ef3mp2wfwp" path="res://Entities/Units/Data/Unit.tscn" id="1_gyctu"]
 [ext_resource type="Shader" uid="uid://q6d4p3qpyi60" path="res://Shaders/UnitOutlineShader.gdshader" id="3_2lgnb"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4c5uo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hjdkq"]
 resource_local_to_scene = true
 shader = ExtResource("3_2lgnb")
 shader_parameter/outline_size = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 
-[node name="Unit" instance=ExtResource("1_o256i")]
-script = ExtResource("2_ox2e2")
+[node name="Unit" instance=ExtResource("1_gyctu")]
 
-[node name="AnimatedSprite2D" parent="." index="2"]
-material = SubResource("ShaderMaterial_4c5uo")
+[node name="AnimatedSprite2D" parent="." index="3"]
+material = SubResource("ShaderMaterial_hjdkq")

@@ -53,9 +53,6 @@ func _process(_delta: float):
 	
 	if spawning_unit:
 		spawn_visual.position = mouse_pos
-
-		if !player_input.dev_disable_input:
-			player_input.dev_disable_input = true
 	
 func _input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -68,17 +65,15 @@ func spawn_unit(data):
 		finish_spawn()
 		return
 	
-	player_input.block_input_frames = 5
 	var unit = unit_scenes.get(data.unit_type, unit_scenes["unit"])
-	player_input.block_input_frames = 5
 	var spawned_unit = unit.instantiate()
 	spawned_unit.global_position = mouse_pos
 	get_tree().current_scene.add_child(spawned_unit)
 	spawned_unit.init_unit(data)
 	spawned_unit.damage_text = damage_text
-	spawned_unit.commands = commandsData
 	spawned_unit.owner_id = owner_id
 	player_input.selectable_units.append(spawned_unit)
+	player_input.command_issued.connect(spawned_unit.command_component.issue_command)
 	spawned_unit.died.connect(player_input._on_unit_died)
 	spawned_unit.died.connect(manager._on_unit_died)
 	if data.unit_type == "hero" and !manager.get_player(owner_id).hero:
@@ -87,9 +82,11 @@ func spawn_unit(data):
 	finish_spawn()
 
 func finish_spawn():
+	player_input.block_input_frames = 10
 	show_unit_on_mouse(false)
 	spawning_unit = false
-	player_input.dev_disable_input = false
+	await get_tree().process_frame
+	player_input.is_input_enabled = true
 
 func show_unit_on_mouse(value):
 	spawn_visual.visible = value
@@ -123,3 +120,6 @@ func _on_spawn_button_pressed():
 	current_data = selected_data
 	spawning_unit = true
 	show_unit_on_mouse(true)
+
+	player_input.is_input_enabled = false
+	player_input.block_input_frames = 0

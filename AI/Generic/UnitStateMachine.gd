@@ -34,6 +34,9 @@ func state_logic(delta): #Actual state logic, what to do in states
 				match command.type:
 					"move":
 						parent.movement_target = command.position
+						parent.pathfinding_agent.target_position = parent.movement_target
+						parent.stored_target = parent.pathfinding_agent.target_position
+						print("Path set", parent.stored_target)
 						set_state(states.moving)
 					"attack_move":
 						parent.attack_move_target = command.position
@@ -43,15 +46,9 @@ func state_logic(delta): #Actual state logic, what to do in states
 						set_state(states.stop)
 					"hold":
 						set_state(states.hold)
-			else:
-				parent.movement_target = null
-				parent.pathfinding_agent.target_position = Vector2.ZERO
-				parent.move_to_target()
 						
 		states.moving:
 			if parent.movement_target != null:
-				if parent.pathfinding_timer > parent.pathfinding_speed:
-					parent.pathfinding_agent.target_position = parent.movement_target
 				parent.move_to_target()
 				
 		states.attack_moving:

@@ -18,6 +18,7 @@ var animation_library = null
 
 func set_ready():
 	initialized = true
+	set_state("Idle")
 
 func _physics_process(delta):
 	if !initialized:
