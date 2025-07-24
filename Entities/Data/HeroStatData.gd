@@ -94,4 +94,4 @@ func get_bonus_attack_damage() -> int:
 			return max (1, int(floor(intelligence / 3)))
 		_:
 			return 0
-			
+		

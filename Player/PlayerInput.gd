@@ -37,8 +37,6 @@ const DRAG_THRESHOLD := 50.0
 var player_ui = null
 var camera = null
 
-signal command_issued(command, unit, target_pos, is_queued)
-
 func init_node() -> void:
 	if !player.is_local_player:
 		is_input_enabled = false

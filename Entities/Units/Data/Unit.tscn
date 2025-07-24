@@ -11,7 +11,7 @@
 [ext_resource type="Script" uid="uid://ctgb4rxeelfog" path="res://Entities/Units/Data/HpBarVisual.gd" id="6_vb87f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r47uv"]
-size = Vector2(14, 18)
+size = Vector2(25, 25)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_u5kfr"]
 
@@ -48,6 +48,7 @@ commands_data = ExtResource("3_phtje")
 script = ExtResource("3_bpv6j")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 100
 position = Vector2(0, 7)
 shape = SubResource("RectangleShape2D_r47uv")
 
@@ -78,11 +79,11 @@ vertical_alignment = 2
 
 [node name="Pathfinding" type="NavigationAgent2D" parent="."]
 path_desired_distance = 5.0
-radius = 8.0
-neighbor_distance = 1000.0
+radius = 24.0
+neighbor_distance = 100.0
 max_neighbors = 5
-time_horizon_agents = 5.0
-time_horizon_obstacles = 5.0
+time_horizon_agents = 0.3
+time_horizon_obstacles = 0.3
 max_speed = 50.0
 avoidance_priority = 0.5
 debug_enabled = true

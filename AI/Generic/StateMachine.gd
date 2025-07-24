@@ -2,15 +2,11 @@ extends Node
 
 class_name StateMachine
 
-var frame_counter := 0
-const FRAME_INTERVAL := 2
-
 var state_id: int = 0
 var state: String = ""
 var prev_state = null
 var states = {}
 var initialized: bool = false
-var restrict_speed: bool = false
 
 @onready var parent = get_parent()
 var animation_player = null
@@ -23,14 +19,8 @@ func set_ready():
 func _physics_process(delta):
 	if !initialized:
 		return
-		
-	if restrict_speed:
-		frame_counter += 1
-		if frame_counter >= FRAME_INTERVAL:
-			frame_counter = 0
-			update_state_machine(delta)
-	else:
-		update_state_machine(delta)
+
+	update_state_machine(delta)
 			
 func update_state_machine(delta):
 	var new_state = get_transition(delta)

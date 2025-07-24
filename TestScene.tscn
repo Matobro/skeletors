@@ -27,6 +27,7 @@ border_width_bottom = 3
 border_color = Color(0, 0, 0, 1)
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_go42g"]
+cell_size = 32.0
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_sreuk"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
@@ -55,7 +56,8 @@ script = ExtResource("1_go42g")
 [node name="DebugDraw" type="Node2D" parent="."]
 script = ExtResource("2_tq6uv")
 
-[node name="SpatialGrid" type="Node" parent="."]
+[node name="SpatialGrid" type="Node2D" parent="."]
+z_index = 100
 script = ExtResource("5_sreuk")
 
 [node name="DamageTextPool" type="Node" parent="."]
@@ -109,6 +111,27 @@ offset_top = 11.0
 offset_right = 239.0
 offset_bottom = 34.0
 text = "Player"
+
+[node name="DevBox2" type="Panel" parent="CanvasLayer"]
+offset_left = 5.0
+offset_top = 168.0
+offset_right = 265.0
+offset_bottom = 323.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_wicfy")
+
+[node name="Label" type="Label" parent="CanvasLayer/DevBox2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "0 - display pathfinding info
+(will drain ur fps)"
 
 [node name="Label" type="Label" parent="CanvasLayer"]
 visible = false

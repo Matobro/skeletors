@@ -14,6 +14,8 @@ var damage_text: DamageTextPool
 @onready var aggro_collision: CollisionShape2D = $AggroRange/CollisionShape2D
 @onready var hp_bar: Control = $HpBar/Control
 @onready var navigation_agent = $"Pathfinding"
+@onready var navigation_map = null
+@onready var debug_draw = get_tree().current_scene.get_node("DebugDraw")
 var spatial_grid = null
 
 var owner_id: int
@@ -22,12 +24,14 @@ var abilities: Array[Ability]
 var dead: bool = false
 var facing_right: bool = true
 var selected: bool
+var unit_scale: float = 16
 
 var attack_timer: float = 0.0
 var attack_anim_timer: float = 0.0
 var has_attacked: bool = false
 var is_attack_committed: bool = false
 
+var is_moving: bool = false
 ### Combat
 
 var attack_target: Unit = null
@@ -36,43 +40,29 @@ var friendly_targets: Array = []
 
 signal died(unit)
 
+func _draw():
+	pass
+
 func init_unit(unit_data):
+	print("Unit.init_unit() called for:", self)
+
 	data = unit_data.duplicate()
 	await get_tree().process_frame
-	assign_stuff()
+
+	_data_received()
+	await get_tree().process_frame
+
 	init_stats()
+	assign_stuff()
 	connect_signals()
 
-func assign_stuff():
-	dead = false
-	set_selected(false)
-	set_unit_color()
-	aggro_collision.set_deferred("disabled", false)
-	
-	animation_library.add_animation_library("animations", data.unit_library)
-	animation_player.init_animations(data.unit_model_data)
-
-	state_machine.animation_player = animation_player
-	state_machine.animation_library = animation_library
-	state_machine.parent = self
-
-	command_component.unit = self
-
-func connect_signals():
-	command_component.command_issued.connect(state_machine._on_command_issued)
-	state_machine.command_completed.connect(command_component._on_command_completed)
-	spatial_grid.register_unit(self)
-# func _on_command_issued(command_type: String, target_unit: Node, target_position: Vector2, is_queued: bool):
-# 	if state_machine:
-# 		state_machine.receive_command(command_type, target_unit, target_position, is_queued)
-# 		command_component.show_command_visual(command_type, target_position)
-
-func _on_command_completed(_command_type: String):
+func _data_received():
 	pass
 
 func init_stats():
-	state_machine.set_ready()
-	data.stats = data.stats.duplicate()
+
+	if data.stats is BaseStatData:
+		data.stats = data.stats.duplicate()
 
 	#lol
 	data.stats.max_health = data.stats.base_max_hp
@@ -87,14 +77,44 @@ func init_stats():
 	data.stats.current_mana = data.stats.max_mana
 	data.stats.attack_damage = data.stats.base_damage
 
-	###reduces lag (maybe)
-	if data.unit_type == "unit":
-		var rng = randi_range(-10, 10)
-		data.stats.attack_range += rng
-		
+	set_nav_agent_stats()
 
 	hp_bar.init_hp_bar(data.stats.current_health, data.stats.max_health)
 	
+
+func assign_stuff():
+	dead = false
+	set_selected(false)
+	set_unit_color()
+	aggro_collision.set_deferred("disabled", false)
+	unit_scale = data.unit_model_data.get_unit_scale_from_sprite()
+	print(unit_scale)
+
+	animation_library.add_animation_library("animations", data.unit_library)
+	animation_player.init_animations(data.unit_model_data)
+
+	state_machine.animation_player = animation_player
+	state_machine.animation_library = animation_library
+	state_machine.parent = self
+
+	command_component.unit = self
+
+func connect_signals():
+	command_component.command_issued.connect(state_machine._on_command_issued)
+	state_machine.command_completed.connect(command_component._on_command_completed)
+	spatial_grid.register_unit(self)
+	spatial_grid.allunits_debug.append(self)
+	spatial_grid.path_ready.connect(state_machine._on_path_ready)
+	state_machine.set_ready()
+
+# func _on_command_issued(command_type: String, target_unit: Node, target_position: Vector2, is_queued: bool):
+# 	if state_machine:
+# 		state_machine.receive_command(command_type, target_unit, target_position, is_queued)
+# 		command_component.show_command_visual(command_type, target_position)
+
+func _on_command_completed(_command_type: String):
+	pass
+
 func set_unit_color():
 	var sprite_material = animation_player.material
 	if sprite_material and sprite_material is ShaderMaterial:
@@ -124,6 +144,9 @@ func is_within_attack_range(_target) -> bool:
 func get_stat(stat: String):
 	return data.stats[stat]
 
+func set_nav_agent_stats():
+	navigation_agent.radius = navigation_agent.radius
+	navigation_agent.max_speed = data.stats.movement_speed
 func take_damage(damage: int):
 	if dead: return
 

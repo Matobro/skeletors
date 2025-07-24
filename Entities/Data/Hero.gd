@@ -2,35 +2,16 @@ extends Unit
 
 class_name Hero
 
-func init_unit(unit_data):
+func init_unit(unit_data: UnitData):
+	print("Hero.init_unit() called for:", self)
+	super.init_unit(unit_data)
 
-	### Hero class specific ###
-
-	data = unit_data.duplicate()
-
-	if data.stats is HeroStatData:
-		data.stats = data.stats.duplicate()
-	else:
-		push_warning("Hero Stats is wrong type (BaseStatData), should be (HeroStatData")
-		data.stats = data.stats.duplicate()
-
-	data.hero = self
+func _data_received():
+	data.stats = data.stats.duplicate() as HeroStatData
 	data.stats.recalculate_stats()
-	### Unit class ###
-	await get_tree().process_frame
-
-	animation_library.add_animation_library("animations", data.unit_library)	
-	animation_player.init_animations(data.unit_model_data)
-	state_machine.animation_player = animation_player
-	state_machine.animation_library = animation_library
-	dead = false
-	set_selected(false)
-	aggro_collision.set_deferred("disabled", false)
-	set_unit_color()
-	await get_tree().process_frame
-
-	state_machine.set_ready()
-	hp_bar.init_hp_bar(data.stats.current_health, data.stats.max_health)
+	data.hero = self
+	print(data.hero)
+	init_stats()
 
 func get_xp(amount):
 	data.stats.xp += amount

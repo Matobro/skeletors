@@ -23,6 +23,7 @@ var unit_data_list: Array = []
 @onready var owner_select = null
 @onready var spawn_popup = null
 @onready var spatial_grid = null
+@onready var nav_map = null
 
 
 func init_node() -> void:
@@ -35,6 +36,7 @@ func init_node() -> void:
 	owner_select = $"../CanvasLayer/DevBox/OptionButton"
 	spawn_popup = $"../CanvasLayer/SpawnPopUp"
 	spatial_grid = $"../SpatialGrid"
+	nav_map = $"../NavigationRegion2D"
 	on_ready()
 
 func on_ready():
@@ -73,20 +75,29 @@ func spawn_unit(data):
 		finish_spawn()
 		return
 	
+	### Spawn unit ##
 	var unit = unit_scenes.get(data.unit_type, unit_scenes["unit"])
+	print(unit)
 	var spawned_unit = unit.instantiate()
 	spawned_unit.global_position = mouse_pos
 	get_tree().current_scene.add_child(spawned_unit)
+
+	### Initialize unit ###
 	spawned_unit.init_unit(data)
 	spawned_unit.damage_text = damage_text
 	spawned_unit.owner_id = owner_id
 	spawned_unit.spatial_grid = spatial_grid
+	spawned_unit.navigation_map = nav_map
+
+	### Assign player stuff ###
 	player_input.selectable_units.append(spawned_unit)
-	player_input.command_issued.connect(spawned_unit.command_component.issue_command)
+	#player_input.command_issued.connect(spawned_unit.command_component.issue_command)
 	spawned_unit.died.connect(player_input._on_unit_died)
 	spawned_unit.died.connect(manager._on_unit_died)
+
+	### Assign hero to player ###
 	if data.unit_type == "hero" and !manager.get_player(owner_id).hero:
-		manager.get_player(owner_id).hero = spawned_unit
+		manager.get_player(owner_id).hero = spawned_unit as Hero
 
 func finish_spawn():
 	spawn_popup.visible = false

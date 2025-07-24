@@ -1,22 +1,31 @@
 extends StateMachine
 
-### COMMENT SPAM WARNING, I CANT REMEMBER HOW STUFF WORKS ###
 class_name UnitAI
 
 signal command_completed(command_type)
 
+var last_command_type := ""
+var last_commanded_position := Vector2.INF
 var max_queue_size: int = 5
 
 var current_command = null
+var original_command_position = null
 var pathfinding_target: Vector2 = Vector2.ZERO
-var aggro_check_timer: float = 0.0
 
-var detour_target: Vector2 = Vector2.ZERO
-var detour_timer: float = 0.0
-const DETOUR_TIME: float = 1.0
-const DETOUR_DISTANCE: float = 80.0
-const BLOCKED_RADIUS: float = 48.0
+var aggro_check_timer: float = 0.0
 const AGGRO_CHECK_INTERVAL: float = 1.0
+
+### Pathfinding stuff ###
+var path: PackedVector2Array = []
+var path_index: int = 0
+var path_requested: bool = false
+var current_path_request_id = 0
+
+var last_requested_path := {"start": Vector2.INF, "end": Vector2.INF}
+var last_requested_target := Vector2.ZERO
+var path_request_timer := 0.0
+const PATH_REQUEST_INTERVAL := 2.0  # how often u can request
+const TARGET_CHANGE_THRESHOLD := 100.0  # how much target point must move to consider new path
 
 func _ready():
 	add_state("Idle")
@@ -27,26 +36,36 @@ func _ready():
 	add_state("Attack")
 	add_state("Dying")
 
+
 func _on_command_issued(_command_type, _target, _position, is_queued):
+	if !is_queued:
+		if _command_type == last_command_type and _position.distance_to(last_commanded_position) < TARGET_CHANGE_THRESHOLD:
+			print("Spam click detected")
+			return
+
+	last_command_type = _command_type
+	last_commanded_position = _position	
+
 	if state == "Idle" and current_command == null or !is_queued:
 		_process_next_command()
 
+
 func _process_next_command():
-	### If no commands then return to idle
 	var next_command = parent.command_component.get_next_command()
 
 	if next_command == null:
 		set_state("Idle")
 		current_command = null
+		last_command_type = ""
+		last_commanded_position = Vector2.INF
 		return
 
-	### Get next command, remove it from queue and signal current command to be done
 	current_command = next_command
+	original_command_position = current_command.target_position
 	parent.command_component.pop_next_command()
 
 	emit_signal("command_completed", current_command.type)
 
-	### Set correct state based on command
 	match current_command.type:
 		"Move":
 			set_state("Move")
@@ -59,41 +78,65 @@ func _process_next_command():
 		_:
 			set_state("Idle")
 
+
 func enter_state(_new_state, _old_state):
+	if !initialized:
+		return
+
 	match _new_state:
 		"Idle":
 			animation_player.play("idle")
 			parent.velocity = Vector2.ZERO
 			aggro_check_timer = 0.0
 		"Move":
+			parent.spatial_grid.deregister_unit(parent)
+			parent.is_moving = true
 			animation_player.play("walk")
 		"Attack_move":
+			parent.spatial_grid.deregister_unit(parent)
 			aggro_check_timer = 0.0
 			animation_player.play("walk")
 		"Aggro":
+			parent.spatial_grid.deregister_unit(parent)
 			animation_player.play("walk")
 		"Attack":
-			parent.velocity  = Vector2.ZERO
+			parent.spatial_grid.deregister_unit(parent)
+			parent.velocity = Vector2.ZERO
 		"Dying":
+			parent.spatial_grid.deregister_unit(parent)
 			parent.set_physics_process(false)
 			parent.set_collision_layer(0)
 			parent.set_collision_mask(0)
 			animation_player.connect("animation_finished", Callable(self, "_on_death_animation_finished"), CONNECT_ONE_SHOT)
 			animation_player.play("dying")
 		"Stop":
+			parent.spatial_grid.update_unit_position(parent)
 			parent.velocity = Vector2.ZERO
 			_process_next_command()
+
 
 func exit_state(_old_state, _new_state):
 	match _old_state:
 		"Move":
+			path = []
+			path_index = 0
+			path_requested = false
+			last_requested_target = Vector2.ZERO
+			parent.spatial_grid.register_unit(parent)
 			parent.velocity = Vector2.ZERO
+			parent.is_moving = false
+			parent.navigation_agent.set_velocity(Vector2.ZERO)
 			animation_player.stop()
 		"Aggro":
-			parent.velocity  = Vector2.ZERO
+			parent.spatial_grid.register_unit(parent)
+			parent.is_moving = false
+			parent.navigation_agent.set_velocity(Vector2.ZERO)
 			animation_player.stop()
 		"Attack":
-			parent.velocity = Vector2.ZERO
+			parent.spatial_grid.register_unit(parent)
+			parent.is_moving = false
+			parent.navigation_agent.set_velocity(Vector2.ZERO)
+
 
 func state_logic(delta):
 	match state:
@@ -108,8 +151,10 @@ func state_logic(delta):
 		"Attack":
 			_attack_logic(delta)
 
+
 func get_transition(_delta):
 	return null
+
 
 func _idle_logic(delta):
 	if current_command != null:
@@ -118,93 +163,71 @@ func _idle_logic(delta):
 	parent.velocity = Vector2.ZERO
 	aggro_check_timer += delta
 
-	#Check enemies in aggro range every x seconds
 	if aggro_check_timer > AGGRO_CHECK_INTERVAL:
 		aggro_check_timer = 0.0
-
-		#If enemy found issue attack command
 		var enemy = parent.closest_enemy_in_aggro_range()
 		if enemy != null:
-			parent.command_component.issue_command("Attack", enemy, enemy.global_position, false, parent.owner_id) 
+			parent.command_component.issue_command("Attack", enemy, enemy.global_position, false, parent.owner_id)
 
-func _move_logic(delta):
+
+func _move_logic(_delta):
 	if current_command == null:
 		set_state("Idle")
 		return
 
-	var nav_agent = parent.navigation_agent
-	var target_position = current_command.target_position
+	var target = current_command.target_position
+	var spatial_grid = parent.spatial_grid
 
-	# --- DETOUR LOGIC ---
-	if detour_target != Vector2.ZERO:
-		# Move slower when detouring
-		var slow_speed = parent.get_stat("movement_speed") * 0.75
-		
-		# Move towards detour target
-		var detour_dir = (detour_target - parent.global_position).normalized()
-		parent.velocity = detour_dir * slow_speed
-		parent.move_and_slide()
-		parent.handle_orientation(detour_dir)
+	# If we have no path yet
+	if path.size() == 0:
+		if not path_requested:
+			# Debounce: if target is basically the same as before, don't re-request
+			if last_requested_target.distance_to(target) < TARGET_CHANGE_THRESHOLD:
+				print("Overriding")
+				# Skip requesting a new path; treat as already handled
+				_process_next_command()
+				return
 
-		# Track how long we've been detouring
-		detour_timer += delta
+			last_requested_target = target
+			current_path_request_id += 1
+			spatial_grid.queue_unit_for_path(parent, current_path_request_id)
+			path_requested = true
+		return  # Wait for path
 
-		# Consider detour finished if close enough OR detour time passed
-		if parent.global_position.distance_to(detour_target) < 16 or detour_timer >= 1.0:
-			detour_target = Vector2.ZERO
-			detour_timer = 0.0
-			
-			# Recalculate path to original target after detouring
-			nav_agent.target_position = target_position
-			pathfinding_target = target_position
-
-		# While detouring, skip the rest of the move logic
-		return
-
-	# --- NORMAL PATHFINDING & BLOCK CHECK ---
-	
-	# Recalculate path if target changed and not detouring
-	if pathfinding_target != target_position:
-		nav_agent.target_position = target_position
-		pathfinding_target = target_position
-
-	# Target reached
-	if nav_agent.is_navigation_finished():
+	# Reached end
+	if path_index >= path.size():
 		_process_next_command()
+		path_requested = false
 		return
 
-	# Check for blocking units
-	var nearby_units = parent.spatial_grid.get_nearby_units(parent.global_position, BLOCKED_RADIUS)
-	var blocking_unit = null
-	for unit in nearby_units:
-		if unit == parent:
-			continue
-		if unit.global_position.distance_to(parent.global_position) < BLOCKED_RADIUS:
-			blocking_unit = unit
-			break
+	var _target = path[path_index]
+	var to_target = _target - parent.global_position
 
-	if blocking_unit != null:
-		detour_timer += delta
-		if detour_timer >= DETOUR_TIME:
-			var away_dir = (parent.global_position - blocking_unit.global_position).normalized()
-			var perp_dir = Vector2(-away_dir.y, away_dir.x)
-			if randi() % 2 == 0:
-				perp_dir = -perp_dir
-			var detour_dir = (perp_dir * 0.5 + away_dir * 0.5).normalized()
-			detour_target = parent.global_position + detour_dir * DETOUR_DISTANCE
-			detour_timer = 0.0
-			return
+	if to_target.length() < 10.0:
+		path_index += 1
 	else:
-		detour_timer = 0.0
+		var dir = to_target.normalized()
+		var velocity = dir * parent.get_stat("movement_speed")
+		parent.velocity = velocity
+		parent.move_and_slide()
 
-	# Move normally towards next path point
-	var next_point = nav_agent.get_next_path_position()
-	var direction = (next_point - parent.global_position).normalized()
-	parent.velocity = direction * parent.get_stat("movement_speed")
-	parent.move_and_slide()
-	parent.handle_orientation(direction)
+func _on_path_ready(unit, new_path: PackedVector2Array, request_id):
+	# Path for wrong unit (how)
+	if unit != parent:
+		return
 
+	# Return if outdated path (someone likes spamming clicks)
+	if request_id != current_path_request_id:
+		return
 
+	# Return if invalid path
+	if new_path.size() == 0:
+		set_state("Idle")
+		return
+
+	path = new_path
+	path_index = 0
+	path_requested = false
 
 func _attack_move_logic(delta):
 	if current_command == null:

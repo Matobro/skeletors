@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bkjat5hp6pjna"]
+[gd_scene load_steps=5 format=3 uid="uid://bkjat5hp6pjna"]
 
 [ext_resource type="PackedScene" uid="uid://bj7ef3mp2wfwp" path="res://Entities/Units/Data/Unit.tscn" id="1_gyctu"]
+[ext_resource type="Script" uid="uid://bfyq7u1d5dh3c" path="res://Entities/Data/Hero.gd" id="2_hjdkq"]
 [ext_resource type="Shader" uid="uid://q6d4p3qpyi60" path="res://Shaders/UnitOutlineShader.gdshader" id="3_2lgnb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hjdkq"]
@@ -10,6 +11,7 @@ shader_parameter/outline_size = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 
 [node name="Unit" instance=ExtResource("1_gyctu")]
+script = ExtResource("2_hjdkq")
 
 [node name="AnimatedSprite2D" parent="." index="3"]
 material = SubResource("ShaderMaterial_hjdkq")
