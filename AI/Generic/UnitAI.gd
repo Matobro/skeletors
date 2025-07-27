@@ -46,15 +46,10 @@ func _ready():
 
 func _on_command_issued(_command_type, _target, _position, is_queued):
 	if !is_queued:
-		if _command_type == last_command_type and _position.distance_to(last_commanded_position) < TARGET_CHANGE_THRESHOLD:
-			print("Spam click detected")
-			return
+		_process_next_command()
 
 	last_command_type = _command_type
 	last_commanded_position = _position	
-
-	if state == "Idle" and current_command == null or !is_queued:
-		_process_next_command()
 
 
 func _process_next_command():
@@ -97,6 +92,7 @@ func enter_state(_new_state, _old_state):
 			parent.velocity = Vector2.ZERO
 			aggro_check_timer = 0.0
 		"Move":
+			path = []
 			parent.spatial_grid.deregister_unit(parent)
 			parent.is_moving = true
 			animation_player.play("walk")
@@ -178,45 +174,34 @@ func _idle_logic(delta):
 	parent.velocity = Vector2.ZERO
 	aggro_check_timer += delta
 
+	# Check enemies in aggro range every x seconds
 	if aggro_check_timer > AGGRO_CHECK_INTERVAL:
 		aggro_check_timer = 0.0
 		var enemy = parent.closest_enemy_in_aggro_range()
+
+		# If enemy found, issue attack command to that unit
 		if enemy != null:
 			parent.command_component.issue_command("Attack", enemy, enemy.global_position, false, parent.owner_id)
-
 
 func _move_logic(delta):
 	if current_command == null:
 		set_state("Idle")
 		return
 
-	if _follow_path_to(current_command.target_position, delta):
-		_process_next_command()
+	# If no path, request path
+	if path.size() <= 0:
+		request_path()
+		return # wait for path
 
-func _on_path_ready(unit, new_path: PackedVector2Array, request_id):
-	# Path for wrong unit (how)
-	if unit != parent:
-		return
-
-	# Return if outdated path (someone likes spamming clicks)
-	if request_id != current_path_request_id:
-		return
-
-	# Return if invalid path
-	if new_path.size() == 0:
-		set_state("Idle")
-		return
-
-	print("Path received:", new_path.size(), " points for ", unit.name)
-	path = new_path
-	path_index = 0
-	path_requested = false
+	# Follow path
+	_follow_path(delta)
 
 func _attack_move_logic(delta):
 	if current_command == null:
 		set_state("Idle")
 		return
 
+	# Check for enemies in aggro range every x seconds
 	aggro_check_timer += delta
 	if aggro_check_timer >= AGGRO_CHECK_INTERVAL:
 		aggro_check_timer = 0.0
@@ -225,45 +210,55 @@ func _attack_move_logic(delta):
 			parent.command_component.issue_command("Attack", enemy, enemy.global_position, false, parent.owner_id)
 			return
 
-	if _follow_path_to(current_command.target_position, delta):
-		_process_next_command()
+	# If no path, request path
+	if path.size() <= 0:
+		request_path()
+		return # wait for path
+
+	# Follow path
+	_follow_path(delta)
 
 func _aggro_logic(delta):
 	aggro_path_timer += delta
-
+	
 	var target_unit = current_command.target_unit
 	if target_unit == null or !is_instance_valid(target_unit) or target_unit.dead:
 		_process_next_command()
 		return
 
-	var nearby_cell = parent.spatial_grid.find_walkable_cell_near(target_unit.global_position)
-	var target_pos = parent.spatial_grid.cell_to_world(nearby_cell)
-
-	if path.size() == 0 and !path_requested:
-	# Force a new path request since none exists yet
-		last_requested_target = Vector2.INF
-
-	if parent.is_within_attack_range(target_pos):
+	# If in attack range then go to attack state
+	if parent.is_within_attack_range(target_unit.global_position):
 		set_state("Attack")
 		return
 
-	if aggro_path_timer >= AGGRO_PATH_INTERVAL or last_requested_target.distance_to(target_pos) >= AGGRO_TARGET_CHANGE_THRESHOLD:
-		aggro_path_timer = 0.0
+	# If targeted unit is far away then use pathfinding
+	if parent.global_position.distance_to(target_unit.global_position) > 100:
+		var nearby_cell = parent.spatial_grid.find_walkable_cell_near(target_unit.global_position)
+		var target_pos = parent.spatial_grid.cell_to_world(nearby_cell)
+		current_command.target_position = target_pos
+			
+		# If no path, request path
+		if path.size() <= 0:
+			request_path()
+			return # wait for path
+		
+		# Else follow path
+		_follow_path(delta)
 
-		path = []
-		path_index = 0
-		path_requested = false
+		# If target moved over x amount then get new path
+		if target_pos.distance_to(path[-1]) > 10.0:
+			request_path()
 
-	# Always update last known target position
-	last_requested_target = target_pos
-
-	_follow_path_to(target_pos, delta)
+	# If targeted unit is close then use simple movement
+	else:
+		_simple_move(delta)
 
 func _attack_logic(delta):
 	
 	var target_unit = current_command.target_unit
 	parent.attack_target = target_unit
 
+	# Check if target is still valid
 	if target_unit == null or !is_instance_valid(target_unit) or target_unit.dead:
 		_process_next_command()
 		return
@@ -286,7 +281,7 @@ func _attack_logic(delta):
 			parent.attack_anim_timer = 0.0
 			parent.has_attacked = false
 			parent.is_attack_committed = false
-	
+
 	else:
 		#Check if in range
 		if parent.is_within_attack_range(target_unit.position):
@@ -305,39 +300,77 @@ func _attack_logic(delta):
 
 		#Target went out of range -> Chase
 		else:
-			_follow_path_to(target_unit.global_position, delta)
+			if parent.owner_id == 10: print(target_unit)
+			if parent.global_position.distance_to(target_unit.global_position) > 100:
+				set_state("Aggro")
+			else:
+				_simple_move(delta)
 
-func _follow_path_to(target_position: Vector2, _delta: float) -> bool:
+func request_path():
 	var spatial_grid = parent.spatial_grid
-	
-	# If we have no path yet, request one
-	if path.size() == 0:
-		if not path_requested:
-			if last_requested_target == Vector2.INF or last_requested_target.distance_to(target_position) >= TARGET_CHANGE_THRESHOLD:
-				last_requested_target = target_position
-				current_path_request_id += 1
-				spatial_grid.queue_unit_for_path(parent, current_path_request_id)
-				path_requested = true
-		return false
+	current_path_request_id += 1
+	path_requested = true
+	spatial_grid.queue_unit_for_path(parent, current_path_request_id)
 
-	# If we've reached the end of the path
+func _on_path_ready(unit, new_path: PackedVector2Array, request_id):
+	# Path for wrong unit (how)
+	if unit != parent:
+		return
+
+	# Return if outdated path (someone likes spamming clicks)
+	if request_id != current_path_request_id:
+		return
+
+	# Return if invalid path
+	if new_path.size() == 0:
+		set_state("Idle")
+		return
+
+	# Setup received path
+	print("Path received:", new_path.size(), " points for ", unit.name)
+	path = new_path
+	path_index = 0
+	path_requested = false
+
+func _simple_move(_delta):
+	var dir = (current_command.target_unit.global_position - parent.global_position).normalized()
+	var velocity = dir * parent.get_stat("movement_speed")
+
+	parent.velocity = velocity
+	parent.move_and_slide()
+	parent.handle_orientation(dir)
+
+func _follow_path(_delta):
+	
+	# If no path
+	if path.size() <= 0:
+		return
+
+	# If reached target
 	if path_index >= path.size():
 		path_requested = false
-		return true  # Target reached
+		return
+
+	var _target = path[path_index]
+	var distance_to_target = _target - parent.global_position
+
+	# Check if distance to current path point is close enough
+	if distance_to_target.length() < 10.0:
+		path_index += 1
 
 	# Move towards next point in path
-	var _target = path[path_index]
-	var to_target = _target - parent.global_position
-
-	if to_target.length() < 10.0:
-		path_index += 1
 	else:
-		var dir = to_target.normalized()
+		var dir = distance_to_target.normalized()
 		parent.velocity = dir * parent.get_stat("movement_speed")
 		parent.move_and_slide()
 		parent.handle_orientation(dir)
 
-	return false  # Still en route
+	# Check if distance to end goal is close enough
+	var distance_to_goal = parent.global_position - path[-1]
+
+	# If yepperino -> Goto next command
+	if distance_to_goal.length() < 10.0:
+		_process_next_command()
 
 func _on_death_animation_finished():
 	parent.queue_free()

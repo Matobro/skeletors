@@ -12,16 +12,19 @@ func _draw():
 	for circle in circles:
 		draw_circle(circle.pos, circle.rad, circle.color, false, 2.0, false)
 
-	if path.size() < 2:
-		return
-
-	for i in range(path.size() - 1):
-		draw_line(path[i], path[i + 1], Color(1, 0, 0), 2)
-
 	for point in path:
 		draw_circle(point, 4, Color(0, 1, 0))
 
+func add_line_owned(owner_id, start: Vector2, end: Vector2, color: Color = Color.BLUE):
+	if owner_id != 1:
+		return
+
+	lines.clear()
+	lines.append({ "start": start, "end": end, "color": color })
+	queue_redraw()
+
 func add_line(start: Vector2, end: Vector2, color: Color = Color.BLUE):
+	lines.clear()
 	lines.append({ "start": start, "end": end, "color": color })
 	queue_redraw()
 

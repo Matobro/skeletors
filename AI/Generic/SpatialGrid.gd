@@ -10,8 +10,8 @@ var grid := {}
 
 var astar := AStar2D.new()
 
-var grid_width: int = 50
-var grid_height: int = 50
+var grid_width: int = 100
+var grid_height: int = 100
 var cell_size: float = 40.0
 
 var half_width = grid_width / 2
@@ -30,6 +30,7 @@ signal path_ready(unit, path: PackedVector2Array, request_id)
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("0"):
 		debug_draw_enabled = !debug_draw_enabled
+		queue_redraw()
 
 func _draw():
 	if !debug_draw_enabled:
@@ -51,7 +52,7 @@ func _draw():
 	for unit in units:
 		draw_circle(unit.global_position, 5, Color.YELLOW)
 	
-	for unit in allunits_debug:
+	for unit in units:
 		if unit.state_machine.path != null:
 			var path = unit.state_machine.path
 			for i in range(path.size() -1):
@@ -95,11 +96,7 @@ func queue_unit_for_path(unit, request_id):
 	var start_pos = unit.global_position
 	var end_pos = unit.state_machine.current_command.target_position if unit.state_machine.current_command != null else start_pos
 
-	print("Queueing path for ", unit.name, " from ", start_pos, " to ", end_pos)
 	var last = unit.get_meta("last_requested_path") if unit.has_meta("last_requested_path") else {"start": Vector2.INF, "end": Vector2.INF}
-
-	print("Last start:", last["start"], " distance:", last["start"].distance_to(start_pos))
-	print("Last end:", last["end"], " distance:", last["end"].distance_to(end_pos))
 
 	if last["start"].distance_to(start_pos) < 8 and last["end"].distance_to(end_pos) < 8:
 		print("Skipping path request due to close start/end")
