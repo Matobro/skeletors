@@ -19,17 +19,20 @@ class MouseEventInfo:
 @export var commands: CommandsData
 
 var dev_disable_input: bool = false
-
+var spatial_grid = null
 var player_id = null
 var drag_start = Vector2.ZERO
 var dragging = false
 var is_local_player: bool = false
 var is_input_enabled: bool = false
 
+var command_cooldown_frames := 0
 var block_input_frames: int = 0
 var selected_units: Array[Unit] = []
 var selectable_units: Array[Unit] = []
+
 const DRAG_THRESHOLD := 50.0
+const COMMAND_COOLDOWN := 10
 
 @onready var selection_box = $"../CanvasLayer/BoxSelection"
 @onready var player = get_parent()
@@ -46,15 +49,19 @@ func init_node() -> void:
 	player_id = player.player_id
 	camera = player.player_camera
 	player_ui = player.player_ui
+	spatial_grid = player.spatial_grid
 
 func _process(_delta):
 	if block_input_frames > 0:
 		block_input_frames -= 1
 
+	if command_cooldown_frames > 0:
+		command_cooldown_frames -= 1
+
 	if !is_input_enabled:
 		selection_box.visible = false
 		return
-
+	
 	cleanup_invalid_units()
 
 func _unhandled_input(event: InputEvent):
@@ -94,6 +101,9 @@ func handle_mouse_input(event):
 		return
 	
 	if block_input_frames > 0:
+		return
+
+	if command_cooldown_frames > 0:
 		return
 
 	if is_mouse_over_ui():
@@ -216,18 +226,40 @@ func issue_attack_command(event_info):
 		unit.command_component.issue_command("Attack", event_info.click_target, event_info.pos, event_info.is_queued, player_id)
 	
 func issue_attack_move_command(event_info):
-	var formation_positions = calculate_unit_formation(event_info.total_units, event_info.pos)
-	for i in range(selected_units.size()):
+	var formation = calculate_unit_formation(event_info.total_units, event_info.pos)
+	for i in range (selected_units.size()):
 		var unit = selected_units[i]
-		var target_pos = formation_positions[i]
-		unit.command_component.issue_command("Attack_move", event_info.click_target, target_pos, event_info.is_queued, player_id)
+		var target_pos = formation[i]
+		unit.command_component.issue_command(
+			"Attack_move",
+			event_info.click_target,
+			target_pos,
+			event_info.is_queued,
+			player_id
+		)
 
+	command_cooldown_frames = COMMAND_COOLDOWN
 func issue_move_command(event_info):
-	var formation_positions = calculate_unit_formation(event_info.total_units, event_info.pos)
-	for i in range(selected_units.size()):
+	# Center of formation
+	var formation = calculate_unit_formation(event_info.total_units, event_info.pos)
+	for i in range (selected_units.size()):
 		var unit = selected_units[i]
-		var target_pos = formation_positions[i]
-		unit.command_component.issue_command("Move", event_info.click_target, target_pos, event_info.is_queued, player_id)
+		var target_pos = formation[i]
+		unit.command_component.issue_command(
+			"Move",
+			event_info.click_target,
+			target_pos,
+			event_info.is_queued,
+			player_id
+		)
+
+	command_cooldown_frames = COMMAND_COOLDOWN
+
+func center_of_mass(units: Array) -> Vector2:
+	var center := Vector2.ZERO
+	for u in units:
+		center += u.global_position
+	return center / units.size()
 
 func calculate_unit_formation(total_units, pos):
 	var unit_targets := []

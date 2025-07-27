@@ -103,7 +103,6 @@ func connect_signals():
 	command_component.command_issued.connect(state_machine._on_command_issued)
 	state_machine.command_completed.connect(command_component._on_command_completed)
 	spatial_grid.register_unit(self)
-	spatial_grid.allunits_debug.append(self)
 	spatial_grid.path_ready.connect(state_machine._on_path_ready)
 	state_machine.set_ready()
 

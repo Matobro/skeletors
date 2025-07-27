@@ -95,9 +95,14 @@ func queue_unit_for_path(unit, request_id):
 	var start_pos = unit.global_position
 	var end_pos = unit.state_machine.current_command.target_position if unit.state_machine.current_command != null else start_pos
 
+	print("Queueing path for ", unit.name, " from ", start_pos, " to ", end_pos)
 	var last = unit.get_meta("last_requested_path") if unit.has_meta("last_requested_path") else {"start": Vector2.INF, "end": Vector2.INF}
 
+	print("Last start:", last["start"], " distance:", last["start"].distance_to(start_pos))
+	print("Last end:", last["end"], " distance:", last["end"].distance_to(end_pos))
+
 	if last["start"].distance_to(start_pos) < 8 and last["end"].distance_to(end_pos) < 8:
+		print("Skipping path request due to close start/end")
 		return  # Same path -> skip
 
 	unit.set_meta("last_requested_path", {"start": start_pos, "end": end_pos})
@@ -332,6 +337,21 @@ func _get_nearest_free_cell(pos: Vector2) -> Vector2:
 				if _is_in_grid(cell) and astar.has_point(_get_cell_id(cell)):
 					return cell
 	return center  # fallback
+
+func find_walkable_cell_near(pos: Vector2, max_radius := 2) -> Vector2:
+	var center = _get_cell_coords(pos)
+	for r in range(1, max_radius + 1):
+		for dx in range(-r, r + 1):
+			for dy in range(-r, r + 1):
+				if abs(dx) + abs(dy) != r:  # perimeter only (optional)
+					continue
+				var cell = center + Vector2(dx, dy)
+				if _is_in_grid(cell) and astar.has_point(_get_cell_id(cell)):
+					return cell
+	return center  # fallback
+
+func cell_to_world(cell: Vector2) -> Vector2:
+	return (cell + Vector2(half_width, half_height)) * cell_size - Vector2(half_width, half_height) * cell_size
 
 func _get_cell_coords(_position: Vector2) -> Vector2:
 	var half_grid_pixels = Vector2(grid_width, grid_height) * cell_size / 2

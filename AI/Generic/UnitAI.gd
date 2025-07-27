@@ -12,6 +12,7 @@ var current_command = null
 var original_command_position = null
 var pathfinding_target: Vector2 = Vector2.ZERO
 
+var aggro_path_timer = 0.0
 var aggro_check_timer: float = 0.0
 const AGGRO_CHECK_INTERVAL: float = 1.0
 
@@ -24,8 +25,13 @@ var current_path_request_id = 0
 var last_requested_path := {"start": Vector2.INF, "end": Vector2.INF}
 var last_requested_target := Vector2.ZERO
 var path_request_timer := 0.0
+
 const PATH_REQUEST_INTERVAL := 2.0  # how often u can request
-const TARGET_CHANGE_THRESHOLD := 100.0  # how much target point must move to consider new path
+const TARGET_CHANGE_THRESHOLD := 8.0  # how much target point must move to consider new path
+const AGGRO_PATH_INTERVAL := 0.5
+const AGGRO_TARGET_CHANGE_THRESHOLD := 8.0
+
+var devstate = null
 
 func _ready():
 	add_state("Idle")
@@ -35,6 +41,7 @@ func _ready():
 	add_state("Aggro")
 	add_state("Attack")
 	add_state("Dying")
+	devstate = $"../DevState"
 
 
 func _on_command_issued(_command_type, _target, _position, is_queued):
@@ -83,6 +90,7 @@ func enter_state(_new_state, _old_state):
 	if !initialized:
 		return
 
+	print("Player ", parent.owner_id, " unit Entered state: ", _new_state)
 	match _new_state:
 		"Idle":
 			animation_player.play("idle")
@@ -98,7 +106,9 @@ func enter_state(_new_state, _old_state):
 			animation_player.play("walk")
 		"Aggro":
 			parent.spatial_grid.deregister_unit(parent)
+			parent.spatial_grid.deregister_unit(parent)
 			animation_player.play("walk")
+			last_requested_target = Vector2.INF
 		"Attack":
 			parent.spatial_grid.deregister_unit(parent)
 			parent.velocity = Vector2.ZERO
@@ -116,6 +126,7 @@ func enter_state(_new_state, _old_state):
 
 
 func exit_state(_old_state, _new_state):
+	print("Player ", parent.owner_id, " unit Exited state: ", _old_state)
 	match _old_state:
 		"Move":
 			path = []
@@ -124,21 +135,24 @@ func exit_state(_old_state, _new_state):
 			last_requested_target = Vector2.ZERO
 			parent.spatial_grid.register_unit(parent)
 			parent.velocity = Vector2.ZERO
-			parent.is_moving = false
-			parent.navigation_agent.set_velocity(Vector2.ZERO)
+			animation_player.stop()
+		"Attack_move":
+			path = []
+			path_index = 0
+			path_requested = false
+			last_requested_target = Vector2.ZERO
+			parent.spatial_grid.register_unit(parent)
+			parent.velocity = Vector2.ZERO
 			animation_player.stop()
 		"Aggro":
 			parent.spatial_grid.register_unit(parent)
-			parent.is_moving = false
-			parent.navigation_agent.set_velocity(Vector2.ZERO)
 			animation_player.stop()
 		"Attack":
 			parent.spatial_grid.register_unit(parent)
-			parent.is_moving = false
-			parent.navigation_agent.set_velocity(Vector2.ZERO)
 
 
 func state_logic(delta):
+	devstate.text = state
 	match state:
 		"Idle":
 			_idle_logic(delta)
@@ -158,6 +172,7 @@ func get_transition(_delta):
 
 func _idle_logic(delta):
 	if current_command != null:
+		_process_next_command()
 		return
 
 	parent.velocity = Vector2.ZERO
@@ -170,46 +185,13 @@ func _idle_logic(delta):
 			parent.command_component.issue_command("Attack", enemy, enemy.global_position, false, parent.owner_id)
 
 
-func _move_logic(_delta):
+func _move_logic(delta):
 	if current_command == null:
 		set_state("Idle")
 		return
 
-	var target = current_command.target_position
-	var spatial_grid = parent.spatial_grid
-
-	# If we have no path yet
-	if path.size() == 0:
-		if not path_requested:
-			# Debounce: if target is basically the same as before, don't re-request
-			if last_requested_target.distance_to(target) < TARGET_CHANGE_THRESHOLD:
-				print("Overriding")
-				# Skip requesting a new path; treat as already handled
-				_process_next_command()
-				return
-
-			last_requested_target = target
-			current_path_request_id += 1
-			spatial_grid.queue_unit_for_path(parent, current_path_request_id)
-			path_requested = true
-		return  # Wait for path
-
-	# Reached end
-	if path_index >= path.size():
+	if _follow_path_to(current_command.target_position, delta):
 		_process_next_command()
-		path_requested = false
-		return
-
-	var _target = path[path_index]
-	var to_target = _target - parent.global_position
-
-	if to_target.length() < 10.0:
-		path_index += 1
-	else:
-		var dir = to_target.normalized()
-		var velocity = dir * parent.get_stat("movement_speed")
-		parent.velocity = velocity
-		parent.move_and_slide()
 
 func _on_path_ready(unit, new_path: PackedVector2Array, request_id):
 	# Path for wrong unit (how)
@@ -225,6 +207,7 @@ func _on_path_ready(unit, new_path: PackedVector2Array, request_id):
 		set_state("Idle")
 		return
 
+	print("Path received:", new_path.size(), " points for ", unit.name)
 	path = new_path
 	path_index = 0
 	path_requested = false
@@ -235,8 +218,6 @@ func _attack_move_logic(delta):
 		return
 
 	aggro_check_timer += delta
-
-	#Check enemies in aggro range every x seconds
 	if aggro_check_timer >= AGGRO_CHECK_INTERVAL:
 		aggro_check_timer = 0.0
 		var enemy = parent.closest_enemy_in_aggro_range()
@@ -244,45 +225,40 @@ func _attack_move_logic(delta):
 			parent.command_component.issue_command("Attack", enemy, enemy.global_position, false, parent.owner_id)
 			return
 
-	var target_position = current_command.target_position
-	var nav_agent = parent.navigation_agent
-
-	#Calculate new path if it doesn't exist yet
-	if pathfinding_target != target_position:
-		nav_agent.target_position = target_position
-		pathfinding_target = target_position
-	
-	#Target reached
-	if nav_agent.is_navigation_finished():
+	if _follow_path_to(current_command.target_position, delta):
 		_process_next_command()
-		return
 
-	#Move towards the target with pathfinding
-	var next_point = nav_agent.get_next_path_position()
-	var direction = (next_point - parent.global_position).normalized()
-	parent.velocity = direction * parent.get_stat("movement_speed")
-	parent.move_and_slide()
-	parent.handle_orientation(direction)
-
-func _aggro_logic(_delta):
+func _aggro_logic(delta):
+	aggro_path_timer += delta
 
 	var target_unit = current_command.target_unit
 	if target_unit == null or !is_instance_valid(target_unit) or target_unit.dead:
 		_process_next_command()
 		return
 
-	#Go to attack state if in range
-	if parent.is_within_attack_range(target_unit.position):
+	var nearby_cell = parent.spatial_grid.find_walkable_cell_near(target_unit.global_position)
+	var target_pos = parent.spatial_grid.cell_to_world(nearby_cell)
+
+	if path.size() == 0 and !path_requested:
+	# Force a new path request since none exists yet
+		last_requested_target = Vector2.INF
+
+	if parent.is_within_attack_range(target_pos):
 		set_state("Attack")
 		return
 
-	#Chase if out of range
-	var direction = (target_unit.global_position - parent.global_position).normalized()
-	parent.velocity = direction * parent.get_stat("movement_speed")
-	parent.move_and_slide()
-	parent.handle_orientation(direction)
-	animation_player.play("walk")
-	
+	if aggro_path_timer >= AGGRO_PATH_INTERVAL or last_requested_target.distance_to(target_pos) >= AGGRO_TARGET_CHANGE_THRESHOLD:
+		aggro_path_timer = 0.0
+
+		path = []
+		path_index = 0
+		path_requested = false
+
+	# Always update last known target position
+	last_requested_target = target_pos
+
+	_follow_path_to(target_pos, delta)
+
 func _attack_logic(delta):
 	
 	var target_unit = current_command.target_unit
@@ -329,11 +305,39 @@ func _attack_logic(delta):
 
 		#Target went out of range -> Chase
 		else:
-			var direction = (target_unit.global_position - parent.global_position).normalized()
-			parent.velocity = direction * parent.get_stat("movement_speed")
-			parent.move_and_slide()
-			parent.handle_orientation(direction)
-			animation_player.play("walk")
+			_follow_path_to(target_unit.global_position, delta)
+
+func _follow_path_to(target_position: Vector2, _delta: float) -> bool:
+	var spatial_grid = parent.spatial_grid
+	
+	# If we have no path yet, request one
+	if path.size() == 0:
+		if not path_requested:
+			if last_requested_target == Vector2.INF or last_requested_target.distance_to(target_position) >= TARGET_CHANGE_THRESHOLD:
+				last_requested_target = target_position
+				current_path_request_id += 1
+				spatial_grid.queue_unit_for_path(parent, current_path_request_id)
+				path_requested = true
+		return false
+
+	# If we've reached the end of the path
+	if path_index >= path.size():
+		path_requested = false
+		return true  # Target reached
+
+	# Move towards next point in path
+	var _target = path[path_index]
+	var to_target = _target - parent.global_position
+
+	if to_target.length() < 10.0:
+		path_index += 1
+	else:
+		var dir = to_target.normalized()
+		parent.velocity = dir * parent.get_stat("movement_speed")
+		parent.move_and_slide()
+		parent.handle_orientation(dir)
+
+	return false  # Still en route
 
 func _on_death_animation_finished():
 	parent.queue_free()

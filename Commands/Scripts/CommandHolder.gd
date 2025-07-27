@@ -12,7 +12,7 @@ var current_point = null
 
 var max_commands: int = 5
 
-func issue_command(command_type: String, target, position: Vector2, is_queued: bool, player_id: int):
+func issue_command(command_type: String, target, position: Vector2, is_queued: bool, player_id: int, shared_path: PackedVector2Array = [], offset: Vector2 = Vector2.ZERO):
 	if player_id != unit.owner_id:
 		return
 
@@ -20,6 +20,8 @@ func issue_command(command_type: String, target, position: Vector2, is_queued: b
 		"type": command_type,
 		"target_unit": target,
 		"target_position": position,
+		"shared_path": shared_path,
+		"offset": offset
 	}
 
 	if is_queued:

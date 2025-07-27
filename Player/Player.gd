@@ -8,6 +8,8 @@ var player_id: int
 var hero: Hero = null
 var is_local_player: bool = false
 
+var spatial_grid: SpatialGrid
+
 func _ready():
 	await get_tree().process_frame
 
