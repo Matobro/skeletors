@@ -18,7 +18,6 @@ var half_width = grid_width / 2
 var half_height = grid_height / 2
 
 var units = []
-var allunits_debug = []
 var path_queue = []
 
 var max_paths_per_frame = 5
@@ -48,32 +47,20 @@ func _draw():
 			var pos = cell * cell_size 
 			draw_rect(Rect2(pos, Vector2(cell_size, cell_size)), Color(1, 0, 0, 0.4))
 	
-	# Draw units
+	# Draw units centers
 	for unit in units:
 		draw_circle(unit.global_position, 5, Color.YELLOW)
-	
-	for unit in units:
-		if unit.state_machine.path != null:
-			var path = unit.state_machine.path
-			for i in range(path.size() -1):
-				var start = path[i]
-				var end = path[i + 1]
-				draw_line(start, end, Color.RED, 2.0)
 
-	# Draw grid
-	var offset = Vector2(half_width, half_height) * cell_size
+	## Draw grid
+	# var offset = Vector2(half_width, half_height) * cell_size
 
-	for x in range(-int(half_width), int(half_width)):
-		for y in range(-int(half_height), int(half_height)):
-			var cell = Vector2(x, y)
-			var id = _get_cell_id(cell)
-			if astar.has_point(id):
-				var pos = astar.get_point_position(id) - offset
-				draw_circle(pos, 2.0, Color(0.2, 0.5, 1.0))
-
-	# for cell in debug_cells:
-	# 	var pos = cell * cell_size
-	# 	draw_rect(Rect2(cell * cell_size, Vector2(cell_size, cell_size)), Color.AQUA, false, 1)
+	# for x in range(-int(half_width), int(half_width)):
+	# 	for y in range(-int(half_height), int(half_height)):
+	# 		var cell = Vector2(x, y)
+	# 		var id = _get_cell_id(cell)
+	# 		if astar.has_point(id):
+	# 			var pos = astar.get_point_position(id) - offset
+	# 			draw_circle(pos, 2.0, Color(0.2, 0.5, 1.0))
 
 func _process(_delta):
 	var count = 0
@@ -89,8 +76,6 @@ func _process(_delta):
 			path.remove_at(0)
 		emit_signal("path_ready", unit, path, request_id)
 		count += 1
-		if debug_draw_enabled:
-			queue_redraw()
 
 func queue_unit_for_path(unit, request_id):
 	var start_pos = unit.global_position

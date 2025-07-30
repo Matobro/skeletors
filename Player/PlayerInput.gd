@@ -68,6 +68,9 @@ func _unhandled_input(event: InputEvent):
 	if !is_input_enabled:
 		return
 
+	if block_input_frames > 0:
+		return
+		
 	if event is InputEventKey and event.pressed:
 		handle_keyboard_commands(event)
 	elif event is InputEventMouseButton or event is InputEventMouseMotion:
@@ -179,9 +182,7 @@ func on_left_click_released(event_info):
 			player_ui.clear_control_group()
 
 func on_right_click_pressed(event_info):
-	if event_info.attack_moving:
-		issue_attack_command(event_info)
-	elif event_info.click_target and event_info.click_target.owner_id == 10:
+	if event_info.attack_moving and event_info.click_target:
 		issue_attack_command(event_info)
 	else:
 		issue_move_command(event_info)

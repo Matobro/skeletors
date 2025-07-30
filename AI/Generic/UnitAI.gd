@@ -90,7 +90,7 @@ func enter_state(_new_state, _old_state):
 		"Idle":
 			animation_player.play("idle")
 			parent.velocity = Vector2.ZERO
-			aggro_check_timer = 0.0
+			aggro_check_timer = AGGRO_CHECK_INTERVAL
 		"Move":
 			path = []
 			parent.spatial_grid.deregister_unit(parent)
@@ -98,7 +98,7 @@ func enter_state(_new_state, _old_state):
 			animation_player.play("walk")
 		"Attack_move":
 			parent.spatial_grid.deregister_unit(parent)
-			aggro_check_timer = 0.0
+			aggro_check_timer = AGGRO_CHECK_INTERVAL
 			animation_player.play("walk")
 		"Aggro":
 			parent.spatial_grid.deregister_unit(parent)
