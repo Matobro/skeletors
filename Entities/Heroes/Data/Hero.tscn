@@ -10,7 +10,7 @@ shader = ExtResource("3_2lgnb")
 shader_parameter/outline_size = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 
-[node name="Unit" instance=ExtResource("1_gyctu")]
+[node name="Hero" instance=ExtResource("1_gyctu")]
 script = ExtResource("2_hjdkq")
 
 [node name="AnimatedSprite2D" parent="." index="3"]

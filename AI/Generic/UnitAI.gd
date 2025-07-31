@@ -85,7 +85,6 @@ func enter_state(_new_state, _old_state):
 	if !initialized:
 		return
 
-	print("Player ", parent.owner_id, " unit Entered state: ", _new_state)
 	match _new_state:
 		"Idle":
 			animation_player.play("idle")
@@ -122,7 +121,6 @@ func enter_state(_new_state, _old_state):
 
 
 func exit_state(_old_state, _new_state):
-	print("Player ", parent.owner_id, " unit Exited state: ", _old_state)
 	match _old_state:
 		"Move":
 			path = []
@@ -141,6 +139,10 @@ func exit_state(_old_state, _new_state):
 			parent.velocity = Vector2.ZERO
 			animation_player.stop()
 		"Aggro":
+			path = []
+			path_index = 0
+			path_requested = false
+			last_requested_target = Vector2.ZERO
 			parent.spatial_grid.register_unit(parent)
 			animation_player.stop()
 		"Attack":
@@ -239,15 +241,18 @@ func _aggro_logic(delta):
 			
 		# If no path, request path
 		if path.size() <= 0:
+			print("REQUESTING PATH DUE TO NO PATH")
 			request_path()
 			return # wait for path
 		
 		# Else follow path
 		_follow_path(delta)
-
+		
 		# If target moved over x amount then get new path
-		if target_pos.distance_to(path[-1]) > 10.0:
-			request_path()
+		if path.size() > 0:
+			if target_pos.distance_to(path[-1]) > 60.0:
+				print("REQUESTING PATH DUE TO TARGET MOVING! DISTANCE: ", target_pos.distance_to(path[-1]))
+				request_path()
 
 	# If targeted unit is close then use simple movement
 	else:
@@ -300,8 +305,7 @@ func _attack_logic(delta):
 
 		#Target went out of range -> Chase
 		else:
-			if parent.owner_id == 10: print(target_unit)
-			if parent.global_position.distance_to(target_unit.global_position) > 100:
+			if parent.global_position.distance_to(target_unit.global_position) > parent.get_stat("attack_range") + 1:
 				set_state("Aggro")
 			else:
 				_simple_move(delta)
@@ -327,7 +331,6 @@ func _on_path_ready(unit, new_path: PackedVector2Array, request_id):
 		return
 
 	# Setup received path
-	print("Path received:", new_path.size(), " points for ", unit.name)
 	path = new_path
 	path_index = 0
 	path_requested = false

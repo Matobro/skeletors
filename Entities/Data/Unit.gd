@@ -23,7 +23,7 @@ var data : UnitData
 var abilities: Array[Ability]
 var dead: bool = false
 var facing_right: bool = true
-var selected: bool
+var selected: bool = true
 var unit_scale: float = 16
 
 var attack_timer: float = 0.0
@@ -63,20 +63,9 @@ func init_stats():
 
 	if data.stats is BaseStatData:
 		data.stats = data.stats.duplicate()
+		data.stats.recalculate_stats()
 
 	#lol
-	data.stats.max_health = data.stats.base_max_hp
-	data.stats.max_mana = data.stats.base_max_mana
-	data.stats.armor = data.stats.base_armor
-	data.stats.movement_speed = data.stats.base_movement_speed
-	data.stats.health_regen = data.stats.base_health_regen
-	data.stats.mana_regen = data.stats.base_mana_regen
-	data.stats.attack_speed = data.stats.base_attack_speed
-	data.stats.attack_range = data.stats.base_range
-	data.stats.current_health = data.stats.max_health
-	data.stats.current_mana = data.stats.max_mana
-	data.stats.attack_damage = data.stats.base_damage
-
 	set_nav_agent_stats()
 
 	hp_bar.init_hp_bar(data.stats.current_health, data.stats.max_health)

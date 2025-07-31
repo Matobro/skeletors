@@ -30,3 +30,27 @@ var attack_range: int = 0
 var current_health: int
 var current_mana: int
 var attack_damage: int
+
+func recalculate_stats():
+	var previous_max_hp = max_health
+	var previous_max_mana = max_mana
+
+	max_health = base_max_hp
+	attack_speed = base_attack_speed
+	max_mana = base_max_mana
+	armor = base_armor
+	movement_speed = base_movement_speed
+	health_regen = base_health_regen
+	mana_regen = base_mana_regen
+	attack_range = base_range
+	attack_damage = base_damage
+
+	if previous_max_hp > 0:
+		current_health = int(current_health * max_health / previous_max_hp)
+	else:
+		current_health = max_health
+
+	if previous_max_mana > 0:
+		current_mana = int(current_mana * max_mana / previous_max_mana)
+	else:
+		current_mana = max_mana

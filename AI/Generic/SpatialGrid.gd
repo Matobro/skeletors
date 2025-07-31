@@ -141,9 +141,8 @@ func build_astar_graph():
 						astar.connect_points(id, neighbor_id, false)
 
 func find_path(start_pos: Vector2, end_pos: Vector2) -> PackedVector2Array:
+	print("Finding path...")
 	var start_cell = _get_cell_coords(start_pos)
-	if not astar.has_point(_get_cell_id(start_cell)):
-		start_cell = _get_nearest_free_cell(start_pos)
 	var end_cell = _get_cell_coords(end_pos)
 
 	start_cell = _get_nearest_free_cell(start_pos)
@@ -171,7 +170,14 @@ func find_path(start_pos: Vector2, end_pos: Vector2) -> PackedVector2Array:
 	# Return smoothed path if needed
 	if world_path.size() > 8 and start_pos.distance_to(end_pos) > 200:
 		world_path = smooth_path(world_path)
-	return world_path
+	
+	if world_path.size () > 0:
+		print("Path generated: ", world_path)
+		return world_path
+	
+	else:
+		print("Couldn't find path")
+		return PackedVector2Array()
 
 func smooth_path(path: PackedVector2Array) -> PackedVector2Array:
 	if path.size() <= 2:
@@ -313,10 +319,10 @@ func _get_nearest_free_cell(pos: Vector2) -> Vector2:
 	var center = _get_cell_coords(pos)
 	var max_search = 10  # search radius
 	for r in range(max_search):
-		for dx in range(-r, r+1):
-			for dy in range(-r, r+1):
+		for dx in range(-r, r + 1):
+			for dy in range(-r, r + 1):
 				var cell = center + Vector2(dx, dy)
-				if _is_in_grid(cell) and astar.has_point(_get_cell_id(cell)):
+				if _is_in_grid(cell) and astar.has_point(_get_cell_id(cell)) and not grid.has(cell):
 					return cell
 	return center  # fallback
 
@@ -325,7 +331,7 @@ func find_walkable_cell_near(pos: Vector2, max_radius := 2) -> Vector2:
 	for r in range(1, max_radius + 1):
 		for dx in range(-r, r + 1):
 			for dy in range(-r, r + 1):
-				if abs(dx) + abs(dy) != r:  # perimeter only (optional)
+				if abs(dx) + abs(dy) != r:  # perimeter only
 					continue
 				var cell = center + Vector2(dx, dy)
 				if _is_in_grid(cell) and astar.has_point(_get_cell_id(cell)):

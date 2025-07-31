@@ -2,16 +2,10 @@ extends Unit
 
 class_name Hero
 
-func init_unit(unit_data: UnitData):
-	print("Hero.init_unit() called for:", self)
-	super.init_unit(unit_data)
-
 func _data_received():
 	data.stats = data.stats.duplicate() as HeroStatData
 	data.stats.recalculate_stats()
 	data.hero = self
-	print(data.hero)
-	init_stats()
 
 func get_xp(amount):
 	data.stats.xp += amount

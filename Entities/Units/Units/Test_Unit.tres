@@ -8,7 +8,7 @@
 
 [sub_resource type="Resource" id="Resource_7jcky"]
 script = ExtResource("3_ywxjw")
-base_max_hp = 50
+base_max_hp = 5
 base_max_mana = 0
 base_health_regen = 0.1
 base_mana_regen = 0.1

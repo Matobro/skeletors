@@ -56,7 +56,6 @@ func recalculate_stats():
 	else:
 		current_mana = max_mana
 
-
 func get_bonus_health() -> int:
 	return strength * str_multiplier
 
