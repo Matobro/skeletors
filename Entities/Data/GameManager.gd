@@ -1,7 +1,6 @@
 extends Node
 
 @onready var dev_spawner = $"DevSpawnUnit"
-@onready var spatial_grid = $"SpatialGrid"
 var player_scene = preload("res://Player/PlayerObject.tscn")
 var all_units = []
 
@@ -38,7 +37,6 @@ func spawn_players():
 	for player_data in players_to_spawn:
 		var p = player_scene.instantiate()
 		p.player_id = player_data.id
-		p.spatial_grid = spatial_grid
 		add_child(p)
 		players[p.player_id] = p
 		register_player(p)

@@ -92,30 +92,30 @@ func enter_state(_new_state, _old_state):
 			aggro_check_timer = AGGRO_CHECK_INTERVAL
 		"Move":
 			path = []
-			parent.spatial_grid.deregister_unit(parent)
+			SpatialGrid.deregister_unit(parent)
 			parent.is_moving = true
 			animation_player.play("walk")
 		"Attack_move":
-			parent.spatial_grid.deregister_unit(parent)
+			SpatialGrid.deregister_unit(parent)
 			aggro_check_timer = AGGRO_CHECK_INTERVAL
 			animation_player.play("walk")
 		"Aggro":
-			parent.spatial_grid.deregister_unit(parent)
-			parent.spatial_grid.deregister_unit(parent)
+			SpatialGrid.deregister_unit(parent)
+			SpatialGrid.deregister_unit(parent)
 			animation_player.play("walk")
 			last_requested_target = Vector2.INF
 		"Attack":
-			parent.spatial_grid.deregister_unit(parent)
+			SpatialGrid.deregister_unit(parent)
 			parent.velocity = Vector2.ZERO
 		"Dying":
-			parent.spatial_grid.deregister_unit(parent)
+			SpatialGrid.deregister_unit(parent)
 			parent.set_physics_process(false)
 			parent.set_collision_layer(0)
 			parent.set_collision_mask(0)
 			animation_player.connect("animation_finished", Callable(self, "_on_death_animation_finished"), CONNECT_ONE_SHOT)
 			animation_player.play("dying")
 		"Stop":
-			parent.spatial_grid.update_unit_position(parent)
+			SpatialGrid.update_unit_position(parent)
 			parent.velocity = Vector2.ZERO
 			_process_next_command()
 
@@ -127,7 +127,7 @@ func exit_state(_old_state, _new_state):
 			path_index = 0
 			path_requested = false
 			last_requested_target = Vector2.ZERO
-			parent.spatial_grid.register_unit(parent)
+			SpatialGrid.register_unit(parent)
 			parent.velocity = Vector2.ZERO
 			animation_player.stop()
 		"Attack_move":
@@ -135,7 +135,7 @@ func exit_state(_old_state, _new_state):
 			path_index = 0
 			path_requested = false
 			last_requested_target = Vector2.ZERO
-			parent.spatial_grid.register_unit(parent)
+			SpatialGrid.register_unit(parent)
 			parent.velocity = Vector2.ZERO
 			animation_player.stop()
 		"Aggro":
@@ -143,10 +143,10 @@ func exit_state(_old_state, _new_state):
 			path_index = 0
 			path_requested = false
 			last_requested_target = Vector2.ZERO
-			parent.spatial_grid.register_unit(parent)
+			SpatialGrid.register_unit(parent)
 			animation_player.stop()
 		"Attack":
-			parent.spatial_grid.register_unit(parent)
+			SpatialGrid.register_unit(parent)
 
 
 func state_logic(delta):
@@ -235,8 +235,8 @@ func _aggro_logic(delta):
 
 	# If targeted unit is far away then use pathfinding
 	if parent.global_position.distance_to(target_unit.global_position) > 100:
-		var nearby_cell = parent.spatial_grid.find_walkable_cell_near(target_unit.global_position)
-		var target_pos = parent.spatial_grid.cell_to_world(nearby_cell)
+		var nearby_cell = SpatialGrid.find_walkable_cell_near(target_unit.global_position)
+		var target_pos = SpatialGrid.cell_to_world(nearby_cell)
 		current_command.target_position = target_pos
 			
 		# If no path, request path
@@ -311,7 +311,7 @@ func _attack_logic(delta):
 				_simple_move(delta)
 
 func request_path():
-	var spatial_grid = parent.spatial_grid
+	var spatial_grid = SpatialGrid
 	current_path_request_id += 1
 	path_requested = true
 	spatial_grid.queue_unit_for_path(parent, current_path_request_id)

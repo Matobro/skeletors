@@ -4,19 +4,13 @@ class_name Unit
 
 @onready var dev_state = $DevState
 
-###############
-var damage_text: DamageTextPool
 ###UNIT DATA###
 @onready var command_component = $"CommandHolder"
 @onready var state_machine: UnitAI = $UnitStateMachine
 @onready var animation_player: AnimatedSprite2D = $AnimatedSprite2D
 @onready var animation_library: AnimationPlayer = $AnimationPlayer
 @onready var aggro_collision: CollisionShape2D = $AggroRange/CollisionShape2D
-@onready var hp_bar: Control = $HpBar/Control
-@onready var navigation_agent = $"Pathfinding"
-@onready var navigation_map = null
-@onready var debug_draw = get_tree().current_scene.get_node("DebugDraw")
-var spatial_grid = null
+@onready var hp_bar: Control = $AnimatedSprite2D/HpBar/Control
 
 var owner_id: int
 var data : UnitData
@@ -40,9 +34,6 @@ var friendly_targets: Array = []
 
 signal died(unit)
 
-func _draw():
-	pass
-
 func init_unit(unit_data):
 	print("Unit.init_unit() called for:", self)
 
@@ -65,9 +56,6 @@ func init_stats():
 		data.stats = data.stats.duplicate()
 		data.stats.recalculate_stats()
 
-	#lol
-	set_nav_agent_stats()
-
 	hp_bar.init_hp_bar(data.stats.current_health, data.stats.max_health)
 	
 
@@ -76,7 +64,7 @@ func assign_stuff():
 	set_selected(false)
 	set_unit_color()
 	aggro_collision.set_deferred("disabled", false)
-	unit_scale = data.unit_model_data.get_unit_scale_from_sprite()
+	unit_scale = data.unit_model_data.get_unit_scale_from_sprite() / 2
 	print(unit_scale)
 
 	animation_library.add_animation_library("animations", data.unit_library)
@@ -85,14 +73,16 @@ func assign_stuff():
 	state_machine.animation_player = animation_player
 	state_machine.animation_library = animation_library
 	state_machine.parent = self
+	
+	#hp_bar.set_bar_position(animation_player.get_frame_size().y, animation_player.scale.y, animation_player.position.y)
 
 	command_component.unit = self
 
 func connect_signals():
 	command_component.command_issued.connect(state_machine._on_command_issued)
 	state_machine.command_completed.connect(command_component._on_command_completed)
-	spatial_grid.register_unit(self)
-	spatial_grid.path_ready.connect(state_machine._on_path_ready)
+	SpatialGrid.register_unit(self)
+	SpatialGrid.path_ready.connect(state_machine._on_path_ready)
 	state_machine.set_ready()
 
 # func _on_command_issued(command_type: String, target_unit: Node, target_position: Vector2, is_queued: bool):
@@ -132,9 +122,6 @@ func is_within_attack_range(_target) -> bool:
 func get_stat(stat: String):
 	return data.stats[stat]
 
-func set_nav_agent_stats():
-	navigation_agent.radius = navigation_agent.radius
-	navigation_agent.max_speed = data.stats.movement_speed
 func take_damage(damage: int):
 	if dead: return
 
@@ -142,7 +129,7 @@ func take_damage(damage: int):
 	data.stats.current_health = clamp(data.stats.current_health, 0, data.stats.max_health)
 	hp_bar.set_hp_bar(data.stats.current_health)
 
-	damage_text.show_text(str(damage), animation_player.global_position)
+	DamageText.show_text(str(damage), animation_player.global_position)
 	
 	if data.stats.current_health <= 0:
 		set_selected(false)

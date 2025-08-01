@@ -23,6 +23,8 @@ metadata/_custom_type_script = "uid://01ohikrtxe7k"
 
 [resource]
 script = ExtResource("2_ywxjw")
+power_level = 0
+is_spawnable_enemy = false
 unit_model_data = ExtResource("3_7jcky")
 unit_library = ExtResource("4_7jcky")
 unit_type = "unit"

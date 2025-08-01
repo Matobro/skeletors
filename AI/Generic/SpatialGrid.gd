@@ -1,7 +1,5 @@
 extends Node2D
 
-class_name SpatialGrid
-
 const DIAGONALS = [Vector2(1,1), Vector2(-1,1), Vector2(1,-1), Vector2(-1,-1)]
 
 var debug_cells := []
@@ -12,7 +10,7 @@ var astar := AStar2D.new()
 
 var grid_width: int = 100
 var grid_height: int = 100
-var cell_size: float = 40.0
+var cell_size: float = 50.0
 
 var half_width = grid_width / 2
 var half_height = grid_height / 2
@@ -29,39 +27,8 @@ signal path_ready(unit, path: PackedVector2Array, request_id)
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("0"):
 		debug_draw_enabled = !debug_draw_enabled
-		queue_redraw()
-
-func _draw():
-	if !debug_draw_enabled:
-		return
-
-	var grid_pixel_size = Vector2(grid_width, grid_height) * cell_size
-
-	# Draw grid border around center (0,0)
-	var top_left = Vector2(-half_width, -half_height) * cell_size
-	draw_rect(Rect2(top_left, grid_pixel_size), Color(0.7, 0.7, 0.7, 1), false, 2)
-	
-	# Draw only occupied cells
-	for cell in grid.keys():
-		if grid[cell].size() > 0:
-			var pos = cell * cell_size 
-			draw_rect(Rect2(pos, Vector2(cell_size, cell_size)), Color(1, 0, 0, 0.4))
-	
-	# Draw units centers
-	for unit in units:
-		draw_circle(unit.global_position, 5, Color.YELLOW)
-
-	## Draw grid
-	# var offset = Vector2(half_width, half_height) * cell_size
-
-	# for x in range(-int(half_width), int(half_width)):
-	# 	for y in range(-int(half_height), int(half_height)):
-	# 		var cell = Vector2(x, y)
-	# 		var id = _get_cell_id(cell)
-	# 		if astar.has_point(id):
-	# 			var pos = astar.get_point_position(id) - offset
-	# 			draw_circle(pos, 2.0, Color(0.2, 0.5, 1.0))
-
+		print("Debug draw enabled: ", debug_draw_enabled)
+		
 func _process(_delta):
 	var count = 0
 	var max_this_frame = 10 if Engine.get_frames_per_second() > 55 else 2 
@@ -234,8 +201,6 @@ func register_unit(unit) -> void:
 		grid[cell].append(unit)
 	update_occupied_cells(covered_cells, true)
 	unit.set_meta("grid_coords", covered_cells)
-	if debug_draw_enabled:
-		queue_redraw()
 
 func deregister_unit(unit) -> void:
 	if units.has(unit):
@@ -248,8 +213,6 @@ func deregister_unit(unit) -> void:
 				if grid[cell].size() == 0:
 					grid.erase(cell)
 		update_occupied_cells(coords_list, false)
-	if debug_draw_enabled:
-		queue_redraw()
 
 func update_occupied_cells(cells: Array, occupied: bool) -> void:
 	for cell in cells:

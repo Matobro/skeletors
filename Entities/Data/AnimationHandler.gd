@@ -17,20 +17,20 @@ func init_animations(data):
 	play("idle")
 
 func scale_upwards(sprite_to_scale, target_scale):
-	var height = get_frame_size(sprite_to_scale).y
+	var height = get_frame_size().y
 	var difference = sprite_to_scale.scale.y - 1.0
 
 	sprite_to_scale.scale = target_scale
 	sprite_to_scale.position.y -= (height * difference) / 2
 
-func get_frame_size(sprite_to_scale):
-	var _sprite = sprite_to_scale.sprite_frames.get_frame_texture(
-		sprite_to_scale.animation,
-		sprite_to_scale.frame
+func get_frame_size():
+	var _sprite = sprite_frames.get_frame_texture(
+		animation,
+		frame
 	)
 	return _sprite.get_size()
 
 func set_selection_circle_position():
-	var unit_height = get_frame_size(self).y * scale.y
+	var unit_height = get_frame_size().y * scale.y
 	selection_circle_front.position.y = position.y + (unit_height / 3)
 	selection_circle_back.position.y = selection_circle_front.position.y

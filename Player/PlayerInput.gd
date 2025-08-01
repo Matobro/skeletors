@@ -19,7 +19,6 @@ class MouseEventInfo:
 @export var commands: CommandsData
 
 var dev_disable_input: bool = false
-var spatial_grid = null
 var player_id = null
 var drag_start = Vector2.ZERO
 var dragging = false
@@ -49,7 +48,6 @@ func init_node() -> void:
 	player_id = player.player_id
 	camera = player.player_camera
 	player_ui = player.player_ui
-	spatial_grid = player.spatial_grid
 
 func _process(_delta):
 	if block_input_frames > 0:

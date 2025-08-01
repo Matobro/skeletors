@@ -19,10 +19,8 @@ var unit_data_list: Array = []
 @onready var spawn_button = null
 @onready var spawn_visual = null
 @onready var player_input = null
-@onready var damage_text = null
 @onready var owner_select = null
 @onready var spawn_popup = null
-@onready var spatial_grid = null
 @onready var nav_map = null
 
 
@@ -32,10 +30,8 @@ func init_node() -> void:
 	spawn_button = $"../CanvasLayer/DevBox/VBoxContainer/Button"
 	spawn_visual = $"../CanvasLayer/TextureRect"
 	#player_input = $"../PlayerObject/PlayerInput"
-	damage_text = $"../DamageTextPool"
 	owner_select = $"../CanvasLayer/DevBox/OptionButton"
 	spawn_popup = $"../CanvasLayer/SpawnPopUp"
-	spatial_grid = $"../SpatialGrid"
 	nav_map = $"../NavigationRegion2D"
 	on_ready()
 
@@ -84,14 +80,10 @@ func spawn_unit(data):
 
 	### Initialize unit ###
 	spawned_unit.init_unit(data)
-	spawned_unit.damage_text = damage_text
 	spawned_unit.owner_id = owner_id
-	spawned_unit.spatial_grid = spatial_grid
-	spawned_unit.navigation_map = nav_map
 
 	### Assign player stuff ###
 	player_input.selectable_units.append(spawned_unit)
-	#player_input.command_issued.connect(spawned_unit.command_component.issue_command)
 	spawned_unit.died.connect(player_input._on_unit_died)
 	spawned_unit.died.connect(manager._on_unit_died)
 

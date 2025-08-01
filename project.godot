@@ -14,6 +14,12 @@ config/name="Skeletors"
 run/main_scene="uid://dv3rvon240ulo"
 config/features=PackedStringArray("4.4", "Forward Plus")
 
+[autoload]
+
+UnitDatabase="*res://Game/Data/UnitDatabase.gd"
+DamageText="*res://Entities/Data/DamageTextPool.gd"
+SpatialGrid="*res://AI/Generic/SpatialGrid.gd"
+
 [display]
 
 window/size/viewport_width=1920
