@@ -118,9 +118,6 @@ func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null) -> Pack
 		var grid_pos = astar.get_point_position(id)
 		var world_pos = grid_pos - Vector2(grid_manager.half_width, grid_manager.half_height) * grid_manager.cell_size
 		world_path.append(world_pos)
-
-	if world_path.size() > 8 and start_pos.distance_to(end_pos) > 200:
-		world_path = smooth_path(world_path)
 	
 	if world_path.size () > 0:
 		print("Path generated: ", world_path)
@@ -175,7 +172,7 @@ func has_line_of_sight(from: Vector2, to: Vector2) -> bool:
 func _get_nearest_free_cell(pos: Vector2) -> Vector2:
 	var center = grid_manager._get_cell_coords(pos)
 	var max_search = 10  # search radius
-	for r in range(max_search):
+	for r in range(1, max_search):
 		for dx in range(-r, r + 1):
 			for dy in range(-r, r + 1):
 				var cell = center + Vector2(dx, dy)
