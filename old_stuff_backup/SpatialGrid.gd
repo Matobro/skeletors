@@ -2,6 +2,7 @@ extends Node2D
 
 const DIAGONALS = [Vector2(1,1), Vector2(-1,1), Vector2(1,-1), Vector2(-1,-1)]
 
+var debug_paths := {}
 var debug_cells := []
 
 var grid := {}
@@ -21,6 +22,7 @@ var path_queue = []
 var max_paths_per_frame = 5
 
 var debug_draw_enabled := false
+var debug_grid_enabled := false
 
 signal path_ready(unit, path: PackedVector2Array, request_id)
 
@@ -28,6 +30,10 @@ func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("0"):
 		debug_draw_enabled = !debug_draw_enabled
 		print("Debug draw enabled: ", debug_draw_enabled)
+
+	if Input.is_action_just_pressed("9"):
+		debug_grid_enabled = !debug_grid_enabled
+		print("Debug grid enabled: ", debug_grid_enabled)
 		
 func _process(_delta):
 	var count = 0
@@ -35,16 +41,17 @@ func _process(_delta):
 	while count < max_this_frame and path_queue.size() > 0:
 		var item = path_queue.pop_front()
 		var unit = item.unit
+		var target_unit = item.target_unit
 		var request_id = item.request_id
 		var start_pos = unit.global_position
 		var end_pos = unit.state_machine.current_command.target_position if unit.state_machine.current_command != null else start_pos
-		var path = find_path(start_pos, end_pos)
+		var path = find_path(start_pos, end_pos, target_unit)
 		if path.size() > 1 and path [0].distance_to(unit.global_position) > cell_size * 0.5:
 			path.remove_at(0)
 		emit_signal("path_ready", unit, path, request_id)
 		count += 1
 
-func queue_unit_for_path(unit, request_id):
+func queue_unit_for_path(unit, request_id, target_unit = null):
 	var start_pos = unit.global_position
 	var end_pos = unit.state_machine.current_command.target_position if unit.state_machine.current_command != null else start_pos
 
@@ -60,7 +67,11 @@ func queue_unit_for_path(unit, request_id):
 		if item.unit == unit:
 			item.request_id = request_id
 			return
-	path_queue.append({"unit": unit, "request_id": request_id})
+	path_queue.append({
+		"unit": unit, 
+		"request_id": request_id, 
+		"target_unit": target_unit
+		})
 
 func _ready() -> void:
 	build_astar_graph()
@@ -107,14 +118,19 @@ func build_astar_graph():
 					if astar.has_point(_get_cell_id(side1)) and astar.has_point(_get_cell_id(side2)):
 						astar.connect_points(id, neighbor_id, false)
 
-func find_path(start_pos: Vector2, end_pos: Vector2) -> PackedVector2Array:
+func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null) -> PackedVector2Array:
 	print("Finding path...")
 	var start_cell = _get_cell_coords(start_pos)
 	var end_cell = _get_cell_coords(end_pos)
-
+	
 	start_cell = _get_nearest_free_cell(start_pos)
-	end_cell = _get_nearest_free_cell(end_pos)
+	var desired_end_cell = end_cell
 
+	if target_unit != null and grid.has(desired_end_cell) and grid[desired_end_cell].has(target_unit):
+		end_cell = desired_end_cell
+	else:
+		end_cell = _get_nearest_free_cell(end_pos)
+	
 	var start_id = _get_cell_id(start_cell)
 	var end_id = _get_cell_id(end_cell)
 
@@ -125,6 +141,13 @@ func find_path(start_pos: Vector2, end_pos: Vector2) -> PackedVector2Array:
 	if not astar.has_point(end_id):
 		print("Warning: end cell ", end_cell, " invalid")
 		return PackedVector2Array()
+
+	var was_disabled = false
+	if target_unit != null and end_cell == desired_end_cell:
+		if astar.has_point(end_id):
+			was_disabled = astar.is_point_disabled(end_id)
+			if was_disabled:
+				astar.set_point_disabled(end_id, false)
 
 	var raw_path = astar.get_id_path(start_id, end_id)
 	var world_path = PackedVector2Array()
@@ -193,7 +216,7 @@ func has_line_of_sight(from: Vector2, to: Vector2) -> bool:
 func register_unit(unit) -> void:
 	if not units.has(unit):
 		units.append(unit)
-	var radius = unit.unit_scale if unit.unit_scale else 32.0
+	var radius = 16.0
 	var covered_cells = _get_cells_covered(unit.global_position, radius)
 	for cell in covered_cells:
 		if not grid.has(cell):
@@ -294,11 +317,12 @@ func find_walkable_cell_near(pos: Vector2, max_radius := 2) -> Vector2:
 	for r in range(1, max_radius + 1):
 		for dx in range(-r, r + 1):
 			for dy in range(-r, r + 1):
-				if abs(dx) + abs(dy) != r:  # perimeter only
+				if abs(dx) + abs(dy) != r:
 					continue
 				var cell = center + Vector2(dx, dy)
 				if _is_in_grid(cell) and astar.has_point(_get_cell_id(cell)):
 					return cell
+
 	return center  # fallback
 
 func cell_to_world(cell: Vector2) -> Vector2:

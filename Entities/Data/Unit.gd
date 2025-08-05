@@ -82,7 +82,7 @@ func connect_signals():
 	command_component.command_issued.connect(state_machine._on_command_issued)
 	state_machine.command_completed.connect(command_component._on_command_completed)
 	SpatialGrid.register_unit(self)
-	SpatialGrid.path_ready.connect(state_machine._on_path_ready)
+	SpatialGrid.path_request_manager.path_ready.connect(state_machine._on_path_ready)
 	state_machine.set_ready()
 
 # func _on_command_issued(command_type: String, target_unit: Node, target_position: Vector2, is_queued: bool):

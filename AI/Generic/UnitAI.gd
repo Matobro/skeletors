@@ -4,15 +4,8 @@ class_name UnitAI
 
 signal command_completed(command_type)
 
-var last_command_type := ""
-var last_commanded_position := Vector2.INF
-var max_queue_size: int = 5
-
 var current_command = null
-var original_command_position = null
-var pathfinding_target: Vector2 = Vector2.ZERO
 
-var aggro_path_timer = 0.0
 var aggro_check_timer: float = 0.0
 const AGGRO_CHECK_INTERVAL: float = 1.0
 
@@ -24,12 +17,7 @@ var current_path_request_id = 0
 
 var last_requested_path := {"start": Vector2.INF, "end": Vector2.INF}
 var last_requested_target := Vector2.ZERO
-var path_request_timer := 0.0
 
-const PATH_REQUEST_INTERVAL := 2.0  # how often u can request
-const TARGET_CHANGE_THRESHOLD := 8.0  # how much target point must move to consider new path
-const AGGRO_PATH_INTERVAL := 0.5
-const AGGRO_TARGET_CHANGE_THRESHOLD := 8.0
 
 var devstate = null
 
@@ -48,22 +36,15 @@ func _on_command_issued(_command_type, _target, _position, is_queued):
 	if !is_queued:
 		_process_next_command()
 
-	last_command_type = _command_type
-	last_commanded_position = _position	
-
-
 func _process_next_command():
 	var next_command = parent.command_component.get_next_command()
 
 	if next_command == null:
 		set_state("Idle")
 		current_command = null
-		last_command_type = ""
-		last_commanded_position = Vector2.INF
 		return
 
 	current_command = next_command
-	original_command_position = current_command.target_position
 	parent.command_component.pop_next_command()
 
 	emit_signal("command_completed", current_command.type)
@@ -90,6 +71,7 @@ func enter_state(_new_state, _old_state):
 			animation_player.play("idle")
 			parent.velocity = Vector2.ZERO
 			aggro_check_timer = AGGRO_CHECK_INTERVAL
+			SpatialGridDebugRenderer._delete_path(parent)
 		"Move":
 			path = []
 			SpatialGrid.deregister_unit(parent)
@@ -221,7 +203,6 @@ func _attack_move_logic(delta):
 	_follow_path(delta)
 
 func _aggro_logic(delta):
-	aggro_path_timer += delta
 	
 	var target_unit = current_command.target_unit
 	if target_unit == null or !is_instance_valid(target_unit) or target_unit.dead:
@@ -235,9 +216,9 @@ func _aggro_logic(delta):
 
 	# If targeted unit is far away then use pathfinding
 	if parent.global_position.distance_to(target_unit.global_position) > 100:
-		var nearby_cell = SpatialGrid.find_walkable_cell_near(target_unit.global_position)
-		var target_pos = SpatialGrid.cell_to_world(nearby_cell)
-		current_command.target_position = target_pos
+		print("pathfinding")
+
+		current_command.target_position = target_unit.global_position
 			
 		# If no path, request path
 		if path.size() <= 0:
@@ -250,12 +231,15 @@ func _aggro_logic(delta):
 		
 		# If target moved over x amount then get new path
 		if path.size() > 0:
-			if target_pos.distance_to(path[-1]) > 60.0:
-				print("REQUESTING PATH DUE TO TARGET MOVING! DISTANCE: ", target_pos.distance_to(path[-1]))
+			var target_cell = SpatialGrid.get_cell_coords(target_unit.global_position)
+			var path_end_cell = SpatialGrid.get_cell_coords(path[-1])
+			if target_cell != path_end_cell:
+				print("REQUESTING PATH DUE TO TARGET MOVING!")
 				request_path()
 
 	# If targeted unit is close then use simple movement
 	else:
+		print("simple moving")
 		_simple_move(delta)
 
 func _attack_logic(delta):
@@ -311,10 +295,10 @@ func _attack_logic(delta):
 				_simple_move(delta)
 
 func request_path():
-	var spatial_grid = SpatialGrid
 	current_path_request_id += 1
 	path_requested = true
-	spatial_grid.queue_unit_for_path(parent, current_path_request_id)
+	SpatialGrid.queue_unit_for_path(parent, current_path_request_id, current_command.target_unit)
+	SpatialGridDebugRenderer._delete_path(parent)
 
 func _on_path_ready(unit, new_path: PackedVector2Array, request_id):
 	# Path for wrong unit (how)
@@ -329,11 +313,14 @@ func _on_path_ready(unit, new_path: PackedVector2Array, request_id):
 	if new_path.size() == 0:
 		set_state("Idle")
 		return
-
+	
 	# Setup received path
 	path = new_path
 	path_index = 0
 	path_requested = false
+
+	#DEBUG
+	SpatialGridDebugRenderer._receive_path(unit, path)
 
 func _simple_move(_delta):
 	var dir = (current_command.target_unit.global_position - parent.global_position).normalized()
