@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://dyju2wf1d0htn"]
+
+[node name="UnitStateMachine" type="Node2D"]
+process_mode = 4

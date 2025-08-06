@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dyju2wf1d0htn"]
-
-[ext_resource type="Script" uid="uid://b6je5oe7328sv" path="res://old_stuff_backup/UnitStateMachine.gd" id="1_looy0"]
-
-[node name="UnitStateMachine" type="Node2D"]
-script = ExtResource("1_looy0")

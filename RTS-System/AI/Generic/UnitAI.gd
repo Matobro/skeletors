@@ -1,0 +1,177 @@
+extends StateMachine
+
+class_name UnitAI
+
+signal command_completed(command_type)
+
+var current_command = null
+var fallback_command = null
+
+var aggro_check_timer: float = 0.0
+const AGGRO_CHECK_INTERVAL: float = 1.0
+
+### Pathfinding stuff ###
+var path: PackedVector2Array = []
+var path_index: int = 0
+var path_requested: bool = false
+var current_path_request_id = 0
+
+var last_requested_path := {"start": Vector2.INF, "end": Vector2.INF}
+var last_requested_target := Vector2.ZERO
+
+### Stuck stuff ###
+var stuck_check_timer: float = 0.0
+var last_position: Vector2 = Vector2.INF
+const STUCK_TIME_THRESHOLD: float = 0.5
+const STUCK_DISTANCE_THRESHOLD: float = 5.0
+
+var devstate = null
+
+func _ready():
+	add_state("Idle", preload("res://RTS-System/AI/Generic/UnitAIStates/IdleState.gd").new())
+	add_state("Move", preload("res://RTS-System/AI/Generic/UnitAIStates/MoveState.gd").new())
+	add_state("Attack_move", preload("res://RTS-System/AI/Generic/UnitAIStates/AttackMoveState.gd").new())
+	add_state("Aggro", preload("res://RTS-System/AI/Generic/UnitAIStates/AggroState.gd").new())
+	add_state("Attack", preload("res://RTS-System/AI/Generic/UnitAIStates/AttackState.gd").new())
+	add_state("Hold", preload("res://RTS-System/AI/Generic/UnitAIStates/HoldState.gd").new())
+	add_state("Stop", preload("res://RTS-System/AI/Generic/UnitAIStates/StopState.gd").new())
+	add_state("Dying", preload("res://RTS-System/AI/Generic/UnitAIStates/DyingState.gd").new())
+	devstate = $"../DevState"
+
+	for s in states.values():
+		s.ai = self
+		s.parent = parent
+
+func special_process():
+	devstate.text = str(state)
+func _on_command_issued(_command_type, _target, _position, is_queued):
+	if !is_queued:
+		_process_next_command()
+
+func _process_next_command():
+	var next_command = parent.command_component.get_next_command()
+
+	if next_command == null:
+		set_state("Idle")
+		current_command = null
+		return
+
+	current_command = next_command
+	parent.command_component.pop_next_command()
+
+	emit_signal("command_completed", current_command.type)
+
+	match current_command.type:
+		"Move":
+			set_state("Move")
+		"Attack":
+			set_state("Aggro")
+		"Attack_move":
+			set_state("Attack_move")
+		"Stop":
+			set_state("Stop")
+		_:
+			set_state("Idle")
+
+func apply_separation_force() -> Vector2:
+	if parent.is_holding_position:
+		return Vector2.ZERO
+	
+	var force = Vector2.ZERO
+	var nearby_units = SpatialGrid.get_units_around(parent.global_position, 32)
+
+	for other in nearby_units:
+		if other == parent:
+			continue
+		if other.is_holding_position:
+			continue
+		
+		var offset = parent.global_position - other.global_position
+		var dist = offset.length()
+		if dist > 0 and dist < 32:
+			force += offset.normalized() / dist  # stronger when closer
+
+	return force.normalized()
+
+func request_path():
+	current_path_request_id += 1
+	path_requested = true
+	SpatialGrid.queue_unit_for_path(parent, current_path_request_id, current_command.target_unit)
+	SpatialGridDebugRenderer._delete_path(parent)
+
+func _on_path_ready(unit, new_path: PackedVector2Array, request_id):
+	# Path for wrong unit (how)
+	if unit != parent:
+		return
+
+	# Return if outdated path (someone likes spamming clicks)
+	if request_id != current_path_request_id:
+		return
+
+	# Return if invalid path
+	if new_path.size() == 0:
+		set_state("Idle")
+		return
+	
+	# Setup received path
+	path = new_path
+	path_index = 0
+	path_requested = false
+
+	#DEBUG
+	SpatialGridDebugRenderer._receive_path(unit, path)
+
+func _follow_path(_delta):
+	if path.size() <= 0:
+		return
+
+	if path_index >= path.size():
+		path_requested = false
+		stuck_check_timer = 0.0  # reset stuck timer when path finished
+		last_position = Vector2.INF
+		return
+
+	var _target = path[path_index]
+	var distance_to_target = _target - parent.global_position
+
+	# Check if distance to current path point is close enough
+	if distance_to_target.length() < 10.0:
+		path_index += 1
+
+	else:
+		# Movement logic
+		var dir = distance_to_target.normalized()
+		var separation = apply_separation_force()
+		var final_direction = (dir + separation * 0.75).normalized()
+		parent.velocity = final_direction * parent.get_stat("movement_speed")
+		parent.move_and_slide()
+		parent.handle_orientation(final_direction)
+
+		# Stuck detection
+		stuck_check_timer += _delta
+
+		if last_position == Vector2.INF:
+			last_position = parent.global_position
+
+		elif stuck_check_timer >= STUCK_TIME_THRESHOLD:
+			var moved_distance = parent.global_position.distance_to(last_position)
+			if moved_distance < STUCK_DISTANCE_THRESHOLD:
+				print("Unit seems stuck. Requesting new path.")
+				request_path()
+				stuck_check_timer = 0.0
+				last_position = parent.global_position
+			else:
+				# Reset timer and last position if progress was made
+				stuck_check_timer = 0.0
+				last_position = parent.global_position
+
+	# Check if distance to end goal is close enough
+	var distance_to_goal = parent.global_position.distance_to(path[-1])
+
+	if distance_to_goal < 10.0:
+		if current_command != null and current_command.type in ["Attack", "Attack_move"] and fallback_command != null:
+			return
+		_process_next_command()
+
+func _on_death_animation_finished():
+	parent.queue_free()

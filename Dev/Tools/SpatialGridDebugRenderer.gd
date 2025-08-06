@@ -80,9 +80,13 @@ func _draw():
 			var pos = cell * cell_size 
 			draw_rect(Rect2(pos, Vector2(cell_size, cell_size)), Color(1, 0, 0, 0.4))
 	
-	# Draw units centers
+	# Draw unit bounds
 	for unit in units:
-		draw_circle(unit.global_position, 5, Color.YELLOW)
+		var radius = unit.unit_scale
+		var pos = unit.global_position
+		var _top_left = pos - Vector2(radius, radius)
+		var size = Vector2(radius * 2, radius * 2)
+		draw_rect(Rect2(_top_left, size), Color.GREEN, false)
 
 	if SpatialGrid.debug_grid_enabled:
 		var manager = get_tree().current_scene
@@ -110,12 +114,8 @@ func _draw():
 	for unit in paths:
 		if is_instance_valid(unit):
 			var path = paths[unit]
-			var from_pos = unit.global_position
+			var color = Color.GREEN if unit.owner_id == 1 else Color.RED
 
-			# First point
-			if path.size() > 0:
-				draw_line(from_pos, path[0], Color.RED, 2.0)
-
-			# The rest
+			# Draw the full path only
 			for i in range(path.size() - 1):
-				draw_line(path[i], path[i + 1], Color.RED, 2.0)
+				draw_line(path[i], path[i + 1], color, 2.0)

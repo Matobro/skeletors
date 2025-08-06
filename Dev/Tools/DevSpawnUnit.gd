@@ -1,10 +1,10 @@
 extends Node2D
 
 var unit_scenes = {
-	"hero": preload("res://Entities/Heroes/Data/Hero.tscn"),
-	"unit": preload("res://Entities/Units/Data/Unit.tscn")
+	"hero": preload("res://RTS-System/Entities/Data/Hero.tscn"),
+	"unit": preload("res://RTS-System/Entities/Data/Unit.tscn")
 }
-var commandsData = preload("res://Commands/DefaultCommands.tres")
+var commandsData = preload("res://RTS-System/Commands/DefaultCommands.tres")
 
 var spawning_unit: bool
 var owner_id: int = 1
@@ -37,8 +37,8 @@ func init_node() -> void:
 
 func on_ready():
 	spawning_unit = false
-	unit_data_list = load_units_from_folder("res://Entities/Units/Units/", "unit")
-	unit_data_list += load_units_from_folder("res://Entities/Heroes/Heroes/", "hero")
+	unit_data_list = load_units_from_folder("res://RTS-System/Entities/Units/Database/", "unit")
+	unit_data_list += load_units_from_folder("res://RTS-System/Entities/Heroes/Database/", "hero")
 
 	for data in unit_data_list:
 		unit_list.add_item(data.name)

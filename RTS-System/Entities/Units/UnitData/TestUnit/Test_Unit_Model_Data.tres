@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnitModelData" load_steps=3 format=3 uid="uid://dbn2rgqy5pauf"]
+
+[ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="1_n55sh"]
+[ext_resource type="SpriteFrames" uid="uid://j3ueq03cf5sq" path="res://RTS-System/Entities/Units/UnitData/TestUnit/Test_Unit_Spriteframes.tres" id="2_jyn66"]
+
+[resource]
+script = ExtResource("1_n55sh")
+sprite_frames = ExtResource("2_jyn66")
+offset = Vector2(0, 0)
+scale = Vector2(2, 2)
+extra_mass = 1.0
+animation_attack_point = 0.5
+animation_attack_duration = 0.8
+metadata/_custom_type_script = "uid://dq4e1yj8njkif"

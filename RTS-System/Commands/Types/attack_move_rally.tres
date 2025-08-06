@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://ddvoixvr77oqt"]
+
+[ext_resource type="Texture2D" uid="uid://cy6kiopk3r70" path="res://RTS-System/Commands/Sprites/AttackMoveRally.png" id="1_rijsn"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_rijsn")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
