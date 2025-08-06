@@ -6,7 +6,7 @@ class_name Unit
 
 ###UNIT DATA###
 @onready var command_component = $"CommandHolder"
-@onready var state_machine: UnitAI = $UnitStateMachine
+@onready var state_machine: UnitAI = $UnitAI
 @onready var animation_player: AnimatedSprite2D = $AnimatedSprite2D
 @onready var animation_library: AnimationPlayer = $AnimationPlayer
 @onready var aggro_collision: CollisionShape2D = $AggroRange/CollisionShape2D
@@ -35,10 +35,10 @@ var friendly_targets: Array = []
 
 signal died(unit)
 
-func init_unit(unit_data):
+func init_unit():
 	print("Unit.init_unit() called for:", self)
 
-	data = unit_data.duplicate()
+	data = data.duplicate()
 	await get_tree().process_frame
 
 	_data_received()

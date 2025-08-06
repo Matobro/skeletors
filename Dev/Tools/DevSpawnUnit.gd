@@ -72,24 +72,7 @@ func spawn_unit(data):
 		return
 	
 	### Spawn unit ##
-	var unit = unit_scenes.get(data.unit_type, unit_scenes["unit"])
-	print(unit)
-	var spawned_unit = unit.instantiate()
-	spawned_unit.global_position = mouse_pos
-	get_tree().current_scene.add_child(spawned_unit)
-
-	### Initialize unit ###
-	spawned_unit.init_unit(data)
-	spawned_unit.owner_id = owner_id
-
-	### Assign player stuff ###
-	player_input.selectable_units.append(spawned_unit)
-	spawned_unit.died.connect(player_input._on_unit_died)
-	spawned_unit.died.connect(manager._on_unit_died)
-
-	### Assign hero to player ###
-	if data.unit_type == "hero" and !manager.get_player(owner_id).hero:
-		manager.get_player(owner_id).hero = spawned_unit as Hero
+	UnitSpawner.spawn_unit(data, mouse_pos, owner_id)
 
 func finish_spawn():
 	spawn_popup.visible = false

@@ -102,13 +102,13 @@ func _draw():
 		for id in astar.get_point_ids():
 			var pos = astar.get_point_position(id) + top_left
 			if visible_rect.has_point(pos):
-				draw_circle(pos, 6, Color.GREEN)
+				draw_circle(pos, 2, Color.GREEN)
 
-			for neighbor_id in astar.get_point_connections(id):
-				var neighbor_pos = astar.get_point_position(neighbor_id) + top_left
-				var line_rect = Rect2(pos, neighbor_pos - pos).abs()
-				if visible_rect.intersects(line_rect):
-					draw_line(pos, neighbor_pos, Color.GRAY)
+			# for neighbor_id in astar.get_point_connections(id):
+			# 	var neighbor_pos = astar.get_point_position(neighbor_id) + top_left
+			# 	var line_rect = Rect2(pos, neighbor_pos - pos).abs()
+			# 	if visible_rect.intersects(line_rect):
+			# 		draw_line(pos, neighbor_pos, Color.GRAY)
 
 	# Draw unit paths
 	for unit in paths:

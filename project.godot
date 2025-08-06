@@ -16,10 +16,12 @@ config/features=PackedStringArray("4.4", "Forward Plus")
 
 [autoload]
 
-UnitDatabase="*res://Game/Data/UnitDatabase.gd"
+UnitDatabase="*res://Game/Data/Main/UnitDatabase.gd"
 DamageText="*res://RTS-System/Entities/Data/DamageTextPool.gd"
 SpatialGridDebugRenderer="*res://Dev/Tools/SpatialGridDebugRenderer.gd"
 SpatialGrid="*res://RTS-System/Map/MapController.gd"
+UnitHandler="*res://Game/Data/Main/UnitHandler.gd"
+UnitSpawner="*res://Game/WaveSystem/UnitSpawner.gd"
 
 [display]
 

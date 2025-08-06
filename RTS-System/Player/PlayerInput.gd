@@ -28,7 +28,6 @@ var is_input_enabled: bool = false
 var command_cooldown_frames := 0
 var block_input_frames: int = 0
 var selected_units: Array[Unit] = []
-var selectable_units: Array[Unit] = []
 
 const DRAG_THRESHOLD := 50.0
 const COMMAND_COOLDOWN := 10
@@ -310,23 +309,50 @@ func end_drag(shift):
 	
 	select_units_in_box(Rect2(selection_box.global_position, selection_box.size), shift)
 			
-func select_units_in_box(box: Rect2, shift) -> void:
+func select_units_in_box(box: Rect2, shift: bool) -> void:
+	var units_in_box: Array = []
+	var own_units_in_box: Array = []
+	var enemy_units_in_box: Array = []
+
+	# Add units to array in the selection
+	for unit in UnitHandler.all_units:
+		var screen_pos = camera.get_viewport_transform() * unit.global_position
+		if box.has_point(screen_pos):
+			units_in_box.append(unit)
+			if unit.owner_id == player_id:
+				own_units_in_box.append(unit)
+			else:
+				enemy_units_in_box.append(unit)
+
+	# Decice what to select
+	var new_selection: Array = []
+	if own_units_in_box.size() > 0:
+		new_selection = own_units_in_box
+	elif enemy_units_in_box.size() > 0:
+		new_selection = enemy_units_in_box
+
+	# Get current selection owner
+	var current_owner_id: int = -1
+	if selected_units.size() > 0:
+		current_owner_id = selected_units[0].owner_id
+
+	# If not holding shift, clear previous selection
 	if !shift:
 		for unit in selected_units:
 			unit.set_selected(false)
 		selected_units.clear()
 		player_ui.clear_control_group()
-		
-	for unit in selectable_units:
-		if unit.owner_id != player_id: continue
-		var screen_pos = camera.get_viewport_transform() * unit.global_position
-		### if hits unit
-		if box.has_point(screen_pos):
-			### if hits and not already selected
-			if unit not in selected_units:
-				player_ui.add_unit_to_control(unit)
-				selected_units.append(unit)
-				unit.set_selected(true)	
+	else:
+		# If holding shift, filter selection to allow only units of same player
+		if current_owner_id != -1:
+			new_selection = new_selection.filter(func(u): return u.owner_id == current_owner_id)
+
+	# Add filtered units
+	for unit in new_selection:
+		if unit not in selected_units:
+			unit.set_selected(true)
+			selected_units.append(unit)
+			player_ui.add_unit_to_control(unit)
 
 func check_click_hit(mouse_pos: Vector2):
 	var space_state = get_world_2d().direct_space_state
@@ -345,22 +371,47 @@ func check_click_hit(mouse_pos: Vector2):
 		var collider = results[0].collider
 		if collider and collider.has_method("set_selected"):
 			return collider
-		return false
-		
-func select_unit_at_mouse_pos(mouse_pos: Vector2, shift):
-	var result = check_click_hit(mouse_pos)
-	if result:
-		if !shift:
-			for unit in selected_units:
-				unit.set_selected(false)
-			selected_units.clear()
-			player_ui.clear_control_group()
-	
-		result.set_selected(true)
-		selected_units.append(result)
-		player_ui.add_unit_to_control(result)
+	return null
 
-func _on_unit_died(unit):
-	if unit in selectable_units:
-		selectable_units.erase(unit)
-		player_ui.remove_unit_from_group(unit)
+
+func select_unit_at_mouse_pos(mouse_pos: Vector2, shift: bool):
+	var clicked_unit = check_click_hit(mouse_pos)
+	if clicked_unit == null:
+		return
+	
+	var clicked_owner = clicked_unit.owner_id
+
+	if not shift:
+		# Clear all selection
+		for unit in selected_units:
+			unit.set_selected(false)
+		selected_units.clear()
+		player_ui.clear_control_group()
+
+		# Select the clicked unit
+		clicked_unit.set_selected(true)
+		selected_units.append(clicked_unit)
+		player_ui.add_unit_to_control(clicked_unit)
+	else:
+		# Shift is held
+		if selected_units.size() == 0:
+			# No current selection, allow any
+			clicked_unit.set_selected(true)
+			selected_units.append(clicked_unit)
+			player_ui.add_unit_to_control(clicked_unit)
+		else:
+			var current_owner = selected_units[0].owner_id
+			if clicked_owner == current_owner:
+				if clicked_unit in selected_units:
+					# Deselect if already selected
+					clicked_unit.set_selected(false)
+					selected_units.erase(clicked_unit)
+					player_ui.remove_unit_from_group(clicked_unit)
+				else:
+					# Add to selection
+					clicked_unit.set_selected(true)
+					selected_units.append(clicked_unit)
+					player_ui.add_unit_to_control(clicked_unit)
+			else:
+				# Different owner, ignore
+				pass

@@ -3,8 +3,8 @@ extends Node
 const grid_width: int = 100
 const grid_height: int = 100
 const cell_size: float = 50.0
-const half_width: int = grid_width / 2
-const half_height: int = grid_height / 2
+const half_width = int(grid_width / 2.0)
+const half_height = int(grid_height / 2.0)
 
 func _get_cell_coords(_position: Vector2) -> Vector2:
 	var half_grid_pixels = Vector2(grid_width, grid_height) * cell_size / 2

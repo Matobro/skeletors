@@ -1,8 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://bkjat5hp6pjna"]
+[gd_scene load_steps=11 format=3 uid="uid://bkjat5hp6pjna"]
 
 [ext_resource type="PackedScene" uid="uid://bj7ef3mp2wfwp" path="res://RTS-System/Entities/Data/Unit.tscn" id="1_ud4hw"]
 [ext_resource type="Script" uid="uid://bfyq7u1d5dh3c" path="res://RTS-System/Entities/Data/Hero.gd" id="2_q3git"]
 [ext_resource type="Shader" uid="uid://q6d4p3qpyi60" path="res://RTS-System/Shaders/UnitOutlineShader.gdshader" id="3_msp50"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r47uv"]
+size = Vector2(25, 25)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hjdkq"]
 resource_local_to_scene = true
@@ -10,8 +13,41 @@ shader = ExtResource("3_msp50")
 shader_parameter/outline_size = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_u5kfr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r47uv"]
+bg_color = Color(0.611765, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e4orr"]
+bg_color = Color(0, 0.8, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vb87f"]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.18359, 0.18359, 0.18359, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fgnkd"]
+radius = 342.067
+
 [node name="Hero" instance=ExtResource("1_ud4hw")]
 script = ExtResource("2_q3git")
 
-[node name="AnimatedSprite2D" parent="." index="3"]
+[node name="CollisionShape2D" parent="." index="1"]
+shape = SubResource("RectangleShape2D_r47uv")
+
+[node name="AnimatedSprite2D" parent="." index="2"]
 material = SubResource("ShaderMaterial_hjdkq")
+sprite_frames = SubResource("SpriteFrames_u5kfr")
+
+[node name="HpBar" parent="AnimatedSprite2D" index="0"]
+theme_override_styles/background = SubResource("StyleBoxFlat_r47uv")
+theme_override_styles/fill = SubResource("StyleBoxFlat_e4orr")
+
+[node name="Panel" parent="AnimatedSprite2D/HpBar" index="0"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_vb87f")
+
+[node name="CollisionShape2D" parent="AggroRange" index="0"]
+shape = SubResource("CircleShape2D_fgnkd")

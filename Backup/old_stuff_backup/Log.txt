@@ -1,4 +1,0 @@
-26/06/2026
---------mato
-Version 0.0.1
-Starting project
