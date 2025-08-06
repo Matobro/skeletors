@@ -406,7 +406,7 @@ func select_unit_at_mouse_pos(mouse_pos: Vector2, shift: bool):
 					# Deselect if already selected
 					clicked_unit.set_selected(false)
 					selected_units.erase(clicked_unit)
-					player_ui.remove_unit_from_group(clicked_unit)
+					player_ui.remove_unit_from_control(clicked_unit)
 				else:
 					# Add to selection
 					clicked_unit.set_selected(true)

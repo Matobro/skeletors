@@ -80,7 +80,7 @@ func _draw():
 			var pos = cell * cell_size 
 			draw_rect(Rect2(pos, Vector2(cell_size, cell_size)), Color(1, 0, 0, 0.4))
 	
-	# Draw unit bounds
+	# Draw unit bounds and separation forces
 	for unit in units:
 		var radius = unit.unit_scale
 		var pos = unit.global_position

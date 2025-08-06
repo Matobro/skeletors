@@ -7,9 +7,9 @@ func _ready() -> void:
 	load_unit_data()
 
 func load_unit_data():
-	hero_list = load_units_from_folder("res://Entities/Heroes/Heroes/", "hero")
-	unit_list = load_units_from_folder("res://Entities/Units/Units/", "unit")
-
+	hero_list = load_units_from_folder("res://RTS-System/Entities/Heroes/Database/", "hero")
+	unit_list = load_units_from_folder("res://RTS-System/Entities/Units/Database/", "unit")
+	
 func load_units_from_folder(folder_path: String, unit_type: String) -> Array:
 	var dir = DirAccess.open(folder_path)
 	var units: Array = []

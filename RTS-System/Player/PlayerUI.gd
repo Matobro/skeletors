@@ -67,7 +67,7 @@ func add_unit_to_control(unit):
 	instance.init_unit(port)
 	control_group_array.append(instance)
 
-func remove_unit_from_group(unit):
+func remove_unit_from_control(unit):
 	var next_unit = get_next_in_group()
 	var was_first = null
 	if control_group_array.size() > 0 and is_instance_valid(control_group_array[0]):

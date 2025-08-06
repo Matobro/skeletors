@@ -11,6 +11,7 @@ var is_local_player: bool = false
 func _ready():
 	await get_tree().process_frame
 
+	UnitHandler.unit_died.connect(_on_unit_died)
 	if get_local_player() == 1:
 		is_local_player = true
 	else:
@@ -28,3 +29,6 @@ func _ready():
 	
 func get_local_player():
 	return player_id
+
+func _on_unit_died(unit):
+	player_ui.remove_unit_from_control(unit)

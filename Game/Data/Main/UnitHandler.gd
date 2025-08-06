@@ -3,6 +3,8 @@ extends Node
 var all_units: Array = []
 var units_by_player: Dictionary = {}
 
+signal unit_died(unit)
+
 func register_unit(unit):
 	# Add unit to registry
 	all_units.append(unit)
@@ -13,7 +15,7 @@ func register_unit(unit):
 	units_by_player[unit.owner_id].append(unit)
 
 	# Connect signals
-	unit.died.connect(_on_unit_died.bind(unit))
+	unit.died.connect(_on_unit_died)
 
 	# Initialize unit
 	unit.init_unit()
@@ -27,6 +29,7 @@ func unregister_unit(unit):
 		units_by_player[unit.owner_id].erase(unit)
 
 func _on_unit_died(unit):
+	print("SIGNAL LOLL")
 	unregister_unit(unit)
 	emit_signal("unit_died", unit)
 

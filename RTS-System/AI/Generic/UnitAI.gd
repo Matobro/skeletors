@@ -22,10 +22,10 @@ var last_requested_target := Vector2.ZERO
 ### Stuck stuff ###
 var stuck_check_timer: float = 0.0
 var last_position: Vector2 = Vector2.INF
-const STUCK_TIME_THRESHOLD: float = 0.5
-const STUCK_DISTANCE_THRESHOLD: float = 5.0
+const STUCK_TIME_THRESHOLD: float = 0.2
+const STUCK_DISTANCE_THRESHOLD: float = 10.0
 
-var devstate = null
+var devstate: Label = null
 
 func _ready():
 	add_state("Idle", preload("res://RTS-System/AI/Generic/UnitAIStates/IdleState.gd").new())
@@ -44,6 +44,14 @@ func _ready():
 
 func special_process():
 	devstate.text = str(state)
+	var color = null
+	match state:
+		"Move": color = Color.GREEN
+		"Idle": color = Color.GRAY
+		"Attack": color = Color.RED
+		"Attack_move": color = Color.DARK_RED
+		_: color = Color.WHITE
+	devstate.add_theme_color_override("font_color", color)
 func _on_command_issued(_command_type, _target, _position, is_queued):
 	if !is_queued:
 		_process_next_command()
@@ -78,20 +86,22 @@ func apply_separation_force() -> Vector2:
 		return Vector2.ZERO
 	
 	var force = Vector2.ZERO
-	var nearby_units = SpatialGrid.get_units_around(parent.global_position, 32)
+	var nearby_units = SpatialGrid.get_units_around(parent.global_position, 80)
+	var separation_radius = 50.0
+	var separation_strength = 100.0 
 
 	for other in nearby_units:
-		if other == parent:
-			continue
-		if other.is_holding_position:
+		if other == parent or other.is_holding_position:
 			continue
 		
 		var offset = parent.global_position - other.global_position
 		var dist = offset.length()
-		if dist > 0 and dist < 32:
-			force += offset.normalized() / dist  # stronger when closer
 
-	return force.normalized()
+		if dist > 0 and dist < separation_radius:
+			var push = offset.normalized() * ((separation_radius - dist) / separation_radius)
+			force += push
+
+	return force * separation_strength
 
 func request_path():
 	current_path_request_id += 1
@@ -142,7 +152,7 @@ func _follow_path(_delta):
 		# Movement logic
 		var dir = distance_to_target.normalized()
 		var separation = apply_separation_force()
-		var final_direction = (dir + separation * 0.75).normalized()
+		var final_direction = (dir + separation * 0.25).normalized()
 		parent.velocity = final_direction * parent.get_stat("movement_speed")
 		parent.move_and_slide()
 		parent.handle_orientation(final_direction)
@@ -169,7 +179,7 @@ func _follow_path(_delta):
 	var distance_to_goal = parent.global_position.distance_to(path[-1])
 
 	if distance_to_goal < 10.0:
-		if current_command != null and current_command.type in ["Attack", "Attack_move"] and fallback_command != null:
+		if current_command != null and current_command.type in ["Attack", "Attack_move"]:
 			return
 		_process_next_command()
 
