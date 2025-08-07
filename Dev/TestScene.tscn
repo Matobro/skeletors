@@ -1,6 +1,5 @@
-[gd_scene load_steps=12 format=4 uid="uid://dv3rvon240ulo"]
+[gd_scene load_steps=11 format=4 uid="uid://dv3rvon240ulo"]
 
-[ext_resource type="Script" uid="uid://30hv0rapwc73" path="res://RTS-System/Entities/Data/GameManager.gd" id="1_lmhu4"]
 [ext_resource type="Script" uid="uid://cyy8ru024m6fd" path="res://Dev/Tools/DevSpawnUnit.gd" id="2_1r4kt"]
 [ext_resource type="Script" uid="uid://b4hen6yn0dyic" path="res://Dev/Fps.gd" id="3_fmrvc"]
 [ext_resource type="Texture2D" uid="uid://cbbfeajwrgr1c" path="res://RTS-System/Terrain/Tilesets/Test_Ground_Tile.png" id="4_wjqvk"]
@@ -48,7 +47,6 @@ sources/0 = SubResource("TileSetAtlasSource_tq6uv")
 
 [node name="World" type="Node2D"]
 y_sort_enabled = true
-script = ExtResource("1_lmhu4")
 
 [node name="DevSpawnUnit" type="Node2D" parent="."]
 script = ExtResource("2_1r4kt")

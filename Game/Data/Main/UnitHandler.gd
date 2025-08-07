@@ -29,9 +29,13 @@ func unregister_unit(unit):
 		units_by_player[unit.owner_id].erase(unit)
 
 func _on_unit_died(unit):
-	print("SIGNAL LOLL")
 	unregister_unit(unit)
 	emit_signal("unit_died", unit)
+
+	if unit.owner_id == 10:
+		for player in PlayerManager.get_all_players():
+			if player.player_id != 10 and player.hero:
+				player.hero.get_xp(unit.data.stats.xp_yield)
 
 func get_units_by_player(owner_id):
 	return units_by_player.get(owner_id, [])

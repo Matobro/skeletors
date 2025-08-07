@@ -22,6 +22,7 @@ SpatialGridDebugRenderer="*res://Dev/Tools/SpatialGridDebugRenderer.gd"
 SpatialGrid="*res://RTS-System/Map/MapController.gd"
 UnitHandler="*res://Game/Data/Main/UnitHandler.gd"
 UnitSpawner="*res://Game/WaveSystem/UnitSpawner.gd"
+PlayerManager="*res://RTS-System/Entities/Data/PlayerManager.gd"
 
 [display]
 

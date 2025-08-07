@@ -10,7 +10,6 @@ func register_unit(unit) -> void:
 	if not units.has(unit):
 		units.append(unit)
 	var radius = unit.unit_scale
-	print("Unit Scale: ", radius)
 	var covered_cells = grid_manager._get_cells_covered(unit.global_position, radius)
 	for cell in covered_cells:
 		if not grid.has(cell):
@@ -33,7 +32,6 @@ func deregister_unit(unit) -> void:
 
 func update_unit_position(unit) -> void:
 	var radius = unit.unit_scale
-	print("Unit Scale: ", radius)
 	var old_coords = unit.get_meta("grid_coords")
 	var new_coords = grid_manager._get_cells_covered(unit.global_position, radius)
 	if old_coords != new_coords:

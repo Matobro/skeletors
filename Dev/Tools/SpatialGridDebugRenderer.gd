@@ -89,7 +89,7 @@ func _draw():
 		draw_rect(Rect2(_top_left, size), Color.GREEN, false)
 
 	if SpatialGrid.debug_grid_enabled:
-		var manager = get_tree().current_scene
+		var manager = PlayerManager
 		var cam = manager.players[1].player_camera
 
 		var screen_size = get_viewport().get_visible_rect().size

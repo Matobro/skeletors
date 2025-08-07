@@ -29,6 +29,8 @@ func _ready():
 
 	astar_manager.build_astar_graph()
 
+	UnitHandler.unit_died.connect(path_request_manager.clear_path_requests_for_unit)
+	
 func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null) -> PackedVector2Array:
 	return astar_manager.find_path(start_pos, end_pos, target_unit)
 

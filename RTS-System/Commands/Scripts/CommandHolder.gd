@@ -12,6 +12,11 @@ var current_point = null
 
 var max_commands: int = 5
 
+func _on_command_completed(command_type, fallback_command):
+	if command_type == "Attack":
+		if fallback_command != null:
+			insert_command_at_front(fallback_command)
+
 func issue_command(command_type: String, target, position: Vector2, is_queued: bool, player_id: int, shared_path: PackedVector2Array = [], offset: Vector2 = Vector2.ZERO):
 	if player_id != unit.owner_id:
 		return
@@ -39,6 +44,9 @@ func issue_command(command_type: String, target, position: Vector2, is_queued: b
 	show_command_visual(command_type, position)
 	add_rally_point(command_type, position, is_queued)
 	emit_signal("command_issued", command_type, target, position, is_queued)
+
+func insert_command_at_front(command):
+	queue.insert(0, command)
 
 func add_rally_point(command_type: String, pos, is_queued):
 	var rp = commands_data.command_object.instantiate()
@@ -70,9 +78,6 @@ func show_command_visual(command_type: String, target_pos: Vector2):
 		sprite_frames = null
 
 	visual.init_node(sprite_frames, true)
-
-func _on_command_completed(_command_type):
-	pass
 
 func get_next_command():
 	if queue.size() > 0:

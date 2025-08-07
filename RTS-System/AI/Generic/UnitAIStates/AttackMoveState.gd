@@ -24,8 +24,16 @@ func state_logic(delta):
 		ai.aggro_check_timer = 0.0
 		var enemy = parent.closest_enemy_in_aggro_range()
 		if enemy != null:
-			ai.fallback_command = ai.current_command
-			parent.command_component.issue_command("Attack", enemy, enemy.global_position, false, parent.owner_id)
+			if ai.fallback_command == null:
+				ai.fallback_command = ai.current_command
+			parent.command_component.insert_command_at_front({
+				"type": "Attack",
+				"target_unit": enemy,
+				"target_position": enemy.global_position,
+				"shared_path": [],
+				"offset": Vector2.ZERO
+			})
+			ai.set_state("Aggro")
 			return
 
 	if ai.path.size() <= 0:

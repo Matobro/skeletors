@@ -2,7 +2,7 @@ extends StateMachine
 
 class_name UnitAI
 
-signal command_completed(command_type)
+signal command_completed(command_type, fallback_command)
 
 var current_command = null
 var fallback_command = null
@@ -16,8 +16,11 @@ var path_index: int = 0
 var path_requested: bool = false
 var current_path_request_id = 0
 
-var last_requested_path := {"start": Vector2.INF, "end": Vector2.INF}
+var last_requested_path := {"start": Vector2.INF, "end": Vector2.INF, "status": "none"}
 var last_requested_target := Vector2.ZERO
+
+var path_timeout_timer = 0.0
+const PATH_REQUEST_TIMEOUT = 1.0
 
 ### Stuck stuff ###
 var stuck_check_timer: float = 0.0
@@ -52,6 +55,7 @@ func special_process():
 		"Attack_move": color = Color.DARK_RED
 		_: color = Color.WHITE
 	devstate.add_theme_color_override("font_color", color)
+	
 func _on_command_issued(_command_type, _target, _position, is_queued):
 	if !is_queued:
 		_process_next_command()
@@ -67,7 +71,7 @@ func _process_next_command():
 	current_command = next_command
 	parent.command_component.pop_next_command()
 
-	emit_signal("command_completed", current_command.type)
+	emit_signal("command_completed", current_command.type, fallback_command)
 
 	match current_command.type:
 		"Move":
@@ -78,6 +82,8 @@ func _process_next_command():
 			set_state("Attack_move")
 		"Stop":
 			set_state("Stop")
+		"Hold":
+			set_state("Hold")
 		_:
 			set_state("Idle")
 
@@ -106,6 +112,7 @@ func apply_separation_force() -> Vector2:
 func request_path():
 	current_path_request_id += 1
 	path_requested = true
+	path_timeout_timer = 0.0
 	SpatialGrid.queue_unit_for_path(parent, current_path_request_id, current_command.target_unit)
 	SpatialGridDebugRenderer._delete_path(parent)
 
@@ -127,11 +134,25 @@ func _on_path_ready(unit, new_path: PackedVector2Array, request_id):
 	path = new_path
 	path_index = 0
 	path_requested = false
+	path_timeout_timer = 0.0
+
+	set_meta("last_requested_path", {
+		"start": parent.global_position,
+		"end": current_command.target_position if current_command != null else parent.global_position,
+		"status": "received"
+	})
 
 	#DEBUG
 	SpatialGridDebugRenderer._receive_path(unit, path)
 
-func _follow_path(_delta):
+func _follow_path(delta):
+	if path_requested:
+		path_timeout_timer += delta
+		if path_timeout_timer > PATH_REQUEST_TIMEOUT:
+			print("Timeout waiting for path. Retrying...")
+			request_path()
+			path_timeout_timer = 0.0
+
 	if path.size() <= 0:
 		return
 
@@ -153,12 +174,13 @@ func _follow_path(_delta):
 		var dir = distance_to_target.normalized()
 		var separation = apply_separation_force()
 		var final_direction = (dir + separation * 0.25).normalized()
-		parent.velocity = final_direction * parent.get_stat("movement_speed")
+		var desired_velocity = final_direction * parent.get_stat("movement_speed")
+		parent.velocity = parent.velocity.lerp(desired_velocity, 0.3) # the magic number is "acceleration", high values introduce jittering, low values makes units floaty
 		parent.move_and_slide()
 		parent.handle_orientation(final_direction)
 
 		# Stuck detection
-		stuck_check_timer += _delta
+		stuck_check_timer += delta
 
 		if last_position == Vector2.INF:
 			last_position = parent.global_position
@@ -167,9 +189,10 @@ func _follow_path(_delta):
 			var moved_distance = parent.global_position.distance_to(last_position)
 			if moved_distance < STUCK_DISTANCE_THRESHOLD:
 				print("Unit seems stuck. Requesting new path.")
-				request_path()
-				stuck_check_timer = 0.0
-				last_position = parent.global_position
+				if !path_requested:
+					request_path()
+					stuck_check_timer = 0.0
+					last_position = parent.global_position
 			else:
 				# Reset timer and last position if progress was made
 				stuck_check_timer = 0.0

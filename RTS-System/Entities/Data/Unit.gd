@@ -36,8 +36,6 @@ var friendly_targets: Array = []
 signal died(unit)
 
 func init_unit():
-	print("Unit.init_unit() called for:", self)
-
 	data = data.duplicate()
 	await get_tree().process_frame
 

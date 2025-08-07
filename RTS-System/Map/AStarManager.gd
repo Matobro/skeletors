@@ -84,7 +84,6 @@ func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null) -> Pack
 	print("Finding path...")
 	
 	var start_cell = grid_manager._get_cell_coords(start_pos)
-	print("Cell coords:", start_cell)
 	start_cell = _get_nearest_free_cell(start_pos)
 
 	var end_cell: Vector2
@@ -116,8 +115,6 @@ func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null) -> Pack
 		end_cell = _get_nearest_free_cell(end_pos)
 
 	var start_id = grid_manager._get_cell_id(start_cell)
-	print("Start point id:", start_id)
-	print("Start point pos (AStar):", astar.get_point_position(start_id))
 	var end_id = grid_manager._get_cell_id(end_cell)
 
 	if not astar.has_point(start_id):
@@ -133,16 +130,12 @@ func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null) -> Pack
 
 	for id in raw_path:
 		var grid_pos = astar.get_point_position(id)
-		
-		var cell_x = floor(grid_pos.x / grid_manager.cell_size) - grid_manager.half_width
-		var cell_y = floor(grid_pos.y / grid_manager.cell_size) - grid_manager.half_height
-		print("Path cell:", Vector2(cell_x, cell_y))
 
 		var world_pos = grid_pos - Vector2(grid_manager.half_width, grid_manager.half_height) * grid_manager.cell_size
 		world_path.append(world_pos)
 
 	if world_path.size() > 0:
-		print("Path (to target or neighbor) generated: ", world_path)
+		print("Path generated, points: ", world_path.size())
 		world_path[0] = start_pos
 		return smooth_path(world_path)
 	else:
@@ -168,7 +161,7 @@ func smooth_path(path: PackedVector2Array) -> PackedVector2Array:
 				found = true
 				break
 		if not found:
-			# Shouldn’t really happen unless something breaks
+			# Shouldnt really happen unless something breaks
 			current_index += 1
 			smoothed.append(path[current_index])
 
@@ -201,6 +194,7 @@ func has_line_of_sight(from: Vector2, to: Vector2) -> bool:
 			return false
 
 	return true
+	
 func _get_nearest_free_cell(pos: Vector2) -> Vector2:
 	var center = grid_manager._get_cell_coords(pos)
 	var max_search = 10  # search radius
@@ -215,7 +209,7 @@ func _get_nearest_free_cell(pos: Vector2) -> Vector2:
 func get_units_around(position: Vector2, radius: float = 32.0) -> Array:
 	var units_in_radius := []
 	
-	# Use your _get_cells_covered to get all cells overlapping the radius
+	# Use _get_cells_covered to get all cells overlapping the radius
 	var cells = grid_manager._get_cells_covered(position, radius)
 	
 	for cell in cells:

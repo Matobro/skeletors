@@ -12,13 +12,21 @@ func queue_unit_for_path(unit, request_id, target_unit = null):
 	var start_pos = unit.global_position
 	var end_pos = unit.state_machine.current_command.target_position if unit.state_machine.current_command != null else start_pos
 
-	var last = unit.get_meta("last_requested_path") if unit.has_meta("last_requested_path") else {"start": Vector2.INF, "end": Vector2.INF}
+	var last = unit.get_meta("last_requested_path") if unit.has_meta("last_requested_path") else {"start": Vector2.INF, "end": Vector2.INF, "status": "none"}
 
-	if last["start"].distance_to(start_pos) < 8 and last["end"].distance_to(end_pos) < 8:
+	if last != null \
+	and last.has("status" \
+	and last["status"] == "queued" ) \
+	and last["start"].distance_to(start_pos) < 8 \
+	and last["end"].distance_to(end_pos) < 8:
 		print("Skipping path request due to close start/end")
 		return  # Same path -> skip
 
-	unit.set_meta("last_requested_path", {"start": start_pos, "end": end_pos})
+	unit.set_meta("last_requested_path", {
+		"start": start_pos, 
+		"end": end_pos, 
+		"status": "queued"
+		})
 
 	for item in path_queue:
 		if item.unit == unit:
@@ -30,16 +38,33 @@ func queue_unit_for_path(unit, request_id, target_unit = null):
 		"target_unit": target_unit
 		})
 
+func clear_path_requests_for_unit(unit):
+	path_queue = path_queue.filter(func(item):
+		return item.unit != unit
+		)
+
 func _process(_delta):
-	var count = 0
-	var max_this_frame = 10 if Engine.get_frames_per_second() > 55 else 2 
-	while count < max_this_frame and path_queue.size() > 0:
+	var time_budget = 0.5 / Engine.get_frames_per_second()
+	var time_spent = 0.0
+	var start_time = Time.get_ticks_usec()
+
+	while path_queue.size() > 0:
 		var item = path_queue.pop_front()
 		var unit = item.unit
+		if !is_instance_valid(unit):
+			continue
+			
 		var target_unit = item.target_unit
 		var request_id = item.request_id
+
+		if target_unit != null and !is_instance_valid(target_unit):
+			target_unit = null
+
 		var start_pos = unit.global_position
 		var end_pos = unit.state_machine.current_command.target_position if unit.state_machine.current_command != null else start_pos
 		var path = astar_manager.find_path(start_pos, end_pos, target_unit)
 		emit_signal("path_ready", unit, path, request_id)
-		count += 1
+
+		time_spent = (Time.get_ticks_usec() - start_time) / 1_000_000.0
+		if time_spent >= time_budget:
+			break

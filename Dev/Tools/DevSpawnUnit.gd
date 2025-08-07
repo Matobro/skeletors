@@ -25,7 +25,6 @@ var unit_data_list: Array = []
 
 
 func init_node() -> void:
-	manager = get_parent()
 	unit_list = $"../CanvasLayer/DevBox/VBoxContainer/OptionButton"
 	spawn_button = $"../CanvasLayer/DevBox/VBoxContainer/Button"
 	spawn_visual = $"../CanvasLayer/TextureRect"
@@ -66,7 +65,7 @@ func _input(event: InputEvent):
 
 			
 func spawn_unit(data):
-	if !manager.get_player(owner_id):
+	if !PlayerManager.get_player(owner_id):
 		push_warning("Player: ", owner_id, " does not exist")
 		finish_spawn()
 		return
