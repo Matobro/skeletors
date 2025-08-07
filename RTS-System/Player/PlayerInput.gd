@@ -95,7 +95,15 @@ func handle_keyboard_commands(event: InputEventKey):
 		issue_stop_command(get_key_event_info())
 	elif event.is_action_pressed("h"):
 		issue_hold_command(get_key_event_info())
-
+	elif selected_units.size() > 0:
+		match event.keycode:
+			KEY_Q:
+				selected_units[0].cast_ability(0, get_global_mouse_position(), get_tree().current_scene)
+			KEY_W:
+				selected_units[0].cast_ability(1, get_global_mouse_position(), get_tree().current_scene)
+			KEY_E:
+				selected_units[0].cast_ability(2, get_global_mouse_position(), get_tree().current_scene)
+				
 func handle_mouse_input(event):
 	if !is_input_enabled:
 		return

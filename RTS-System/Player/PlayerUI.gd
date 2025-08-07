@@ -38,6 +38,18 @@ var unit_slot = preload("res://RTS-System/Entities/Data/UnitSlot.tscn")
 @onready var level_label = $HeroStats/Level
 @onready var current_control_group = $CurrentControlGrid
 
+@onready var ability_buttons = [
+	$ActionMenu/GridContainer/AbilityButton0,
+	$ActionMenu/GridContainer/AbilityButton1,
+	$ActionMenu/GridContainer/AbilityButton2,
+	$ActionMenu/GridContainer/AbilityButton3,
+	$ActionMenu/GridContainer/AbilityButton4,
+	$ActionMenu/GridContainer/AbilityButton5,
+	$ActionMenu/GridContainer/AbilityButton6,
+	$ActionMenu/GridContainer/AbilityButton7,
+
+]
+
 var control_group_array = []
 var ui_hidden = false
 var current_data: UnitData
@@ -224,6 +236,13 @@ func update_unit_ui(data):
 	mana_bar.value = stats.current_mana
 	mana_bar_label.text = str(stats.current_mana, "/", stats.max_mana)
 
+	for i in ability_buttons.size():
+		var button = ability_buttons[i]
+		if i < data.parent.abilities.size():
+			button.visible = true
+			button.setup(data.parent.abilities[i], data.parent, i)
+		else:
+			button.visible = false
 ########################################################################
 ### UPDATE UI ##########################################################
 ########################################################################

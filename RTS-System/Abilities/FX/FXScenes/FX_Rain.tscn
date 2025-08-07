@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://cltk34p0wrw66"]
+
+[ext_resource type="Script" uid="uid://beowqfyv1e4wc" path="res://RTS-System/Abilities/FX/FX_Base.gd" id="1_tevjb"]
+[ext_resource type="Texture2D" uid="uid://1vjudbifsc40" path="res://RTS-System/Abilities/FX/Textures/Test_Particle_Texture.png" id="2_x6r1l"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2nqdy"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(5, 0, 0)
+emission_shape = 1
+emission_sphere_radius = 30.0
+angle_min = 1.07288e-05
+angle_max = 1.07288e-05
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 150.0
+initial_velocity_max = 150.0
+gravity = Vector3(0, 98, 0)
+
+[node name="FX_Rain" type="Node2D"]
+z_index = 100
+script = ExtResource("1_tevjb")
+fx_texture = ExtResource("2_x6r1l")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+process_material = SubResource("ParticleProcessMaterial_2nqdy")

@@ -12,6 +12,7 @@ class_name UnitData
 @export var avatar: SpriteFrames
 @export var stats: BaseStatData
 
+var parent = null
 var hero: Hero = null
 
 func get_unit_type() -> String:

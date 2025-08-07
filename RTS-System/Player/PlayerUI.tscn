@@ -1,10 +1,11 @@
-[gd_scene load_steps=24 format=3 uid="uid://44m1veg1thkm"]
+[gd_scene load_steps=25 format=3 uid="uid://44m1veg1thkm"]
 
 [ext_resource type="Script" uid="uid://dtvvveravq00x" path="res://RTS-System/Player/PlayerUI.gd" id="1_mb3tw"]
 [ext_resource type="Texture2D" uid="uid://f8758o682hq6" path="res://RTS-System/Commands/UI/Move.png" id="1_qbo8c"]
 [ext_resource type="Texture2D" uid="uid://wg4ahtxtfu3a" path="res://RTS-System/Commands/UI/Stop.png" id="2_2ncyk"]
 [ext_resource type="Texture2D" uid="uid://dj0gxf8y644j7" path="res://RTS-System/Commands/UI/Hold_Position.png" id="3_1i0l3"]
 [ext_resource type="Texture2D" uid="uid://cj72b3uo7vdg1" path="res://RTS-System/Commands/UI/AttackMove.png" id="4_mb3tw"]
+[ext_resource type="Script" uid="uid://c6vcku5pmoowr" path="res://RTS-System/Abilities/Data/AbilityButton.gd" id="6_bkqy6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0sfn1"]
 bg_color = Color(0.136826, 0.136826, 0.136826, 1)
@@ -190,6 +191,62 @@ offset_bottom = 73.0
 texture = ExtResource("4_mb3tw")
 expand_mode = 2
 stretch_mode = 3
+
+[node name="AbilityButton0" type="Button" parent="ActionMenu/GridContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("6_bkqy6")
+
+[node name="AbilityButton1" type="Button" parent="ActionMenu/GridContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("6_bkqy6")
+
+[node name="AbilityButton2" type="Button" parent="ActionMenu/GridContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("6_bkqy6")
+
+[node name="AbilityButton3" type="Button" parent="ActionMenu/GridContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("6_bkqy6")
+
+[node name="AbilityButton4" type="Button" parent="ActionMenu/GridContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("6_bkqy6")
+
+[node name="AbilityButton5" type="Button" parent="ActionMenu/GridContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("6_bkqy6")
+
+[node name="AbilityButton6" type="Button" parent="ActionMenu/GridContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("6_bkqy6")
+
+[node name="AbilityButton7" type="Button" parent="ActionMenu/GridContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("6_bkqy6")
 
 [node name="Panel" type="Panel" parent="."]
 offset_left = -398.0

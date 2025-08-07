@@ -71,6 +71,10 @@ func assign_stuff():
 	state_machine.animation_player = animation_player
 	state_machine.animation_library = animation_library
 	state_machine.parent = self
+
+	data.parent = self
+	var rof = load("res://RTS-System/Abilities/Resources/Rain of Fire.tres")
+	abilities.append(rof)
 	
 	#hp_bar.set_bar_position(animation_player.get_frame_size().y, animation_player.scale.y, animation_player.position.y)
 
@@ -126,7 +130,7 @@ func regenate_health():
 	
 	data.stats.current_health = min(data.stats.current_health + data.stats.health_regen, data.stats.max_health)
 	hp_bar.set_hp_bar(data.stats.current_health)
-	
+
 func take_damage(damage: int):
 	if dead: return
 

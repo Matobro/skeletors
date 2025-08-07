@@ -9,4 +9,4 @@ func add_ability(ability: Ability):
 func activate_ability(index: int, target = null, position = Vector2.ZERO):
     if index < 0 or index >= abilities.size():
         return
-    abilities[index].activate(target, position)
+    abilities[index].activate_ability(target, position, abilities[index].owner)

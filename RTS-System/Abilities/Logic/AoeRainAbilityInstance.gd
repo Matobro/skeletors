@@ -18,7 +18,7 @@ func setup(config: AoeRainAbility, pos: Vector2, world: Node, owner_node: Node):
     wave_timer = Timer.new()
     wave_timer.wait_time = abiliy_config.duration / abiliy_config.wave_count
     wave_timer.one_shot = false
-    add_child(wave_timer)
+    ParticleManager.add_child(wave_timer)
     wave_timer.timeout.connect(_on_wave_timeout)
     wave_timer.start()
     
@@ -37,19 +37,19 @@ func _on_wave_timeout():
 
 func perform_wave():
     var targets = abiliy_config.get_targets_in_area(position, abiliy_config.area_radius, world_node)
+    
+    if abiliy_config.fx:
+        ParticleManager.play_fx(abiliy_config.fx, position)
+    
     for target in targets:
         ##if check ally orsomething
             ##continue
 
+        print("hit ", target)
         var damage = abiliy_config.damage_per_wave
         target.take_damage(damage)
 
         #if abiliy_config.effect_debuff != null:
             #target.apply.effect(abiliy_config.effect_debuff)
 
-func spawn_effect():
-    if abiliy_config.effect_scene != null:
-        var effect = abiliy_config.effect_scene.instantiate()
-        effect.global_position = position
-        world_node.add_child(effect)
 
