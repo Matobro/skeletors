@@ -65,15 +65,15 @@ func get_bonus_attack_speed() -> float:
 func get_bonus_mana() -> int:
 	return intelligence * int_multiplier
 
+func get_bonus_health_regen() -> float:
+	return strength / 10.0
+
 ### TO DO ###
 func get_bonus_armor() -> int:
 	return 0
 
 func get_bonus_movement_speed() -> int:
 	return 0
-
-func get_bonus_health_regen() -> float:
-	return 0.0
 
 func get_bonus_mana_regen() -> float:
 	return 0.0
@@ -86,11 +86,11 @@ func get_bonus_attack_range() -> int:
 func get_bonus_attack_damage() -> int:
 	match main_stat:
 		"strength":
-			return max (1, int(floor(strength / 3)))
+			return max (1, int(floor(strength / 2)))
 		"agility":
-			return max (1, int(floor(agility / 3)))
+			return max (1, int(floor(agility / 2)))
 		"intelligence":
-			return max (1, int(floor(intelligence / 3)))
+			return max (1, int(floor(intelligence / 2)))
 		_:
 			return 0
 		

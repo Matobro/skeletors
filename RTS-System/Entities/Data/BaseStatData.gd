@@ -5,8 +5,8 @@ class_name BaseStatData
 ### Stats ##
 @export_category("Stats")
 @export_group("Base Stats")
-@export var base_max_hp: int = 5
-@export var base_max_mana: int = 0
+@export var base_max_hp: float = 5
+@export var base_max_mana: float = 0
 @export var base_health_regen: float = 0.1
 @export var base_mana_regen: float = 0.1
 @export var base_armor: int = 1
@@ -18,8 +18,8 @@ class_name BaseStatData
 @export var xp_yield: int = 50
 
 # @export_group("Current Stats")
-var max_health: int = 0
-var max_mana: int = 0
+var max_health: float = 0
+var max_mana: float = 0
 var armor: int = 0
 var movement_speed: int = 0
 var health_regen: float = 0.0
@@ -27,8 +27,8 @@ var mana_regen: float = 0.0
 var attack_speed: float = 0.0
 var attack_range: int = 0
 
-var current_health: int
-var current_mana: int
+var current_health: float
+var current_mana: float
 var attack_damage: int
 
 func recalculate_stats():

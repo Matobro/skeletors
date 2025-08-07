@@ -120,6 +120,13 @@ func is_within_attack_range(_target) -> bool:
 func get_stat(stat: String):
 	return data.stats[stat]
 
+func regenate_health():
+	if data.stats.health_regen <= 0:
+		return
+	
+	data.stats.current_health = min(data.stats.current_health + data.stats.health_regen, data.stats.max_health)
+	hp_bar.set_hp_bar(data.stats.current_health)
+	
 func take_damage(damage: int):
 	if dead: return
 

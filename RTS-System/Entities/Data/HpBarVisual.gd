@@ -2,7 +2,7 @@ extends Control
 
 @onready var hp_bar = $".."
 
-var max_hp: int
+var max_hp: float
 var line_color: Color = Color.BLACK
 var line_width: float = 2.0
 

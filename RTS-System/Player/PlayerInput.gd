@@ -154,7 +154,7 @@ func on_left_click_pressed(event_info):
 	### Attack move if holding A
 	drag_start = event_info.pos
 	if event_info.total_units > 0 and event_info.attack_moving:
-		if event_info.click_target and event_info.click_target.owner_id == 10:
+		if event_info.click_target:
 			issue_attack_command(event_info)
 		else:
 			issue_attack_move_command(event_info)
@@ -179,10 +179,7 @@ func on_left_click_released(event_info):
 			player_ui.clear_control_group()
 
 func on_right_click_pressed(event_info):
-	if event_info.attack_moving and event_info.click_target:
-		issue_attack_command(event_info)
-	else:
-		issue_move_command(event_info)
+	issue_move_command(event_info)
 
 func on_right_click_released(_event_info):
 	pass

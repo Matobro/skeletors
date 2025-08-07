@@ -1,13 +1,29 @@
 extends Node
 
 var all_units: Array = []
+var heroes: Array = []
 var units_by_player: Dictionary = {}
+
+var regen_tick := 0.0
+const REGEN_INTERVAL := 1.0
 
 signal unit_died(unit)
 
+func _process(delta):
+	regen_tick += delta
+	if regen_tick >= REGEN_INTERVAL:
+		regen_tick = 0.0
+		for unit in all_units:
+			unit.regenate_health()
+			
 func register_unit(unit):
 	# Add unit to registry
 	all_units.append(unit)
+
+	# If hero add to hero registry
+	if unit.data.unit_type == "hero" and !heroes.has(unit):
+		print("Added hero")
+		heroes.append(unit)
 
 	# Add unit to player specific registry
 	if not units_by_player.has(unit.owner_id):
@@ -33,9 +49,9 @@ func _on_unit_died(unit):
 	emit_signal("unit_died", unit)
 
 	if unit.owner_id == 10:
-		for player in PlayerManager.get_all_players():
-			if player.player_id != 10 and player.hero:
-				player.hero.get_xp(unit.data.stats.xp_yield)
+		for hero in heroes:
+			if hero.owner_id != 10:
+				hero.get_xp(unit.data.stats.xp_yield)
 
 func get_units_by_player(owner_id):
 	return units_by_player.get(owner_id, [])

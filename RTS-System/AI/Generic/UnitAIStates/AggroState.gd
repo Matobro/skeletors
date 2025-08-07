@@ -28,14 +28,21 @@ func state_logic(delta):
 	if ai.path.size() <= 0:
 		ai.request_path()
 		return
+	
+	if ai.path.size() > 0 and parent.global_position.distance_to(target_unit.global_position) < 75:
+		var target_cells = SpatialGrid.grid_manager._get_cells_covered(target_unit.global_position, target_unit.unit_scale)
+		var path_end_cell = SpatialGrid.get_cell_coords(ai.path[-1])
+		var within_range = false
+
+		for cell in target_cells:
+			if cell.distance_to(path_end_cell) <= 1:
+				within_range = true
+				break
+
+		if !within_range and !ai.path_requested:
+			ai.request_path()
 
 	ai._follow_path(delta)
-	
-	if ai.path.size() > 0:
-		var target_cell = SpatialGrid.get_cell_coords(target_unit.global_position)
-		var path_end_cell = SpatialGrid.get_cell_coords(ai.path[-1])
-		if target_cell.distance_to(path_end_cell) > 1:
-			ai.request_path()
 
 	# 'Nudge' towards target if reached goal but still out of range
 	if ai.path_index >= ai.path.size() and !parent.is_within_attack_range(target_unit.global_position):

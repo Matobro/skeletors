@@ -233,6 +233,6 @@ func get_damage(data):
 	var dice = data.attack_dice_roll
 	var _min = damage - dice
 	var _max = damage + dice
-	var clamp_min = clamp(_min, 1, 9999)
+	var clamp_min = clamp(_min, 1, 999999)
 	var arr = [clamp_min, _max]
 	return arr

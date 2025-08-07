@@ -45,17 +45,6 @@ func _ready():
 		s.ai = self
 		s.parent = parent
 
-func special_process():
-	devstate.text = str(state)
-	var color = null
-	match state:
-		"Move": color = Color.GREEN
-		"Idle": color = Color.GRAY
-		"Attack": color = Color.RED
-		"Attack_move": color = Color.DARK_RED
-		_: color = Color.WHITE
-	devstate.add_theme_color_override("font_color", color)
-	
 func _on_command_issued(_command_type, _target, _position, is_queued):
 	if !is_queued:
 		_process_next_command()
@@ -92,7 +81,7 @@ func apply_separation_force() -> Vector2:
 		return Vector2.ZERO
 	
 	var force = Vector2.ZERO
-	var nearby_units = SpatialGrid.get_units_around(parent.global_position, 80)
+	var nearby_units = SpatialGrid.get_units_around(parent.global_position, 60)
 	var separation_radius = 50.0
 	var separation_strength = 100.0 
 
