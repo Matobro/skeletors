@@ -5,6 +5,7 @@ func enter_state():
     parent.velocity = Vector2.ZERO
 
 func exit_state():
+    ai.clear_unit_state()
     SpatialGrid.register_unit(parent)
 
 func state_logic(delta):

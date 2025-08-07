@@ -6,10 +6,7 @@ func enter_state():
 	ai.last_requested_target = Vector2.INF
 
 func exit_state():
-	ai.path = []
-	ai.path_index = 0
-	ai.path_requested = false
-	ai.last_requested_target = Vector2.ZERO
+	ai.clear_unit_state()
 	SpatialGrid.register_unit(parent)
 	ai.animation_player.stop()
 

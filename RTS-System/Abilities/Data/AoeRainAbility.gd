@@ -3,6 +3,8 @@ extends Ability
 class_name AoeRainAbility
 
 const AoeRainAbilityInstance = preload("res://RTS-System/Abilities/Logic/AoeRainAbilityInstance.gd")
+const AreaIndicator = preload("res://RTS-System/Abilities/Data/AreaIndicator.tscn")
+
 @export var wave_count: int
 @export var duration: float
 @export var damage_per_wave: int

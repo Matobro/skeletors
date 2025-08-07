@@ -13,5 +13,6 @@ fx_scene = ExtResource("1_1fbyv")
 texture = ExtResource("3_4ttco")
 color = SubResource("Gradient_d02re")
 scale = 1.0
+radius = 1.0
 duration = 1.0
 metadata/_custom_type_script = "uid://csbo11pi5e5t1"

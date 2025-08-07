@@ -7,49 +7,57 @@ var _owner: Node
 var waves_remaining: int
 var wave_timer : Timer
 
+var area_indicator: Node2D
+
 func setup(config: AoeRainAbility, pos: Vector2, world: Node, owner_node: Node):
-    abiliy_config = config
-    position = pos
-    world_node = world
-    _owner = owner_node
+	abiliy_config = config
+	position = pos
+	world_node = world
+	_owner = owner_node
 
-    waves_remaining = abiliy_config.wave_count
+	waves_remaining = abiliy_config.wave_count
 
-    wave_timer = Timer.new()
-    wave_timer.wait_time = abiliy_config.duration / abiliy_config.wave_count
-    wave_timer.one_shot = false
-    ParticleManager.add_child(wave_timer)
-    wave_timer.timeout.connect(_on_wave_timeout)
-    wave_timer.start()
-    
+	area_indicator = abiliy_config.AreaIndicator.instantiate()
+	area_indicator.position = position
+	area_indicator.radius = abiliy_config.area_radius
+	print(area_indicator.radius)
+	ParticleManager.add_child(area_indicator)
+
+	wave_timer = Timer.new()
+	wave_timer.wait_time = abiliy_config.duration / abiliy_config.wave_count
+	wave_timer.one_shot = false
+	ParticleManager.add_child(wave_timer)
+	wave_timer.timeout.connect(_on_wave_timeout)
+	wave_timer.start()
+
 func _on_wave_timeout():
-    if waves_remaining <= 0:
-        wave_timer.stop()
-        queue_free()
-        return
-    
-    perform_wave()
-    waves_remaining -= 1
+	if waves_remaining <= 0:
+		wave_timer.stop()
+		queue_free()
+		return
+	
+	perform_wave()
+	waves_remaining -= 1
 
-    if waves_remaining <= 0:
-        wave_timer.stop()
-        queue_free()
+	if waves_remaining <= 0:
+		wave_timer.stop()
+		queue_free()
 
 func perform_wave():
-    var targets = abiliy_config.get_targets_in_area(position, abiliy_config.area_radius, world_node)
-    
-    if abiliy_config.fx:
-        ParticleManager.play_fx(abiliy_config.fx, position)
-    
-    for target in targets:
-        ##if check ally orsomething
-            ##continue
+	var targets = abiliy_config.get_targets_in_area(position, abiliy_config.area_radius, world_node)
+	
+	if abiliy_config.fx:
+		var _scale = abiliy_config.area_radius / 32
+		var _radius = abiliy_config.area_radius
+		ParticleManager.play_fx(abiliy_config.fx, position, _scale, _radius)
+	
+	for target in targets:
+		##if check ally orsomething
+			##continue
 
-        print("hit ", target)
-        var damage = abiliy_config.damage_per_wave
-        target.take_damage(damage)
+		print("hit ", target)
+		var damage = abiliy_config.damage_per_wave
+		target.take_damage(damage)
 
-        #if abiliy_config.effect_debuff != null:
-            #target.apply.effect(abiliy_config.effect_debuff)
-
-
+		#if abiliy_config.effect_debuff != null:
+			#target.apply.effect(abiliy_config.effect_debuff)

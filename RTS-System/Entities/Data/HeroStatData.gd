@@ -46,6 +46,16 @@ func recalculate_stats():
 	attack_range = base_range + get_bonus_attack_range()
 	attack_damage = base_damage + get_bonus_attack_damage()
 
+	max_health = max(max_health, 0)
+	attack_speed = max(attack_speed, 0.01)
+	max_mana = max(max_mana, 0)
+	armor = max(armor, 0)
+	movement_speed = max(movement_speed, 50)
+	health_regen = max(health_regen, 0)
+	mana_regen = max(mana_regen, 0)
+	attack_range = max(attack_range, 30)
+	attack_damage = max(attack_damage, 1)
+
 	if previous_max_hp > 0:
 		current_health = int(current_health * max_health / previous_max_hp)
 	else:
@@ -57,15 +67,27 @@ func recalculate_stats():
 		current_mana = max_mana
 
 func get_bonus_health() -> int:
+	if strength * str_multiplier <= 0:
+		return 0
+
 	return strength * str_multiplier
 
 func get_bonus_attack_speed() -> float:
+	if agility * agi_multiplier <= 0:
+		return 0.0
+
 	return agility * agi_multiplier
 	
 func get_bonus_mana() -> int:
+	if intelligence * int_multiplier <= 0:
+		return 0
+
 	return intelligence * int_multiplier
 
 func get_bonus_health_regen() -> float:
+	if strength / 10.0 <= 0:
+		return 0.0
+
 	return strength / 10.0
 
 ### TO DO ###

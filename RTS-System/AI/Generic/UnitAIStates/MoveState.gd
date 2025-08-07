@@ -7,10 +7,7 @@ func enter_state():
     ai.animation_player.play("walk")
 
 func exit_state():
-    ai.path = []
-    ai.path_index = 0
-    ai.path_requested = false
-    ai.last_requested_target = Vector2.ZERO
+    ai.clear_unit_state()
     SpatialGrid.register_unit(parent)
     parent.velocity = Vector2.ZERO
     ai.animation_player.stop()

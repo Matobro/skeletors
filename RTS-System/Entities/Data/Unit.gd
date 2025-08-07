@@ -73,8 +73,9 @@ func assign_stuff():
 	state_machine.parent = self
 
 	data.parent = self
-	var rof = load("res://RTS-System/Abilities/Resources/Rain of Fire.tres")
-	abilities.append(rof)
+	if data.unit_type == "hero":
+		var rof = load("res://RTS-System/Abilities/Resources/Rain of Fire.tres")
+		abilities.append(rof)
 	
 	#hp_bar.set_bar_position(animation_player.get_frame_size().y, animation_player.scale.y, animation_player.position.y)
 

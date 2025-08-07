@@ -76,6 +76,23 @@ func _process_next_command():
 		_:
 			set_state("Idle")
 
+func clear_unit_state():
+	aggro_check_timer = 0.0
+
+	path = []
+	path_index = 0
+	path_requested = false
+	current_path_request_id = 0
+
+	last_requested_path = {"start": Vector2.INF, "end": Vector2.INF, "status": "none"}
+	last_requested_target = Vector2.ZERO
+
+	path_timeout_timer = 0.0
+
+	stuck_check_timer = 0.0
+	last_position = Vector2.INF
+
+
 func apply_separation_force() -> Vector2:
 	if parent.is_holding_position:
 		return Vector2.ZERO

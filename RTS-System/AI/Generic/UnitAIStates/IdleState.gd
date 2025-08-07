@@ -7,7 +7,7 @@ func enter_state():
     SpatialGridDebugRenderer._delete_path(parent)
 
 func exit_state():
-    pass
+    ai.clear_unit_state()
 
 func state_logic(delta):
     parent.velocity = Vector2.ZERO

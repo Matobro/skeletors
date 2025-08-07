@@ -7,4 +7,5 @@ class_name FXResource
 @export var texture: Texture2D
 @export var color: Gradient
 @export var scale: float = 1.0
+@export var radius: float = 1.0
 @export var duration: float = 1.0

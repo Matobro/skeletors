@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://dkxx8g6l1upmt"]
+
+[ext_resource type="Script" uid="uid://bik8uwgbg3hj3" path="res://RTS-System/Abilities/Data/AreaIndicator.gd" id="1_g33dt"]
+[ext_resource type="Texture2D" uid="uid://bir3qtv6b0q07" path="res://RTS-System/Abilities/FX/Textures/Circle.png" id="2_2asre"]
+
+[node name="AreaIndicator" type="Node2D"]
+modulate = Color(0.281187, 0, 0.0876873, 0.196078)
+z_index = 100
+script = ExtResource("1_g33dt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_2asre")
