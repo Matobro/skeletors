@@ -76,7 +76,10 @@ func assign_stuff():
 	if data.unit_type == "hero":
 		var rof = load("res://RTS-System/Abilities/Resources/Rain of Fire.tres")
 		abilities.append(rof)
-	
+
+		var shockwave = load("res://RTS-System/Abilities/Resources/Shockwave.tres")
+		abilities.append(shockwave)
+		
 	#hp_bar.set_bar_position(animation_player.get_frame_size().y, animation_player.scale.y, animation_player.position.y)
 
 	command_component.unit = self

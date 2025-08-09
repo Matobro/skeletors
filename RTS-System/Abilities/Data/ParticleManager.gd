@@ -26,3 +26,17 @@ func play_fx(fx_res: FXResource, position: Vector2, _scale, _radius):
 	fx.fx_radius = _radius
 	fx.fx_duration = fx_res.duration
 	get_tree().current_scene.add_child(fx)
+
+func attach_and_play_fx(fx_res: FXResource, position: Vector2, _scale, _radius, lifetime, dir, origin):
+	if !fx_res: return
+
+	var fx = fx_res.fx_scene.instantiate()
+	fx.fx_texture = fx_res.texture
+	fx.fx_scale = _scale
+	fx.fx_radius = _radius
+	fx.fx_duration = lifetime
+	fx.will_follow = true
+	fx.follow_target = origin
+	fx.dir = dir
+	get_tree().current_scene.add_child(fx)
+	fx.global_position = position

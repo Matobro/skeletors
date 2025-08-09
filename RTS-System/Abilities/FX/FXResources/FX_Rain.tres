@@ -8,7 +8,7 @@
 
 [resource]
 script = ExtResource("1_gkq2w")
-display_name = ""
+display_name = "Rain of Fire"
 fx_scene = ExtResource("1_1fbyv")
 texture = ExtResource("3_4ttco")
 color = SubResource("Gradient_d02re")

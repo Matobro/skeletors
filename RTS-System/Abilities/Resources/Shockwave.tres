@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="GroundTargetedAbility" load_steps=4 format=3 uid="uid://dvjiu0of6l7q"]
+
+[ext_resource type="Texture2D" uid="uid://cbbfeajwrgr1c" path="res://RTS-System/Terrain/Tilesets/Test_Ground_Tile.png" id="1_7plcc"]
+[ext_resource type="Script" uid="uid://ca83vtb8idv16" path="res://RTS-System/Abilities/Data/GroundTargetedAbility.gd" id="1_sipc0"]
+[ext_resource type="Resource" uid="uid://r3vyfaygcjc8" path="res://RTS-System/Abilities/FX/FXResources/FX_Shockwave.tres" id="1_wja8m"]
+
+[resource]
+script = ExtResource("1_sipc0")
+is_wave = true
+area_radius = 100.0
+move_speed = 1000
+damage = 2
+lifetime = 2.0
+name = "Shockwave"
+icon = ExtResource("1_7plcc")
+cooldown = 0.0
+mana_cost = 0
+fx = ExtResource("1_wja8m")
+metadata/_custom_type_script = "uid://ca83vtb8idv16"
