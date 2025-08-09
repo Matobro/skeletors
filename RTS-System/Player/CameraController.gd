@@ -18,7 +18,8 @@ func _ready():
 func _process(delta):
 	if controls_enabled:
 		var mouse_pos = get_viewport().get_mouse_position()
-		var screen_size = get_viewport().size
+		var screen_size = get_viewport_rect().size
+		
 		if(mouse_pos.x <= CAMERA_BORDER_SIZE):
 			camera.position.x -= edge_scroll_speed * delta
 		elif(mouse_pos.x >= screen_size.x - CAMERA_BORDER_SIZE):

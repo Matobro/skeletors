@@ -21,7 +21,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 
 	for player in get_all_players():
-		print("Player ID: ", player.player_id)
+		print("Player ID: ", player.player_id, " created")
 		
 	dev_spawner.player_input = get_player(1).player_input
 	dev_spawner.init_node()

@@ -29,6 +29,7 @@ var command_cooldown_frames := 0
 var block_input_frames: int = 0
 var selected_units: Array[Unit] = []
 
+var fullscreen: bool = true
 const DRAG_THRESHOLD := 50.0
 const COMMAND_COOLDOWN := 10
 
@@ -91,7 +92,14 @@ func get_mouse_event_info() -> MouseEventInfo:
 		)
 
 func handle_keyboard_commands(event: InputEventKey):
-	if event.is_action_pressed("s"):
+	if event.is_action_pressed("8"):
+		if fullscreen:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			DisplayServer.window_set_size(Vector2(1920, 1080))
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		fullscreen = !fullscreen
+	elif event.is_action_pressed("s"):
 		issue_stop_command(get_key_event_info())
 	elif event.is_action_pressed("h"):
 		issue_hold_command(get_key_event_info())
@@ -125,6 +133,7 @@ func handle_mouse_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
+				drag_start = event_info.pos
 				on_left_click_pressed(event_info)
 			else:
 				on_left_click_released(event_info)
@@ -187,7 +196,10 @@ func on_left_click_released(event_info):
 			player_ui.clear_control_group()
 
 func on_right_click_pressed(event_info):
-	issue_move_command(event_info)
+	if event_info.click_target and event_info.click_target.owner_id == 10:
+		issue_attack_command(event_info)
+	else:
+		issue_move_command(event_info)
 
 func on_right_click_released(_event_info):
 	pass
@@ -293,17 +305,18 @@ func is_mouse_over_ui() -> bool:
 func start_drag():
 	dragging = true
 	selection_box.visible = true
-	selection_box.global_position = camera.get_viewport_transform() * drag_start
+
+	selection_box.position = world_to_screen(drag_start)
 	selection_box.size = Vector2.ZERO
 	
 func update_drag(current_pos: Vector2):
-	var drag_start_screen = camera.get_viewport_transform() * drag_start
-	var current_pos_screen = camera.get_viewport_transform() * current_pos
+	var start_screen_pos = world_to_screen(drag_start)
+	var current_screen_pos = world_to_screen(current_pos)
 	var top_left = Vector2(
-		min(drag_start_screen.x, current_pos_screen.x),
-		min(drag_start_screen.y, current_pos_screen.y)
+		min(start_screen_pos.x, current_screen_pos.x),
+		min(start_screen_pos.y, current_screen_pos.y)
 	)
-	var size = (current_pos_screen - drag_start_screen).abs()
+	var size = (current_screen_pos - start_screen_pos).abs()
 	
 	selection_box.global_position = top_left
 	selection_box.size = size
@@ -313,7 +326,13 @@ func end_drag(shift):
 	selection_box.visible = false
 	
 	select_units_in_box(Rect2(selection_box.global_position, selection_box.size), shift)
-			
+
+func world_to_screen(world_pos: Vector2) -> Vector2:
+	var cam_pos = camera.global_position
+	var zoom = camera.zoom
+	var screen_center = camera.get_viewport_rect().size / 2
+	return screen_center + (world_pos - cam_pos) * zoom
+
 func select_units_in_box(box: Rect2, shift: bool) -> void:
 	var units_in_box: Array = []
 	var own_units_in_box: Array = []
@@ -321,7 +340,7 @@ func select_units_in_box(box: Rect2, shift: bool) -> void:
 
 	# Add units to array in the selection
 	for unit in UnitHandler.all_units:
-		var screen_pos = camera.get_viewport_transform() * unit.global_position
+		var screen_pos = world_to_screen(unit.global_position)
 		if box.has_point(screen_pos):
 			units_in_box.append(unit)
 			if unit.owner_id == player_id:

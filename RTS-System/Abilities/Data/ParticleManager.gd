@@ -10,7 +10,7 @@ func _ready() -> void:
 		while file_name != "":
 			if file_name.ends_with(".tres"):
 				var path = "res://RTS-System/Abilities/FX/FXResources/" + file_name
-				var fx_res = load(path)
+				var fx_res = ResourceLoader.load(path)
 				if fx_res is FXResource:
 					fx_map[file_name.get_basename()] = fx_res
 			file_name = dir.get_next()

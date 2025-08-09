@@ -65,6 +65,7 @@ func _physics_process(delta: float) -> void:
 
 	position += dir * move_speed * delta
 
+
 func _on_timer_timeout():
 	queue_free()
 
