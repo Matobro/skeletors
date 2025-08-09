@@ -230,11 +230,11 @@ func update_unit_ui(data):
 
 	var hp = clamp(stats.current_health, 0, 99999)
 	hp_bar.value = stats.current_health
-	hp_bar_label.text = str(hp, "/", stats.max_health)
+	hp_bar_label.text = str(int(hp), "/", int(stats.max_health))
 
 	mana_bar.max_value = stats.max_mana
 	mana_bar.value = stats.current_mana
-	mana_bar_label.text = str(stats.current_mana, "/", stats.max_mana)
+	mana_bar_label.text = str(int(stats.current_mana), "/", int(stats.max_mana))
 
 	for i in ability_buttons.size():
 		var button = ability_buttons[i]
