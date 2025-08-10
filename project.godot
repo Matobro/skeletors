@@ -25,6 +25,8 @@ UnitSpawner="*res://Game/WaveSystem/UnitSpawner.gd"
 PlayerManager="*res://RTS-System/Entities/Data/PlayerManager.gd"
 ParticleManager="*res://RTS-System/Abilities/Data/ParticleManager.gd"
 MapHandler="*res://Game/Data/Main/MapHandler.gd"
+TooltipManager="*res://RTS-System/Player/TooltipManager.gd"
+StatModifiers="*res://RTS-System/Entities/Data/StatModifiers.gd"
 
 [display]
 

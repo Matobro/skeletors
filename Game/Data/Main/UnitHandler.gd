@@ -45,6 +45,9 @@ func unregister_unit(unit):
 		units_by_player[unit.owner_id].erase(unit)
 
 func _on_unit_died(unit):
+	if !is_instance_valid(unit):
+		return
+		
 	unregister_unit(unit)
 	emit_signal("unit_died", unit)
 

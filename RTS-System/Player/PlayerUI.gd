@@ -26,11 +26,6 @@ var unit_slot = preload("res://RTS-System/Entities/Data/UnitSlot.tscn")
 var portrait_stylebox = null
 @onready var name_label = $UnitStats/Name
 @onready var xp_bar = $HeroStats/XpBar
-@onready var damage_label = $UnitStats/DamageValue
-@onready var str_label = $HeroStats/StrValue
-@onready var agi_label = $HeroStats/AgiValue
-@onready var int_label = $HeroStats/IntValue
-@onready var armor_label = $UnitStats/ArmorValue
 @onready var hp_bar = $Control/HpBar
 @onready var hp_bar_label = $Control/HpValue
 @onready var mana_bar = $Control/ManaBar
@@ -40,6 +35,20 @@ var portrait_stylebox = null
 @onready var level_label = $HeroStats/Level
 @onready var current_control_group = $CurrentControlGrid
 
+@onready var stat_names = {
+	"damage": $UnitStats/Damage,
+	"armor": $UnitStats/Armor,
+	"str": $HeroStats/Str,
+	"agi": $HeroStats/Agi,
+	"int": $HeroStats/Int
+}
+@onready var stat_labels = {
+	"damage": $UnitStats/DamageValue,
+	"armor": $UnitStats/ArmorValue,
+	"str": $HeroStats/StrValue,
+	"agi": $HeroStats/AgiValue,
+	"int": $HeroStats/IntValue,
+}
 @onready var ability_buttons = [
 	$ActionMenu/GridContainer/AbilityButton0,
 	$ActionMenu/GridContainer/AbilityButton1,
@@ -58,7 +67,14 @@ var ui_hidden = false
 var current_data: UnitData
 var update_speed = 5
 var current_frame = 0
+var parent = null
 
+func _ready():
+	for stat_name in stat_names.keys():
+		var label = stat_names[stat_name]
+		label.connect("mouse_entered", Callable(self, "_on_stat_hover_entered").bind(stat_name))
+		label.connect("mouse_exited", Callable(self, "_on_stat_hover_exited"))
+		
 func init_node():
 	portrait_stylebox = portrait_panel.get("theme_override_styles/panel")
 	og_color = portrait_stylebox.bg_color
@@ -201,10 +217,6 @@ func fit_portrait():
 ### UI LOGIC END #######################################################
 ########################################################################
 
-########################################################################
-### UPDATE UI ##########################################################
-########################################################################
-
 func update_unit_ui(data):
 	if data == null:
 		return
@@ -217,12 +229,15 @@ func update_unit_ui(data):
 			"unit":
 				unit_stats.visible = true
 				hero_stats.visible = false
+			"neutral": 
+				unit_stats.visible = true
+				hero_stats.visible = false
 			"hero":
 				unit_stats.visible = true
 				hero_stats.visible = true
-				str_label.text = str(stats.strength)
-				agi_label.text = str(stats.agility)
-				int_label.text = str(stats.intelligence)
+				stat_labels["str"].text = str(stats.strength)
+				stat_labels["agi"].text = str(stats.agility)
+				stat_labels["int"].text = str(stats.intelligence)
 				xp_bar.max_value = data.hero.get_xp_for_next_level() - data.hero.get_xp_for_current_level()
 				xp_bar.value = data.stats.xp - data.hero.get_xp_for_current_level()
 				level_label.text = str(stats.level)
@@ -236,9 +251,9 @@ func update_unit_ui(data):
 	name_label.text = data.name
 
 	var fixed_damage = get_damage(stats)
-	damage_label.text = str(fixed_damage[0], "-" , fixed_damage[1])
+	stat_labels["damage"].text = str(fixed_damage[0], "-" , fixed_damage[1])
 
-	armor_label.text = str(stats.armor)
+	stat_labels["armor"].text = str(stats.armor)
 
 	hp_bar.max_value = stats.max_health
 
@@ -257,9 +272,6 @@ func update_unit_ui(data):
 			button.setup(data.parent.abilities[i], data.parent, i)
 		else:
 			button.visible = false
-########################################################################
-### UPDATE UI ##########################################################
-########################################################################
 
 func get_damage(data):
 	var damage = data.attack_damage
@@ -269,3 +281,54 @@ func get_damage(data):
 	var clamp_min = clamp(_min, 1, 999999)
 	var arr = [clamp_min, _max]
 	return arr
+
+func gather_stat_info(data, stat_name):
+	var main_stat = ""
+	if data.unit_type == "hero":
+		main_stat = data.stats.main_stat
+	match stat_name:
+		"damage":
+			var damage_range = get_damage(data.stats)
+			return str("Damage: %d - %d" % [damage_range[0], damage_range[1]], "\n",
+			"\nAttacks per second : ", data.stats.attack_speed)
+		"armor":
+			return "Armor: %d" % data.stats.armor
+		"str":
+			if main_stat == "strength":
+				return str("Strength: ", data.stats.strength, "\n",
+				"\nEvery ", StatModifiers.main_stat_multiplier, " strength increases damage by 1. \n",
+				"\nHealth is increased by ", StatModifiers.str_multiplier, " for every strength.\n",
+				"\nHealth regeneration is increased by ", StatModifiers.regen_modifier, " for every strength.")
+			else:
+				return str("Strength: ", data.stats.strength, "\n",
+				"\nHealth is increased by ", StatModifiers.str_multiplier, " for every strength.\n",
+				"\nHealth regeneration is increased by ", StatModifiers.regen_modifier, " for every strength.")
+		"agi":
+			if main_stat == "agility":
+				return str("Agility: ", data.stats.agility, "\n",
+				"\nEvery ", StatModifiers.main_stat_multiplier, " agility increases damage by 1. \n",
+				"\nAttack speed is increased by ", StatModifiers.agi_multiplier, " for every agility.\n")
+			else:	
+				return str("Agility: ", data.stats.agility, "\n",
+				"\nAttack speed is increased by ", StatModifiers.agi_multiplier, " for every agility.") 
+		"int":
+			if main_stat == "intelligence":
+				return str("Intelligence: ", data.stats.intelligence, "\n",
+				"\nEvery ", StatModifiers.main_stat_multiplier, " intelligence increases damage by 1. \n",
+				"\nMana is increased by ", StatModifiers.int_multiplier, " for every intelligence.\n",
+				"\nMana regeneration is increased by ", StatModifiers.regen_modifier, " for every intelligence.")
+			else:	
+				return str("Intelligence: ", data.stats.intelligence, "\n",
+				"\nMana is increased by ", StatModifiers.int_multiplier, " for every intelligence.\n",
+				"\nMana regeneration is increased by ", StatModifiers.regen_modifier, " for every intelligence.")
+		_:
+			return ""
+
+func _on_stat_hover_entered(stat_name):
+	print("Called")
+	var label = stat_names[stat_name]
+	var text = gather_stat_info(current_data, stat_name)
+
+	TooltipManager.show_tooltip(parent.player_id, text, label.global_position)
+func _on_stat_hover_exited():
+	TooltipManager.hide_tooltip(parent.player_id)

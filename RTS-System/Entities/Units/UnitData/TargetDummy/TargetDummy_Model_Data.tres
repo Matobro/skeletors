@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UnitModelData" load_steps=3 format=3 uid="uid://5fcvagilxkj6"]
+
+[ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="2_vlvhs"]
+[ext_resource type="SpriteFrames" uid="uid://dgvwbsvlyt0qb" path="res://RTS-System/Entities/Units/UnitData/TargetDummy/TargetDummy_Spriteframes.tres" id="3_vlvhs"]
+
+[resource]
+script = ExtResource("2_vlvhs")
+sprite_frames = ExtResource("3_vlvhs")
+scale = Vector2(4, 4)
+animation_attack_point = 0.5
+animation_attack_duration = 1.0
+projectile_speed = 300
+metadata/_custom_type_script = "uid://dq4e1yj8njkif"

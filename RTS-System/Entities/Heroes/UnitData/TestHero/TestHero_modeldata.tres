@@ -1,14 +1,16 @@
-[gd_resource type="Resource" script_class="UnitModelData" load_steps=3 format=3 uid="uid://dcesvheohla5h"]
+[gd_resource type="Resource" script_class="UnitModelData" load_steps=4 format=3 uid="uid://dcesvheohla5h"]
 
+[ext_resource type="PackedScene" uid="uid://chxscd5c7iu64" path="res://RTS-System/Entities/Projectiles/HomingProjectile.tscn" id="1_rnuvg"]
 [ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="1_xrowm"]
 [ext_resource type="SpriteFrames" uid="uid://b7drij1vhiw1p" path="res://RTS-System/Entities/Heroes/UnitData/TestHero/TestHero_spriteframes.tres" id="2_2bed7"]
 
 [resource]
 script = ExtResource("1_xrowm")
 sprite_frames = ExtResource("2_2bed7")
-offset = Vector2(0, 0)
 scale = Vector2(4, 4)
-extra_mass = 30.0
+offset = Vector2(0, -20)
 animation_attack_point = 0.5
 animation_attack_duration = 0.8
+projectile_scene = ExtResource("1_rnuvg")
+projectile_speed = 300
 metadata/_custom_type_script = "uid://dq4e1yj8njkif"

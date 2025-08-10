@@ -17,7 +17,7 @@ class_name BaseStatData
 @export var base_armor: int = 1
 ## Units base movement speed, without any bonuses
 @export var base_movement_speed: int = 330
-## Units base attack speed, without any bonuses
+## Units base attack speed (attacks per second, higher = faster), without any bonuses
 @export var base_attack_speed: float = 1.0
 ## Units base damage, without any bonuses
 @export var base_damage: int = 2

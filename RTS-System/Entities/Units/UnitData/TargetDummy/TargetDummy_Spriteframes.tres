@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://dgvwbsvlyt0qb"]
+
+[ext_resource type="Texture2D" uid="uid://drt56emteuf0s" path="res://RTS-System/Entities/Units/UnitData/TargetDummy/Sprites/TargetDummy.png" id="1_beb2h"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w3olq"]
+atlas = ExtResource("1_beb2h")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b8igm"]
+atlas = ExtResource("1_beb2h")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4g60u"]
+atlas = ExtResource("1_beb2h")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b1g1l"]
+atlas = ExtResource("1_beb2h")
+region = Rect2(0, 0, 50, 50)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w3olq")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b8igm")
+}],
+"loop": true,
+"name": &"dying",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4g60u")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b1g1l")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]

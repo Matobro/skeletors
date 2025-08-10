@@ -7,7 +7,7 @@ var owner_unit
 var homing = true
 
 func _process(delta):
-    if target == null or !is_instance_valid(target) or target.dead:
+    if target == null or !is_instance_valid(target):
         print("invalid target")
         queue_free()
         return

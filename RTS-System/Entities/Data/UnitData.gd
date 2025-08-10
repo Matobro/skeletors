@@ -10,7 +10,7 @@ class_name UnitData
 @export var unit_model_data: UnitModelData
 ## Was lazy, this only includes attack animation so it can be scaled with attack speed
 @export var unit_library: AnimationLibrary
-## either 'hero' or 'unit'. Heroes have level etc, units dont
+## either 'hero', 'unit' or 'neutral'.
 @export var unit_type: String
 ## Unit display name
 @export var name: String

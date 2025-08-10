@@ -16,6 +16,9 @@ func state_logic(delta):
 		handle_no_target()
 		return
 
+	if target_unit == parent:
+		return
+
 	if parent.is_attack_committed:
 		process_attack_animation(delta, target_unit)
 	else:

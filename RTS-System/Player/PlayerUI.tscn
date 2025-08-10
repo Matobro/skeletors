@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://44m1veg1thkm"]
+[gd_scene load_steps=29 format=3 uid="uid://44m1veg1thkm"]
 
 [ext_resource type="Script" uid="uid://dtvvveravq00x" path="res://RTS-System/Player/PlayerUI.gd" id="1_mb3tw"]
 [ext_resource type="Texture2D" uid="uid://f8758o682hq6" path="res://RTS-System/Commands/UI/Move.png" id="1_qbo8c"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cj72b3uo7vdg1" path="res://RTS-System/Commands/UI/AttackMove.png" id="4_mb3tw"]
 [ext_resource type="Script" uid="uid://c6vcku5pmoowr" path="res://RTS-System/Abilities/Data/AbilityButton.gd" id="6_bkqy6"]
 [ext_resource type="FontFile" uid="uid://hryht1uvr8i8" path="res://Game/Data/Fonts/8-bit-snobbery/8 Bit Snobbery.ttf" id="7_adh6j"]
+[ext_resource type="Script" uid="uid://bjosjd3mjgwnm" path="res://RTS-System/Player/TooltipPanel.gd" id="8_c35mt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0sfn1"]
 bg_color = Color(0.136826, 0.136826, 0.136826, 1)
@@ -98,6 +99,14 @@ bg_color = Color(0.192157, 0, 0.811765, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_c35mt"]
 font = ExtResource("7_adh6j")
 font_size = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c35mt"]
+bg_color = Color(0.111197, 0.111197, 0.111197, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.234246, 0.0553226, 0.0579772, 1)
 
 [node name="PlayerUI" type="Node2D"]
 script = ExtResource("1_mb3tw")
@@ -263,9 +272,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_sxr4j")
 [node name="Portrait" type="MarginContainer" parent="."]
 clip_contents = true
 offset_left = -393.0
-offset_top = 280.0
-offset_right = -208.0
-offset_bottom = 465.0
+offset_top = 285.0
+offset_right = -218.0
+offset_bottom = 460.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Portrait"]
 scale = Vector2(8, 8)
@@ -284,6 +293,7 @@ offset_left = 27.0
 offset_top = 356.0
 offset_right = 94.0
 offset_bottom = 383.0
+mouse_filter = 1
 text = "Strength"
 label_settings = SubResource("LabelSettings_lvs6t")
 vertical_alignment = 1
@@ -304,6 +314,7 @@ offset_left = 27.0
 offset_top = 402.0
 offset_right = 94.0
 offset_bottom = 429.0
+mouse_filter = 1
 text = "Agility"
 label_settings = SubResource("LabelSettings_42bxf")
 vertical_alignment = 1
@@ -324,6 +335,7 @@ offset_left = 27.0
 offset_top = 448.0
 offset_right = 117.0
 offset_bottom = 475.0
+mouse_filter = 1
 text = "Intelligence"
 label_settings = SubResource("LabelSettings_3tuem")
 vertical_alignment = 1
@@ -383,6 +395,7 @@ offset_left = -163.0
 offset_top = 355.0
 offset_right = -99.0
 offset_bottom = 382.0
+mouse_filter = 1
 text = "Damage"
 label_settings = SubResource("LabelSettings_sxr4j")
 horizontal_alignment = 1
@@ -404,6 +417,7 @@ offset_left = -163.0
 offset_top = 429.0
 offset_right = -99.0
 offset_bottom = 456.0
+mouse_filter = 1
 text = "Armor"
 label_settings = SubResource("LabelSettings_amrgt")
 horizontal_alignment = 1
@@ -506,4 +520,38 @@ grow_vertical = 2
 text = "GAME PAUSED"
 label_settings = SubResource("LabelSettings_c35mt")
 horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ToolTipPanel" type="Panel" parent="."]
+visible = false
+z_index = 500
+custom_minimum_size = Vector2(50, 50)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -5.0
+offset_right = 5.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_c35mt")
+script = ExtResource("8_c35mt")
+
+[node name="Label" type="Label" parent="ToolTipPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -11.5
+offset_right = 100.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
 vertical_alignment = 1

@@ -7,7 +7,8 @@ class_name UnitModelData
 @export var sprite_frames: SpriteFrames
 ## Default for somereason is 2, so use that as a base
 @export var scale: Vector2 = Vector2.ONE
-
+## Tweak if selection circle etc misaligned
+@export var offset: Vector2
 ## At which point (in seconds) of the animation damage is dealt
 @export var animation_attack_point: float = 0.5
 ## Should be attack animation length, scaling done elsewhere

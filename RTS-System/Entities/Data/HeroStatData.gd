@@ -23,12 +23,6 @@ class_name HeroStatData
 ## Do not change
 @export var xp_to_level: int = 500
 
-
-### Multipliers ###
-var str_multiplier: int = 2
-var agi_multiplier: float = 0.01
-var int_multiplier: int = 2
-
 func gain_stats(_str, _agi, _int):
 	strength += _str
 	agility += _agi
@@ -70,25 +64,25 @@ func recalculate_stats():
 		current_mana = max_mana
 
 func get_bonus_health() -> int:
-	if strength * str_multiplier <= 0:
+	if strength * StatModifiers.str_multiplier <= 0:
 		return 0
 
-	return strength * str_multiplier
+	return strength * StatModifiers.str_multiplier
 
 func get_bonus_attack_speed() -> float:
-	if agility * agi_multiplier <= 0:
+	if agility * StatModifiers.agi_multiplier <= 0:
 		return 0.0
 
-	return agility * agi_multiplier
+	return agility * StatModifiers.agi_multiplier
 	
 func get_bonus_mana() -> int:
-	if intelligence * int_multiplier <= 0:
+	if intelligence * StatModifiers.int_multiplier <= 0:
 		return 0
 
-	return intelligence * int_multiplier
+	return intelligence * StatModifiers.int_multiplier
 
 func get_bonus_health_regen() -> float:
-	if strength / 10.0 <= 0:
+	if strength * StatModifiers.regen_modifier <= 0:
 		return 0.0
 
 	return strength / 10.0
@@ -111,11 +105,11 @@ func get_bonus_attack_range() -> int:
 func get_bonus_attack_damage() -> int:
 	match main_stat:
 		"strength":
-			return max (1, int(floor(strength / 2)))
+			return max (1, int(floor(strength / StatModifiers.main_stat_multiplier)))
 		"agility":
-			return max (1, int(floor(agility / 2)))
+			return max (1, int(floor(agility / StatModifiers.main_stat_multiplier)))
 		"intelligence":
-			return max (1, int(floor(intelligence / 2)))
+			return max (1, int(floor(intelligence / StatModifiers.main_stat_multiplier)))
 		_:
 			return 0
 		

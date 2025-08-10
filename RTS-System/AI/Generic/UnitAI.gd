@@ -50,6 +50,9 @@ func _on_command_issued(_command_type, _target, _position, is_queued):
 		_process_next_command()
 
 func _process_next_command():
+	if parent.data.unit_type == "neutral":
+		return
+		
 	var next_command = parent.command_component.get_next_command()
 
 	if next_command == null:
@@ -103,7 +106,7 @@ func apply_separation_force() -> Vector2:
 	var force = Vector2.ZERO
 	var nearby_units = SpatialGrid.get_units_around(parent.global_position, 60)
 	var separation_radius = 50.0
-	var separation_strength = 100.0 
+	var separation_strength = 50.0 
 
 	for other in nearby_units:
 		if other == parent or other.is_holding_position:

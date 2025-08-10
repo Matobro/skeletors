@@ -7,9 +7,8 @@
 [resource]
 script = ExtResource("2_kqqcs")
 sprite_frames = ExtResource("3_kqqcs")
-offset = Vector2(0, 0)
 scale = Vector2(2, 2)
-extra_mass = 0.0
+offset = Vector2(0, -10)
 animation_attack_point = 0.5
 animation_attack_duration = 1.0
 projectile_scene = ExtResource("1_hpvyd")

@@ -11,6 +11,7 @@ class_name Unit
 @onready var animation_library: AnimationPlayer = $AnimationPlayer
 @onready var aggro_collision: CollisionShape2D = $AggroRange/CollisionShape2D
 @onready var hp_bar: Control = $AnimatedSprite2D/HpBar/Control
+@onready var collider = $CollisionShape2D
 
 var owner_id: int
 var data : UnitData
@@ -68,7 +69,7 @@ func assign_stuff():
 	unit_scale = data.unit_model_data.get_unit_radius_world_space()
 
 	animation_library.add_animation_library("animations", data.unit_library)
-	animation_player.init_animations(data.unit_model_data)
+	animation_player.init_animations(data.unit_model_data, self)
 
 	state_machine.animation_player = animation_player
 	state_machine.animation_library = animation_library

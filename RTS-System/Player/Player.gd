@@ -3,6 +3,7 @@ extends Node2D
 @onready var player_input = $"PlayerInput"
 @onready var player_camera = $"PlayerCamera"
 @onready var player_ui = $"CanvasLayer/PlayerUI"
+@onready var tooltip_panel = $"CanvasLayer/PlayerUI/ToolTipPanel"
 
 var player_id: int
 var hero: Hero = null
@@ -27,6 +28,9 @@ func _ready():
 	else:
 		player_ui.visible = false
 	
+	player_ui.parent = self
+	TooltipManager.register_player_tooltip(player_id, tooltip_panel)
+
 func get_local_player():
 	return player_id
 
