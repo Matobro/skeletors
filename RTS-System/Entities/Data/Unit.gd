@@ -102,18 +102,7 @@ func _on_command_completed(_command_type: String):
 func set_unit_color():
 	var sprite_material = animation_player.material
 	if sprite_material and sprite_material is ShaderMaterial:
-		match owner_id:
-			1: sprite_material.set_shader_parameter("outline_color", Color.GREEN)
-			2: sprite_material.set_shader_parameter("outline_color", Color.BLUE)
-			3: sprite_material.set_shader_parameter("outline_color", Color.SANDY_BROWN)
-			4: sprite_material.set_shader_parameter("outline_color", Color.TEAL)
-			5: sprite_material.set_shader_parameter("outline_color", Color.YELLOW)
-			6: sprite_material.set_shader_parameter("outline_color", Color.ORANGE)
-			7: sprite_material.set_shader_parameter("outline_color", Color.PURPLE)
-			8: sprite_material.set_shader_parameter("outline_color", Color.HOT_PINK)
-			9: sprite_material.set_shader_parameter("outline_color", Color.GRAY)
-			10: sprite_material.set_shader_parameter("outline_color", Color.RED)
-			_: sprite_material.set_shader_parameter("outline_color", Color.BLACK)
+		sprite_material.set_shader_parameter("outline_color", PlayerManager.get_player_color(owner_id))
 
 func _physics_process(delta: float):
 	if attack_timer > 0:

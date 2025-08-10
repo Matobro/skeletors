@@ -4,6 +4,17 @@ var dev_spawner = null
 
 var player_scene = preload("res://RTS-System/Player/PlayerObject.tscn")
 
+var player_colors := {
+	1: Color.GREEN,
+	2: Color.BLUE,
+	3: Color.SANDY_BROWN,
+	4: Color.TEAL,
+	5: Color.YELLOW,
+	6: Color.ORANGE,
+	7: Color.PURPLE,
+	8: Color.GRAY,
+	10: Color.RED
+}
 var players_to_spawn = [
 	{ "id": 1, "is_ai": false, "hero": null },
 	{ "id": 10, "is_ai": true, "hero": null }
@@ -39,6 +50,9 @@ func spawn_players():
 
 func register_player(player_object):
 	players[player_object.player_id] = player_object
+
+func get_player_color(player_id: int) -> Color:
+	return player_colors.get(player_id, Color.BLACK)
 
 func get_player(player_id):
 	return players.get(player_id)

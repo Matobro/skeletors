@@ -22,6 +22,8 @@ extends Node2D
 var unit_slot = preload("res://RTS-System/Entities/Data/UnitSlot.tscn")
 @onready var portrait = $Portrait/AnimatedSprite2D
 @onready var portrait_box = $Portrait
+@onready var portrait_panel = $PortraitPanel
+var portrait_stylebox = null
 @onready var name_label = $UnitStats/Name
 @onready var xp_bar = $HeroStats/XpBar
 @onready var damage_label = $UnitStats/DamageValue
@@ -50,6 +52,7 @@ var unit_slot = preload("res://RTS-System/Entities/Data/UnitSlot.tscn")
 
 ]
 
+var og_color = null
 var control_group_array = []
 var ui_hidden = false
 var current_data: UnitData
@@ -57,6 +60,8 @@ var update_speed = 5
 var current_frame = 0
 
 func init_node():
+	portrait_stylebox = portrait_panel.get("theme_override_styles/panel")
+	og_color = portrait_stylebox.bg_color
 	show_stats(false)
 	check_group()
 	hero_stats.visible = false
@@ -134,6 +139,8 @@ func hide_all_ui():
 	current_control_group.visible = false
 	show_bars(false)
 	ui_hidden = true
+	if portrait_stylebox:
+		portrait_stylebox.bg_color = og_color
 
 func show_single_unit(unit):
 	current_data = unit.data
@@ -146,12 +153,15 @@ func show_single_unit(unit):
 	update_unit_ui(current_data)
 
 func show_control_group():
+	current_data = control_group_array[0].unit.data
 	hero_stats.visible = false
 	unit_stats.visible = false
 	portrait.visible = true
 	current_control_group.visible = true
 	show_bars(true)
-	ui_hidden = false
+	ui_hidden = true
+
+	update_unit_ui(current_data)
 
 func check_group():
 	var units = control_group_array.size()
@@ -202,23 +212,27 @@ func update_unit_ui(data):
 	var stats = data.stats
 
 	#Switch between unit-hero ui
-	match data.unit_type:
-		"unit":
-			unit_stats.visible = true
-			hero_stats.visible = false
-		"hero":
-			unit_stats.visible = true
-			hero_stats.visible = true
-			str_label.text = str(stats.strength)
-			agi_label.text = str(stats.agility)
-			int_label.text = str(stats.intelligence)
-			xp_bar.max_value = data.hero.get_xp_for_next_level() - data.hero.get_xp_for_current_level()
-			xp_bar.value = data.stats.xp - data.hero.get_xp_for_current_level()
-			level_label.text = str(stats.level)
-			
+	if !ui_hidden:
+		match data.unit_type:
+			"unit":
+				unit_stats.visible = true
+				hero_stats.visible = false
+			"hero":
+				unit_stats.visible = true
+				hero_stats.visible = true
+				str_label.text = str(stats.strength)
+				agi_label.text = str(stats.agility)
+				int_label.text = str(stats.intelligence)
+				xp_bar.max_value = data.hero.get_xp_for_next_level() - data.hero.get_xp_for_current_level()
+				xp_bar.value = data.stats.xp - data.hero.get_xp_for_current_level()
+				level_label.text = str(stats.level)
+				
 	portrait.sprite_frames = data.avatar
 	portrait.play("idle")
-	
+	var portrait_color = PlayerManager.get_player_color(data.parent.owner_id)
+	var faded_color = portrait_color.lerp(og_color, 0.75)
+	portrait_stylebox.bg_color = faded_color
+
 	name_label.text = data.name
 
 	var fixed_damage = get_damage(stats)

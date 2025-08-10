@@ -4,6 +4,7 @@ func enter_state():
 	SpatialGrid.deregister_unit(parent)
 	ai.animation_player.play("walk")
 	ai.last_requested_target = Vector2.INF
+	
 
 func exit_state():
 	ai.clear_unit_state()

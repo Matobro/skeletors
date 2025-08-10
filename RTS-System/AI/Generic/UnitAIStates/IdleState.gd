@@ -12,7 +12,7 @@ func exit_state():
 func state_logic(delta):
     parent.velocity = Vector2.ZERO
     ai.aggro_check_timer += delta
-    if ai.aggro_check_timer > ai.AGGRO_CHECK_INTERVAL:
+    if ai.aggro_check_timer >= ai.AGGRO_CHECK_INTERVAL:
         ai.aggro_check_timer = 0.0
         var enemy = parent.closest_enemy_in_aggro_range()
         if enemy != null:

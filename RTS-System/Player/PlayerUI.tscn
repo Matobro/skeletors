@@ -40,7 +40,7 @@ border_width_bottom = 3
 border_color = Color(0.187454, 0.151084, 0.0470374, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sxr4j"]
-bg_color = Color(0.143487, 0.142745, 0.240192, 1)
+bg_color = Color(0.0823529, 0.0823529, 0.0823529, 1)
 border_width_left = 5
 border_width_top = 5
 border_width_right = 5
@@ -248,7 +248,7 @@ icon_alignment = 1
 expand_icon = true
 script = ExtResource("6_bkqy6")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="PortraitPanel" type="Panel" parent="."]
 offset_left = -398.0
 offset_top = 280.0
 offset_right = -213.0
@@ -257,9 +257,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_sxr4j")
 
 [node name="Portrait" type="MarginContainer" parent="."]
 clip_contents = true
-offset_left = -398.0
+offset_left = -393.0
 offset_top = 280.0
-offset_right = -213.0
+offset_right = -208.0
 offset_bottom = 465.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Portrait"]
