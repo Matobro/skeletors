@@ -30,6 +30,9 @@ var block_input_frames: int = 0
 var selected_units: Array[Unit] = []
 
 var fullscreen: bool = true
+var last_clicked_unit = null
+
+const DOUBLE_CLICK_TIME = 0.3
 const DRAG_THRESHOLD := 50.0
 const COMMAND_COOLDOWN := 10
 
@@ -170,6 +173,7 @@ func cleanup_invalid_units():
 func on_left_click_pressed(event_info):
 	### Attack move if holding A
 	drag_start = event_info.pos
+
 	if event_info.total_units > 0 and event_info.attack_moving:
 		if event_info.click_target:
 			issue_attack_command(event_info)
@@ -180,6 +184,12 @@ func on_left_click_pressed(event_info):
 	### If not A moving: select clicked target
 	elif event_info.click_target and !event_info.attack_moving:
 		select_unit_at_mouse_pos(event_info.pos, event_info.is_queued)
+		if last_clicked_unit == event_info.click_target:
+			select_all_units_of_type(event_info.click_target)
+			last_clicked_unit = null
+			return
+		last_clicked_unit = event_info.click_target
+	
 
 func on_left_click_released(event_info):
 	if event_info.attack_moving:
@@ -270,6 +280,24 @@ func issue_move_command(event_info):
 
 	command_cooldown_frames = COMMAND_COOLDOWN
 
+func select_all_units_of_type(unit):
+	print("called select all")
+	for selected_unit in selected_units:
+		print("Unselecting")
+		selected_unit.set_selected(false)
+	selected_units.clear()
+	player_ui.clear_control_group()
+
+	var _owner = unit.owner_id
+	var unit_type = unit.data.name
+
+	for other_unit in UnitHandler.all_units:
+		if other_unit.owner_id == _owner and other_unit.data.name == unit_type:
+			print("Adding: ", other_unit.data.name)
+			other_unit.set_selected(true)
+			selected_units.append(other_unit)
+			player_ui.add_unit_to_control(other_unit)
+			
 func center_of_mass(units: Array) -> Vector2:
 	var center := Vector2.ZERO
 	for u in units:

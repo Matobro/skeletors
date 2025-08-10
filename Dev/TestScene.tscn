@@ -49,11 +49,13 @@ sources/0 = SubResource("TileSetAtlasSource_tq6uv")
 y_sort_enabled = true
 
 [node name="DevSpawnUnit" type="Node2D" parent="."]
+process_mode = 1
 script = ExtResource("2_1r4kt")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+process_mode = 1
 visible = false
 offset_left = 282.0
 offset_top = 153.0
@@ -62,6 +64,7 @@ offset_bottom = 168.0
 texture = SubResource("PlaceholderTexture2D_wicfy")
 
 [node name="DevBox" type="Panel" parent="CanvasLayer"]
+process_mode = 1
 offset_left = 5.0
 offset_top = 5.0
 offset_right = 265.0
@@ -98,6 +101,7 @@ offset_bottom = 34.0
 text = "Player"
 
 [node name="DevBox2" type="Panel" parent="CanvasLayer"]
+process_mode = 1
 offset_left = 5.0
 offset_top = 168.0
 offset_right = 265.0
@@ -121,6 +125,7 @@ text = "0 - display pathfinding info
 8-fullscreen/windowed"
 
 [node name="Label" type="Label" parent="CanvasLayer"]
+process_mode = 1
 offset_left = 6.0
 offset_top = 332.0
 offset_right = 210.0
@@ -141,6 +146,7 @@ move
 a + click unit = attack target"
 
 [node name="SpawnPopUp" type="Control" parent="CanvasLayer"]
+process_mode = 1
 visible = false
 layout_mode = 3
 anchors_preset = 8
@@ -183,6 +189,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="FpsMeter" type="Control" parent="CanvasLayer"]
+process_mode = 1
 layout_mode = 3
 anchors_preset = 1
 anchor_left = 1.0

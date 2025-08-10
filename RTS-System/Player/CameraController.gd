@@ -2,14 +2,15 @@ extends Node2D
 
 const CAMERA_BORDER_SIZE = 20
 var edge_scroll_speed: int = 1000
-var min_zoom := 0.25
+var min_zoom := 0.5
 var max_zoom := 2.0
 var zoom_speed := 0.1
 var zoom_duration := 0.2
-
-var camera_zoom := 0.5: set = set_camera_zoom
+var paused: bool = false
+var camera_zoom := 1.0: set = set_camera_zoom
 var controls_enabled: bool = true
 
+@onready var pause_screen = $"../CanvasLayer/PlayerUI/PauseScreen"
 @onready var camera: Camera2D = $"../PlayerCamera"
 
 func _ready():
@@ -31,6 +32,11 @@ func _process(delta):
 			camera.position.y += edge_scroll_speed * delta
 
 func _unhandled_input(event):
+	if event.is_action_pressed("esc"):
+			paused = !paused
+			pause_screen.visible = paused
+			controls_enabled = !paused
+			get_tree().paused = paused
 	if controls_enabled:
 		if event.is_action_pressed("scroll_up"):
 			set_camera_zoom(camera_zoom + zoom_speed)

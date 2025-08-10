@@ -1,7 +1,6 @@
 extends UnitState
 
 func enter_state():
-	print("Entering Attack State, attack_timer=", parent.attack_timer)
 	#SpatialGrid.deregister_unit(parent)
 	parent.velocity = Vector2.ZERO
 
@@ -46,7 +45,6 @@ func process_attack_animation(delta, target_unit):
 
 
 func try_to_attack(target_unit):
-	print("try_to_attack cooldown:", parent.attack_timer)
 	if parent.attack_timer > 0.0:
 		return
 
@@ -60,6 +58,7 @@ func try_to_attack(target_unit):
 		# Play attack animation at correct speed
 		ai.animation_library.play("animations/attack")
 		ai.animation_library.speed_scale = parent.get_stat("attack_speed")
+		parent.handle_orientation((target_unit.global_position - parent.global_position).normalized())
 	else:
 		ai.set_state("Aggro")
 
