@@ -255,7 +255,7 @@ func issue_attack_move_command(event_info):
 
 	command_cooldown_frames = COMMAND_COOLDOWN
 func issue_move_command(event_info):
-	print("Clicked pos:", event_info.pos)
+	#print("Clicked pos:", event_info.pos)
 	var formation = calculate_unit_formation(event_info.total_units, event_info.pos)
 	for i in range (selected_units.size()):
 		var unit = selected_units[i]

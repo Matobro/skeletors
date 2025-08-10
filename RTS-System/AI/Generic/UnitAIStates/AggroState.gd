@@ -4,7 +4,7 @@ func enter_state():
 	SpatialGrid.deregister_unit(parent)
 	ai.animation_player.play("walk")
 	ai.last_requested_target = Vector2.INF
-	
+
 
 func exit_state():
 	ai.clear_unit_state()
@@ -45,6 +45,6 @@ func state_logic(delta):
 	# 'Nudge' towards target if reached goal but still out of range
 	if ai.path_index >= ai.path.size() and !parent.is_within_attack_range(target_unit.global_position):
 		var dir = (target_unit.global_position - parent.global_position).normalized()
-		parent.velocity = dir * parent.get_stat("movement_speed") * 0.5
+		parent.velocity = dir * parent.get_stat("movement_speed")
 		parent.move_and_slide()
 		parent.handle_orientation(dir)

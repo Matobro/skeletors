@@ -25,6 +25,7 @@ var attack_anim_timer: float = 0.0
 var has_attacked: bool = false
 var is_attack_committed: bool = false
 var is_holding_position: bool = false
+var is_ranged: bool
 
 var is_moving: bool = false
 ### Combat
@@ -62,6 +63,7 @@ func assign_stuff():
 	dead = false
 	set_selected(false)
 	set_unit_color()
+	is_ranged = data.is_ranged
 	aggro_collision.set_deferred("disabled", false)
 	unit_scale = data.unit_model_data.get_unit_radius_world_space()
 
@@ -124,7 +126,7 @@ func regenate_health():
 	data.stats.current_health = min(data.stats.current_health + data.stats.health_regen, data.stats.max_health)
 	hp_bar.set_hp_bar(data.stats.current_health)
 
-func take_damage(damage: int):
+func take_damage(damage: int, attacker = null):
 	if dead: return
 
 	data.stats.current_health -= damage
@@ -139,9 +141,22 @@ func take_damage(damage: int):
 		dead = true
 		emit_signal("died", self)
 		state_machine.set_state("Dying")
-	
+		return
+
+	if attacker and state_machine.current_state == state_machine.states["Idle"] and attacker.owner_id != owner_id:
+		command_component.issue_command(
+			"Attack",
+			attacker,
+			attacker.global_position,
+			false,
+			owner_id
+		)
+
 func get_attack_delay() -> float:
-	return 1.0 / data.stats.attack_speed
+	var attack_speed = data.stats.attack_speed
+	if attack_speed <= 0:
+		attack_speed = 0.01
+	return 1.0 / attack_speed
 
 func cast_ability(index: int, pos: Vector2, world_node: Node):
 	if index < 0 or index >= abilities.size():
@@ -160,7 +175,7 @@ func perform_attack():
 		var dice_roll = randi_range(-dice, dice)
 		var result = dmg + dice_roll
 		var damage = clampi(result, 1, 9999)
-		attack_target.take_damage(damage)
+		attack_target.take_damage(damage, self)
 
 func set_selected(value: bool):
 	if value == selected:

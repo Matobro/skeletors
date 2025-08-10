@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="2_ywxjw"]
 [ext_resource type="Resource" uid="uid://dbn2rgqy5pauf" path="res://RTS-System/Entities/Units/UnitData/TestUnit/Test_Unit_Model_Data.tres" id="3_7jcky"]
 [ext_resource type="Script" uid="uid://01ohikrtxe7k" path="res://RTS-System/Entities/Data/BaseStatData.gd" id="3_ywxjw"]
-[ext_resource type="AnimationLibrary" uid="uid://buipah3kc28mm" path="res://RTS-System/Entities/Units/UnitData/TestUnit/TestUnit_Library.res" id="4_7jcky"]
+[ext_resource type="AnimationLibrary" uid="uid://xdjyaj70yly" path="res://RTS-System/Entities/Units/UnitData/TestUnit/TestUnit_Library.res" id="4_7jcky"]
 
 [sub_resource type="Resource" id="Resource_7jcky"]
 script = ExtResource("3_ywxjw")
@@ -32,4 +32,5 @@ name = "Test_Unit"
 description = "Unit for testing"
 avatar = ExtResource("1_wgatk")
 stats = SubResource("Resource_7jcky")
+is_ranged = false
 metadata/_custom_type_script = "uid://oeoy2vl8vgue"

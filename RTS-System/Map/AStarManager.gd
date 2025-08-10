@@ -135,7 +135,7 @@ func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null) -> Pack
 		world_path.append(world_pos)
 
 	if world_path.size() > 0:
-		print("Path generated, points: ", world_path.size())
+		#("Path generated, points: ", world_path.size())
 		world_path[0] = start_pos
 		return smooth_path(world_path)
 	else:

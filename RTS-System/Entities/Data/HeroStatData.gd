@@ -16,8 +16,11 @@ class_name HeroStatData
 @export var intelligence_per_level: int
 
 @export_group("Level Info")
+## Do not change
 @export var level: int
+## Do not change
 @export var xp: int
+## Do not change
 @export var xp_to_level: int = 500
 
 

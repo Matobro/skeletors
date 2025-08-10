@@ -92,6 +92,9 @@ func clear_unit_state():
 	stuck_check_timer = 0.0
 	last_position = Vector2.INF
 
+	parent.attack_anim_timer = 0.0
+	parent.is_attack_committed = false
+
 
 func apply_separation_force() -> Vector2:
 	if parent.is_holding_position:

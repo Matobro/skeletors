@@ -3,6 +3,7 @@
 		"res://RTS-System/Entities/Heroes/Database/TestHero.tres"
 	],
 	"units": [
+		"res://RTS-System/Entities/Units/Database/TestArcher.tres",
 		"res://RTS-System/Entities/Units/Database/Test_Unit.tres"
 	]
 }

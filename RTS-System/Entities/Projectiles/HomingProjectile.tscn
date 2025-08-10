@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://chxscd5c7iu64"]
+
+[ext_resource type="Script" uid="uid://b7cj7ydsx3hjq" path="res://RTS-System/Entities/Data/HomingProjectile.gd" id="1_4qd3t"]
+[ext_resource type="Texture2D" uid="uid://x3g28jtnmscn" path="res://RTS-System/Entities/Projectiles/Sprites/Arrow.png" id="2_anygk"]
+
+[node name="HomingProjectile" type="Node2D"]
+z_index = 100
+script = ExtResource("1_4qd3t")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_anygk")

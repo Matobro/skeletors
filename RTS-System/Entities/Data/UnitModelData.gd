@@ -2,12 +2,21 @@ extends Resource
 
 class_name UnitModelData
 
+## Should be unique for each different unit
+## Animations (NAMED EXACTLY) [attack] [dying] [idle] [walk]
 @export var sprite_frames: SpriteFrames
-@export var offset: Vector2
+## Default for somereason is 2, so use that as a base
 @export var scale: Vector2 = Vector2.ONE
-@export var extra_mass: float = 0.0
+
+## At which point (in seconds) of the animation damage is dealt
 @export var animation_attack_point: float = 0.5
+## Should be attack animation length, scaling done elsewhere
 @export var animation_attack_duration: float = 1.0
+
+## Projectile scene for ranged attacks - not needed if melee
+@export var projectile_scene = preload("res://RTS-System/Entities/Projectiles/HomingProjectile.tscn")
+## Projectile speed
+@export var projectile_speed = 300
 
 func get_unit_radius_world_space() -> float:
 	var tex = sprite_frames.get_frame_texture("idle", 0)

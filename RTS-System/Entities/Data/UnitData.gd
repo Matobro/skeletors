@@ -2,15 +2,26 @@ extends Resource
 
 class_name UnitData
 
+## 'Power level' for waves, higher = harder
 @export var power_level: int = 0
+## If it should be included in wave enemy pool
 @export var is_spawnable_enemy: bool = false
+## Unit 'model' data, such as sprite, animations, projectile
 @export var unit_model_data: UnitModelData
+## Was lazy, this only includes attack animation so it can be scaled with attack speed
 @export var unit_library: AnimationLibrary
+## either 'hero' or 'unit'. Heroes have level etc, units dont
 @export var unit_type: String
+## Unit display name
 @export var name: String
+## Description, not implemented yet
 @export var description: String
+## This should just be the same spriteframes, as in model data. Been lazy
 @export var avatar: SpriteFrames
+## Unit stats, heroes use HeroStatData, units use BaseStatData
 @export var stats: BaseStatData
+## If unit uses ranged attacks
+@export var is_ranged: bool
 
 var parent = null
 var hero: Hero = null

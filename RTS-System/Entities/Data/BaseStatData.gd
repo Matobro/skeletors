@@ -5,16 +5,31 @@ class_name BaseStatData
 ### Stats ##
 @export_category("Stats")
 @export_group("Base Stats")
-@export var base_max_hp: float = 5
+## Units base hp, without any bonuses
+@export var base_max_hp: float = 5 
+## Units base mp, without any bonuses
 @export var base_max_mana: float = 0
+## Units base hp regen, without any bonuses
 @export var base_health_regen: float = 0.1
+## Units base mp regen, without any bonuses
 @export var base_mana_regen: float = 0.1
+## Units base armor, without any bonuses
 @export var base_armor: int = 1
+## Units base movement speed, without any bonuses
 @export var base_movement_speed: int = 330
+## Units base attack speed, without any bonuses
 @export var base_attack_speed: float = 1.0
+## Units base damage, without any bonuses
 @export var base_damage: int = 2
+## Units base range, without any bonuses
 @export var base_range: int = 50
+## Units dice roll (damage variation)
+## [min = damage - dice roll]
+## [max = damage + dice roll]
+## [damage = randi_range(min, max)]
+## [damage = clampi(damage, 1, 9999)]
 @export var attack_dice_roll: int = 2
+## How much unit gives xp when killed
 @export var xp_yield: int = 50
 
 # @export_group("Current Stats")

@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://drbvpwg5w2t63"]
+
+[ext_resource type="AnimationLibrary" uid="uid://nojmva14u2ew" path="res://RTS-System/Entities/Units/UnitData/TestArcher/TestArcher_Library.res" id="1_2s88j"]
+[ext_resource type="SpriteFrames" uid="uid://bsepr4hoft7c7" path="res://RTS-System/Entities/Units/UnitData/TestArcher/TestArcher_Spriteframes.tres" id="1_qrx8v"]
+
+[node name="TestArcherAnim" type="Node2D"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"TestArcher": ExtResource("1_2s88j")
+}
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = ExtResource("1_qrx8v")
+animation = &"attack"
