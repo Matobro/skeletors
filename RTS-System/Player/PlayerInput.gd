@@ -293,7 +293,6 @@ func select_all_units_of_type(unit):
 
 	for other_unit in UnitHandler.all_units:
 		if other_unit.owner_id == _owner and other_unit.data.name == unit_type:
-			print("Adding: ", other_unit.data.name)
 			other_unit.set_selected(true)
 			selected_units.append(other_unit)
 			player_ui.add_unit_to_control(other_unit)

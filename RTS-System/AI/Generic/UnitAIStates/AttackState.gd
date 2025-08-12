@@ -27,12 +27,13 @@ func state_logic(delta):
 func process_attack_animation(delta, target_unit):
 	parent.attack_anim_timer += delta
 
+	# Scale animations to attack speed
 	var anim_speed = parent.get_stat("attack_speed")
 	var attack_point_scaled = parent.data.unit_model_data.animation_attack_point / anim_speed
 	var attack_duration_scaled = parent.data.unit_model_data.animation_attack_duration / anim_speed
 
 	# Deal damage
-	if not parent.has_attacked and parent.attack_anim_timer >= attack_point_scaled:
+	if !parent.has_attacked and parent.attack_anim_timer >= attack_point_scaled:
 		if parent.data.is_ranged:
 			spawn_projectile(target_unit)
 		else:
@@ -46,13 +47,14 @@ func process_attack_animation(delta, target_unit):
 		parent.has_attacked = false
 		parent.is_attack_committed = false
 
-
 func try_to_attack(target_unit):
 	if parent.attack_timer > 0.0:
 		return
 
 	# Check if in range
-	if parent.is_within_attack_range(target_unit.position):
+	if parent.is_within_attack_range(target_unit.position) and !parent.is_attack_committed:
+		ai.animation_player.stop()
+		ai.animation_library.stop()
 		parent.velocity = Vector2.ZERO
 		parent.is_attack_committed = true
 		parent.has_attacked = false
