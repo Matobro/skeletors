@@ -45,6 +45,8 @@ func issue_command(command_type: String, target, position: Vector2, is_queued: b
 	add_rally_point(command_type, position, is_queued)
 	emit_signal("command_issued", command_type, target, position, is_queued)
 
+func remove_command(command):
+	queue.erase(command)
 func insert_command_at_front(command):
 	queue.insert(0, command)
 

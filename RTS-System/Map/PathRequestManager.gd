@@ -12,17 +12,12 @@ func queue_unit_for_path(unit, request_id, target_unit = null):
 	var start_pos = unit.global_position
 	var end_pos = unit.state_machine.current_command.target_position if unit.state_machine.current_command != null else start_pos
 
-	var last = unit.get_meta("last_requested_path") if unit.has_meta("last_requested_path") else {"start": Vector2.INF, "end": Vector2.INF, "status": "none"}
-
-	if last != null \
-	and last.has("status" \
-	and last["status"] == "queued" ) \
-	and last["start"].distance_to(start_pos) < 8 \
-	and last["end"].distance_to(end_pos) < 8:
+	var last = unit.state_machine.last_requested_path
+	if last != null and last.has("status") and last["status"] == "queued" and last["end"].distance_to(end_pos) < 30:
 		print("Skipping path request due to close start/end")
-		return  # Same path -> skip
+		return # Same path -> skip
 
-	unit.set_meta("last_requested_path", {
+	unit.state_machine.last_requested_path = ({
 		"start": start_pos, 
 		"end": end_pos, 
 		"status": "queued"
@@ -32,11 +27,14 @@ func queue_unit_for_path(unit, request_id, target_unit = null):
 		if item.unit == unit:
 			item.request_id = request_id
 			return
+
 	path_queue.append({
 		"unit": unit, 
 		"request_id": request_id, 
 		"target_unit": target_unit
 		})
+
+	return
 
 func clear_path_requests_for_unit(unit):
 	path_queue = path_queue.filter(func(item):

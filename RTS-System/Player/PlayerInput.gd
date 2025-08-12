@@ -304,6 +304,8 @@ func center_of_mass(units: Array) -> Vector2:
 	return center / units.size()
 
 func calculate_unit_formation(total_units, pos):
+	if total_units == 1:
+		return [pos]
 	var unit_targets := []
 	var spacing := 82.0
 	var columns = int(ceil(sqrt(total_units)))

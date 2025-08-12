@@ -15,6 +15,7 @@ var path: PackedVector2Array = []
 var path_index: int = 0
 var path_requested: bool = false
 var current_path_request_id = 0
+var dont_clear: bool
 
 var last_requested_path := {"start": Vector2.INF, "end": Vector2.INF, "status": "none"}
 var last_requested_target := Vector2.ZERO
@@ -52,21 +53,34 @@ func _on_command_issued(_command_type, _target, _position, is_queued):
 func _process_next_command():
 	if parent.data.unit_type == "neutral":
 		return
-		
+	
+	dont_clear = false
 	var next_command = parent.command_component.get_next_command()
 
+	## Go idle if no next command
 	if next_command == null:
+		print("No next command")
 		set_state("Idle")
 		current_command = null
 		return
 
+	if is_spam(next_command):
+		dont_clear = true
+		parent.command_component.remove_command(next_command)
+		return
+
+	## Get next command
 	current_command = next_command
 	parent.command_component.pop_next_command()
 
+	## Signal previous command as completed
 	emit_signal("command_completed", current_command.type, fallback_command)
 
+	dont_clear = false
+	## Set state from command
 	match current_command.type:
 		"Move":
+			print("Setting state")
 			set_state("Move")
 		"Attack":
 			set_state("Aggro")
@@ -79,7 +93,17 @@ func _process_next_command():
 		_:
 			set_state("Idle")
 
+func is_spam(next_command):
+	if next_command != null and current_command != null:
+		if next_command.type == current_command.type and next_command.target_position.distance_to(current_command.target_position) <= 50:
+			return true
+		
+	return false
+
 func clear_unit_state():
+	if dont_clear:
+		return
+	
 	aggro_check_timer = 0.0
 
 	path = []
@@ -97,7 +121,6 @@ func clear_unit_state():
 
 	parent.attack_anim_timer = 0.0
 	parent.is_attack_committed = false
-
 
 func apply_separation_force() -> Vector2:
 	if parent.is_holding_position:
@@ -123,6 +146,7 @@ func apply_separation_force() -> Vector2:
 
 func request_path():
 	current_path_request_id += 1
+
 	path_requested = true
 	path_timeout_timer = 0.0
 	SpatialGrid.queue_unit_for_path(parent, current_path_request_id, current_command.target_unit)
@@ -168,6 +192,7 @@ func _follow_path(delta):
 	if path.size() <= 0:
 		return
 
+	## Reached end
 	if path_index >= path.size():
 		path_requested = false
 		stuck_check_timer = 0.0  # reset stuck timer when path finished
