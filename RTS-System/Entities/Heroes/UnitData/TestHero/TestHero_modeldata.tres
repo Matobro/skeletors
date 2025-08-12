@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("1_xrowm")
 sprite_frames = ExtResource("2_2bed7")
-scale = Vector2(4, 4)
+scale = Vector2(3, 3)
 offset = Vector2(0, -20)
 animation_attack_point = 0.5
 animation_attack_duration = 0.8

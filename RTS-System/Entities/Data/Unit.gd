@@ -130,6 +130,9 @@ func regenate_health():
 func take_damage(damage: int, attacker = null):
 	if dead: return
 
+	var reduction = 1.0 - StatModifiers.calculate_armor(data.stats.armor)
+	var final_damage = damage * reduction
+	damage = clamp(final_damage, 1, 9999)
 	data.stats.current_health -= damage
 	data.stats.current_health = clamp(data.stats.current_health, 0, data.stats.max_health)
 	hp_bar.set_hp_bar(data.stats.current_health)

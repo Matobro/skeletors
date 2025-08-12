@@ -89,7 +89,10 @@ func get_bonus_health_regen() -> float:
 
 ### TO DO ###
 func get_bonus_armor() -> int:
-	return 0
+	if agility / StatModifiers.armor_modifier < 1:
+		return 0
+
+	return agility / StatModifiers.armor_modifier
 
 func get_bonus_movement_speed() -> int:
 	return 0

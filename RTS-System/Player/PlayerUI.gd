@@ -292,7 +292,9 @@ func gather_stat_info(data, stat_name):
 			return str("Damage: %d - %d" % [damage_range[0], damage_range[1]], "\n",
 			"\nAttacks per second : ", data.stats.attack_speed)
 		"armor":
-			return "Armor: %d" % data.stats.armor
+			return str("Armor: ", data.stats.armor, "\n",
+			"\nDamage reduced by: ", int(StatModifiers.calculate_armor(data.stats.armor) * 100), "%\n",
+			"\nMovement speed: ", data.stats.movement_speed)
 		"str":
 			if main_stat == "strength":
 				return str("Strength: ", data.stats.strength, "\n",
@@ -307,10 +309,12 @@ func gather_stat_info(data, stat_name):
 			if main_stat == "agility":
 				return str("Agility: ", data.stats.agility, "\n",
 				"\nEvery ", StatModifiers.main_stat_multiplier, " agility increases damage by 1. \n",
-				"\nAttack speed is increased by ", StatModifiers.agi_multiplier, " for every agility.\n")
+				"\nAttack speed is increased by ", StatModifiers.agi_multiplier, " for every agility.\n",
+				"\nEvery ", StatModifiers.armor_modifier, " agility increases armor by 1")
 			else:	
 				return str("Agility: ", data.stats.agility, "\n",
-				"\nAttack speed is increased by ", StatModifiers.agi_multiplier, " for every agility.") 
+				"\nAttack speed is increased by ", StatModifiers.agi_multiplier, " for every agility. \n",
+				"\nEvery ", StatModifiers.armor_modifier, " agility increases armor by 1") 
 		"int":
 			if main_stat == "intelligence":
 				return str("Intelligence: ", data.stats.intelligence, "\n",
