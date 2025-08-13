@@ -16,6 +16,7 @@ config/features=PackedStringArray("4.4", "Forward Plus")
 
 [autoload]
 
+GameManager="*res://Game/Data/Main/GameManager.gd"
 UnitDatabase="*res://Game/Data/Main/UnitDatabase.gd"
 DamageText="*res://RTS-System/Entities/Data/DamageTextPool.gd"
 SpatialGridDebugRenderer="*res://Dev/Tools/SpatialGridDebugRenderer.gd"

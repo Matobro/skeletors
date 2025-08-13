@@ -34,7 +34,7 @@ func state_logic(delta):
 			return
 
 	if ai.path.size() <= 0:
-		ai.request_path()
+		ai.request_path(delta)
 		return
 
 	var distance_to_goal = parent.global_position.distance_to(ai.path[-1])

@@ -17,7 +17,7 @@ func state_logic(delta):
 		return
 
 	if ai.path.size() <= 0:
-		ai.request_path()
+		ai.request_path(delta)
 		return
 
 	ai._follow_path(delta)

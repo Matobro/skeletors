@@ -50,6 +50,9 @@ func _on_command_issued(_command_type, _target, _position, is_queued):
 	if !is_queued:
 		_process_next_command()
 
+func special_process():
+	devstate.text = state
+
 func _process_next_command():
 	if parent.data.unit_type == "neutral":
 		return
@@ -76,6 +79,7 @@ func _process_next_command():
 	emit_signal("command_completed", current_command.type, fallback_command)
 
 	dont_clear = false
+
 	## Set state from command
 	match current_command.type:
 		"Move":
@@ -142,7 +146,13 @@ func apply_separation_force() -> Vector2:
 
 	return force * separation_strength
 
-func request_path():
+func request_path(delta):
+	if path_requested:
+		path_timeout_timer += delta
+		if path_timeout_timer > PATH_REQUEST_TIMEOUT:
+			print("Timeout waiting for path. Retrying...")
+			request_path(delta)
+
 	current_path_request_id += 1
 
 	path_requested = true
@@ -180,12 +190,6 @@ func _on_path_ready(unit, new_path: PackedVector2Array, request_id):
 	SpatialGridDebugRenderer._receive_path(unit, path)
 
 func _follow_path(delta):
-	if path_requested:
-		path_timeout_timer += delta
-		if path_timeout_timer > PATH_REQUEST_TIMEOUT:
-			print("Timeout waiting for path. Retrying...")
-			request_path()
-			path_timeout_timer = 0.0
 
 	if path.size() <= 0:
 		return
@@ -207,10 +211,10 @@ func _follow_path(delta):
 	else:
 		# Movement logic
 		var dir = distance_to_target.normalized()
-		var separation = apply_separation_force()
-		var final_direction = (dir + separation * 0.25).normalized()
+		#var separation = apply_separation_force()
+		var final_direction = (dir).normalized()
 		var desired_velocity = final_direction * parent.get_stat("movement_speed")
-		parent.velocity = parent.velocity.lerp(desired_velocity, 0.3) # the magic number is "acceleration", high values introduce jittering, low values makes units floaty
+		parent.velocity = parent.velocity.lerp(desired_velocity, 0.7) # the magic number is "acceleration", high values introduce jittering, low values makes units floaty
 		parent.move_and_slide()
 		parent.handle_orientation(final_direction)
 
@@ -223,9 +227,8 @@ func _follow_path(delta):
 		elif stuck_check_timer >= STUCK_TIME_THRESHOLD:
 			var moved_distance = parent.global_position.distance_to(last_position)
 			if moved_distance < STUCK_DISTANCE_THRESHOLD:
-				print("Unit seems stuck. Requesting new path.")
 				if !path_requested:
-					request_path()
+					request_path(delta)
 					stuck_check_timer = 0.0
 					last_position = parent.global_position
 			else:

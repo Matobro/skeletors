@@ -27,8 +27,8 @@ var has_attacked: bool = false
 var is_attack_committed: bool = false
 var is_holding_position: bool = false
 var is_ranged: bool
-
 var is_moving: bool = false
+var is_ready: bool = false
 ### Combat
 
 var attack_target: Unit = null
@@ -93,6 +93,7 @@ func connect_signals():
 	SpatialGrid.register_unit(self)
 	SpatialGrid.path_request_manager.path_ready.connect(state_machine._on_path_ready)
 	state_machine.set_ready()
+	is_ready = true
 
 # func _on_command_issued(command_type: String, target_unit: Node, target_position: Vector2, is_queued: bool):
 # 	if state_machine:

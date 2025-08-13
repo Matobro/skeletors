@@ -11,6 +11,7 @@ func exit_state():
 	ai.animation_player.stop()
 
 func state_logic(delta):
+
 	var target_unit = ai.current_command.target_unit
 	if target_unit == null or !is_instance_valid(target_unit) or target_unit.dead:
 		ai._process_next_command()
@@ -23,10 +24,10 @@ func state_logic(delta):
 	ai.current_command.target_position = target_unit.global_position
 
 	if ai.path.size() <= 0:
-		ai.request_path()
+		ai.request_path(delta)
 		return
 	
-	if ai.path.size() > 0 and parent.global_position.distance_to(target_unit.global_position) < 75:
+	if ai.path.size() > 0 and parent.global_position.distance_to(target_unit.global_position) > 75:
 		var target_cells = SpatialGrid.grid_manager._get_cells_covered(target_unit.global_position, target_unit.unit_scale)
 		var path_end_cell = SpatialGrid.get_cell_coords(ai.path[-1])
 		var within_range = false
@@ -37,7 +38,7 @@ func state_logic(delta):
 				break
 
 		if !within_range and !ai.path_requested:
-			ai.request_path()
+			ai.request_path(delta)
 
 	ai._follow_path(delta)
 

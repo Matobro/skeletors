@@ -44,6 +44,8 @@ func spawn_players():
 	for player_data in players_to_spawn:
 		var p = player_scene.instantiate()
 		p.player_id = player_data.id
+		p.is_ai = player_data.is_ai
+		p.is_local_player = !player_data.is_ai and player_data.id == 1
 		add_child(p)
 		players[p.player_id] = p
 		register_player(p)
