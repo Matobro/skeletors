@@ -59,7 +59,6 @@ func _process_next_command():
 
 	## Go idle if no next command
 	if next_command == null:
-		print("No next command")
 		set_state("Idle")
 		current_command = null
 		return
@@ -80,7 +79,6 @@ func _process_next_command():
 	## Set state from command
 	match current_command.type:
 		"Move":
-			print("Setting state")
 			set_state("Move")
 		"Attack":
 			set_state("Aggro")

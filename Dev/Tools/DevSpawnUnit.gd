@@ -1,9 +1,5 @@
 extends Node2D
 
-var unit_scenes = {
-	"hero": preload("res://RTS-System/Entities/Data/Hero.tscn"),
-	"unit": preload("res://RTS-System/Entities/Data/Unit.tscn")
-}
 var commandsData = preload("res://RTS-System/Commands/DefaultCommands.tres")
 
 var spawning_unit: bool
