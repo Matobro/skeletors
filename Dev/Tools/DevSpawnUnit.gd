@@ -19,8 +19,10 @@ var unit_data_list: Array = []
 @onready var spawn_popup = null
 @onready var nav_map = null
 
-
 func init_node() -> void:
+	if GameManager.dev_mode == false:
+		return
+
 	unit_list = $"../CanvasLayer/DevBox/VBoxContainer/OptionButton"
 	spawn_button = $"../CanvasLayer/DevBox/VBoxContainer/Button"
 	spawn_visual = $"../CanvasLayer/TextureRect"

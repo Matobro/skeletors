@@ -16,6 +16,7 @@ initial_velocity_max = 150.0
 gravity = Vector3(0, 98, 0)
 
 [node name="FX" type="Node2D"]
+position = Vector2(0, -1)
 script = ExtResource("1_i52ia")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]

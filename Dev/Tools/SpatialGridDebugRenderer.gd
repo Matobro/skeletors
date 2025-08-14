@@ -67,19 +67,20 @@ func _draw():
 	
 	var grid_pixel_size = Vector2(grid_width, grid_height) * cell_size
 
-	# Draw grid border around center (0,0)
 	var top_left = Vector2(-half_width, -half_height) * cell_size
+
+	# Draw grid border
 	draw_rect(Rect2(top_left, grid_pixel_size), Color(0.7, 0.7, 0.7, 1), false, 2)
-	
+
 	# Draw grid center
 	draw_circle(Vector2.ZERO, 10, Color.RED)
-	
-	# Draw occupied cells
+
+	# Draw occupied/walkable cells
 	for cell in grid.keys():
 		if grid[cell].size() > 0:
-			var pos = cell * cell_size 
+			var pos = cell * cell_size
 			draw_rect(Rect2(pos, Vector2(cell_size, cell_size)), Color(1, 0, 0, 0.4))
-	
+
 	# Draw unit bounds and separation forces
 	for unit in units:
 		var radius = unit.unit_scale
@@ -91,7 +92,6 @@ func _draw():
 	if SpatialGrid.debug_grid_enabled:
 		var manager = PlayerManager
 		var cam = manager.players[1].player_camera
-
 		var screen_size = get_viewport().get_visible_rect().size
 		var cam_pos = cam.global_position
 		var zoom = cam.zoom
@@ -100,7 +100,7 @@ func _draw():
 		var visible_rect = Rect2(cam_pos - half_screen_size, world_screen_size)
 
 		for id in astar.get_point_ids():
-			var pos = astar.get_point_position(id) + top_left
+			var pos = astar.get_point_position(id)
 			if visible_rect.has_point(pos):
 				draw_circle(pos, 2, Color.GREEN)
 

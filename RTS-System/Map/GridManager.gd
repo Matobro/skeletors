@@ -1,10 +1,32 @@
 extends Node
 
-const grid_width: int = 100
-const grid_height: int = 100
-const cell_size: float = 50.0
-const half_width = int(grid_width / 2.0)
-const half_height = int(grid_height / 2.0)
+var grid_width: int = 100
+var grid_height: int = 100
+var cell_size: float = 50.0
+var half_width = int(grid_width / 2.0)
+var half_height = int(grid_height / 2.0)
+
+func build_grid_from_tilemap() -> Dictionary:
+	var grid = {}
+	var map_rect = MapHandler.used_cells
+	grid_width = map_rect.size.x
+	grid_height = map_rect.size.y
+
+	half_width = grid_width / 2.0
+	half_height = grid_height / 2.0
+
+	cell_size = MapHandler.tile_size.x
+	var tilemap = MapHandler.tile_map
+
+	for x in range(map_rect.position.x, map_rect.position.x + map_rect.size.x):
+		for y in range(map_rect.position.y, map_rect.position.y + map_rect.size.y):
+			var cell = Vector2(x, y)
+			if tilemap.get_cell_source_id(cell) == 0: # id 0 = walkable
+				grid[cell] = []
+			else:
+				grid[cell] = ["obstacle"]  # mark as blocked
+	
+	return grid
 
 func _get_cell_coords(_position: Vector2) -> Vector2:
 	var half_grid_pixels = Vector2(grid_width, grid_height) * cell_size / 2

@@ -47,6 +47,7 @@ func issue_command(command_type: String, target, position: Vector2, is_queued: b
 
 func remove_command(command):
 	queue.erase(command)
+	
 func insert_command_at_front(command):
 	queue.insert(0, command)
 

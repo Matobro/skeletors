@@ -32,13 +32,32 @@ func deregister_unit(unit) -> void:
 
 func update_unit_position(unit) -> void:
 	var radius = unit.unit_scale
-	var old_coords = unit.get_meta("grid_coords")
+	var old_coords = unit.get_meta("grid_coords") if unit.has_meta("grid_coords") else []
 	var new_coords = grid_manager._get_cells_covered(unit.global_position, radius)
-	if old_coords != new_coords:
-		deregister_unit(unit)
-		register_unit(unit)
-	else:
-		unit.set_meta("grid_coords", new_coords)
+
+	# Find cells to remove and add
+	var removed_cells = old_coords.filter(func(c): return not new_coords.has(c))
+	var added_cells = new_coords.filter(func(c): return not old_coords.has(c))
+
+	# Remove unit from old cells
+	for cell in removed_cells:
+		if grid.has(cell):
+			grid[cell].erase(unit)
+			if grid[cell].size() == 0:
+				astar_manager.update_occupied_cells([cell], false)
+				grid.erase(cell)
+
+	# Add unit to new cells
+	for cell in added_cells:
+		if not grid.has(cell):
+			grid[cell] = []
+		grid[cell].append(unit)
+		astar_manager.update_occupied_cells([cell], true)
+
+	# Update metadata
+	unit.set_meta("grid_coords", new_coords)
+
+
 
 func get_nearby_units(position: Vector2, radius: float) -> Array:
 	var cells = grid_manager._get_cells_covered(position, radius)

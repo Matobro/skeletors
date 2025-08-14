@@ -13,8 +13,9 @@ func queue_unit_for_path(unit, request_id, target_unit = null):
 	var end_pos = unit.state_machine.current_command.target_position if unit.state_machine.current_command != null else start_pos
 
 	var last = unit.state_machine.last_requested_path
-	if last != null and last.has("status") and last["status"] == "queued" and last["end"].distance_to(end_pos) < 30:
-		print("Skipping path request due to close start/end")
+	
+	if last != null and last.has("status") and last["status"] == "queued" and last["start"].distance_to(start_pos) < 30 and last["end"].distance_to(end_pos) < 30:
+		print("Skipping path request due to path is almost same")
 		return # Same path -> skip
 
 	unit.state_machine.last_requested_path = ({
@@ -29,7 +30,7 @@ func queue_unit_for_path(unit, request_id, target_unit = null):
 			return
 
 	path_queue.append({
-		"unit": unit, 
+		"unit": unit,
 		"request_id": request_id, 
 		"target_unit": target_unit
 		})

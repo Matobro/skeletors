@@ -8,14 +8,14 @@
 
 [sub_resource type="Resource" id="Resource_7jcky"]
 script = ExtResource("3_ywxjw")
-base_max_hp = 250.0
+base_max_hp = 115.0
 base_max_mana = 0.0
 base_health_regen = 0.1
 base_mana_regen = 0.1
-base_armor = 1
+base_armor = 2
 base_movement_speed = 330
 base_attack_speed = 1.0
-base_damage = 15
+base_damage = 7
 base_range = 60
 attack_dice_roll = 3
 xp_yield = 50

@@ -26,7 +26,7 @@ const PATH_REQUEST_TIMEOUT = 1.0
 ### Stuck stuff ###
 var stuck_check_timer: float = 0.0
 var last_position: Vector2 = Vector2.INF
-const STUCK_TIME_THRESHOLD: float = 0.2
+const STUCK_TIME_THRESHOLD: float = 0.5
 const STUCK_DISTANCE_THRESHOLD: float = 10.0
 
 var devstate: Label = null
@@ -124,39 +124,23 @@ func clear_unit_state():
 	parent.attack_anim_timer = 0.0
 	parent.is_attack_committed = false
 
-func apply_separation_force() -> Vector2:
-	if parent.is_holding_position:
-		return Vector2.ZERO
-	
-	var force = Vector2.ZERO
-	var nearby_units = SpatialGrid.get_units_around(parent.global_position, 60)
-	var separation_radius = 50.0
-	var separation_strength = 50.0 
-
-	for other in nearby_units:
-		if other == parent or other.is_holding_position:
-			continue
-		
-		var offset = parent.global_position - other.global_position
-		var dist = offset.length()
-
-		if dist > 0 and dist < separation_radius:
-			var push = offset.normalized() * ((separation_radius - dist) / separation_radius)
-			force += push
-
-	return force * separation_strength
-
 func request_path(delta):
 	if path_requested:
 		path_timeout_timer += delta
-		if path_timeout_timer > PATH_REQUEST_TIMEOUT:
+		if path_timeout_timer >= PATH_REQUEST_TIMEOUT:
 			print("Timeout waiting for path. Retrying...")
-			request_path(delta)
+			clear_unit_state()
+		else:
+			return
 
+	print("Path requested")
 	current_path_request_id += 1
 
 	path_requested = true
 	path_timeout_timer = 0.0
+	
+	last_position = parent.global_position
+	stuck_check_timer = 0.0
 	SpatialGrid.queue_unit_for_path(parent, current_path_request_id, current_command.target_unit)
 	SpatialGridDebugRenderer._delete_path(parent)
 
@@ -168,23 +152,23 @@ func _on_path_ready(unit, new_path: PackedVector2Array, request_id):
 	# Return if outdated path (someone likes spamming clicks)
 	if request_id != current_path_request_id:
 		return
+	
+	path_requested = false
 
 	# Return if invalid path
 	if new_path.size() == 0:
-		set_state("Idle")
 		return
-	
+
 	# Setup received path
 	path = new_path
 	path_index = 0
-	path_requested = false
 	path_timeout_timer = 0.0
 
-	set_meta("last_requested_path", {
+	last_requested_path = {
 		"start": parent.global_position,
 		"end": current_command.target_position if current_command != null else parent.global_position,
 		"status": "received"
-	})
+	}
 
 	#DEBUG
 	SpatialGridDebugRenderer._receive_path(unit, path)
@@ -211,8 +195,7 @@ func _follow_path(delta):
 	else:
 		# Movement logic
 		var dir = distance_to_target.normalized()
-		#var separation = apply_separation_force()
-		var final_direction = (dir).normalized()
+		var final_direction = dir.normalized()
 		var desired_velocity = final_direction * parent.get_stat("movement_speed")
 		parent.velocity = parent.velocity.lerp(desired_velocity, 0.7) # the magic number is "acceleration", high values introduce jittering, low values makes units floaty
 		parent.move_and_slide()
@@ -227,15 +210,11 @@ func _follow_path(delta):
 		elif stuck_check_timer >= STUCK_TIME_THRESHOLD:
 			var moved_distance = parent.global_position.distance_to(last_position)
 			if moved_distance < STUCK_DISTANCE_THRESHOLD:
-				if !path_requested:
-					request_path(delta)
-					stuck_check_timer = 0.0
-					last_position = parent.global_position
-			else:
-				# Reset timer and last position if progress was made
-				stuck_check_timer = 0.0
-				last_position = parent.global_position
+				print("Unit is stuck")
+				request_path(delta)
 
+			stuck_check_timer = 0.0
+			last_position = parent.global_position
 	# Check if distance to end goal is close enough
 	var distance_to_goal = parent.global_position.distance_to(path[-1])
 

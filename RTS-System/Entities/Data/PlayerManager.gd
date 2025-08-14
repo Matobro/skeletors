@@ -23,19 +23,22 @@ var players_to_spawn = [
 var players = {}
 
 ### INIT ###
-func _ready() -> void:
+func setup_player_manager() -> void:
 	await get_tree().process_frame
+	
+	if GameManager.dev_mode == true:
+		dev_spawner = get_node("/root/World/DevSpawnUnit")
 
-	dev_spawner = get_node("/root/World/DevSpawnUnit")
 	spawn_players()
 
 	await get_tree().process_frame
 
 	for player in get_all_players():
 		print("Player ID: ", player.player_id, " created")
-		
-	dev_spawner.player_input = get_player(1).player_input
-	dev_spawner.init_node()
+	
+	if GameManager.dev_mode == true:
+		dev_spawner.player_input = get_player(1).player_input
+		dev_spawner.init_node()
 
 ### INIT END ###
 

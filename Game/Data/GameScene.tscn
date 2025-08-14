@@ -1,9 +1,9 @@
-[gd_scene load_steps=13 format=4 uid="uid://dv3rvon240ulo"]
+[gd_scene load_steps=13 format=4 uid="uid://cm1rmw44ussdd"]
 
-[ext_resource type="Script" uid="uid://cyy8ru024m6fd" path="res://Dev/Tools/DevSpawnUnit.gd" id="2_1r4kt"]
-[ext_resource type="Script" uid="uid://b4hen6yn0dyic" path="res://Dev/Fps.gd" id="3_fmrvc"]
-[ext_resource type="Texture2D" uid="uid://d07ycx08vnjo8" path="res://RTS-System/Terrain/Tilesets/BoundaryTile.png" id="4_lmhu4"]
-[ext_resource type="Texture2D" uid="uid://cbbfeajwrgr1c" path="res://RTS-System/Terrain/Tilesets/Test_Ground_Tile.png" id="4_wjqvk"]
+[ext_resource type="Script" uid="uid://cyy8ru024m6fd" path="res://Dev/Tools/DevSpawnUnit.gd" id="1_k32wu"]
+[ext_resource type="Script" uid="uid://b4hen6yn0dyic" path="res://Dev/Fps.gd" id="2_h3hrf"]
+[ext_resource type="Texture2D" uid="uid://cbbfeajwrgr1c" path="res://RTS-System/Terrain/Tilesets/Test_Ground_Tile.png" id="3_kqv4l"]
+[ext_resource type="Texture2D" uid="uid://d07ycx08vnjo8" path="res://RTS-System/Terrain/Tilesets/BoundaryTile.png" id="4_c176p"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_wicfy"]
 
@@ -33,7 +33,7 @@ outlines = Array[PackedVector2Array]([PackedVector2Array(-8, -8, 8, -8, 8, 8, -8
 agent_radius = 0.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tq6uv"]
-texture = ExtResource("4_wjqvk")
+texture = ExtResource("3_kqv4l")
 0:0/0 = 0
 0:0/0/terrain_set = 0
 0:0/0/terrain = 0
@@ -43,7 +43,7 @@ texture = ExtResource("4_wjqvk")
 0:1/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1r4kt"]
-texture = ExtResource("4_lmhu4")
+texture = ExtResource("4_c176p")
 0:0/0 = 0
 1:0/0 = 0
 0:1/0 = 0
@@ -62,9 +62,10 @@ y_sort_enabled = true
 
 [node name="DevSpawnUnit" type="Node2D" parent="."]
 process_mode = 1
-script = ExtResource("2_1r4kt")
+script = ExtResource("1_k32wu")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
 process_mode = 1
@@ -216,7 +217,7 @@ layout_mode = 0
 offset_left = -67.0
 offset_right = 39.0
 offset_bottom = 23.0
-script = ExtResource("3_fmrvc")
+script = ExtResource("2_h3hrf")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 navigation_polygon = SubResource("NavigationPolygon_go42g")
