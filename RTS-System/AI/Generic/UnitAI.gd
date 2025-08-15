@@ -1,5 +1,4 @@
 extends StateMachine
-
 class_name UnitAI
 
 signal command_completed(command_type, fallback_command)
@@ -40,18 +39,22 @@ func _ready():
 	add_state("Hold", preload("res://RTS-System/AI/Generic/UnitAIStates/HoldState.gd").new())
 	add_state("Stop", preload("res://RTS-System/AI/Generic/UnitAIStates/StopState.gd").new())
 	add_state("Dying", preload("res://RTS-System/AI/Generic/UnitAIStates/DyingState.gd").new())
+	
 	devstate = $"../DevState"
 
 	for s in states.values():
 		s.ai = self
 		s.parent = parent
 
+
 func _on_command_issued(_command_type, _target, _position, is_queued):
 	if !is_queued:
 		_process_next_command()
 
+
 func special_process():
 	devstate.text = state
+
 
 func _process_next_command():
 	if parent.data.unit_type == "neutral":
@@ -60,27 +63,28 @@ func _process_next_command():
 	dont_clear = false
 	var next_command = parent.command_component.get_next_command()
 
-	## Go idle if no next command
+	# Only go idle if no next command AND no path is active or requested
 	if next_command == null:
-		set_state("Idle")
-		current_command = null
+		if !path_requested and path_index >= path.size():
+			set_state("Idle")
 		return
 
+	# Prevent spam commands
 	if is_spam(next_command):
 		dont_clear = true
 		parent.command_component.remove_command(next_command)
 		return
 
-	## Get next command
+	# Set the current command
 	current_command = next_command
 	parent.command_component.pop_next_command()
 
-	## Signal previous command as completed
+	# Signal previous command as completed
 	emit_signal("command_completed", current_command.type, fallback_command)
 
 	dont_clear = false
 
-	## Set state from command
+	# Set state from command
 	match current_command.type:
 		"Move":
 			set_state("Move")
@@ -95,74 +99,68 @@ func _process_next_command():
 		_:
 			set_state("Idle")
 
+
 func is_spam(next_command):
 	if next_command != null and current_command != null:
 		if next_command.type == current_command.type and next_command.target_position.distance_to(current_command.target_position) <= 50:
 			return true
-		
 	return false
 
-func clear_unit_state():
-	if dont_clear:
-		return
-	
-	aggro_check_timer = 0.0
 
+func clear_unit_state():
+	if dont_clear: # for spam
+		return
+
+	aggro_check_timer = 0.0
 	path = []
 	path_index = 0
 	path_requested = false
 	current_path_request_id = 0
-
 	last_requested_path = {"start": Vector2.INF, "end": Vector2.INF, "status": "none"}
 	last_requested_target = Vector2.ZERO
-
 	path_timeout_timer = 0.0
-
 	stuck_check_timer = 0.0
 	last_position = Vector2.INF
-
 	parent.attack_anim_timer = 0.0
 	parent.is_attack_committed = false
 
 func request_path(delta):
+	path_timeout_timer += delta
 	if path_requested:
-		path_timeout_timer += delta
 		if path_timeout_timer >= PATH_REQUEST_TIMEOUT:
-			print("Timeout waiting for path. Retrying...")
-			clear_unit_state()
+			print("Path request timed out. Retrying...")
+			path_requested = false
+			path_timeout_timer = 0.0
 		else:
 			return
 
-	print("Path requested")
-	current_path_request_id += 1
-
 	path_requested = true
 	path_timeout_timer = 0.0
-	
+	current_path_request_id += 1
 	last_position = parent.global_position
 	stuck_check_timer = 0.0
+
 	SpatialGrid.queue_unit_for_path(parent, current_path_request_id, current_command.target_unit)
 	SpatialGridDebugRenderer._delete_path(parent)
 
+
 func _on_path_ready(unit, new_path: PackedVector2Array, request_id):
-	# Path for wrong unit (how)
 	if unit != parent:
 		return
-
-	# Return if outdated path (someone likes spamming clicks)
 	if request_id != current_path_request_id:
 		return
-	
-	path_requested = false
 
-	# Return if invalid path
 	if new_path.size() == 0:
-		return
+		print("Received empty path. Will retry on next follow_path call.")
+		path_requested = false
+		path_index = 0
+		path = []
+		return  # Follow_path will retry automatically
 
-	# Setup received path
 	path = new_path
 	path_index = 0
 	path_timeout_timer = 0.0
+	path_requested = false
 
 	last_requested_path = {
 		"start": parent.global_position,
@@ -170,58 +168,57 @@ func _on_path_ready(unit, new_path: PackedVector2Array, request_id):
 		"status": "received"
 	}
 
-	#DEBUG
 	SpatialGridDebugRenderer._receive_path(unit, path)
 
-func _follow_path(delta):
 
-	if path.size() <= 0:
+func _follow_path(delta):
+	# If no path -> request path
+	if path.size() == 0 or path_index >= path.size():
+		request_path(delta)
 		return
 
-	## Reached end
+	# If reached end do nothing
 	if path_index >= path.size():
 		path_requested = false
-		stuck_check_timer = 0.0  # reset stuck timer when path finished
+		stuck_check_timer = 0.0
 		last_position = Vector2.INF
 		return
 
 	var _target = path[path_index]
-	var distance_to_target = _target - parent.global_position
+	var to_target = _target - parent.global_position
+	var distance_to_target = to_target.length()
 
-	# Check if distance to current path point is close enough
-	if distance_to_target.length() < 10.0:
+	# Advance path index if close enough
+	if distance_to_target < 10.0:
 		path_index += 1
-
-	else:
-		# Movement logic
-		var dir = distance_to_target.normalized()
-		var final_direction = dir.normalized()
-		var desired_velocity = final_direction * parent.get_stat("movement_speed")
-		parent.velocity = parent.velocity.lerp(desired_velocity, 0.7) # the magic number is "acceleration", high values introduce jittering, low values makes units floaty
-		parent.move_and_slide()
-		parent.handle_orientation(final_direction)
-
-		# Stuck detection
-		stuck_check_timer += delta
-
-		if last_position == Vector2.INF:
-			last_position = parent.global_position
-
-		elif stuck_check_timer >= STUCK_TIME_THRESHOLD:
-			var moved_distance = parent.global_position.distance_to(last_position)
-			if moved_distance < STUCK_DISTANCE_THRESHOLD:
-				print("Unit is stuck")
-				request_path(delta)
-
+		if path_index >= path.size():
+			path_requested = false
 			stuck_check_timer = 0.0
-			last_position = parent.global_position
-	# Check if distance to end goal is close enough
-	var distance_to_goal = parent.global_position.distance_to(path[-1])
-
-	if distance_to_goal < 10.0:
-		if current_command != null and current_command.type in ["Attack", "Attack_move"]:
+			last_position = Vector2.INF
 			return
-		_process_next_command()
+		else:
+			_target = path[path_index]
+			to_target = _target - parent.global_position
+
+	# Move toward target
+	var dir = to_target.normalized()
+	var speed = parent.get_stat("movement_speed")
+	parent.velocity = dir * speed
+	parent.move_and_slide()
+	parent.handle_orientation(dir)
+
+	# Stuck detection
+	stuck_check_timer += delta
+	if last_position == Vector2.INF:
+		last_position = parent.global_position
+	elif stuck_check_timer >= STUCK_TIME_THRESHOLD:
+		var moved_distance = parent.global_position.distance_to(last_position)
+		if moved_distance < STUCK_DISTANCE_THRESHOLD and current_command != null:
+			print("Unit is stuck, requesting new path")
+			path_requested = false
+			request_path(delta)
+		stuck_check_timer = 0.0
+		last_position = parent.global_position
 
 func _on_death_animation_finished():
 	parent.queue_free()

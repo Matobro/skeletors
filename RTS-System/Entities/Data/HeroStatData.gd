@@ -17,11 +17,11 @@ class_name HeroStatData
 
 @export_group("Level Info")
 ## Do not change
-@export var level: int
+var level: int = 1
 ## Do not change
-@export var xp: int
+var xp: int
 ## Do not change
-@export var xp_to_level: int = 500
+var xp_to_level: int = 500
 
 func gain_stats(_str, _agi, _int):
 	strength += _str

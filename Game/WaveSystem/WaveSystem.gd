@@ -3,7 +3,7 @@ extends Node
 var current_wave = 0
 var wave_timer = 0.0
 
-var spawn_keys = [] #holds spawn points, eg ["north", "east", "west"]
+var spawn_keys = []
 var spawn_index: int = 0
 
 @onready var spawn_points = {
@@ -38,7 +38,7 @@ func get_next_spawn_point() -> Node2D:
 
 func get_wave_composition(wave: int) -> Array:
 	var possible_enemies = UnitDatabase.get_enemy_units_for_wave(wave)
-	var budget = 10 + wave * 5
+	var budget = 2 + wave * 5
 
 	var composition = []
 

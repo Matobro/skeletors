@@ -3,7 +3,9 @@ extends UnitState
 func enter_state():
 	SpatialGrid.deregister_unit(ai.parent)
 	ai.aggro_check_timer = ai.AGGRO_CHECK_INTERVAL
-	ai.animation_player.play("walk")
+	var scale = parent.get_stat("movement_speed") / 330.0
+	var animation_speed = pow(scale, StatModifiers.movement_speed_animation_modifier)
+	ai.animation_player.play_animation("walk", animation_speed)
 
 func exit_state():
 	ai.clear_unit_state()

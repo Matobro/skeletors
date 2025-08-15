@@ -40,7 +40,10 @@ var portrait_stylebox = null
 	"armor": $UnitStats/Armor,
 	"str": $HeroStats/Str,
 	"agi": $HeroStats/Agi,
-	"int": $HeroStats/Int
+	"int": $HeroStats/Int,
+	"xp_bar": $HeroStats/XpBar,
+	"hp_bar": $Control/HpBar,
+	"mp_bar": $Control/ManaBar
 }
 @onready var stat_labels = {
 	"damage": $UnitStats/DamageValue,
@@ -58,7 +61,6 @@ var portrait_stylebox = null
 	$ActionMenu/GridContainer/AbilityButton5,
 	$ActionMenu/GridContainer/AbilityButton6,
 	$ActionMenu/GridContainer/AbilityButton7,
-
 ]
 
 var og_color = null
@@ -325,14 +327,20 @@ func gather_stat_info(data, stat_name):
 				return str("Intelligence: ", data.stats.intelligence, "\n",
 				"\nMana is increased by ", StatModifiers.int_multiplier, " for every intelligence.\n",
 				"\nMana regeneration is increased by ", StatModifiers.regen_modifier, " for every intelligence.")
+		"xp_bar":
+			return str("--------------------[" ,data.stats.xp, " / ", data.parent.get_xp_for_next_level(), "]--------------------")
+		"hp_bar":
+			return str("Health regeneration: ", data.stats.health_regen, "/s")
+		"mp_bar":
+			return str("Mana regeneration: ", data.stats.mana_regen, "/s")
 		_:
 			return ""
 
 func _on_stat_hover_entered(stat_name):
-	print("Called")
 	var label = stat_names[stat_name]
 	var text = gather_stat_info(current_data, stat_name)
 
 	TooltipManager.show_tooltip(parent.player_id, text, label.global_position)
+	
 func _on_stat_hover_exited():
 	TooltipManager.hide_tooltip(parent.player_id)

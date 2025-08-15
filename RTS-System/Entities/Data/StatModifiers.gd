@@ -8,6 +8,8 @@ var regen_modifier: float = 0.06
 var armor_modifier: float = 5.0
 var armor_const: float = 0.05
 
+var movement_speed_animation_modifier: float = 3.0
+
 func calculate_armor(armor):
     var x = armor * armor_const
     var y = (armor_const * armor) + 1

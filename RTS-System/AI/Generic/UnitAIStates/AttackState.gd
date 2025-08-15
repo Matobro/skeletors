@@ -10,7 +10,6 @@ func exit_state():
 
 func state_logic(delta):
 	var target_unit = ai.current_command.target_unit
-	parent.attack_target = target_unit
 
 	if target_unit == null or !is_instance_valid(target_unit) or target_unit.dead:
 		handle_no_target()
@@ -19,6 +18,8 @@ func state_logic(delta):
 	if target_unit == parent:
 		return
 
+	parent.attack_target = target_unit
+	
 	if parent.is_attack_committed:
 		process_attack_animation(delta, target_unit)
 	else:
@@ -54,15 +55,14 @@ func try_to_attack(target_unit):
 	# Check if in range
 	if parent.is_within_attack_range(target_unit.position) and !parent.is_attack_committed:
 		ai.animation_player.stop()
-		ai.animation_library.stop()
 		parent.velocity = Vector2.ZERO
 		parent.is_attack_committed = true
 		parent.has_attacked = false
 		parent.attack_anim_timer = 0.0
 
 		# Play attack animation at correct speed
-		ai.animation_library.play("animations/attack")
-		ai.animation_library.speed_scale = parent.get_stat("attack_speed")
+		var animation_speed = parent.get_stat("attack_speed")
+		ai.animation_player.play_animation("attack", animation_speed)
 		parent.handle_orientation((target_unit.global_position - parent.global_position).normalized())
 	else:
 		ai.set_state("Aggro")

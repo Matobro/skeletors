@@ -10,7 +10,6 @@ var initialized: bool = false
 
 @onready var parent = get_parent()
 var animation_player = null
-var animation_library = null
 
 func set_ready():
 	initialized = true

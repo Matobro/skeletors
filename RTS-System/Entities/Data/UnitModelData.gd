@@ -13,7 +13,6 @@ class_name UnitModelData
 @export var animation_attack_point: float = 0.5
 ## Should be attack animation length, scaling done elsewhere
 @export var animation_attack_duration: float = 1.0
-
 ## Projectile scene for ranged attacks - not needed if melee
 @export var projectile_scene = preload("res://RTS-System/Entities/Projectiles/HomingProjectile.tscn")
 ## Projectile speed

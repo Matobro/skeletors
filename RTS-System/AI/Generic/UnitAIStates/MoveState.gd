@@ -3,8 +3,9 @@ extends UnitState
 func enter_state():
 	#SpatialGrid.deregister_unit(parent)
 	parent.is_moving = true
-	ai.animation_player.play("walk")
-
+	var scale = parent.get_stat("movement_speed") / 330.0
+	var animation_speed = pow(scale, StatModifiers.movement_speed_animation_modifier)
+	ai.animation_player.play_animation("walk", animation_speed)
 func exit_state():
 	ai.clear_unit_state()
 	#SpatialGrid.register_unit(parent)
@@ -17,9 +18,17 @@ func state_logic(delta):
 		ai.set_state("Idle")
 		return
 
+	# Update grid position every frame
 	SpatialGrid.update_unit_position(parent)
-	if ai.path.size() <= 0:
+	
+	# Request path if not already requested
+	if ai.path.size() <= 0 and !ai.path_requested:
 		ai.request_path(delta)
 		return
 
-	ai._follow_path(delta)
+	if ai.path_index >= ai.path.size():
+		ai._process_next_command()
+		
+	# Follow the path if it exists
+	if ai.path.size() > 0:
+		ai._follow_path(delta)

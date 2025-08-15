@@ -8,7 +8,7 @@
 
 [sub_resource type="Resource" id="Resource_yhm5l"]
 script = ExtResource("3_ti037")
-base_max_hp = 50.0
+base_max_hp = 45.0
 base_max_mana = 0.0
 base_health_regen = 0.1
 base_mana_regen = 0.1

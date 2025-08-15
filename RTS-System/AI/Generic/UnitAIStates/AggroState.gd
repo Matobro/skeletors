@@ -1,8 +1,12 @@
 extends UnitState
 
+const PATH_RECALC_THRESHOLD := 32
+
 func enter_state():
 	SpatialGrid.deregister_unit(parent)
-	ai.animation_player.play("walk")
+	var scale = parent.get_stat("movement_speed") / 330.0
+	var animation_speed = pow(scale, StatModifiers.movement_speed_animation_modifier)
+	ai.animation_player.play_animation("walk", animation_speed)
 	ai.last_requested_target = Vector2.INF
 
 func exit_state():
@@ -27,18 +31,12 @@ func state_logic(delta):
 		ai.request_path(delta)
 		return
 	
-	if ai.path.size() > 0 and parent.global_position.distance_to(target_unit.global_position) > 75:
-		var target_cells = SpatialGrid.grid_manager._get_cells_covered(target_unit.global_position, target_unit.unit_scale)
-		var path_end_cell = SpatialGrid.get_cell_coords(ai.path[-1])
-		var within_range = false
+	var target_pos = target_unit.global_position
 
-		for cell in target_cells:
-			if cell.distance_to(path_end_cell) <= 1:
-				within_range = true
-				break
-
-		if !within_range and !ai.path_requested:
-			ai.request_path(delta)
+	if ai.last_requested_target.distance_to(target_pos) > PATH_RECALC_THRESHOLD and !ai.path_requested:
+		print("Request path")
+		ai.last_requested_target = target_pos
+		ai.request_path(delta)
 
 	ai._follow_path(delta)
 

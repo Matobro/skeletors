@@ -31,3 +31,7 @@ func set_selection_circle_position(unit):
 	selection_circle_front.position.y = position.y + (unit_height / 2) + unit.data.unit_model_data.offset.y
 	selection_circle_back.position.y = selection_circle_front.position.y
 	unit.collider.global_position = unit.global_position
+
+func play_animation(animation_name: String = "idle", animation_speed: float = 1.0):
+	set_speed_scale(animation_speed)
+	play(animation_name)

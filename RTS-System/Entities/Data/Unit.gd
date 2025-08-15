@@ -8,7 +8,6 @@ class_name Unit
 @onready var command_component = $"CommandHolder"
 @onready var state_machine: UnitAI = $UnitAI
 @onready var animation_player: AnimatedSprite2D = $AnimatedSprite2D
-@onready var animation_library: AnimationPlayer = $AnimationPlayer
 @onready var aggro_collision: CollisionShape2D = $AggroRange/CollisionShape2D
 @onready var hp_bar: Control = $AnimatedSprite2D/HpBar/Control
 @onready var collider = $CollisionShape2D
@@ -66,13 +65,12 @@ func assign_stuff():
 	set_unit_color()
 	is_ranged = data.is_ranged
 	aggro_collision.set_deferred("disabled", false)
-	unit_scale = data.unit_model_data.get_unit_radius_world_space()
+	unit_scale = data.unit_model_data.get_unit_radius_world_space() /2
 
-	animation_library.add_animation_library("animations", data.unit_library)
+	data.avatar = data.unit_model_data.sprite_frames
 	animation_player.init_animations(data.unit_model_data, self)
 
 	state_machine.animation_player = animation_player
-	state_machine.animation_library = animation_library
 	state_machine.parent = self
 
 	data.parent = self

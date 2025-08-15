@@ -9,9 +9,6 @@ var grid = {}
 var occupied_cells := {}
 var walkable_cells := []
 
-# ---------------------------
-# Build ASTAR graph
-# ---------------------------
 func build_astar_graph():
 	astar.clear()
 
@@ -97,47 +94,77 @@ func update_occupied_cells(cells: Array, occupied: bool) -> void:
 
 func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null) -> PackedVector2Array:
 	var start_cell = grid_manager._get_cell_coords(start_pos)
-	start_cell = _get_nearest_free_cell(start_pos)
+	var end_cell = grid_manager._get_cell_coords(target_unit.global_position if target_unit else end_pos)
 
-	var end_cell: Vector2
-
-	if target_unit != null:
-		var target_cell = grid_manager._get_cell_coords(target_unit.global_position)
-		var found_valid_adjacent = false
-
-		var offsets = [
-			Vector2(0, 1), Vector2(1, 0), Vector2(0, -1), Vector2(-1, 0),
-			Vector2(1, 1), Vector2(1, -1), Vector2(-1, -1), Vector2(-1, 1)
-		]
-
-		for offset in offsets:
-			var neighbor = target_cell + offset
-			if grid_manager._is_in_grid(neighbor) and astar.has_point(grid_manager._get_cell_id(neighbor)) and not grid.has(neighbor) and not neighbor in occupied_cells:
-				end_cell = neighbor
-				found_valid_adjacent = true
-				break
-
-		if not found_valid_adjacent:
-			end_cell = _get_nearest_free_cell(target_unit.global_position)
-	else:
-		end_cell = _get_nearest_free_cell(end_pos)
+	# Allow the target cell to be considered free (even if occupied by the target)
+	end_cell = _get_nearest_reachable_free_cell(end_cell, start_cell)
 
 	var start_id = grid_manager._get_cell_id(start_cell)
 	var end_id = grid_manager._get_cell_id(end_cell)
 
 	if not astar.has_point(start_id) or not astar.has_point(end_id):
-		return PackedVector2Array()  # cannot path
+		return PackedVector2Array()  # Path blocked
 
 	var raw_path = astar.get_id_path(start_id, end_id)
-	var world_path = PackedVector2Array()
+	if raw_path.size() == 0:
+		return PackedVector2Array()
 
+	var world_path = PackedVector2Array()
 	for id in raw_path:
 		world_path.append(astar.get_point_position(id))
 
+	# Start exactly at current position
 	if world_path.size() > 0:
 		world_path[0] = start_pos
-		return smooth_path(world_path)
-	return PackedVector2Array()
+
+	return smooth_path(world_path)
+
+
+
+# Finds the nearest free tile that is reachable from start_cell
+func _get_nearest_reachable_free_cell(target_cell: Vector2, start_cell: Vector2) -> Vector2:
+	var visited := {}
+	var queue := [target_cell]
+	var distances := {}
+	visited[target_cell] = true
+	distances[target_cell] = target_cell.distance_to(start_cell)
+	var start_id = grid_manager._get_cell_id(start_cell)
+
+	while queue.size() > 0:
+		# Pop the cell closest to the start
+		queue.sort_custom(func(a,b):
+			return int(distances[a] - distances[b])
+		)
+		var current = queue.pop_front()
+		var current_id = grid_manager._get_cell_id(current)
+
+		if _is_free_cell(current) and astar.has_point(current_id):
+			if astar.get_id_path(start_id, current_id).size() > 0:
+				return current
+
+		for dir in [Vector2(1,0), Vector2(-1,0), Vector2(0,1), Vector2(0,-1),
+					Vector2(1,1), Vector2(-1,1), Vector2(1,-1), Vector2(-1,-1)]:
+			var neighbor = current + dir
+			if not grid_manager._is_in_grid(neighbor):
+				continue
+			if visited.has(neighbor):
+				continue
+			visited[neighbor] = true
+			distances[neighbor] = neighbor.distance_to(start_cell)
+			queue.append(neighbor)
+
+	# fallback
+	return start_cell
+
+
+func _is_free_cell(cell: Vector2, ignore_unit=null) -> bool:
+	if ignore_unit != null:
+		if cell in occupied_cells and occupied_cells[cell] == ignore_unit:
+			return true
+
+	return grid.has(cell) and grid[cell].size() == 0 and not cell in occupied_cells
+
+
 
 func smooth_path(path: PackedVector2Array) -> PackedVector2Array:
 	if path.size() <= 2:
@@ -145,7 +172,7 @@ func smooth_path(path: PackedVector2Array) -> PackedVector2Array:
 
 	var smoothed = PackedVector2Array()
 	var current_index = 0
-	smoothed.append(path[current_index]) 
+	smoothed.append(path[current_index])
 
 	while current_index < path.size() - 1:
 		var found = false
@@ -184,17 +211,6 @@ func has_line_of_sight(from: Vector2, to: Vector2) -> bool:
 			return false
 
 	return true
-
-func _get_nearest_free_cell(pos: Vector2) -> Vector2:
-	var center = grid_manager._get_cell_coords(pos)
-	var max_search = 10
-	for r in range(max_search):
-		for dx in range(-r, r + 1):
-			for dy in range(-r, r + 1):
-				var cell = center + Vector2(dx, dy)
-				if grid_manager._is_in_grid(cell) and not grid.has(cell) and not cell in occupied_cells:
-					return cell
-	return center
 
 func get_units_around(position: Vector2, radius: float = 32.0) -> Array:
 	var units_in_radius := []
