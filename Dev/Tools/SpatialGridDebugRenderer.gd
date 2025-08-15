@@ -75,13 +75,13 @@ func _draw():
 	# Draw grid center
 	draw_circle(Vector2.ZERO, 10, Color.RED)
 
-	# Draw occupied/walkable cells
+	# Draw cells
 	for cell in grid.keys():
 		if grid[cell].size() > 0:
 			var pos = cell * cell_size
 			draw_rect(Rect2(pos, Vector2(cell_size, cell_size)), Color(1, 0, 0, 0.4))
 
-	# Draw unit bounds and separation forces
+	# Draw unit bounds
 	for unit in units:
 		var radius = unit.unit_scale
 		var pos = unit.global_position

@@ -1,9 +1,7 @@
-[gd_resource type="Resource" script_class="UnitData" load_steps=7 format=3 uid="uid://kx5qrkxfo711"]
+[gd_resource type="Resource" script_class="UnitData" load_steps=5 format=3 uid="uid://kx5qrkxfo711"]
 
 [ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="1_pic08"]
-[ext_resource type="SpriteFrames" uid="uid://dgvwbsvlyt0qb" path="res://RTS-System/Entities/Units/UnitData/TargetDummy/TargetDummy_Spriteframes.tres" id="1_rl2ta"]
 [ext_resource type="Script" uid="uid://01ohikrtxe7k" path="res://RTS-System/Entities/Data/BaseStatData.gd" id="3_4cfep"]
-[ext_resource type="AnimationLibrary" uid="uid://ctoscc7cmu3k5" path="res://RTS-System/Entities/Units/UnitData/TargetDummy/TargetDummy_Library.res" id="4_rik0r"]
 [ext_resource type="Resource" uid="uid://5fcvagilxkj6" path="res://RTS-System/Entities/Units/UnitData/TargetDummy/TargetDummy_Model_Data.tres" id="5_mu33x"]
 
 [sub_resource type="Resource" id="Resource_7cjwf"]
@@ -26,11 +24,9 @@ script = ExtResource("1_pic08")
 power_level = 0
 is_spawnable_enemy = false
 unit_model_data = ExtResource("5_mu33x")
-unit_library = ExtResource("4_rik0r")
 unit_type = "neutral"
 name = "Target Dummy"
 description = "Don't hit me :("
-avatar = ExtResource("1_rl2ta")
 stats = SubResource("Resource_7cjwf")
 is_ranged = false
 metadata/_custom_type_script = "uid://oeoy2vl8vgue"
