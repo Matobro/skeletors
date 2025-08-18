@@ -29,12 +29,12 @@ MapHandler="*res://Game/Data/Main/MapHandler.gd"
 TooltipManager="*res://RTS-System/Player/TooltipManager.gd"
 StatModifiers="*res://RTS-System/Entities/Data/StatModifiers.gd"
 WaveSystem="*res://Game/WaveSystem/WaveSystem.gd"
+CommandsData="*res://RTS-System/Commands/Scripts/CommandsData.gd"
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
-window/size/mode=3
 window/stretch/mode="canvas_items"
 
 [editor_plugins]

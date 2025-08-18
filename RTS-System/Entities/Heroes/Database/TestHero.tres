@@ -1,6 +1,5 @@
-[gd_resource type="Resource" script_class="UnitData" load_steps=7 format=3 uid="uid://brkhykt73uw54"]
+[gd_resource type="Resource" script_class="UnitData" load_steps=5 format=3 uid="uid://brkhykt73uw54"]
 
-[ext_resource type="SpriteFrames" uid="uid://b7drij1vhiw1p" path="res://RTS-System/Entities/Heroes/UnitData/TestHero/TestHero_spriteframes.tres" id="1_o1be4"]
 [ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="2_gw4jj"]
 [ext_resource type="Script" uid="uid://dqe50qceubild" path="res://RTS-System/Entities/Data/HeroStatData.gd" id="3_gw4jj"]
 [ext_resource type="Resource" uid="uid://dcesvheohla5h" path="res://RTS-System/Entities/Heroes/UnitData/TestHero/TestHero_modeldata.tres" id="3_iu2uk"]
@@ -14,9 +13,6 @@ intelligence = 2
 strength_per_level = 3
 agility_per_level = 2
 intelligence_per_level = 1
-level = 1
-xp = 0
-xp_to_level = 500
 base_max_hp = 250.0
 base_max_mana = 0.0
 base_health_regen = 0.1
@@ -38,7 +34,6 @@ unit_model_data = ExtResource("3_iu2uk")
 unit_type = "hero"
 name = "Test Hero"
 description = "Im a test hero"
-avatar = ExtResource("1_o1be4")
 stats = SubResource("Resource_iu2uk")
 is_ranged = false
 metadata/_custom_type_script = "uid://oeoy2vl8vgue"

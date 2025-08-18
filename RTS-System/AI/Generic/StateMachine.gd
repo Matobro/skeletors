@@ -8,8 +8,16 @@ var states: Dictionary = {}
 var current_state = null
 var initialized: bool = false
 
-@onready var parent = get_parent()
+var parent: Unit
+var holder: CommandHolder
 var animation_player = null
+var devstate
+
+func _init(unit, command_holder) -> void:
+	parent = unit
+	holder = command_holder
+	animation_player = parent.animation_player
+	devstate = parent.get_node("DevState")
 
 func set_ready():
 	initialized = true
@@ -20,10 +28,8 @@ func _physics_process(delta):
 	if !initialized or current_state == null:
 		return
 	current_state.state_logic(delta)
-	special_process()
+	devstate.text = state
 	
-func special_process():
-	pass
 func set_state(new_state: String):
 
 	if current_state != null:

@@ -1,47 +1,23 @@
 extends UnitState
 
 func enter_state():
-	SpatialGrid.deregister_unit(ai.parent)
-	ai.aggro_check_timer = ai.AGGRO_CHECK_INTERVAL
-	var scale = parent.get_stat("movement_speed") / 330.0
-	var animation_speed = pow(scale, StatModifiers.movement_speed_animation_modifier)
-	ai.animation_player.play_animation("walk", animation_speed)
+	pass
 
 func exit_state():
-	ai.clear_unit_state()
-	SpatialGrid.register_unit(parent)
+	ai.command_handler.clear()
 	parent.velocity = Vector2.ZERO
-	ai.animation_player.stop()
 
-func state_logic(delta):
-	if ai.current_command == null:
+func state_logic(delta: float) -> void:
+	var cmd: Dictionary = ai.get_current_command()
+	if cmd == null:
 		ai.set_state("Idle")
 		return
 
-	ai.aggro_check_timer += delta
-	if ai.aggro_check_timer >= ai.AGGRO_CHECK_INTERVAL:
-		ai.aggro_check_timer = 0.0
-		var enemy = parent.closest_enemy_in_aggro_range()
-		if enemy != null:
-			if ai.fallback_command == null:
-				ai.fallback_command = ai.current_command
-			parent.command_component.insert_command_at_front({
-				"type": "Attack",
-				"target_unit": enemy,
-				"target_position": enemy.global_position,
-				"shared_path": [],
-				"offset": Vector2.ZERO
-			})
-			ai.set_state("Aggro")
-			return
+	# Let CombatState handle aggro & target switching
+	ai.combat_state.update(delta)
 
-	if ai.path.size() <= 0:
-		ai.request_path(delta)
-		return
+	if ai.pathfinder.path.size() > 0 and ai.pathfinder.path_index >= ai.pathfinder.path.size():
+		ai.command_handler.process_next_command()
 
-	var distance_to_goal = parent.global_position.distance_to(ai.path[-1])
-
-	if distance_to_goal < 10.0:
-		ai._process_next_command()
-
-	ai._follow_path(delta)
+	# Follow path normally
+	ai.pathfinder.follow_path(delta)

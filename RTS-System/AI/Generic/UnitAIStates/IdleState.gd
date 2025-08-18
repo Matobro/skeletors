@@ -1,19 +1,14 @@
 extends UnitState
 
-func enter_state():
-    ai.animation_player.play("idle")
-    parent.velocity = Vector2.ZERO
-    ai.aggro_check_timer = ai.AGGRO_CHECK_INTERVAL
-    SpatialGridDebugRenderer._delete_path(parent)
+func enter_state() -> void:
+	parent.velocity = Vector2.ZERO
+	SpatialGridDebugRenderer._delete_path(parent)
 
-func exit_state():
-    ai.clear_unit_state()
+func exit_state() -> void:
+	ai.command_handler.clear()
 
-func state_logic(delta):
-    parent.velocity = Vector2.ZERO
-    ai.aggro_check_timer += delta
-    if ai.aggro_check_timer >= ai.AGGRO_CHECK_INTERVAL:
-        ai.aggro_check_timer = 0.0
-        var enemy = parent.closest_enemy_in_aggro_range()
-        if enemy != null:
-            parent.command_component.issue_command("Attack", enemy, enemy.global_position, false, parent.owner_id)
+func state_logic(delta: float) -> void:
+	parent.velocity = Vector2.ZERO
+	ai.animation_player.play_animation("idle", 1.0)
+
+	ai.combat_state.update(delta)

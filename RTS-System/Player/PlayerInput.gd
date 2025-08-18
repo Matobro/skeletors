@@ -240,22 +240,22 @@ func on_mouse_drag_end(event_info):
 
 func issue_stop_command(event_info):
 	for unit in selected_units:
-		unit.command_component.issue_command("Stop", event_info.click_target, event_info.pos, event_info.is_queued, player_id)
+		unit.command_holder.issue_command("Stop", event_info.click_target, event_info.pos, event_info.is_queued, player_id)
 
 func issue_hold_command(event_info):
 	for unit in selected_units:
-		unit.command_component.issue_command("Hold", event_info.click_target, event_info.pos, event_info.is_queued, player_id)
+		unit.command_holder.issue_command("Hold", event_info.click_target, event_info.pos, event_info.is_queued, player_id)
 	
 func issue_attack_command(event_info):
 	for unit in selected_units:
-		unit.command_component.issue_command("Attack", event_info.click_target, event_info.pos, event_info.is_queued, player_id)
+		unit.command_holder.issue_command("Attack", event_info.click_target, event_info.pos, event_info.is_queued, player_id)
 	
 func issue_attack_move_command(event_info):
 	var formation = calculate_unit_formation(event_info.total_units, event_info.pos)
 	for i in range (selected_units.size()):
 		var unit = selected_units[i]
 		var target_pos = formation[i]
-		unit.command_component.issue_command(
+		unit.command_holder.issue_command(
 			"Attack_move",
 			event_info.click_target,
 			target_pos,
@@ -270,7 +270,7 @@ func issue_move_command(event_info):
 	for i in range (selected_units.size()):
 		var unit = selected_units[i]
 		var target_pos = formation[i]
-		unit.command_component.issue_command(
+		unit.command_holder.issue_command(
 			"Move",
 			event_info.click_target,
 			target_pos,

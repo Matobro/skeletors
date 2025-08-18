@@ -96,6 +96,10 @@ func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null) -> Pack
 	var start_cell = grid_manager._get_cell_coords(start_pos)
 	var end_cell = grid_manager._get_cell_coords(target_unit.global_position if target_unit else end_pos)
 
+	var nearest = _get_nearest_reachable_free_cell(end_cell, start_cell)
+	if nearest == start_cell:
+		return PackedVector2Array()
+
 	# Allow the target cell to be considered free (even if occupied by the target)
 	end_cell = _get_nearest_reachable_free_cell(end_cell, start_cell)
 
@@ -122,38 +126,51 @@ func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null) -> Pack
 
 
 # Finds the nearest free tile that is reachable from start_cell
+# Finds the nearest free tile that is reachable from start_cell
 func _get_nearest_reachable_free_cell(target_cell: Vector2, start_cell: Vector2) -> Vector2:
 	var visited := {}
-	var queue := [target_cell]
 	var distances := {}
-	visited[target_cell] = true
-	distances[target_cell] = target_cell.distance_to(start_cell)
 	var start_id = grid_manager._get_cell_id(start_cell)
 
-	while queue.size() > 0:
-		# Pop the cell closest to the start
-		queue.sort_custom(func(a,b):
-			return int(distances[a] - distances[b])
-		)
-		var current = queue.pop_front()
+	# Priority queue: Array of [cell, priority]
+	var pq := []
+	
+	# Seed with target_cell
+	distances[target_cell] = target_cell.distance_to(start_cell)
+	pq.append([target_cell, distances[target_cell]])
+	visited[target_cell] = true
+
+	while pq.size() > 0:
+		# Pop lowest-priority element (closest to start)
+		pq.sort_custom(func(a, b): return a[1] < b[1])
+		var current_data = pq.pop_front()
+		var current = current_data[0]
 		var current_id = grid_manager._get_cell_id(current)
 
+		# If it's free & path exists, return it
 		if _is_free_cell(current) and astar.has_point(current_id):
-			if astar.get_id_path(start_id, current_id).size() > 0:
+			if !astar.has_point(start_id) or !astar.has_point(current_id):
+				return start_cell #to stop crashing when units glitch out of the map rarely
+				
+			if astar and astar.get_id_path(start_id, current_id).size() > 0:
 				return current
 
-		for dir in [Vector2(1,0), Vector2(-1,0), Vector2(0,1), Vector2(0,-1),
-					Vector2(1,1), Vector2(-1,1), Vector2(1,-1), Vector2(-1,-1)]:
+		# Explore neighbors
+		for dir in [
+			Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1),
+			Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)
+		]:
 			var neighbor = current + dir
 			if not grid_manager._is_in_grid(neighbor):
 				continue
 			if visited.has(neighbor):
 				continue
 			visited[neighbor] = true
-			distances[neighbor] = neighbor.distance_to(start_cell)
-			queue.append(neighbor)
+			var priority = neighbor.distance_to(start_cell)
+			distances[neighbor] = priority
+			pq.append([neighbor, priority])
 
-	# fallback
+	# Fallback if nothing found
 	return start_cell
 
 

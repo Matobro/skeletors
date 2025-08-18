@@ -1,10 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://bj7ef3mp2wfwp"]
+[gd_scene load_steps=12 format=3 uid="uid://bj7ef3mp2wfwp"]
 
 [ext_resource type="Script" uid="uid://dwbfae2lvjiyj" path="res://RTS-System/Entities/Data/Unit.gd" id="1_fgnkd"]
-[ext_resource type="Script" uid="uid://b8r6uekb2q1m7" path="res://RTS-System/Commands/Scripts/CommandHolder.gd" id="2_lhggb"]
-[ext_resource type="Script" uid="uid://npdavne2ik7o" path="res://RTS-System/AI/Generic/UnitAI.gd" id="3_bpv6j"]
 [ext_resource type="Material" uid="uid://l4jbrlx4ers1" path="res://RTS-System/Shaders/UnitOutlineShader.tres" id="3_e4orr"]
-[ext_resource type="Resource" uid="uid://duorjaur3q5tj" path="res://RTS-System/Commands/DefaultCommands.tres" id="3_phtje"]
 [ext_resource type="Script" uid="uid://dnbqrr38f710c" path="res://RTS-System/Entities/Data/AnimationHandler.gd" id="4_r47uv"]
 [ext_resource type="Texture2D" uid="uid://dp4remcsms5gm" path="res://RTS-System/Commands/Sprites/SelectionCircle.png" id="6_6h2nf"]
 [ext_resource type="Script" uid="uid://ctgb4rxeelfog" path="res://RTS-System/Entities/Data/HpBarVisual.gd" id="6_vb87f"]
@@ -36,10 +33,6 @@ radius = 342.067
 z_index = 10
 input_pickable = true
 script = ExtResource("1_fgnkd")
-
-[node name="CommandHolder" type="Node" parent="."]
-script = ExtResource("2_lhggb")
-commands_data = ExtResource("3_phtje")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_index = 100
@@ -113,9 +106,6 @@ scale = Vector2(2, 2)
 texture = ExtResource("6_6h2nf")
 region_enabled = true
 region_rect = Rect2(0, 8, 32, 8)
-
-[node name="UnitAI" type="Node" parent="."]
-script = ExtResource("3_bpv6j")
 
 [connection signal="body_entered" from="AggroRange" to="." method="_on_aggro_range_body_entered"]
 [connection signal="body_exited" from="AggroRange" to="." method="_on_aggro_range_body_exited"]

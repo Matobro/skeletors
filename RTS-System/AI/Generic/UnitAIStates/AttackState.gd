@@ -1,16 +1,21 @@
 extends UnitState
 
+const PATH_RECALC_THRESHOLD := 32
+
 func enter_state():
-	#SpatialGrid.deregister_unit(parent)
 	parent.velocity = Vector2.ZERO
+	ai.combat_state.set_target_from_command()
 
 func exit_state():
-	ai.clear_unit_state()
-	#SpatialGrid.register_unit(parent)
+	ai.command_handler.clear()
+	ai.animation_player.stop()
 
-func state_logic(delta):
-	var target_unit = ai.current_command.target_unit
+func state_logic(delta: float) -> void:
+	# Update target tracking
+	ai.combat_state.update(delta)
+	var target_unit = ai.combat_state.current_target
 
+	# No valid target
 	if target_unit == null or !is_instance_valid(target_unit) or target_unit.dead:
 		handle_no_target()
 		return
@@ -19,21 +24,59 @@ func state_logic(delta):
 		return
 
 	parent.attack_target = target_unit
-	
+
+	# If currently attacking
 	if parent.is_attack_committed:
 		process_attack_animation(delta, target_unit)
 	else:
-		try_to_attack(target_unit)
+		try_to_attack_or_follow(target_unit, delta)
 
-func process_attack_animation(delta, target_unit):
+func try_to_attack_or_follow(target_unit: Node, delta: float) -> void:
+	# Attack if in range and ready
+	if parent.attack_timer <= 0.0 and parent.is_within_attack_range(target_unit.global_position):
+		start_attack(target_unit)
+	else:
+		# Move toward target using pathfinder
+		follow_target(target_unit, delta)
+
+func start_attack(target_unit: Node) -> void:
+	ai.animation_player.stop()
+	parent.velocity = Vector2.ZERO
+	parent.is_attack_committed = true
+	parent.has_attacked = false
+	parent.attack_anim_timer = 0.0
+
+	var animation_speed = parent.get_stat("attack_speed")
+	ai.animation_player.play_animation("attack", animation_speed)
+	parent.handle_orientation((target_unit.global_position - parent.global_position).normalized())
+
+func follow_target(target_unit: Node, delta: float) -> void:
+	# Always update path if target moves or path finished
+	if ai.pathfinder.path_index >= ai.pathfinder.path.size() or ai.pathfinder.last_requested_target.distance_to(target_unit.global_position) > parent.get_stat("attack_range") + PATH_RECALC_THRESHOLD:
+		
+		ai.pathfinder.last_requested_target = target_unit.global_position
+		ai.command_handler.current_command.target_position = target_unit.global_position
+		ai.pathfinder.request_path()
+	
+	# Nudge toward target if path ended but still out of range
+	if ai.pathfinder.path_index >= ai.pathfinder.path.size() and !parent.is_within_attack_range(target_unit.global_position):
+		var dir = (target_unit.global_position - parent.global_position).normalized()
+		parent.velocity = dir * parent.get_stat("movement_speed")
+		ai.animation_player.play_animation("walk", ai.pathfinder.get_walk_animation_speed())
+		parent.move_and_slide()
+		parent.handle_orientation(dir)
+
+	if !parent.is_within_attack_range(target_unit.global_position):
+		# Follow the current path
+		ai.pathfinder.follow_path(delta)
+
+func process_attack_animation(delta: float, target_unit: Node) -> void:
 	parent.attack_anim_timer += delta
 
-	# Scale animations to attack speed
 	var anim_speed = parent.get_stat("attack_speed")
 	var attack_point_scaled = parent.data.unit_model_data.animation_attack_point / anim_speed
 	var attack_duration_scaled = parent.data.unit_model_data.animation_attack_duration / anim_speed
 
-	# Deal damage
 	if !parent.has_attacked and parent.attack_anim_timer >= attack_point_scaled:
 		if parent.data.is_ranged:
 			spawn_projectile(target_unit)
@@ -42,37 +85,17 @@ func process_attack_animation(delta, target_unit):
 		parent.has_attacked = true
 		parent.attack_timer = parent.get_attack_delay()
 
-	# Finish animation, start cooldown
 	if parent.attack_anim_timer >= attack_duration_scaled:
 		parent.attack_anim_timer = 0.0
 		parent.has_attacked = false
 		parent.is_attack_committed = false
 
-func try_to_attack(target_unit):
-	if parent.attack_timer > 0.0:
-		return
-
-	# Check if in range
-	if parent.is_within_attack_range(target_unit.position) and !parent.is_attack_committed:
-		ai.animation_player.stop()
-		parent.velocity = Vector2.ZERO
-		parent.is_attack_committed = true
-		parent.has_attacked = false
-		parent.attack_anim_timer = 0.0
-
-		# Play attack animation at correct speed
-		var animation_speed = parent.get_stat("attack_speed")
-		ai.animation_player.play_animation("attack", animation_speed)
-		parent.handle_orientation((target_unit.global_position - parent.global_position).normalized())
-	else:
-		ai.set_state("Aggro")
-
-func spawn_projectile(target_unit):
+func spawn_projectile(target_unit: Node) -> void:
 	var projectile_scene = parent.data.unit_model_data.projectile_scene
 	if projectile_scene == null:
 		push_warning("Unit: ", parent.name, " doesn't have projectile set")
 		return
-	
+
 	var projectile = projectile_scene.instantiate()
 	projectile.global_position = parent.global_position
 	projectile.target = target_unit
@@ -83,13 +106,28 @@ func spawn_projectile(target_unit):
 
 	parent.get_tree().current_scene.add_child(projectile)
 
-func handle_no_target():
-	if ai.fallback_command != null:
-		ai.current_command = ai.fallback_command
-		ai.fallback_command = null
-		if ai.current_command.type == "Attack_move":
+func handle_no_target() -> void:
+	ai.combat_state.current_target = null
+
+	# Clear current command if it has a dead target
+	if ai.command_handler.current_command != {}:
+		var cmd = ai.command_handler.current_command
+		if cmd.has("target_unit") and (cmd.target_unit == null or !is_instance_valid(cmd.target_unit) or cmd.target_unit.dead):
+			ai.command_handler.current_command = {}  # <-- Clear it
+			ai.command_handler.clear()              # Reset path, attack timers, etc.
+
+	# Process fallback or next command
+	if ai.command_handler.fallback_command != {}:
+		var fb = ai.command_handler.fallback_command
+		ai.command_handler.fallback_command = {}
+		ai.command_handler.current_command = fb
+
+		if fb.type == "Attack_move":
 			ai.set_state("Attack_move")
+			return
 		else:
-			ai._process_next_command()
+			ai.command_handler.process_next_command()
+			return
 	else:
-		ai._process_next_command()
+		ai.command_handler.process_next_command()
+		return

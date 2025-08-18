@@ -1,7 +1,5 @@
 extends Node2D
 
-var commandsData = preload("res://RTS-System/Commands/DefaultCommands.tres")
-
 var spawning_unit: bool
 var owner_id: int = 1
 var mouse_pos = null

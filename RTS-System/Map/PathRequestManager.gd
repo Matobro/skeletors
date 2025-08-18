@@ -9,16 +9,18 @@ var grid_manager
 signal path_ready(unit, path: PackedVector2Array, request_id)
 
 func queue_unit_for_path(unit, request_id, target_unit = null):
+	var unit_pathfinder = unit.unit_ai.pathfinder
+	var unit_commands = unit.unit_ai.command_handler
 	var start_pos = unit.global_position
-	var end_pos = unit.state_machine.current_command.target_position if unit.state_machine.current_command != null else start_pos
+	var end_pos = unit_commands.current_command.target_position if unit_commands.current_command != {} else start_pos
 
-	var last = unit.state_machine.last_requested_path
+	var last = unit_pathfinder.last_requested_path
 	
 	if last != null and last.has("status") and last["status"] == "queued" and last["start"].distance_to(start_pos) < 30 and last["end"].distance_to(end_pos) < 30:
 		print("Skipping path request due to path is almost same")
 		return # Same path -> skip
 
-	unit.state_machine.last_requested_path = ({
+	unit_pathfinder.last_requested_path = ({
 		"start": start_pos, 
 		"end": end_pos, 
 		"status": "queued"
@@ -47,6 +49,9 @@ func _process(_delta):
 	var time_spent = 0.0
 	var start_time = Time.get_ticks_usec()
 
+	if Engine.get_frames_per_second() <= 10:
+		return
+
 	while path_queue.size() > 0:
 		var item = path_queue.pop_front()
 		var unit = item.unit
@@ -60,7 +65,7 @@ func _process(_delta):
 			target_unit = null
 
 		var start_pos = unit.global_position
-		var end_pos = unit.state_machine.current_command.target_position if unit.state_machine.current_command != null else start_pos
+		var end_pos = unit.unit_ai.command_handler.current_command.target_position if unit.unit_ai.command_handler.current_command != {} else start_pos
 		var path = astar_manager.find_path(start_pos, end_pos, target_unit)
 		emit_signal("path_ready", unit, path, request_id)
 

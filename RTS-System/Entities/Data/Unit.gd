@@ -2,11 +2,7 @@ extends CharacterBody2D
 
 class_name Unit
 
-@onready var dev_state = $DevState
-
 ###UNIT DATA###
-@onready var command_component = $"CommandHolder"
-@onready var state_machine: UnitAI = $UnitAI
 @onready var animation_player: AnimatedSprite2D = $AnimatedSprite2D
 @onready var aggro_collision: CollisionShape2D = $AggroRange/CollisionShape2D
 @onready var hp_bar: Control = $AnimatedSprite2D/HpBar/Control
@@ -28,11 +24,15 @@ var is_holding_position: bool = false
 var is_ranged: bool
 var is_moving: bool = false
 var is_ready: bool = false
+var is_invunerable: bool = true
 ### Combat
 
 var attack_target: Unit = null
 var possible_targets: Array = []
 var friendly_targets: Array = []
+
+var command_holder: CommandHolder
+var unit_ai: UnitAI
 
 signal died(unit)
 
@@ -58,9 +58,7 @@ func init_stats():
 
 	hp_bar.init_hp_bar(data.stats.current_health, data.stats.max_health)
 	
-
 func assign_stuff():
-	dead = false
 	set_selected(false)
 	set_unit_color()
 	is_ranged = data.is_ranged
@@ -70,9 +68,6 @@ func assign_stuff():
 	data.avatar = data.unit_model_data.sprite_frames
 	animation_player.init_animations(data.unit_model_data, self)
 
-	state_machine.animation_player = animation_player
-	state_machine.parent = self
-
 	data.parent = self
 	if data.unit_type == "hero":
 		var rof = load("res://RTS-System/Abilities/Resources/Rain of Fire.tres")
@@ -80,23 +75,20 @@ func assign_stuff():
 
 		var shockwave = load("res://RTS-System/Abilities/Resources/Shockwave.tres")
 		abilities.append(shockwave)
-		
+	
+	create_unit_ai()
+	is_invunerable = false
 	#hp_bar.set_bar_position(animation_player.get_frame_size().y, animation_player.scale.y, animation_player.position.y)
 
-	command_component.unit = self
+func create_unit_ai():
+	command_holder = CommandHolder.new(self)
+	unit_ai = UnitAI.new(self, command_holder)
+	unit_ai.init_ai()
+	add_child(unit_ai)
 
 func connect_signals():
-	command_component.command_issued.connect(state_machine._on_command_issued)
-	state_machine.command_completed.connect(command_component._on_command_completed)
 	SpatialGrid.register_unit(self)
-	SpatialGrid.path_request_manager.path_ready.connect(state_machine._on_path_ready)
-	state_machine.set_ready()
 	is_ready = true
-
-# func _on_command_issued(command_type: String, target_unit: Node, target_position: Vector2, is_queued: bool):
-# 	if state_machine:
-# 		state_machine.receive_command(command_type, target_unit, target_position, is_queued)
-# 		command_component.show_command_visual(command_type, target_position)
 
 func _on_command_completed(_command_type: String):
 	pass
@@ -127,7 +119,7 @@ func regenate_health():
 	hp_bar.set_hp_bar(data.stats.current_health)
 
 func take_damage(damage: int, attacker = null):
-	if dead: return
+	if dead or is_invunerable: return
 
 	var reduction = 1.0 - StatModifiers.calculate_armor(data.stats.armor)
 	var final_damage = damage * reduction
@@ -143,17 +135,17 @@ func take_damage(damage: int, attacker = null):
 		hp_bar.set_bar_visible(false)
 		dead = true
 		emit_signal("died", self)
-		state_machine.set_state("Dying")
+		unit_ai.set_state("Dying")
 		return
 
-	if attacker and state_machine.current_state == state_machine.states["Idle"] and attacker.owner_id != owner_id:
-		command_component.issue_command(
-			"Attack",
-			attacker,
-			attacker.global_position,
-			false,
-			owner_id
-		)
+	# if attacker and unit_ai.current_state == unit_ai.states["Idle"] and attacker.owner_id != owner_id:
+	# 	command_holder.issue_command(
+	# 		"Attack",
+	# 		attacker,
+	# 		attacker.global_position,
+	# 		false,
+	# 		owner_id
+	# 	)
 
 func get_attack_delay() -> float:
 	var attack_speed = data.stats.attack_speed

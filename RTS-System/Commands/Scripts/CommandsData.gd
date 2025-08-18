@@ -1,6 +1,4 @@
-extends Resource
-
-class_name CommandsData
+extends Node
 
 var command_object = preload("res://RTS-System/Commands/Command.tscn")
 var move_command = preload("res://RTS-System/Commands/Types/move_command.tres")
