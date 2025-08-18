@@ -123,29 +123,32 @@ func take_damage(damage: int, attacker = null):
 
 	var reduction = 1.0 - StatModifiers.calculate_armor(data.stats.armor)
 	var final_damage = damage * reduction
-	damage = clamp(final_damage, 1, 9999)
-	data.stats.current_health -= damage
-	data.stats.current_health = clamp(data.stats.current_health, 0, data.stats.max_health)
-	hp_bar.set_hp_bar(data.stats.current_health)
 
-	DamageText.show_text(str(damage), animation_player.global_position)
+	if final_damage > 0:
+		damage = clamp(final_damage, 1, 9999)
+		data.stats.current_health -= damage
+		data.stats.current_health = clamp(data.stats.current_health, 0, data.stats.max_health)
+		hp_bar.set_hp_bar(data.stats.current_health)
+		DamageText.show_text(str(damage), animation_player.global_position)
 	
-	if data.stats.current_health <= 0:
-		set_selected(false)
-		hp_bar.set_bar_visible(false)
-		dead = true
-		emit_signal("died", self)
-		unit_ai.set_state("Dying")
-		return
+		if data.stats.current_health <= 0:
+			set_selected(false)
+			hp_bar.set_bar_visible(false)
+			dead = true
+			emit_signal("died", self)
+			unit_ai.set_state("Dying")
+			return
 
-	# if attacker and unit_ai.current_state == unit_ai.states["Idle"] and attacker.owner_id != owner_id:
-	# 	command_holder.issue_command(
-	# 		"Attack",
-	# 		attacker,
-	# 		attacker.global_position,
-	# 		false,
-	# 		owner_id
-	# 	)
+	if attacker and unit_ai.current_state == unit_ai.states["Idle"] and attacker.owner_id != owner_id:
+		command_holder.issue_command(
+			"Attack",
+			attacker,
+			attacker.global_position,
+			false,
+			owner_id
+		 )
+
+		alert_nearby_allies(attacker)
 
 func get_attack_delay() -> float:
 	var attack_speed = data.stats.attack_speed
@@ -192,7 +195,24 @@ func handle_orientation(direction: Vector2):
 	elif direction.x < 0 and facing_right:
 		animation_player.flip_h = true
 		facing_right = false
-				
+
+func alert_nearby_allies(attacker: Unit) -> void:
+	for unit in friendly_targets:
+		if unit == self or unit.dead or unit.owner_id != owner_id:
+			continue
+		unit.on_social_aggro(attacker)
+
+
+func on_social_aggro(attacker: Unit):
+	if unit_ai.current_state == unit_ai.states["Idle"]:
+		command_holder.issue_command(
+			"Attack",
+			attacker,
+			attacker.global_position,
+			false,
+			owner_id
+		)
+
 func compare_distance(target_a, target_b):
 	return position.distance_to(target_a.position) < position.distance_to(target_b.position)
 
