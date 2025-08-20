@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=2 format=3 uid="uid://bsdtg70yyhq67"]
+
+[ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="1_rglsf"]
+
+[resource]
+script = ExtResource("1_rglsf")
+power_level = 0
+is_spawnable_enemy = false
+unit_type = "unit"
+name = ""
+description = ""
+is_ranged = false
+metadata/_custom_type_script = "uid://oeoy2vl8vgue"

@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfys3cil5svxn"]
+
+[ext_resource type="Script" uid="uid://dru6pvveajer8" path="res://addons/UnitCreator/unit_creator_dock.gd" id="1_um3qu"]
+
+[node name="UnitCreatorDock" type="VBoxContainer"]
+script = ExtResource("1_um3qu")
+
+[node name="NameLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Unit Name"
+
+[node name="NameInput" type="LineEdit" parent="."]
+layout_mode = 2
+
+[node name="SpriteLabel" type="Label" parent="."]
+visible = false
+layout_mode = 2
+text = "Sprite path"
+
+[node name="SpritePath" type="LineEdit" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="CreateButton" type="Button" parent="."]
+layout_mode = 2
+text = "Create"
