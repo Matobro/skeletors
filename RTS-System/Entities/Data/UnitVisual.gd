@@ -4,17 +4,21 @@ class_name UnitVisual
 
 var selected: bool = true
 var facing_right: bool = true
+var targeting: bool = false
+var target
 
 var unit_scale: float = 16
 
 var parent: Unit
 var animation_player: AnimatedSprite2D
 var hp_bar
+var target_marker
 
-func _init(parent_ref, animation_player_ref, hp_bar_ref) -> void:
+func _init(parent_ref, animation_player_ref, hp_bar_ref, target_marker_ref) -> void:
 	parent = parent_ref
 	animation_player = animation_player_ref
 	hp_bar = hp_bar_ref
+	target_marker = target_marker_ref
 
 	unit_scale = parent.data.unit_model_data.get_unit_radius_world_space() /2
 
@@ -23,12 +27,31 @@ func _init(parent_ref, animation_player_ref, hp_bar_ref) -> void:
 	
 	hp_bar.init_hp_bar(parent.data.stats.current_health, parent.data.stats.max_health)
 
+func _process(_delta: float):
+	if target:
+		target_marker.global_position = target.global_position + Vector2(0, -75)
+
 func set_selected(value: bool):
 	if value == selected:
 		return
 	
 	selected = value
+	targeting = value
+	if selected == true and target != null:
+		target_marker.visible = true
+	else:
+		target_marker.visible = false
+
 	parent.modulate = Color(1, 1, 1) if selected else Color(0.5, 0.5, 0.5)
+
+func set_target(new_target):
+	target = new_target
+	if targeting and target != null:
+		target_marker.visible = true
+
+func clear_target():
+	target = null
+	target_marker.visible = false
 
 func handle_orientation(direction: Vector2):
 	if direction.x == 0:

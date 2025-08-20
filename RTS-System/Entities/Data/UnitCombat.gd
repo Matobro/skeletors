@@ -73,7 +73,7 @@ func get_attack_delay() -> float:
 
 func alert_nearby_allies(attacker: Unit) -> void:
 	for unit in friendly_targets:
-		if !is_instance_valid(unit) or unit == parent or unit.unit_combat.dead or unit.owner_id != parent.owner_id:
+		if !is_instance_valid(unit) or !should_aggro(attacker):
 			continue
 		unit.unit_combat.on_social_aggro(attacker)
 

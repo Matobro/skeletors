@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://bj7ef3mp2wfwp"]
+[gd_scene load_steps=13 format=3 uid="uid://bj7ef3mp2wfwp"]
 
 [ext_resource type="Script" uid="uid://dwbfae2lvjiyj" path="res://RTS-System/Entities/Data/Unit.gd" id="1_fgnkd"]
 [ext_resource type="Material" uid="uid://l4jbrlx4ers1" path="res://RTS-System/Shaders/UnitOutlineShader.tres" id="3_e4orr"]
 [ext_resource type="Script" uid="uid://dnbqrr38f710c" path="res://RTS-System/Entities/Data/AnimationHandler.gd" id="4_r47uv"]
 [ext_resource type="Texture2D" uid="uid://dp4remcsms5gm" path="res://RTS-System/Commands/Sprites/SelectionCircle.png" id="6_6h2nf"]
+[ext_resource type="Texture2D" uid="uid://c2vkmk7h6u0ja" path="res://RTS-System/Commands/Sprites/TargetMarker.png" id="6_psfdc"]
 [ext_resource type="Script" uid="uid://ctgb4rxeelfog" path="res://RTS-System/Entities/Data/HpBarVisual.gd" id="6_vb87f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r47uv"]
@@ -107,6 +108,12 @@ scale = Vector2(2, 2)
 texture = ExtResource("6_6h2nf")
 region_enabled = true
 region_rect = Rect2(0, 8, 32, 8)
+
+[node name="TargetMarker" type="Sprite2D" parent="."]
+visible = false
+z_index = 150
+scale = Vector2(2, 2)
+texture = ExtResource("6_psfdc")
 
 [connection signal="body_entered" from="AggroRange" to="." method="_on_aggro_range_body_entered"]
 [connection signal="body_exited" from="AggroRange" to="." method="_on_aggro_range_body_exited"]

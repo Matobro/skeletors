@@ -26,6 +26,7 @@ func _init(_ai, _parent):
 
 func clear():
 	current_target = null
+	ai.parent.unit_visual.clear_target()
 	aggro_timer = 0.0
 
 ## Should be called in every state that handles combat
@@ -33,7 +34,7 @@ func update(delta: float):
 	aggro_timer += delta
 	attack_timer -= delta
 
-	if ai.state != "Attack" or ai.state != "Attack_move":
+	if ai.state != "Attack" and ai.state != "Attack_move":
 		return
 
 	# check for new targets in range
@@ -46,12 +47,12 @@ func update(delta: float):
 	# Validate current target
 	if current_target != null and (!is_instance_valid(current_target) or current_target.unit_combat.dead):
 		current_target = null
-		
+		ai.parent.unit_visual.clear_target()
 		if ai.command_handler.current_command != {} and ai.command_handler.current_command.type == "Attack":
 			ai.command_handler.current_command = {}
 			ai.command_handler.clear()
 			ai.command_handler.process_next_command()
-
+			return
 
 	# Check if target is unreachable
 	if current_target != null and is_target_unreachable(current_target):
@@ -81,6 +82,7 @@ func set_target(target: Node) -> void:
 		return
 
 	current_target = target
+	ai.parent.unit_visual.set_target(target)
 
 	# Push new attack command in front of que
 	parent.command_holder.insert_command_at_front({

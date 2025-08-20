@@ -60,6 +60,7 @@ func clear() -> void:
 	ai.pathfinder.reset()
 	ai.combat_state.attack_anim_timer = 0.0
 	ai.combat_state.is_attack_committed = false
+	ai.combat_state.current_target = null
 	ai.animation_player.stop()
 
 func _apply_command(cmd: Dictionary) -> void:

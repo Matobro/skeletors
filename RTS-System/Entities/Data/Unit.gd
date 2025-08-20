@@ -7,6 +7,7 @@ class_name Unit
 @onready var aggro_collision: CollisionShape2D = $AggroRange/CollisionShape2D
 @onready var hp_bar: Control = $AnimatedSprite2D/HpBar/Control
 @onready var collider = $CollisionShape2D
+@onready var target_marker = $TargetMarker
 
 var owner_id: int
 var data : UnitData
@@ -54,9 +55,10 @@ func create_unit():
 	unit_ai = UnitAI.new(self, command_holder)
 	unit_ai.init_ai()
 	unit_combat = UnitCombat.new(self, data.stats)
-	unit_visual = UnitVisual.new(self, animation_player, hp_bar)
+	unit_visual = UnitVisual.new(self, animation_player, hp_bar, target_marker)
 	unit_ability_manager = UnitAbilityManager.new(self, data)
 	add_child(unit_ai)
+	add_child(unit_visual)
 
 	SpatialGrid.register_unit(self)
 
