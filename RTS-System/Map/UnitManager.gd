@@ -9,7 +9,7 @@ var astar_manager
 func register_unit(unit) -> void:
 	if not units.has(unit):
 		units.append(unit)
-	var radius = unit.unit_scale
+	var radius = unit.unit_visual.unit_scale
 	var covered_cells = grid_manager._get_cells_covered(unit.global_position, radius)
 	for cell in covered_cells:
 		if not grid.has(cell):
@@ -31,7 +31,7 @@ func deregister_unit(unit) -> void:
 		astar_manager.update_occupied_cells(coords_list, false)
 
 func update_unit_position(unit) -> void:
-	var radius = unit.unit_scale
+	var radius = unit.unit_visual.unit_scale
 	var old_coords = unit.get_meta("grid_coords") if unit.has_meta("grid_coords") else []
 	var new_coords = grid_manager._get_cells_covered(unit.global_position, radius)
 

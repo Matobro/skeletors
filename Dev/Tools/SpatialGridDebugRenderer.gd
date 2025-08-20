@@ -83,7 +83,7 @@ func _draw():
 
 	# Draw unit bounds
 	for unit in units:
-		var radius = unit.unit_scale
+		var radius = unit.unit_visual.unit_scale
 		var pos = unit.global_position
 		var _top_left = pos - Vector2(radius, radius)
 		var size = Vector2(radius * 2, radius * 2)

@@ -8,7 +8,6 @@ var is_invunerable: bool = true
 var possible_targets: Array[Unit]
 var friendly_targets: Array[Unit]
 
-
 var parent: Unit
 var stats: BaseStatData
 
@@ -22,23 +21,9 @@ func take_damage(damage: int = 0, attacker = null):
 
 	var reduction = 1.0 - StatModifiers.calculate_armor(stats.armor)
 	var final_damage = damage * reduction
+	apply_damage(final_damage, attacker)
 
-	if final_damage > 0:
-		damage = clamp(final_damage, 1, 9999)
-		stats.current_health -= damage
-		stats.current_health = clamp(stats.current_health, 0, stats.max_health)
-		parent.hp_bar.set_hp_bar(stats.current_health)
-		DamageText.show_text(str(damage), parent.animation_player.global_position)
-	
-		if stats.current_health <= 0:
-			parent.set_selected(false)
-			parent.hp_bar.set_bar_visible(false)
-			dead = true
-			parent.emit_signal("died", parent)
-			parent.unit_ai.set_state("Dying")
-			return
-
-	if attacker and parent.unit_ai.current_state == parent.unit_ai.states["Idle"] and attacker.owner_id != parent.owner_id:
+	if should_aggro(attacker):
 		parent.command_holder.issue_command(
 			"Attack",
 			attacker,
@@ -47,14 +32,38 @@ func take_damage(damage: int = 0, attacker = null):
 			parent.owner_id
 		 )
 
-		alert_nearby_allies(attacker)
+func apply_damage(damage, attacker):
+
+	if damage > 0:
+		var final_damage = clampi(damage, 1, 9999)
+		stats.current_health -= final_damage
+		stats.current_health = clamp(stats.current_health, 0, stats.max_health)
+		parent.hp_bar.set_hp_bar(stats.current_health)
+		DamageText.show_text(str(final_damage), parent.animation_player.global_position)
+	
+	if stats.current_health <= 0:
+		handle_death()
+
+	alert_nearby_allies(attacker)
+
+func handle_death():
+	parent.unit_visual.set_selected(false)
+	parent.hp_bar.set_bar_visible(false)
+	dead = true
+	parent.emit_signal("died", parent)
+	parent.unit_ai.set_state("Dying")
 
 func perform_attack():
-	
 	if parent.unit_ai.combat_state.current_target != null:
 		var attack_target = parent.unit_ai.combat_state.current_target
 		var damage = StatModifiers.calculate_damage(stats.attack_dice_roll, stats.attack_damage)
 		attack_target.unit_combat.take_damage(damage, parent)
+
+func should_aggro(attacker) -> bool:
+	if attacker and parent.unit_ai.current_state == parent.unit_ai.states["Idle"] and attacker.owner_id != parent.owner_id:
+		return true
+	
+	return false
 
 func get_attack_delay() -> float:
 	var attack_speed = stats.attack_speed
@@ -64,10 +73,9 @@ func get_attack_delay() -> float:
 
 func alert_nearby_allies(attacker: Unit) -> void:
 	for unit in friendly_targets:
-		if unit == parent or unit.unit_combat.dead or unit.owner_id != parent.owner_id:
+		if !is_instance_valid(unit) or unit == parent or unit.unit_combat.dead or unit.owner_id != parent.owner_id:
 			continue
 		unit.unit_combat.on_social_aggro(attacker)
-
 
 func on_social_aggro(attacker: Unit):
 	if parent.unit_ai.current_state == parent.unit_ai.states["Idle"]:
@@ -87,7 +95,7 @@ func regenate_health():
 	parent.hp_bar.set_hp_bar(stats.current_health)
 
 func is_within_attack_range(_target) -> bool:
-	return stats.attack_range + 2 > parent.global_position.distance_to(_target) # add slight range boost so units dont get stuck
+	return stats.attack_range > parent.global_position.distance_to(_target)
 
 func compare_distance(target_a, target_b):
 	return parent.position.distance_to(target_a.position) < parent.position.distance_to(target_b.position)

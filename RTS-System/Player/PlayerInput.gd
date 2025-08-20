@@ -109,11 +109,11 @@ func handle_keyboard_commands(event: InputEventKey):
 	elif selected_units.size() > 0:
 		match event.keycode:
 			KEY_Q:
-				selected_units[0].cast_ability(0, get_global_mouse_position(), get_tree().current_scene)
+				selected_units[0].unit_ability_manager.cast_ability(0, get_global_mouse_position(), get_tree().current_scene)
 			KEY_W:
-				selected_units[0].cast_ability(1, get_global_mouse_position(), get_tree().current_scene)
+				selected_units[0].unit_ability_manager.cast_ability(1, get_global_mouse_position(), get_tree().current_scene)
 			KEY_E:
-				selected_units[0].cast_ability(2, get_global_mouse_position(), get_tree().current_scene)
+				selected_units[0].unit_ability_manager.cast_ability(2, get_global_mouse_position(), get_tree().current_scene)
 				
 func handle_mouse_input(event):
 	if !is_input_enabled:
@@ -201,7 +201,7 @@ func on_left_click_released(event_info):
 	### If not dragging and no click target the clear selection if not holding shift
 	elif !event_info.click_target and !event_info.is_queued:
 			for unit in selected_units:
-				unit.set_selected(false)
+				unit.unit_visual.set_selected(false)
 			selected_units.clear()
 			player_ui.clear_control_group()
 
@@ -284,7 +284,7 @@ func select_all_units_of_type(unit):
 	print("called select all")
 	for selected_unit in selected_units:
 		print("Unselecting")
-		selected_unit.set_selected(false)
+		selected_unit.unit_visual.set_selected(false)
 	selected_units.clear()
 	player_ui.clear_control_group()
 
@@ -293,7 +293,7 @@ func select_all_units_of_type(unit):
 
 	for other_unit in UnitHandler.all_units:
 		if other_unit.owner_id == _owner and other_unit.data.name == unit_type:
-			other_unit.set_selected(true)
+			other_unit.unit_visual.set_selected(true)
 			selected_units.append(other_unit)
 			player_ui.add_unit_to_control(other_unit)
 			
@@ -392,7 +392,7 @@ func select_units_in_box(box: Rect2, shift: bool) -> void:
 	# If not holding shift, clear previous selection
 	if !shift:
 		for unit in selected_units:
-			unit.set_selected(false)
+			unit.unit_visual.set_selected(false)
 		selected_units.clear()
 		player_ui.clear_control_group()
 	else:
@@ -403,7 +403,7 @@ func select_units_in_box(box: Rect2, shift: bool) -> void:
 	# Add filtered units
 	for unit in new_selection:
 		if unit not in selected_units:
-			unit.set_selected(true)
+			unit.unit_visual.set_selected(true)
 			selected_units.append(unit)
 			player_ui.add_unit_to_control(unit)
 
@@ -422,7 +422,7 @@ func check_click_hit(mouse_pos: Vector2):
 	
 	if results.size() > 0:
 		var collider = results[0].collider
-		if collider and collider.has_method("set_selected"):
+		if collider and collider.unit_visual.has_method("set_selected"):
 			return collider
 	return null
 
@@ -437,19 +437,19 @@ func select_unit_at_mouse_pos(mouse_pos: Vector2, shift: bool):
 	if not shift:
 		# Clear all selection
 		for unit in selected_units:
-			unit.set_selected(false)
+			unit.unit_visual.set_selected(false)
 		selected_units.clear()
 		player_ui.clear_control_group()
 
 		# Select the clicked unit
-		clicked_unit.set_selected(true)
+		clicked_unit.unit_visual.set_selected(true)
 		selected_units.append(clicked_unit)
 		player_ui.add_unit_to_control(clicked_unit)
 	else:
 		# Shift is held
 		if selected_units.size() == 0:
 			# No current selection, allow any
-			clicked_unit.set_selected(true)
+			clicked_unit.unit_visual.set_selected(true)
 			selected_units.append(clicked_unit)
 			player_ui.add_unit_to_control(clicked_unit)
 		else:
@@ -457,12 +457,12 @@ func select_unit_at_mouse_pos(mouse_pos: Vector2, shift: bool):
 			if clicked_owner == current_owner:
 				if clicked_unit in selected_units:
 					# Deselect if already selected
-					clicked_unit.set_selected(false)
+					clicked_unit.unit_visual.set_selected(false)
 					selected_units.erase(clicked_unit)
 					player_ui.remove_unit_from_control(clicked_unit)
 				else:
 					# Add to selection
-					clicked_unit.set_selected(true)
+					clicked_unit.unit_visual.set_selected(true)
 					selected_units.append(clicked_unit)
 					player_ui.add_unit_to_control(clicked_unit)
 			else:

@@ -1,7 +1,7 @@
 extends UnitState
 
 func enter_state():
-	parent.is_moving = true
+	pass
 
 func exit_state():
 	ai.command_handler.clear()

@@ -46,6 +46,6 @@ func state_logic(delta: float) -> void:
 		var dir = (target_unit.global_position - parent.global_position).normalized()
 		parent.velocity = dir * parent.get_stat("movement_speed")
 		parent.move_and_slide()
-		parent.handle_orientation(dir)
+		parent.unit_visual.handle_orientation(dir)
 	else:
 		ai.pathfinder.follow_path(delta)

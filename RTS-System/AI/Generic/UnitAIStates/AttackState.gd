@@ -46,7 +46,7 @@ func start_attack(target_unit: Node) -> void:
 
 	var animation_speed = parent.get_stat("attack_speed")
 	ai.animation_player.play_animation("attack", animation_speed)
-	parent.handle_orientation((target_unit.global_position - parent.global_position).normalized())
+	parent.unit_visual.handle_orientation((target_unit.global_position - parent.global_position).normalized())
 
 func follow_target(target_unit: Node, delta: float) -> void:
 	# Always update path if target moves or path finished
@@ -62,7 +62,7 @@ func follow_target(target_unit: Node, delta: float) -> void:
 		parent.velocity = dir * parent.get_stat("movement_speed")
 		ai.animation_player.play_animation("walk", ai.pathfinder.get_walk_animation_speed())
 		parent.move_and_slide()
-		parent.handle_orientation(dir)
+		parent.unit_visual.handle_orientation(dir)
 
 	if !parent.unit_combat.is_within_attack_range(target_unit.global_position):
 		# Follow the current path

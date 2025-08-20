@@ -80,7 +80,7 @@ func follow_path(delta: float) -> void:
 	var dir: Vector2 = (next_point - parent.global_position).normalized()
 	parent.velocity = dir * parent.get_stat("movement_speed")
 	parent.move_and_slide()
-	parent.handle_orientation(dir)
+	parent.unit_visual.handle_orientation(dir)
 
 	# Check if reached waypoint
 	if parent.global_position.distance_to(next_point) < 10:

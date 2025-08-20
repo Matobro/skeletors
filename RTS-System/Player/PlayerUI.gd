@@ -269,9 +269,9 @@ func update_unit_ui(data):
 
 	for i in ability_buttons.size():
 		var button = ability_buttons[i]
-		if i < data.parent.abilities.size():
+		if i < data.parent.unit_ability_manager.abilities.size():
 			button.visible = true
-			button.setup(data.parent.abilities[i], data.parent, i)
+			button.setup(data.parent.unit_ability_manager.abilities[i], data.parent, i)
 		else:
 			button.visible = false
 
