@@ -11,7 +11,7 @@ func spawn_unit(unit_data: UnitData = null, pos: Vector2 = Vector2.ZERO, player_
     var scene = unit_scenes.get(unit_data.unit_type, unit_scenes["unit"])
     var unit = scene.instantiate()
     unit.data = unit_data
-    unit.global_position = pos
+    unit.global_position = get_spawn_point(pos)
     get_tree().current_scene.add_child(unit)
 
     # Add to registry
@@ -20,5 +20,8 @@ func spawn_unit(unit_data: UnitData = null, pos: Vector2 = Vector2.ZERO, player_
 
     return unit
 
-func get_spawn_point() -> Vector2:
-    return Vector2.ZERO
+func get_spawn_point(pos) -> Vector2:
+    var desired_cell = SpatialGrid.grid_manager._get_cell_coords(pos)
+    var free_cell = SpatialGrid.astar_manager._get_nearest_spawnable_cell(desired_cell)
+    var spawn_pos = SpatialGrid.grid_manager.cell_center_to_world(free_cell)
+    return spawn_pos

@@ -1,12 +1,17 @@
 extends Node
+
 class_name UnitCombatState
 
 var ai
 var parent
 
 var current_target: Node = null
+
+## Timer used for attack animation. Attack point and attack duration can be changed in [UnitModelData]
 var attack_anim_timer: float = 0.0
+## Timer used for attack cooldown
 var attack_timer: float = 0.0
+## Timer used to checking for aggro
 var aggro_timer: float = 0.0
 
 var is_attack_committed: bool = false
@@ -23,6 +28,7 @@ func clear():
 	current_target = null
 	aggro_timer = 0.0
 
+## Should be called in every state that handles combat
 func update(delta: float):
 	aggro_timer += delta
 	attack_timer -= delta

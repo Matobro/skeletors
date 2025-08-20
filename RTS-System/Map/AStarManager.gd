@@ -123,37 +123,18 @@ func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null) -> Pack
 
 	return smooth_path(world_path)
 
-
-
-# Finds the nearest free tile that is reachable from start_cell
 # Finds the nearest free tile that is reachable from start_cell
 func _get_nearest_reachable_free_cell(target_cell: Vector2, start_cell: Vector2) -> Vector2:
 	var visited := {}
-	var distances := {}
-	var start_id = grid_manager._get_cell_id(start_cell)
-
-	# Priority queue: Array of [cell, priority]
-	var pq := []
-	
-	# Seed with target_cell
-	distances[target_cell] = target_cell.distance_to(start_cell)
-	pq.append([target_cell, distances[target_cell]])
+	var queue := [target_cell]
 	visited[target_cell] = true
 
-	while pq.size() > 0:
-		# Pop lowest-priority element (closest to start)
-		pq.sort_custom(func(a, b): return a[1] < b[1])
-		var current_data = pq.pop_front()
-		var current = current_data[0]
+	while queue.size() > 0:
+		var current = queue.pop_front()
 		var current_id = grid_manager._get_cell_id(current)
 
-		# If it's free & path exists, return it
-		if _is_free_cell(current) and astar.has_point(current_id):
-			if !astar.has_point(start_id) or !astar.has_point(current_id):
-				return start_cell #to stop crashing when units glitch out of the map rarely
-				
-			if astar and astar.get_id_path(start_id, current_id).size() > 0:
-				return current
+		if _is_free_cell(current) and astar.has_point(current_id) and not astar.is_point_disabled(current_id):
+			return current  # found a reachable free cell
 
 		# Explore neighbors
 		for dir in [
@@ -165,24 +146,52 @@ func _get_nearest_reachable_free_cell(target_cell: Vector2, start_cell: Vector2)
 				continue
 			if visited.has(neighbor):
 				continue
-			visited[neighbor] = true
-			var priority = neighbor.distance_to(start_cell)
-			distances[neighbor] = priority
-			pq.append([neighbor, priority])
 
-	# Fallback if nothing found
+			visited[neighbor] = true
+			queue.append(neighbor)
+
+	# fallback
 	return start_cell
 
+# Finds the nearest free cell suitable for spawning
+func _get_nearest_spawnable_cell(desired_cell: Vector2) -> Vector2:
+	var visited := {}
+	var queue := [desired_cell]
+	visited[desired_cell] = true
 
-func _is_free_cell(cell: Vector2, ignore_unit=null) -> bool:
-	if ignore_unit != null:
-		if cell in occupied_cells and occupied_cells[cell] == ignore_unit:
-			return true
+	while queue.size() > 0:
+		var current = queue.pop_front()
 
-	return grid.has(cell) and grid[cell].size() == 0 and not cell in occupied_cells
+		# ✅ Return as soon as we find a spawnable one
+		if _is_spawnable_cell(current):
+			return current
 
+		# Explore neighbors (cardinal + diagonal)
+		for dir in [
+			Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1),
+			Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)
+		]:
+			var neighbor = current + dir
+			if not grid_manager._is_in_grid(neighbor):
+				continue
+			if visited.has(neighbor):
+				continue
 
+			visited[neighbor] = true
+			queue.append(neighbor)
 
+	# fallback (no free cell found)
+	return desired_cell
+
+func _is_spawnable_cell(cell: Vector2) -> bool:
+	return grid.has(cell) and grid[cell].size() == 0 and astar.has_point(grid_manager._get_cell_id(cell)) and astar.get_point_weight_scale(grid_manager._get_cell_id(cell)) <= 1.0
+
+# For pathfinding: treat only disabled points as blocked
+func _is_free_cell(cell: Vector2, ignore_unit = null) -> bool:
+	if ignore_unit != null and cell in occupied_cells and occupied_cells[cell] == ignore_unit:
+		return true
+
+	return grid.has(cell) and astar.has_point(grid_manager._get_cell_id(cell)) and not astar.is_point_disabled(grid_manager._get_cell_id(cell))
 func smooth_path(path: PackedVector2Array) -> PackedVector2Array:
 	if path.size() <= 2:
 		return path.duplicate()

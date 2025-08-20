@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=4 format=3 uid="uid://fh28myfor7wx"]
+
+[ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="1_f65jk"]
+[ext_resource type="Script" uid="uid://dqe50qceubild" path="res://RTS-System/Entities/Data/HeroStatData.gd" id="2_xhrv3"]
+
+[sub_resource type="Resource" id="Resource_aksv5"]
+script = ExtResource("2_xhrv3")
+main_stat = "strength"
+strength = 5
+agility = 3
+intelligence = 2
+strength_per_level = 3
+agility_per_level = 2
+intelligence_per_level = 1
+base_max_hp = 50.0
+base_max_mana = 0.0
+base_health_regen = 0.1
+base_mana_regen = 0.1
+base_armor = 1
+base_movement_speed = 330
+base_attack_speed = 1.0
+base_damage = 15
+base_range = 75
+attack_dice_roll = 3
+xp_yield = 50
+metadata/_custom_type_script = "uid://dqe50qceubild"
+
+[resource]
+script = ExtResource("1_f65jk")
+power_level = 0
+is_spawnable_enemy = false
+unit_type = "hero"
+name = ""
+description = ""
+stats = SubResource("Resource_aksv5")
+is_ranged = false
+metadata/_custom_type_script = "uid://oeoy2vl8vgue"

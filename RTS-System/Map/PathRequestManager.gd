@@ -8,6 +8,7 @@ var grid_manager
 
 signal path_ready(unit, path: PackedVector2Array, request_id)
 
+## Queues a path generation for [unit] unless [request_id] already exists in queue. [target_unit] can be specified and it will be used in pathfinding
 func queue_unit_for_path(unit, request_id, target_unit = null):
 	var unit_pathfinder = unit.unit_ai.pathfinder
 	var unit_commands = unit.unit_ai.command_handler
