@@ -39,7 +39,7 @@ window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/ManifestGenerator/plugin.cfg", "res://addons/UnitCreator/plugin.cfg")
+enabled=PackedStringArray("res://addons/LineCounter/plugin.cfg", "res://addons/ManifestGenerator/plugin.cfg", "res://addons/UnitCreator/plugin.cfg")
 
 [global_group]
 
