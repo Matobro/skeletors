@@ -14,7 +14,7 @@ func _process(delta):
 	if regen_tick >= REGEN_INTERVAL:
 		regen_tick = 0.0
 		for unit in all_units:
-			unit.regenate_health()
+			unit.unit_combat.regenate_health()
 			
 func register_unit(unit):
 	# Add unit to registry

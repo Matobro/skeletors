@@ -58,7 +58,7 @@ func perform_wave():
 
 		print("hit ", target)
 		var damage = ability_config.damage_per_wave
-		target.take_damage(damage)
+		target.unit_combat.take_damage(damage)
 
 		#if ability_config.effect_debuff != null:
 			#target.apply.effect(ability_config.effect_debuff)

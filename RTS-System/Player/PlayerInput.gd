@@ -152,7 +152,7 @@ func handle_mouse_input(event):
 			on_mouse_drag(event_info)
 
 func cleanup_invalid_units():
-	selected_units = selected_units.filter(func(u): return u != null and !u.dead)
+	selected_units = selected_units.filter(func(u): return u != null and !u.unit_combat.dead)
 
 ####################################################################################
 ## INPUT BEHAVIOUR GOES HERE                                                      ##

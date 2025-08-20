@@ -27,6 +27,7 @@ func set_ready():
 func _physics_process(delta):
 	if !initialized or current_state == null:
 		return
+	self.combat_state.update(delta)
 	current_state.state_logic(delta)
 	devstate.text = state
 	

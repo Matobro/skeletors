@@ -72,4 +72,4 @@ func _on_timer_timeout():
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.owner_id == 10:
-		body.take_damage(damage)
+		body.unit_combat.take_damage(damage)

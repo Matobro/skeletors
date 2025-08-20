@@ -58,8 +58,8 @@ func clear() -> void:
 		return
 
 	ai.pathfinder.reset()
-	ai.parent.attack_anim_timer = 0.0
-	ai.parent.is_attack_committed = false
+	ai.combat_state.attack_anim_timer = 0.0
+	ai.combat_state.is_attack_committed = false
 	ai.animation_player.stop()
 
 func _apply_command(cmd: Dictionary) -> void:

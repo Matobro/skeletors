@@ -5,7 +5,13 @@ var ai
 var parent
 
 var current_target: Node = null
+var attack_anim_timer: float = 0.0
+var attack_timer: float = 0.0
 var aggro_timer: float = 0.0
+
+var is_attack_committed: bool = false
+var has_attacked: bool = false
+
 
 const AGGRO_CHECK_INTERVAL := 0.25
 
@@ -19,16 +25,20 @@ func clear():
 
 func update(delta: float):
 	aggro_timer += delta
+	attack_timer -= delta
+
+	if ai.state != "Attack" or ai.state != "Attack_move":
+		return
 
 	# check for new targets in range
 	if aggro_timer >= AGGRO_CHECK_INTERVAL:
 		aggro_timer = 0
-		var enemy = parent.closest_enemy_in_aggro_range()
+		var enemy = parent.unit_combat.closest_enemy_in_aggro_range()
 		if enemy != null and should_switch_target(enemy):
 			set_target(enemy)
 
 	# Validate current target
-	if current_target != null and (!is_instance_valid(current_target) or current_target.dead):
+	if current_target != null and (!is_instance_valid(current_target) or current_target.unit_combat.dead):
 		current_target = null
 		
 		if ai.command_handler.current_command != {} and ai.command_handler.current_command.type == "Attack":
@@ -61,7 +71,7 @@ func should_switch_target(new_target: Node) -> bool:
 	return new_dist + 16 < current_dist
 
 func set_target(target: Node) -> void:
-	if target == null or !is_instance_valid(target) or target.dead:
+	if target == null or !is_instance_valid(target) or target.unit_combat.dead:
 		return
 
 	current_target = target
@@ -78,7 +88,7 @@ func set_target(target: Node) -> void:
 	ai.command_handler.process_next_command()
 
 func is_target_unreachable(target: Node) -> bool:
-	if parent.is_within_attack_range(target.global_position):
+	if parent.unit_combat.is_within_attack_range(target.global_position):
 		return false
 	# If path ended but still out of range-> unreachable
 	if !ai.pathfinder.path_requested and ai.pathfinder.path_index >= ai.pathfinder.path.size():
@@ -89,8 +99,8 @@ func find_alternate_target() -> Node:
 	# Find nearest reachable enemy
 	var best: Node = null
 	var best_dist = INF
-	for e in parent.possible_targets:
-		if e != current_target and !e.dead:
+	for e in parent.unit_combat.possible_targets:
+		if e != current_target and !e.unit_combat.dead:
 			var dist = parent.global_position.distance_to(e.global_position)
 			if dist < best_dist:
 				best_dist = dist

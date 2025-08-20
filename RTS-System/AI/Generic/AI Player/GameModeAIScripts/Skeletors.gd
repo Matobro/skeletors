@@ -18,7 +18,7 @@ func update(delta):
 		for unit in units:
 			if unit.is_ready:
 				var target = find_closest_enemy(unit)
-				if target and is_instance_valid(target) and !target.dead and (unit.unit_ai.state == "Idle" or unit.unit_ai.state == "Move"):
+				if target and is_instance_valid(target) and !target.unit_combat.dead and (unit.unit_ai.state == "Idle" or unit.unit_ai.state == "Move"):
 					unit.command_holder.issue_command("Attack", target, target.global_position, false, 10)
 
 func find_closest_enemy(unit) -> Unit:

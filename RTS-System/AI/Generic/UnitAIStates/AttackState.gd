@@ -16,24 +16,22 @@ func state_logic(delta: float) -> void:
 	var target_unit = ai.combat_state.current_target
 
 	# No valid target
-	if target_unit == null or !is_instance_valid(target_unit) or target_unit.dead:
+	if target_unit == null or !is_instance_valid(target_unit) or target_unit.unit_combat.dead:
 		handle_no_target()
 		return
 
 	if target_unit == parent:
 		return
 
-	parent.attack_target = target_unit
-
 	# If currently attacking
-	if parent.is_attack_committed:
+	if ai.combat_state.is_attack_committed:
 		process_attack_animation(delta, target_unit)
 	else:
 		try_to_attack_or_follow(target_unit, delta)
 
 func try_to_attack_or_follow(target_unit: Node, delta: float) -> void:
 	# Attack if in range and ready
-	if parent.attack_timer <= 0.0 and parent.is_within_attack_range(target_unit.global_position):
+	if ai.combat_state.attack_timer <= 0.0 and parent.unit_combat.is_within_attack_range(target_unit.global_position):
 		start_attack(target_unit)
 	else:
 		# Move toward target using pathfinder
@@ -42,9 +40,9 @@ func try_to_attack_or_follow(target_unit: Node, delta: float) -> void:
 func start_attack(target_unit: Node) -> void:
 	ai.animation_player.stop()
 	parent.velocity = Vector2.ZERO
-	parent.is_attack_committed = true
-	parent.has_attacked = false
-	parent.attack_anim_timer = 0.0
+	ai.combat_state.is_attack_committed = true
+	ai.combat_state.has_attacked = false
+	ai.combat_state.attack_anim_timer = 0.0
 
 	var animation_speed = parent.get_stat("attack_speed")
 	ai.animation_player.play_animation("attack", animation_speed)
@@ -59,36 +57,36 @@ func follow_target(target_unit: Node, delta: float) -> void:
 		ai.pathfinder.request_path()
 	
 	# Nudge toward target if path ended but still out of range
-	if ai.pathfinder.path_index >= ai.pathfinder.path.size() and !parent.is_within_attack_range(target_unit.global_position):
+	if ai.pathfinder.path_index >= ai.pathfinder.path.size() and !parent.unit_combat.is_within_attack_range(target_unit.global_position):
 		var dir = (target_unit.global_position - parent.global_position).normalized()
 		parent.velocity = dir * parent.get_stat("movement_speed")
 		ai.animation_player.play_animation("walk", ai.pathfinder.get_walk_animation_speed())
 		parent.move_and_slide()
 		parent.handle_orientation(dir)
 
-	if !parent.is_within_attack_range(target_unit.global_position):
+	if !parent.unit_combat.is_within_attack_range(target_unit.global_position):
 		# Follow the current path
 		ai.pathfinder.follow_path(delta)
 
 func process_attack_animation(delta: float, target_unit: Node) -> void:
-	parent.attack_anim_timer += delta
+	ai.combat_state.attack_anim_timer += delta
 
 	var anim_speed = parent.get_stat("attack_speed")
 	var attack_point_scaled = parent.data.unit_model_data.animation_attack_point / anim_speed
 	var attack_duration_scaled = parent.data.unit_model_data.animation_attack_duration / anim_speed
 
-	if !parent.has_attacked and parent.attack_anim_timer >= attack_point_scaled:
+	if !ai.combat_state.has_attacked and ai.combat_state.attack_anim_timer >= attack_point_scaled:
 		if parent.data.is_ranged:
 			spawn_projectile(target_unit)
 		else:
-			parent.perform_attack()
-		parent.has_attacked = true
-		parent.attack_timer = parent.get_attack_delay()
+			parent.unit_combat.perform_attack()
+		ai.combat_state.has_attacked = true
+		ai.combat_state.attack_timer = parent.unit_combat.get_attack_delay()
 
-	if parent.attack_anim_timer >= attack_duration_scaled:
-		parent.attack_anim_timer = 0.0
-		parent.has_attacked = false
-		parent.is_attack_committed = false
+	if ai.combat_state.attack_anim_timer >= attack_duration_scaled:
+		ai.combat_state.attack_anim_timer = 0.0
+		ai.combat_state.has_attacked = false
+		ai.combat_state.is_attack_committed = false
 
 func spawn_projectile(target_unit: Node) -> void:
 	var projectile_scene = parent.data.unit_model_data.projectile_scene
@@ -112,7 +110,7 @@ func handle_no_target() -> void:
 	# Clear current command if it has a dead target
 	if ai.command_handler.current_command != {}:
 		var cmd = ai.command_handler.current_command
-		if cmd.has("target_unit") and (cmd.target_unit == null or !is_instance_valid(cmd.target_unit) or cmd.target_unit.dead):
+		if cmd.has("target_unit") and (cmd.target_unit == null or !is_instance_valid(cmd.target_unit) or cmd.target_unit.unit_combat.dead):
 			ai.command_handler.current_command = {}  # <-- Clear it
 			ai.command_handler.clear()              # Reset path, attack timers, etc.
 
