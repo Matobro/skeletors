@@ -40,13 +40,18 @@ func try_to_attack_or_follow(target_unit: Node, delta: float) -> void:
 func start_attack(target_unit: Node) -> void:
 	ai.animation_player.stop()
 	parent.velocity = Vector2.ZERO
+	
 	ai.combat_state.is_attack_committed = true
 	ai.combat_state.has_attacked = false
 	ai.combat_state.attack_anim_timer = 0.0
 
-	var animation_speed = parent.get_stat("attack_speed")
-	ai.animation_player.play_animation("attack", animation_speed)
-	parent.unit_visual.handle_orientation((target_unit.global_position - parent.global_position).normalized())
+	var attack_speed = parent.get_stat("attack_speed")
+	var anim_speed = 1.0 * attack_speed
+	ai.animation_player.play_animation("attack", anim_speed)
+
+	parent.unit_visual.handle_orientation(
+		(target_unit.global_position - parent.global_position).normalized()
+	)
 
 func follow_target(target_unit: Node, delta: float) -> void:
 	# Always update path if target moves or path finished
@@ -71,11 +76,16 @@ func follow_target(target_unit: Node, delta: float) -> void:
 func process_attack_animation(delta: float, target_unit: Node) -> void:
 	ai.combat_state.attack_anim_timer += delta
 
-	var anim_speed = parent.get_stat("attack_speed")
-	var attack_point_scaled = parent.data.unit_model_data.animation_attack_point / anim_speed
-	var attack_duration_scaled = parent.data.unit_model_data.animation_attack_duration / anim_speed
+	var spd = max(parent.get_stat("attack_speed"), 0.01)
+	var base_len = parent.animation_player.get_animation_speed("attack")
+	var point_frac = clamp(parent.data.unit_model_data.animation_attack_point, 0.0, 0.999)
 
-	if !ai.combat_state.has_attacked and ai.combat_state.attack_anim_timer >= attack_point_scaled:
+	# Attack point and duration in seconds (scaled by speed)
+	var attack_point_time = (base_len * point_frac) / spd
+	var attack_end_time   = base_len / spd
+
+	# Apply damage at the correct frame
+	if !ai.combat_state.has_attacked and ai.combat_state.attack_anim_timer >= attack_point_time:
 		if parent.data.is_ranged:
 			spawn_projectile(target_unit)
 		else:
@@ -83,7 +93,8 @@ func process_attack_animation(delta: float, target_unit: Node) -> void:
 		ai.combat_state.has_attacked = true
 		ai.combat_state.attack_timer = parent.unit_combat.get_attack_delay()
 
-	if ai.combat_state.attack_anim_timer >= attack_duration_scaled:
+	# Unlock after animation ends
+	if ai.combat_state.attack_anim_timer >= attack_end_time:
 		ai.combat_state.attack_anim_timer = 0.0
 		ai.combat_state.has_attacked = false
 		ai.combat_state.is_attack_committed = false

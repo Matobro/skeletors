@@ -90,6 +90,8 @@ func _create_sprite_frames(unit_name: String) -> SpriteFrames:
     var animations := ["attack", "idle", "dying", "walk"]
     for anim in animations:
         sprite_frames.add_animation(anim)
-        sprite_frames.set_animation_loop(anim, anim != "dying")
+
+    sprite_frames.set_animation_loop("attack", false)
+    sprite_frames.set_animation_loop("dying", false)
 
     return sprite_frames

@@ -9,10 +9,8 @@ class_name UnitModelData
 @export var scale: Vector2 = Vector2.ONE
 ## Tweak if selection circle etc misaligned
 @export var offset: Vector2
-## At which point (in seconds) of the animation damage is dealt
+## At which point (in seconds) of the animation damage is dealt or for ranged units when projectile is fired
 @export var animation_attack_point: float = 0.5
-## Should be attack animation length, scaling done elsewhere
-@export var animation_attack_duration: float = 1.0
 ## Projectile scene for ranged attacks - not needed if melee
 @export var projectile_scene = preload("res://RTS-System/Entities/Projectiles/HomingProjectile.tscn")
 ## Projectile speed

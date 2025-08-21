@@ -13,7 +13,7 @@
 script = ExtResource("2_hfqve")
 main_stat = "strength"
 strength = 300
-agility = 200
+agility = 100
 intelligence = 100
 strength_per_level = 50
 agility_per_level = 30
@@ -31,10 +31,6 @@ attack_dice_roll = 0.2
 xp_yield = 50
 metadata/_custom_type_script = "uid://dqe50qceubild"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_qmg35"]
-atlas = ExtResource("5_s3cu8")
-region = Rect2(0, 0, 50, 50)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_jui2m"]
 atlas = ExtResource("5_s3cu8")
 region = Rect2(50, 0, 50, 50)
@@ -42,6 +38,10 @@ region = Rect2(50, 0, 50, 50)
 [sub_resource type="AtlasTexture" id="AtlasTexture_hhf3s"]
 atlas = ExtResource("5_s3cu8")
 region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s3cu8"]
+atlas = ExtResource("5_s3cu8")
+region = Rect2(0, 0, 50, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_48mhl"]
 atlas = ExtResource("6_jr6jy")
@@ -104,15 +104,15 @@ resource_name = "GigaTestHero_spriteframes"
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_qmg35")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_jui2m")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_hhf3s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s3cu8")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack",
 "speed": 5.0
 }, {
@@ -181,7 +181,6 @@ sprite_frames = SubResource("SpriteFrames_s3cu8")
 scale = Vector2(3, 3)
 offset = Vector2(0, -20)
 animation_attack_point = 0.5
-animation_attack_duration = 1.0
 projectile_scene = ExtResource("3_jvn7s")
 projectile_speed = 800
 metadata/_custom_type_script = "uid://dq4e1yj8njkif"

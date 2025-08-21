@@ -5,10 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://crp7vreakmdh7" path="res://RTS-System/Entities/Units/UnitData/TestUnit/Sprites/Test_Unit_Idle.png" id="3_irfsl"]
 [ext_resource type="Texture2D" uid="uid://bjp14t015lfw6" path="res://RTS-System/Entities/Units/UnitData/TestUnit/Sprites/Test_Unit_Walk.png" id="4_u2ur4"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xduqe"]
-atlas = ExtResource("1_8asxt")
-region = Rect2(0, 0, 50, 50)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_ya8ur"]
 atlas = ExtResource("1_8asxt")
 region = Rect2(50, 0, 50, 50)
@@ -16,6 +12,10 @@ region = Rect2(50, 0, 50, 50)
 [sub_resource type="AtlasTexture" id="AtlasTexture_nyo77"]
 atlas = ExtResource("1_8asxt")
 region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xduqe"]
+atlas = ExtResource("1_8asxt")
+region = Rect2(0, 0, 50, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iy3vk"]
 atlas = ExtResource("2_wsja8")
@@ -72,9 +72,6 @@ region = Rect2(100, 0, 50, 50)
 [resource]
 animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xduqe")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ya8ur")
 }, {

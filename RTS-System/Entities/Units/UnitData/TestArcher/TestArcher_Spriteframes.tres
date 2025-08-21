@@ -5,10 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://k2r1servkptg" path="res://RTS-System/Entities/Units/UnitData/TestArcher/Sprites/TestArcher_idle.png" id="3_vvntm"]
 [ext_resource type="Texture2D" uid="uid://cnwgwudsl6ppo" path="res://RTS-System/Entities/Units/UnitData/TestArcher/Sprites/TestArcher_walk.png" id="4_bwe73"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_wu5dw"]
-atlas = ExtResource("1_21laa")
-region = Rect2(0, 0, 50, 50)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_63hfp"]
 atlas = ExtResource("1_21laa")
 region = Rect2(50, 0, 50, 50)
@@ -16,6 +12,10 @@ region = Rect2(50, 0, 50, 50)
 [sub_resource type="AtlasTexture" id="AtlasTexture_kr3m3"]
 atlas = ExtResource("1_21laa")
 region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wu5dw"]
+atlas = ExtResource("1_21laa")
+region = Rect2(0, 0, 50, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h3bev"]
 atlas = ExtResource("2_ggj7h")
@@ -77,13 +77,13 @@ region = Rect2(100, 0, 50, 50)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_wu5dw")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_63hfp")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_kr3m3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wu5dw")
 }],
 "loop": false,
 "name": &"attack",
