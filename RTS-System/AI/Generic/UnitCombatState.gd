@@ -34,9 +34,6 @@ func update(delta: float):
 	aggro_timer += delta
 	attack_timer -= delta
 
-	if ai.state != "Attack" and ai.state != "Attack_move":
-		return
-
 	# check for new targets in range
 	if aggro_timer >= AGGRO_CHECK_INTERVAL:
 		aggro_timer = 0
@@ -44,6 +41,9 @@ func update(delta: float):
 		if enemy != null and should_switch_target(enemy):
 			set_target(enemy)
 
+	if ai.state != "Attack" and ai.state != "Attack_move":
+		return
+		
 	# Validate current target
 	if current_target != null and (!is_instance_valid(current_target) or current_target.unit_combat.dead):
 		current_target = null

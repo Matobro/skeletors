@@ -9,7 +9,7 @@ func enter_state():
 	ai.animation_player.play("dying")
 
 func exit_state():
-	ai.clear_unit_state()
+	pass
 
 func state_logic(_delta):
 	pass
