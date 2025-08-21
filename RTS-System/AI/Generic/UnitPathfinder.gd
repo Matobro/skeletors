@@ -23,7 +23,7 @@ var last_position: Vector2 = Vector2.INF
 # Constants
 const PATH_TIMEOUT := 1.5
 const STUCK_TIME_THRESHOLD := 1.0
-const STUCK_DISTANCE_THRESHOLD := 5.0
+const STUCK_DISTANCE_THRESHOLD := 10.0
 const PATH_RECALC_THRESHOLD := 40.0
 
 func _init(unit_ai):
@@ -62,8 +62,8 @@ func get_walk_animation_speed() -> float:
 	return animation_speed
 
 func follow_path(delta: float) -> void:
-
 	ai.animation_player.play_animation("walk", get_walk_animation_speed())
+
 	# Request path if no path yet
 	if path.size() <= 0:
 		request_path()
@@ -71,38 +71,33 @@ func follow_path(delta: float) -> void:
 		return
 
 	# Check if reached end
-	if path_index >= path.size() and path.size() > 0:
+	if path_index >= path.size():
 		path_requested = false
 		ai.animation_player.stop()
 		return
 
+	# Movement logic
 	var next_point: Vector2 = path[path_index]
 	var dir: Vector2 = (next_point - parent.global_position).normalized()
 	parent.velocity = dir * parent.get_stat("movement_speed")
 	parent.move_and_slide()
 	parent.unit_visual.handle_orientation(dir)
 
-	# Check if reached waypoint
+	# Waypoint reached
 	if parent.global_position.distance_to(next_point) < 10:
 		path_index += 1
 
-	# Timeout check
-	path_timeout_timer += delta
-	if path_timeout_timer >= PATH_TIMEOUT:
-		print("Path request timed out, retrying")
-		path_requested = false
-		request_path()
+	# Timeout check if waiting for a path
+	if path_requested:
+		path_timeout_timer += delta
+		if path_timeout_timer >= PATH_TIMEOUT:
+			print("Path request timed out, retrying")
+			path_requested = false
+			request_path()
 
 	# Stuck check
 	_check_stuck(delta)
 	SpatialGrid.update_unit_position(parent)
-
-func update_target(new_target: Vector2) -> void:
-	if last_requested_target.distance_to(new_target) > PATH_RECALC_THRESHOLD and !path_requested:
-		print("Recalculating path")
-		last_requested_target = new_target
-		request_path()
-
 
 func on_path_ready(unit: Unit, new_path: PackedVector2Array, request_id: int) -> void:
 	if request_id != current_request_id or new_path.size() <= 0 or unit != parent:
