@@ -9,4 +9,4 @@ func exit_state():
 	ai.command_handler.clear()
 
 func state_logic(_delta):
-	pass
+	ai.process_next_command()

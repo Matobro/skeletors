@@ -6,7 +6,7 @@ func enter_state():
 	parent.set_collision_layer(0)
 	parent.set_collision_mask(0)
 	ai.animation_player.connect("animation_finished", Callable(ai, "_on_death_animation_finished"), CONNECT_ONE_SHOT)
-	ai.animation_player.play("dying")
+	ai.animation_player.play_animation("dying", 1.0)
 
 func exit_state():
 	pass

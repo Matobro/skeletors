@@ -19,8 +19,10 @@ func _init(parent_ref, stats_ref) -> void:
 func take_damage(damage: int = 0, attacker = null):
 	if dead or is_invunerable: return
 
+	# Invert calculated armor. calculate_armor returns "percentage blocked" so you need to invert it, ie only take damage equal to 100% - armor
 	var reduction = 1.0 - StatModifiers.calculate_armor(stats.armor)
 	var final_damage = damage * reduction
+
 	apply_damage(final_damage, attacker)
 
 	if should_aggro(attacker):
@@ -73,7 +75,7 @@ func get_attack_delay() -> float:
 
 func alert_nearby_allies(attacker: Unit) -> void:
 	for unit in friendly_targets:
-		if !is_instance_valid(unit) or !should_aggro(attacker):
+		if !is_instance_valid(unit) or !is_instance_valid(unit.unit_combat) or !should_aggro(attacker):
 			continue
 		unit.unit_combat.on_social_aggro(attacker)
 

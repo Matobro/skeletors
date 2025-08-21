@@ -1,0 +1,200 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=29 format=3 uid="uid://dqi8t2hrqk87p"]
+
+[ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="1_65cuf"]
+[ext_resource type="Script" uid="uid://dqe50qceubild" path="res://RTS-System/Entities/Data/HeroStatData.gd" id="2_hfqve"]
+[ext_resource type="PackedScene" uid="uid://chxscd5c7iu64" path="res://RTS-System/Entities/Projectiles/HomingProjectile.tscn" id="3_jvn7s"]
+[ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="4_l5nal"]
+[ext_resource type="Texture2D" uid="uid://dk6w6lq288o7f" path="res://RTS-System/Entities/Units/UnitData/TestUnit/Sprites/Test_Unit_Attack.png" id="5_s3cu8"]
+[ext_resource type="Texture2D" uid="uid://bkqsiummdyd65" path="res://RTS-System/Entities/Units/UnitData/TestUnit/Sprites/Test_Unit_Death.png" id="6_jr6jy"]
+[ext_resource type="Texture2D" uid="uid://crp7vreakmdh7" path="res://RTS-System/Entities/Units/UnitData/TestUnit/Sprites/Test_Unit_Idle.png" id="7_68xbd"]
+[ext_resource type="Texture2D" uid="uid://bjp14t015lfw6" path="res://RTS-System/Entities/Units/UnitData/TestUnit/Sprites/Test_Unit_Walk.png" id="8_0cr3r"]
+
+[sub_resource type="Resource" id="Resource_aksv5"]
+script = ExtResource("2_hfqve")
+main_stat = "strength"
+strength = 300
+agility = 200
+intelligence = 100
+strength_per_level = 50
+agility_per_level = 30
+intelligence_per_level = 20
+base_max_hp = 250.0
+base_max_mana = 0.0
+base_health_regen = 0.1
+base_mana_regen = 0.1
+base_armor = 1
+base_movement_speed = 330
+base_attack_speed = 1.0
+base_damage = 15
+base_range = 100
+attack_dice_roll = 0.2
+xp_yield = 50
+metadata/_custom_type_script = "uid://dqe50qceubild"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qmg35"]
+atlas = ExtResource("5_s3cu8")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jui2m"]
+atlas = ExtResource("5_s3cu8")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hhf3s"]
+atlas = ExtResource("5_s3cu8")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_48mhl"]
+atlas = ExtResource("6_jr6jy")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ee1yr"]
+atlas = ExtResource("6_jr6jy")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c41b6"]
+atlas = ExtResource("6_jr6jy")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovpi3"]
+atlas = ExtResource("6_jr6jy")
+region = Rect2(150, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wntpr"]
+atlas = ExtResource("6_jr6jy")
+region = Rect2(200, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k2puc"]
+atlas = ExtResource("6_jr6jy")
+region = Rect2(250, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f0j2r"]
+atlas = ExtResource("6_jr6jy")
+region = Rect2(300, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ao0fh"]
+atlas = ExtResource("6_jr6jy")
+region = Rect2(350, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_coq7m"]
+atlas = ExtResource("6_jr6jy")
+region = Rect2(400, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e8cp8"]
+atlas = ExtResource("7_68xbd")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p1t44"]
+atlas = ExtResource("7_68xbd")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jx1dc"]
+atlas = ExtResource("8_0cr3r")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i6he6"]
+atlas = ExtResource("8_0cr3r")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xqw5w"]
+atlas = ExtResource("8_0cr3r")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_s3cu8"]
+resource_name = "GigaTestHero_spriteframes"
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qmg35")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jui2m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hhf3s")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_48mhl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ee1yr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c41b6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovpi3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wntpr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k2puc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f0j2r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ao0fh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_coq7m")
+}],
+"loop": false,
+"name": &"dying",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e8cp8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p1t44")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jx1dc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i6he6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xqw5w")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="Resource" id="Resource_jr6jy"]
+resource_name = "GigaTestHero_modeldata"
+script = ExtResource("4_l5nal")
+sprite_frames = SubResource("SpriteFrames_s3cu8")
+scale = Vector2(3, 3)
+offset = Vector2(0, -20)
+animation_attack_point = 0.5
+animation_attack_duration = 1.0
+projectile_scene = ExtResource("3_jvn7s")
+projectile_speed = 800
+metadata/_custom_type_script = "uid://dq4e1yj8njkif"
+
+[resource]
+resource_name = "GigaTestHero"
+script = ExtResource("1_65cuf")
+power_level = 0
+is_spawnable_enemy = false
+unit_model_data = SubResource("Resource_jr6jy")
+unit_type = "hero"
+name = "Giga TestHero"
+description = ""
+stats = SubResource("Resource_aksv5")
+is_ranged = false
+metadata/_custom_type_script = "uid://oeoy2vl8vgue"

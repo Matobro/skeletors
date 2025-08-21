@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="UnitModelData" load_steps=4 format=3 uid="uid://ejxci8ygrvo7"]
+
+[ext_resource type="PackedScene" uid="uid://chxscd5c7iu64" path="res://RTS-System/Entities/Projectiles/HomingProjectile.tscn" id="1_barhf"]
+[ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="2_jjoi5"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_s3cu8"]
+resource_name = "GigaTestHero_spriteframes"
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"dying",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[resource]
+resource_name = "GigaTestHero_modeldata"
+script = ExtResource("2_jjoi5")
+sprite_frames = SubResource("SpriteFrames_s3cu8")
+scale = Vector2(2, 2)
+offset = Vector2(0, 0)
+animation_attack_point = 0.5
+animation_attack_duration = 1.0
+projectile_scene = ExtResource("1_barhf")
+projectile_speed = 800
+metadata/_custom_type_script = "uid://dq4e1yj8njkif"

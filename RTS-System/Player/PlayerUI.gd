@@ -252,7 +252,7 @@ func update_unit_ui(data):
 
 	name_label.text = data.name
 
-	var fixed_damage = get_damage(stats)
+	var fixed_damage = StatModifiers.get_damage_range(stats.attack_damage, stats.attack_dice_roll)
 	stat_labels["damage"].text = str(fixed_damage[0], "-" , fixed_damage[1])
 
 	stat_labels["armor"].text = str(stats.armor)
@@ -275,22 +275,13 @@ func update_unit_ui(data):
 		else:
 			button.visible = false
 
-func get_damage(data):
-	var damage = data.attack_damage
-	var dice = data.attack_dice_roll
-	var _min = damage - dice
-	var _max = damage + dice
-	var clamp_min = clamp(_min, 1, 999999)
-	var arr = [clamp_min, _max]
-	return arr
-
 func gather_stat_info(data, stat_name):
 	var main_stat = ""
 	if data.unit_type == "hero":
 		main_stat = data.stats.main_stat
 	match stat_name:
 		"damage":
-			var damage_range = get_damage(data.stats)
+			var damage_range = StatModifiers.get_damage_range(data.stats.attack_damage, data.stats.attack_dice_roll)
 			return str("Damage: %d - %d" % [damage_range[0], damage_range[1]], "\n",
 			"\nAttacks per second : ", data.stats.attack_speed)
 		"armor":

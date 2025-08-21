@@ -23,12 +23,9 @@ class_name BaseStatData
 @export var base_damage: int = 2
 ## Units base range, without any bonuses
 @export var base_range: int = 50
-## Units dice roll (damage variation)
-## [min = damage - dice roll]
-## [max = damage + dice roll]
-## [damage = randi_range(min, max)]
-## [damage = clampi(damage, 1, 9999)]
-@export var attack_dice_roll: int = 2
+## Damage variance in percentage. 0.1 = 10%
+## 100 damage + 0.1 dice roll = [90-110]
+@export_range (0.0, 1.0) var attack_dice_roll: float = 0.1
 ## How much unit gives xp when killed
 @export var xp_yield: int = 50
 

@@ -15,7 +15,7 @@ base_movement_speed = 1
 base_attack_speed = 0.1
 base_damage = 1
 base_range = 50
-attack_dice_roll = 1
+attack_dice_roll = 0.0
 xp_yield = 0
 metadata/_custom_type_script = "uid://01ohikrtxe7k"
 

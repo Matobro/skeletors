@@ -32,6 +32,7 @@ func set_selection_circle_position(unit):
 	selection_circle_back.position.y = selection_circle_front.position.y
 	unit.collider.global_position = unit.global_position
 
+## Plays [animation] with [animation_speed]. 0.1 = 0.1x speed, 2.0 = 2x speed
 func play_animation(animation_name: String = "idle", animation_speed: float = 1.0):
 	set_speed_scale(animation_speed)
 	play(animation_name)

@@ -11,15 +11,21 @@ var armor_const: float = 0.06
 var movement_speed_animation_modifier: float = 3.0
 
 func calculate_armor(armor):
-	var x = armor * armor_const
-	var y = (armor_const * armor) + 1
-	var result = x / y
-	return result
+	var effective_armor = armor * armor_const
+	var normalizer = (armor_const * armor) + 1
+	var percentage_blocked = effective_armor / normalizer
+	return percentage_blocked
 
+## Returns actual damage
 func calculate_damage(dice, damage) -> int:
+	var variance = int(damage * dice)
+	var roll = randi_range(-variance, variance)
+	var raw_damage = damage + roll
+	return clampi(raw_damage, 1, 9999)
 
-	var dice_roll = randi_range(-dice, dice)
-	var result = damage + dice_roll
-	var final_damage = clampi(result, 1, 9999)
-
-	return final_damage
+## Returns damage in range, example [190-210]
+func get_damage_range(damage: int, dice: float) -> Array:
+	var variance = int(damage * dice)
+	var min_damage = clamp(damage - variance, 1, 99999)
+	var max_damage = clamp(damage + variance, 1, 99999)
+	return [min_damage, max_damage]

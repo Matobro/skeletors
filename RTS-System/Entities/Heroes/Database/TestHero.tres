@@ -22,7 +22,7 @@ base_movement_speed = 330
 base_attack_speed = 1.0
 base_damage = 15
 base_range = 100
-attack_dice_roll = 2
+attack_dice_roll = 0.1
 xp_yield = 50
 metadata/_custom_type_script = "uid://dqe50qceubild"
 
