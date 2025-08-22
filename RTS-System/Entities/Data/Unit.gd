@@ -58,6 +58,7 @@ func create_unit():
 	unit_visual = UnitVisual.new(self, animation_player, hp_bar, target_marker)
 	unit_ability_manager = UnitAbilityManager.new(self, data)
 	add_child(unit_ai)
+	add_child(unit_combat)
 	add_child(unit_visual)
 
 	SpatialGrid.register_unit(self)

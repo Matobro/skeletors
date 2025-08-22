@@ -7,7 +7,6 @@ func enter_state():
 	ai.combat_state.set_target_from_command()
 
 func exit_state():
-	ai.command_handler.clear()
 	ai.animation_player.stop()
 
 func state_logic(delta: float) -> void:
@@ -22,7 +21,7 @@ func state_logic(delta: float) -> void:
 
 	if target_unit == parent:
 		return
-
+	
 	# If currently attacking
 	if ai.combat_state.is_attack_committed:
 		process_attack_animation(delta, target_unit)
@@ -116,22 +115,22 @@ func spawn_projectile(target_unit: Node) -> void:
 	parent.get_tree().current_scene.add_child(projectile)
 
 func handle_no_target() -> void:
-	ai.combat_state.current_target = null
+	#ai.combat_state.current_target = null
 
 	# Clear current command if it has a dead target
 	if ai.command_handler.current_command != {}:
 		var cmd = ai.command_handler.current_command
 		if cmd.has("target_unit") and (cmd.target_unit == null or !is_instance_valid(cmd.target_unit) or cmd.target_unit.unit_combat.dead):
-			ai.command_handler.current_command = {}  # <-- Clear it
-			ai.command_handler.clear()              # Reset path, attack timers, etc.
+			ai.command_handler.current_command = {}
+			ai.command_handler.clear()
 
 	# Process fallback or next command
 	if ai.command_handler.fallback_command != {}:
-		var fb = ai.command_handler.fallback_command
+		var fallback_command = ai.command_handler.fallback_command
 		ai.command_handler.fallback_command = {}
-		ai.command_handler.current_command = fb
+		ai.command_handler.current_command = fallback_command
 
-		if fb.type == "Attack_move":
+		if fallback_command.type == "Attack_move":
 			ai.set_state("Attack_move")
 			return
 		else:

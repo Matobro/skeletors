@@ -240,15 +240,15 @@ func on_mouse_drag_end(event_info):
 
 func issue_stop_command(event_info):
 	for unit in selected_units:
-		unit.command_holder.issue_command("Stop", event_info.click_target, event_info.pos, event_info.is_queued, player_id)
+		unit.command_holder.issue_command("Stop", event_info.click_target, event_info.pos, event_info.is_queued, player_id, true)
 
 func issue_hold_command(event_info):
 	for unit in selected_units:
-		unit.command_holder.issue_command("Hold", event_info.click_target, event_info.pos, event_info.is_queued, player_id)
+		unit.command_holder.issue_command("Hold", event_info.click_target, event_info.pos, event_info.is_queued, player_id, true)
 	
 func issue_attack_command(event_info):
 	for unit in selected_units:
-		unit.command_holder.issue_command("Attack", event_info.click_target, event_info.pos, event_info.is_queued, player_id)
+		unit.command_holder.issue_command("Attack", event_info.click_target, event_info.pos, event_info.is_queued, player_id, true)
 	
 func issue_attack_move_command(event_info):
 	var formation = calculate_unit_formation(event_info.total_units, event_info.pos)
@@ -260,7 +260,8 @@ func issue_attack_move_command(event_info):
 			event_info.click_target,
 			target_pos,
 			event_info.is_queued,
-			player_id
+			player_id,
+			true
 		)
 
 	command_cooldown_frames = COMMAND_COOLDOWN
@@ -275,7 +276,8 @@ func issue_move_command(event_info):
 			event_info.click_target,
 			target_pos,
 			event_info.is_queued,
-			player_id
+			player_id,
+			true
 		)
 
 	command_cooldown_frames = COMMAND_COOLDOWN
@@ -422,7 +424,7 @@ func check_click_hit(mouse_pos: Vector2):
 	
 	if results.size() > 0:
 		var collider = results[0].collider
-		if collider and collider.unit_visual.has_method("set_selected"):
+		if collider and collider.unit_visual and collider.unit_visual.has_method("set_selected"):
 			return collider
 	return null
 

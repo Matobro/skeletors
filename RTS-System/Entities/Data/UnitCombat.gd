@@ -17,22 +17,15 @@ func _init(parent_ref, stats_ref) -> void:
 	is_invunerable = false
 
 func take_damage(damage: int = 0, attacker = null):
-	if dead or is_invunerable: return
+	if dead or is_invunerable: 
+		return
 
-	# Invert calculated armor. calculate_armor returns "percentage blocked" so you need to invert it, ie only take damage equal to 100% - armor
 	var reduction = 1.0 - StatModifiers.calculate_armor(stats.armor)
 	var final_damage = damage * reduction
-
 	apply_damage(final_damage, attacker)
 
-	if should_aggro(attacker):
-		parent.command_holder.issue_command(
-			"Attack",
-			attacker,
-			attacker.global_position,
-			false,
-			parent.owner_id
-		 )
+	if attacker != null and attacker.owner_id != parent.owner_id:
+		parent.unit_ai.combat_state.on_attacked_by(attacker)
 
 func apply_damage(damage, attacker):
 

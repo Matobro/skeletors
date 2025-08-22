@@ -15,10 +15,10 @@ func _init(unit_ai, command_holder):
 	holder.command_issued.connect(_on_command_issued)
 	command_completed.connect(holder._on_command_completed)
 
-func _on_command_issued(_command_type, _target, _position, is_queued: bool) -> void:
+func _on_command_issued(_command_type, _target, _position, is_queued: bool, _is_player_command) -> void:
 	if !is_queued:
-		clear()
-		ai.combat_state.clear()
+		clear() # clears pathfinding
+		ai.combat_state.clear_combat_state() # clears combat stuff
 		process_next_command()
 
 func process_next_command() -> void:
@@ -30,7 +30,6 @@ func process_next_command() -> void:
 
 	# If no next command go idle
 	if next_command == {}:
-		# if ai.pathfinder.path.size() == 0 or ai.pathfinder.path_index >= ai.pathfinder.path.size():
 		ai.set_state("Idle")
 		return
 
@@ -47,40 +46,48 @@ func process_next_command() -> void:
 	# Advance queue
 	current_command = next_command
 	holder.pop_next_command()
-	dont_clear = false
 
 	# Tell AI which state to enter
 	_apply_command(current_command)
-
 
 func clear() -> void:
 	if dont_clear: # for spam protection
 		return
 
 	ai.pathfinder.reset()
-	ai.combat_state.attack_anim_timer = 0.0
-	ai.combat_state.is_attack_committed = false
-	ai.combat_state.current_target = null
 	ai.animation_player.stop()
 
 func _apply_command(cmd: Dictionary) -> void:
+	var target_state := "Idle"
+
 	match cmd.type:
 		"Move":
-			ai.set_state("Move")
+			target_state = "Move"
 		"Attack":
-			ai.set_state("Attack")
+			target_state = "Attack"
 		"Attack_move":
-			ai.set_state("Attack_move")
+			target_state = "Attack_move"
 		"Stop":
-			ai.set_state("Stop")
+			target_state = "Stop"
 		"Hold":
-			ai.set_state("Hold")
+			target_state = "Hold"
 		_:
-			ai.set_state("Idle")
+			target_state = "Idle"
+
+	if ai.state != target_state:
+		ai.set_state(target_state)
 
 func _is_spam(next_command: Dictionary) -> bool:
 	if next_command != {} and current_command != {}:
 		if next_command.type == current_command.type:
-			if next_command.target_position.distance_to(current_command.target_position) <= 50:
-				return true
+			# Attack to different unit is never spam
+			if next_command.type == "Attack":
+				if next_command.has("target_unit") and current_command.has("target_unit"):
+					if next_command.target_unit != current_command.target_unit:
+						return false
+
+			# Same type and close position = spam
+			if next_command.has("target_position") and current_command.has("target_position"):
+				if next_command.target_position.distance_to(current_command.target_position) <= 50:
+					return true
 	return false

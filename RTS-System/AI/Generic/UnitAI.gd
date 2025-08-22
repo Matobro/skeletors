@@ -2,13 +2,17 @@ extends StateMachine
 class_name UnitAI
 
 var pathfinder: UnitPathfinder
-var command_handler = UnitCommandHandler
-var combat_state = UnitCombatState
+var command_handler: UnitCommandHandler
+var combat_state: UnitCombatState
 
 func init_ai():
 	pathfinder = UnitPathfinder.new(self)
 	command_handler = UnitCommandHandler.new(self, holder)
 	combat_state = UnitCombatState.new(self, parent)
+
+	add_child(pathfinder)
+	add_child(command_handler)
+	add_child(combat_state)
 
 	init_states()
 

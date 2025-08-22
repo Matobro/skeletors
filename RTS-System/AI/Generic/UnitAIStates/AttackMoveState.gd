@@ -1,7 +1,7 @@
 extends UnitState
 
 func enter_state():
-	pass
+	ai.pathfinder.reset()
 
 func exit_state():
 	ai.command_handler.clear()
@@ -13,11 +13,10 @@ func state_logic(delta: float) -> void:
 		ai.set_state("Idle")
 		return
 
-	# Let CombatState handle aggro & target switching
 	ai.combat_state.update(delta)
 
 	if ai.pathfinder.path.size() > 0 and ai.pathfinder.path_index >= ai.pathfinder.path.size():
+		ai.command_handler.fallback_command = {}
 		ai.command_handler.process_next_command()
 
-	# Follow path normally
 	ai.pathfinder.follow_path(delta)

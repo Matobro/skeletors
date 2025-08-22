@@ -2,7 +2,7 @@ extends Node
 
 class_name CommandHolder
 
-signal command_issued(command_type: String, target, position: Vector2, is_queued: bool)
+signal command_issued(command_type: String, target, position: Vector2, is_queued: bool, is_player_command: bool)
 
 var commands_data: CommandsData
 var unit: Unit
@@ -21,7 +21,7 @@ func _on_command_completed(command_type, fallback_command):
 		if fallback_command != {}:
 			insert_command_at_front(fallback_command)
 
-func issue_command(command_type: String, target, position: Vector2, is_queued: bool, player_id: int, shared_path: PackedVector2Array = [], offset: Vector2 = Vector2.ZERO):
+func issue_command(command_type: String = "", target = null, position: Vector2 = Vector2.ZERO, is_queued: bool = false, player_id: int = 10, is_player_command: bool = false, offset: Vector2 = Vector2.ZERO):
 	if player_id != unit.owner_id:
 		return
 
@@ -29,7 +29,7 @@ func issue_command(command_type: String, target, position: Vector2, is_queued: b
 		"type": command_type,
 		"target_unit": target,
 		"target_position": position,
-		"shared_path": shared_path,
+		"is_player_command": is_player_command,
 		"offset": offset
 	}
 
@@ -46,8 +46,9 @@ func issue_command(command_type: String, target, position: Vector2, is_queued: b
 
 	show_command_visual(command_type, position)
 	add_rally_point(command_type, position, is_queued)
-	emit_signal("command_issued", command_type, target, position, is_queued)
+	emit_signal("command_issued", command_type, target, position, is_queued, is_player_command)
 
+## Removes [command] from queue
 func remove_command(command):
 	queue.erase(command)
 	
@@ -85,19 +86,19 @@ func show_command_visual(command_type: String, target_pos: Vector2):
 
 	visual.init_node(sprite_frames, true)
 
+## Returns next [command]
 func get_next_command():
 	if queue.size() > 0:
 		return queue[0]
 	return {}
 
-	#return queue.size() > 0 if queue[0] else null <-- why does this throw warning.. fkn gay syntax
-
+## Returns and removes next [command]
 func pop_next_command():
 	if queue.size() > 0:
 		queue.pop_front()
 		pop_rally_point()
 
-
+## Clears queue
 func clear_commands():
 	current_point = null
 	queue.clear()
