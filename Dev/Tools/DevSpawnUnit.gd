@@ -7,6 +7,7 @@ var temp_color: Color
 var current_data = null
 
 var unit_data_list: Array = []
+var owner_ids: Array = []
 
 @onready var manager = null
 @onready var unit_list = null
@@ -39,8 +40,9 @@ func on_ready():
 	for data in unit_data_list:
 		unit_list.add_item(data.name)
 
-	for i in range(1, 11):
-		owner_select.add_item(str(i))
+	for player in PlayerManager.get_all_players():
+		owner_select.add_item("Player " + str(player.player_id))
+		owner_ids.append(player.player_id)
 
 	owner_select.item_selected.connect(_on_owner_id_selected)
 	spawn_button.pressed.connect(_on_spawn_button_pressed)
@@ -82,7 +84,8 @@ func show_unit_on_mouse(value):
 	spawn_visual.texture = current_data.avatar
 
 func _on_owner_id_selected(index):
-	owner_id = index + 1
+	owner_id = owner_ids[index]
+	current_data = unit_list.get_selected()
 
 func _on_spawn_button_pressed():
 	var selected_unit = unit_list.get_selected()

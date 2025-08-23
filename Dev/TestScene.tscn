@@ -79,7 +79,7 @@ texture = SubResource("PlaceholderTexture2D_wicfy")
 process_mode = 1
 offset_left = 5.0
 offset_top = 5.0
-offset_right = 265.0
+offset_right = 325.0
 offset_bottom = 160.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_wicfy")
 
@@ -106,9 +106,9 @@ offset_bottom = 64.0
 
 [node name="Label" type="Label" parent="CanvasLayer/DevBox"]
 layout_mode = 0
-offset_left = 190.0
+offset_left = 222.0
 offset_top = 11.0
-offset_right = 239.0
+offset_right = 271.0
 offset_bottom = 34.0
 text = "Player"
 
@@ -116,7 +116,7 @@ text = "Player"
 process_mode = 1
 offset_left = 5.0
 offset_top = 168.0
-offset_right = 265.0
+offset_right = 325.0
 offset_bottom = 323.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_wicfy")
 
