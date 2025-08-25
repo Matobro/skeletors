@@ -26,7 +26,7 @@ func set_inventory(new_inventory: UnitInventory) -> void:
 	_update_slots()
 
 func _create_slots():
-	if not inventory:
+	if !inventory:
 		return
 
 	# Adjust the number of slot nodes to match max_slots
@@ -40,7 +40,7 @@ func _create_slots():
 		slot.queue_free()
 
 func _update_slots():
-	if not inventory:
+	if !inventory:
 		for slot in slots:
 			slot.set_item(null)
 		return

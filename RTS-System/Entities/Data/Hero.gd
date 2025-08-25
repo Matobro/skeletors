@@ -6,7 +6,7 @@ func _data_received():
 	data.stats = data.stats.duplicate() as HeroStatData
 	data.hero = self
 
-	unit_inventory = UnitInventory.new()
+	unit_inventory = UnitInventory.new(self)
 	add_child(unit_inventory)
 
 func get_xp(amount):

@@ -51,10 +51,10 @@ func apply_selection(units: Array, shift: bool) -> void:
 		new_selection = units.duplicate()
 
 	for u in selected_units:
-		if u not in new_selection:
+		if u not in new_selection and is_valid_unit(u):
 			u.unit_visual.set_selected(false)
 	for u in new_selection:
-		if u not in selected_units:
+		if u not in selected_units and is_valid_unit(u):
 			u.unit_visual.set_selected(true)
 
 	selected_units = new_selection
@@ -77,7 +77,7 @@ func select_units_in_box(box: Rect2, shift: bool) -> void:
 	var units_in_box: Array = []
 	for unit in UnitHandler.all_units:
 		var screen_pos = parent.world_to_screen(unit.global_position)
-		if box.has_point(screen_pos):
+		if box.has_point(screen_pos) and is_valid_unit(unit):
 			if unit.owner_id == player_id:
 				units_in_box.append(unit)
 
@@ -91,13 +91,13 @@ func select_units_in_box(box: Rect2, shift: bool) -> void:
 func select_all_units_of_type(unit: Unit, shift := false) -> void:
 	var candidates: Array = []
 	for other_unit in UnitHandler.all_units:
-		if other_unit != null and unit != null and other_unit.owner_id == unit.owner_id and other_unit.data.name == unit.data.name:
+		if is_valid_unit(other_unit) and is_valid_unit(unit) and other_unit.owner_id == unit.owner_id and other_unit.data.name == unit.data.name:
 			candidates.append(other_unit)
 
 	if shift:
 		var new_selection = selected_units.duplicate()
 		for u in candidates:
-			if u not in new_selection:
+			if u not in new_selection and is_valid_unit(u):
 				new_selection.append(u)
 		apply_selection(new_selection, false)
 	else:
@@ -107,11 +107,15 @@ func get_first_selected_unit() -> Unit:
 	return selected_units[0] if selected_units.size() > 0 else null
 
 func cleanup_invalid_units():
-
 	var changed = false
 	for unit in selected_units.duplicate():
 		if unit == null or unit.unit_combat.dead:
 			_deselect_unit(unit)
 			changed = true
 	if changed:
-		update_selection(selected_units.duplicate())
+		apply_selection(selected_units.duplicate(), false)
+
+func is_valid_unit(unit: Unit) -> bool:
+	if unit and unit != null and is_instance_valid(unit) and unit.unit_combat and !unit.unit_combat.dead:
+		return true
+	return false

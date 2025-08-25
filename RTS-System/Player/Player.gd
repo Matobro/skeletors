@@ -56,4 +56,5 @@ func get_local_player():
 	return player_id
 
 func _on_unit_died(unit):
-	player_ui.remove_unit_from_control(unit)
+	# player_ui.remove_unit_from_control(unit)
+	pass

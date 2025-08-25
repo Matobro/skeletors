@@ -46,7 +46,7 @@ func recalculate_stats():
 	}
 
 	for stat_name in stat_list.keys():
-		var stat_values = stat_list[stat_name]
+		var stat_values = stat_list[stat_name] 
 		var base_value = stat_values[0]
 		var bonus_value = stat_values[1]
 		var min_value = stat_values[2]
@@ -94,17 +94,18 @@ func get_bonus_mana_regen() -> float:
 
 	return intelligence * StatModifiers.regen_modifier
 
+func get_bonus_armor() -> int:
+	if agility / StatModifiers.armor_modifier < 1:
+		return 0
+
+	return agility / StatModifiers.armor_modifier
+
 func get_item_bonus(stat_name: String) -> float:
 	if parent.unit_inventory:
 		return parent.unit_inventory.get_item_bonus(stat_name)
 	return 0
 
 ### TO DO ###
-func get_bonus_armor() -> int:
-	if agility / StatModifiers.armor_modifier < 1:
-		return 0
-
-	return agility / StatModifiers.armor_modifier
 
 func get_bonus_movement_speed() -> int:
 	return 0

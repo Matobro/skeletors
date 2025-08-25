@@ -6,9 +6,14 @@ class_name UnitInventory
 
 var items: Array = []
 
+var parent
+
 signal item_added(item: ItemData)
 signal item_removed(item: ItemData)
 signal inventory_changed()
+
+func _init(parent_ref) -> void:
+    parent = parent_ref
 
 func add_item(item: ItemData) -> bool:
     if items.size() >= max_slots:
@@ -16,6 +21,7 @@ func add_item(item: ItemData) -> bool:
     items.append(item)
     emit_signal("item_added", item)
     emit_signal("inventory_changed")
+    parent.data.stats.recalculate_stats()
     return true
 
 func remove_item(item: ItemData) -> bool:
@@ -23,6 +29,7 @@ func remove_item(item: ItemData) -> bool:
         items.erase(item)
         emit_signal("item_removed", item)
         emit_signal("inventory_changed")
+        parent.data.stats.recalculate_stats()
         return true
     return false
 

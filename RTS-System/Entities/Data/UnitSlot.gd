@@ -22,6 +22,9 @@ func init_unit(unit_ref):
 		
 func _process(_delta: float) -> void:
 	current_frame += 1
+	if unit == null or !is_instance_valid(unit) or unit.unit_combat.dead:
+		return
+
 	if current_frame > update_speed:
 		current_frame = 0
 		hp_bar.max_value = unit.data.stats.max_health

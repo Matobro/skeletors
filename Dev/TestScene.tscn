@@ -131,10 +131,10 @@ text = "AI: enabled"
 
 [node name="DevBox2" type="Panel" parent="CanvasLayer"]
 process_mode = 1
-offset_left = 5.0
-offset_top = 168.0
-offset_right = 325.0
-offset_bottom = 368.0
+offset_left = 4.0
+offset_top = 166.0
+offset_right = 324.0
+offset_bottom = 366.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_wicfy")
 
 [node name="Label" type="Label" parent="CanvasLayer/DevBox2"]
@@ -153,7 +153,8 @@ text = "0 - display pathfinding info
 (will nuke fps, 0 must be on)
 8 - fullscreen/windowed
 p - start next wave
-o - disable/enable ai"
+o - disable/enable ai
+i - open shop"
 
 [node name="Label" type="Label" parent="CanvasLayer"]
 process_mode = 1

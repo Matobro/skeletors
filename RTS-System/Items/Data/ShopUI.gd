@@ -36,7 +36,6 @@ func _on_item_pressed(item: ItemData):
 	var selected_unit = parent.selected_unit
 	if selected_unit != null:
 		if selected_unit is Hero:
-			print("Adding item")
 			selected_unit.unit_inventory.add_item(item)
 
 func gather_item_info(item) -> String:

@@ -66,19 +66,28 @@ func create_unit():
 
 func get_stat(stat: String):
 	return data.stats[stat]
+
+func is_valid_unit(unit) -> bool:
+	if !is_instance_valid(unit) or unit == null or !unit.unit_combat or unit.unit_combat.dead:
+		return false
+	return true
 		
 func _on_aggro_range_body_entered(body: Node2D):
 	if body.is_in_group("unit"):
+		if !is_valid_unit(body) or !is_valid_unit(self):
+			return
+
 		if body.owner_id != self.owner_id and body not in unit_combat.possible_targets:
 			unit_combat.possible_targets.append(body)
 		if body.owner_id == self.owner_id and body not in unit_combat.friendly_targets:
 			unit_combat.friendly_targets.append(body)
 			
 func _on_aggro_range_body_exited(body: Node2D):
-	if unit_combat.possible_targets.has(body):
-		if body.owner_id != self.owner_id:
-			unit_combat.possible_targets.erase(body)
+	if is_valid_unit(self):
+		if unit_combat.possible_targets.has(body):
+			if body.owner_id != self.owner_id:
+				unit_combat.possible_targets.erase(body)
 
-	if unit_combat.friendly_targets.has(body):
-		if body.owner_id == self.owner_id:
-			unit_combat.friendly_targets.erase(body)
+		if unit_combat.friendly_targets.has(body):
+			if body.owner_id == self.owner_id:
+				unit_combat.friendly_targets.erase(body)
