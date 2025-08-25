@@ -16,6 +16,10 @@ class_name UnitModelData
 ## Projectile speed
 @export var projectile_speed = 300
 
+func get_avatar() -> Texture2D:
+	var avatar = sprite_frames.get_frame_texture("idle", 0)
+	return avatar
+	
 func get_unit_radius_world_space() -> float:
 	var tex = sprite_frames.get_frame_texture("idle", 0)
 	if tex:

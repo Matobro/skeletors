@@ -18,7 +18,6 @@ var unit_combat: UnitCombat
 var unit_visual: UnitVisual
 var unit_ability_manager: UnitAbilityManager
 var unit_inventory: UnitInventory
-var unit_inventory_ui: UnitInventoryUI
 
 signal died(unit)
 

@@ -11,4 +11,4 @@ func set_item(new_item: ItemData) -> void:
         visible = true
     else:
         $TextureRect.texture = null
-        visible = false
+        visible = true

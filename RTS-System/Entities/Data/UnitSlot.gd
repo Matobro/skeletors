@@ -6,10 +6,16 @@ var update_speed = 5
 var current_frame = 0
 @onready var hp_bar = $HpBar
 @onready var avatar = $Avatar
+@onready var box = $Box
 
 func init_unit(unit_ref):
 	unit = unit_ref
-	avatar.texture = unit.data.avatar
+
+	if self.unit is Hero:
+		var style = box.get("theme_override_styles/panel")
+		style.border_color = Color.WHITE
+
+	avatar.texture = unit.data.unit_model_data.get_avatar()
 
 	hp_bar.max_value = unit.data.stats.max_health
 	hp_bar.value = unit.data.stats.current_health

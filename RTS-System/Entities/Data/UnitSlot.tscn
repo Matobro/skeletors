@@ -1,6 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://54p4rbg1lbko"]
+[gd_scene load_steps=8 format=3 uid="uid://54p4rbg1lbko"]
 
 [ext_resource type="Script" uid="uid://rlfeb02p7qb2" path="res://RTS-System/Entities/Data/UnitSlot.gd" id="1_wb4y5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o0oyi"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_b8l55"]
 
@@ -23,29 +25,60 @@ bg_color = Color(0.741176, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eh8vd"]
 bg_color = Color(0, 0.780392, 0, 1)
 
-[node name="UnitSlot" type="Control"]
+[node name="UnitSlot" type="Button"]
+z_index = 1
 custom_minimum_size = Vector2(50, 50)
-layout_mode = 3
-anchors_preset = 0
+offset_right = 50.0
+offset_bottom = 50.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_o0oyi")
 script = ExtResource("1_wb4y5")
 
 [node name="Avatar" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 texture = SubResource("AtlasTexture_wb4y5")
 
 [node name="Box" type="Panel" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5yuhv")
 
 [node name="HpBar" type="ProgressBar" parent="."]
-layout_mode = 0
-offset_top = 40.0
-offset_right = 40.0
-offset_bottom = 47.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 20.0
+offset_right = 20.0
+offset_bottom = 27.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_wb4y5")
 theme_override_styles/fill = SubResource("StyleBoxFlat_eh8vd")
 step = 1.0

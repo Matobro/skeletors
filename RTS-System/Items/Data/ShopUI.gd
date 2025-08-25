@@ -33,14 +33,11 @@ func _add_item_to_shop(item: ItemData):
 
 func _on_item_pressed(item: ItemData):
 	print("pressed")
-	var selected_units = parent.parent.player_input.selected_units
-	if selected_units.size() > 0:
-		print("something selected")
-		if selected_units[0].data.hero != null:
+	var selected_unit = parent.selected_unit
+	if selected_unit != null:
+		if selected_unit is Hero:
 			print("Adding item")
-			var unit = selected_units[0]
-			unit.unit_inventory.add_item(item)
-	pass
+			selected_unit.unit_inventory.add_item(item)
 
 func gather_item_info(item) -> String:
 	var text = str(item.name, " ", item.cost, "\n\n", item.description, "\n\n")
@@ -54,7 +51,7 @@ func gather_item_info(item) -> String:
 func _on_item_hover_entered(item, item_button):
 	var text = gather_item_info(item)
 
-	TooltipManager.show_tooltip(parent.parent.player_id, text, tab_container.global_position)
+	TooltipManager.show_tooltip(parent.player_object.player_id, text, tab_container.global_position)
 
 func _on_item_hover_exited():
-	TooltipManager.hide_tooltip(parent.parent.player_id)
+	TooltipManager.hide_tooltip(parent.player_object.player_id)

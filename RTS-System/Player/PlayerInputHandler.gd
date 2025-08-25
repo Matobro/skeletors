@@ -7,6 +7,10 @@ var command_issuer: PlayerCommandIssuer
 var selection_manager: SelectionManager
 var player_ui
 
+var multi_select_timer = 0.0
+
+const MULTI_SELECT_TIME := 0.5
+
 func _init(parent_ref, command_issuer_ref, selection_manager_ref, player_ui_ref):
 	parent = parent_ref
 	command_issuer = command_issuer_ref
@@ -42,14 +46,6 @@ func on_left_click_pressed(event_info):
 		else:
 			command_issuer.issue_attack_move_command(event_info)
 		return
-	
-	### If not A moving: select clicked target
-	if event_info.click_target and !event_info.attack_moving:
-		if selection_manager.last_clicked_unit == event_info.click_target:
-			selection_manager.select_all_units_of_type(event_info.click_target)
-			selection_manager.last_clicked_unit = null
-			return
-		selection_manager.last_clicked_unit = event_info.click_target
 
 func on_left_click_released(event_info):
 	if event_info.attack_moving:
@@ -60,12 +56,22 @@ func on_left_click_released(event_info):
 		parent.end_drag(event_info.is_queued)
 		return
 	
-	# If not dragging then select at clicked position
-	else:
-		selection_manager.select_unit_at_mouse_pos(event_info.pos, event_info.is_queued)
-
-	if event_info.click_target:
+	# Handle double-click selection
+	if event_info.click_target and !event_info.attack_moving:
+		if selection_manager.last_clicked_unit == event_info.click_target and multi_select_timer > 0:
+			# Shift held → add to selection
+			selection_manager.select_all_units_of_type(event_info.click_target, event_info.is_queued)
+			selection_manager.last_clicked_unit = null
+			multi_select_timer = 0
+			return   # <<< stop here, don't run single-click selection!
+		
+		# First click
 		selection_manager.last_clicked_unit = event_info.click_target
+		multi_select_timer = MULTI_SELECT_TIME
+	
+	# Normal single-click selection
+	selection_manager.select_unit_at_mouse_pos(event_info.pos, event_info.is_queued)
+
 
 func on_right_click_pressed(event_info):
 	if event_info.click_target and event_info.click_target.owner_id == 10:

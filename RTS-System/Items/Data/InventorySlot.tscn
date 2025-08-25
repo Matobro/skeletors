@@ -11,6 +11,7 @@ border_width_bottom = 2
 border_color = Color(0, 0, 0, 1)
 
 [node name="InventorySlot" type="Button"]
+z_index = 500
 custom_minimum_size = Vector2(70, 70)
 theme_override_styles/normal = SubResource("StyleBoxFlat_uk6sk")
 script = ExtResource("1_apgtd")

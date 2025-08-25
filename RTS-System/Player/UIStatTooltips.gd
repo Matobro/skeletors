@@ -10,7 +10,6 @@ func _init(parent_ref, ui_stats_ref) -> void:
 	ui_stats = ui_stats_ref
 
 func _ready() -> void:
-	print("Called connecting")
 	connect_stat_tooltips()
 
 func connect_stat_tooltips():
@@ -81,7 +80,6 @@ func _on_stat_hover_entered(stat_name):
 		var text = gather_stat_info(parent.selected_unit.data, stat_name)
 
 		TooltipManager.show_tooltip(parent.player_object.player_id, text, label.global_position)
-		print("Showing tooltip")
 	
 func _on_stat_hover_exited():
 	TooltipManager.hide_tooltip(parent.player_object.player_id)

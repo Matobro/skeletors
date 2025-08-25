@@ -20,7 +20,7 @@ var player_colors := {
 }
 var players_to_spawn = [
 	{ "id": 1, "is_ai": false, "hero": null },
-	{ "id": 10, "is_ai": true, "hero": null }
+	#{ "id": 10, "is_ai": true, "hero": null }
 ]
 
 var players = {}

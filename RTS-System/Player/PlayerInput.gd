@@ -59,7 +59,7 @@ func init_node() -> void:
 	command_issuer = PlayerCommandIssuer.new(self, selection_manager, player_id)
 	input_handler = PlayerInputHandler.new(self, command_issuer, selection_manager, player_ui)
 
-func _process(_delta):
+func _process(delta):
 	if block_input_frames > 0:
 		block_input_frames -= 1
 
@@ -70,6 +70,8 @@ func _process(_delta):
 		selection_box.visible = false
 		return
 	
+	if input_handler.multi_select_timer > 0:
+		input_handler.multi_select_timer -= delta
 	selection_manager.cleanup_invalid_units()
 
 func _unhandled_input(event: InputEvent):
@@ -113,6 +115,8 @@ func handle_keyboard_commands(event: InputEventKey):
 		command_issuer.issue_stop_command(get_key_event_info())
 	elif event.is_action_pressed("h"):
 		command_issuer.issue_hold_command(get_key_event_info())
+	elif event.is_action_pressed("i"):
+		player_ui.shop_ui.visible = !player_ui.shop_ui.visible
 	elif selection_manager.selected_units.size() > 0:
 		match event.keycode:
 			KEY_Q:

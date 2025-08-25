@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bqedgkscrmmqm" path="res://RTS-System/Items/Data/ShopUI.gd" id="1_6eql6"]
 
 [node name="ShopUI" type="Control"]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_6eql6")
