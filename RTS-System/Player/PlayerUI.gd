@@ -15,12 +15,13 @@ func init_node(parent_ref):
 
 func _ready() -> void:
 	ui_stats = UIUnitStats.new()
-	ui_tooltips = UIStatTooltips.new(self, ui_stats)
 	ui_control_group = UIControlGroup.new()
+	ui_tooltips = UIStatTooltips.new(self, ui_stats)
 
 	add_child(ui_stats)
-	add_child(ui_tooltips)
 	add_child(ui_control_group)
+	add_child(ui_tooltips)
+	
 	hide_ui()
 
 func on_selection_changed(selected_units):

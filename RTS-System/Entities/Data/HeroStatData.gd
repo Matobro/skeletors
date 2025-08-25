@@ -86,7 +86,13 @@ func get_bonus_health_regen() -> float:
 	if strength * StatModifiers.regen_modifier <= 0:
 		return 0.0
 
-	return strength / 10.0
+	return strength * StatModifiers.regen_modifier
+
+func get_bonus_mana_regen() -> float:
+	if intelligence * StatModifiers.regen_modifier <= 0:
+		return 0.0
+
+	return intelligence * StatModifiers.regen_modifier
 
 func get_item_bonus(stat_name: String) -> float:
 	if parent.unit_inventory:
@@ -102,9 +108,6 @@ func get_bonus_armor() -> int:
 
 func get_bonus_movement_speed() -> int:
 	return 0
-
-func get_bonus_mana_regen() -> float:
-	return 0.0
 
 func get_bonus_attack_range() -> int:
 	return 0

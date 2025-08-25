@@ -9,6 +9,20 @@ func _init(parent_ref, ui_stats_ref) -> void:
 	parent = parent_ref
 	ui_stats = ui_stats_ref
 
+func _ready() -> void:
+	print("Called connecting")
+	connect_stat_tooltips()
+
+func connect_stat_tooltips():
+	for stat_name in ui_stats.stat_names.keys():
+		var label = ui_stats.stat_names[stat_name]
+		if label is Control:
+			label.mouse_filter = Control.MOUSE_FILTER_STOP
+			if label.has_signal("mouse_entered") and label.has_signal("mouse_exited"):
+				label.connect("mouse_entered", Callable(self, "_on_stat_hover_entered").bind(stat_name))
+				label.connect("mouse_exited", Callable(self, "_on_stat_hover_exited"))
+
+
 func gather_stat_info(data, stat_name):
 	var main_stat = ""
 	if data.unit_type == "hero":
@@ -64,9 +78,10 @@ func gather_stat_info(data, stat_name):
 func _on_stat_hover_entered(stat_name):
 	if parent.selected_unit != null:
 		var label = ui_stats.stat_names[stat_name]
-		var text = gather_stat_info(parent.selected_unit, stat_name)
+		var text = gather_stat_info(parent.selected_unit.data, stat_name)
 
-		TooltipManager.show_tooltip(parent.player_id, text, label.global_position)
+		TooltipManager.show_tooltip(parent.player_object.player_id, text, label.global_position)
+		print("Showing tooltip")
 	
 func _on_stat_hover_exited():
-	TooltipManager.hide_tooltip(parent.player_id)
+	TooltipManager.hide_tooltip(parent.player_object.player_id)

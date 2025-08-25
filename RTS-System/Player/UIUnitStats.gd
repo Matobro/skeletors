@@ -9,9 +9,6 @@ class_name UIUnitStats
 
 ## UI elements that should display tooltip when hovered over
 @onready var stat_names = {
-	"hero_stats": $"../HeroStats",
-	"unit_stats": $"../UnitStats",
-	"ui_bars": $"../UIBars",
 	"damage": $"../UnitStats/Damage",
 	"armor": $"../UnitStats/Armor",
 	"str": $"../HeroStats/Str",
@@ -24,6 +21,9 @@ class_name UIUnitStats
 
 ## UI Labels that display the actual values
 @onready var stat_labels = {
+	"hero_stats": $"../HeroStats",
+	"unit_stats": $"../UnitStats",
+	"ui_bars": $"../UIBars",
 	"damage": $"../UnitStats/DamageValue",
 	"armor": $"../UnitStats/ArmorValue",
 	"str": $"../HeroStats/StrValue",
@@ -46,11 +46,11 @@ func show_portrait(unit: Unit):
 	portrait_panel.visible = true
 
 func hide_unit_stats():
-	stat_names["unit_stats"].visible = false
-	stat_names["hero_stats"].visible = false
+	stat_labels["unit_stats"].visible = false
+	stat_labels["hero_stats"].visible = false
 
 func hide_ui_bars():
-	stat_names["ui_bars"].visible = false
+	stat_labels["ui_bars"].visible = false
 	portrait_panel.visible = false
 
 func show_ui_bars(unit: Unit):
@@ -62,31 +62,32 @@ func show_ui_bars(unit: Unit):
 	stat_names["mp_bar"].value = unit.data.stats.current_mana
 	stat_labels["mp_bar"].text = str(int(unit.data.stats.current_mana), "/", int(unit.data.stats.max_mana))
 
-	stat_names["ui_bars"].visible = true
+	stat_labels["ui_bars"].visible = true
 	show_portrait(unit)
 
 func show_unit_stats(unit: Unit):
 	show_ui_bars(unit)
 
 	stat_labels["name"].text = unit.data.name
-	stat_labels["damage"].text = str(StatModifiers.get_damage_range(unit.data.stats.attack_damage, unit.data.stats.attack_dice_roll))
+	var dmg = StatModifiers.get_damage_range(unit.data.stats.attack_damage, unit.data.stats.attack_dice_roll)
+	stat_labels["damage"].text = str(dmg[0], "-", dmg[1])
 	stat_labels["armor"].text = str(unit.data.stats.armor)
 
-	stat_names["unit_stats"].visible = true
+	stat_labels["unit_stats"].visible = true
 
 	if unit is Hero:
 		stat_labels["str"].text = str(unit.data.stats.strength)
 		stat_labels["agi"].text = str(unit.data.stats.agility)
-		stat_labels["int"].text = str(unit.data.stats.data.intelligence)
+		stat_labels["int"].text = str(unit.data.stats.intelligence)
 
 		stat_names["xp_bar"].max_value = unit.data.hero.get_xp_for_next_level() - unit.data.hero.get_xp_for_current_level()
 		stat_names["xp_bar"].value = unit.data.stats.xp - unit.data.hero.get_xp_for_current_level()
 
 		stat_labels["level"].text = str(unit.data.stats.level)
 		
-		stat_names["hero_stats"].visible = true
+		stat_labels["hero_stats"].visible = true
 	else:
-		stat_names["hero_stats"].visible = false
+		stat_labels["hero_stats"].visible = false
 
 ## Zoom = how close the portrait is
 ## y_offset_ratio more than 0.5 moves sprite up, less than 0.5 moves sprite down
