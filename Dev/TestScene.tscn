@@ -112,12 +112,29 @@ offset_right = 271.0
 offset_bottom = 34.0
 text = "Player"
 
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/DevBox"]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 95.0
+offset_right = 53.0
+offset_bottom = 135.0
+color = Color(0, 1, 0, 1)
+
+[node name="Label" type="RichTextLabel" parent="CanvasLayer/DevBox/ColorRect"]
+layout_mode = 0
+offset_left = 51.0
+offset_top = 9.0
+offset_right = 201.0
+offset_bottom = 32.0
+bbcode_enabled = true
+text = "AI: enabled"
+
 [node name="DevBox2" type="Panel" parent="CanvasLayer"]
 process_mode = 1
 offset_left = 5.0
 offset_top = 168.0
 offset_right = 325.0
-offset_bottom = 323.0
+offset_bottom = 368.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_wicfy")
 
 [node name="Label" type="Label" parent="CanvasLayer/DevBox2"]
@@ -135,10 +152,12 @@ text = "0 - display pathfinding info
 9 - show grid connections
 (will nuke fps, 0 must be on)
 8 - fullscreen/windowed
-p - start next wave"
+p - start next wave
+o - disable/enable ai"
 
 [node name="Label" type="Label" parent="CanvasLayer"]
 process_mode = 1
+visible = false
 offset_left = 6.0
 offset_top = 332.0
 offset_right = 210.0

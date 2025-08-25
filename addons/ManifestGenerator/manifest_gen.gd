@@ -24,13 +24,15 @@ func _on_button_pressed():
 func _generate_manifest():
     var scan_folders = {
         "heroes": "res://RTS-System/Entities/Heroes/Database",
-        "units": "res://RTS-System/Entities/Units/Database"
+        "units": "res://RTS-System/Entities/Units/Database",
+        "items": "res://RTS-System/Items/Database"
     }
-    var output_file_path = "res://RTS-System/units_manifest.json"
+    var output_file_path = "res://RTS-System/data_manifest.json"
 
     var manifest_data = {
         "heroes": [],
-        "units": []
+        "units": [],
+        "items": []
     }
 
     for category in scan_folders.keys():
@@ -55,4 +57,5 @@ func _generate_manifest():
         return
     file.store_string(json_text)
     file.close()
-    print("Manifest generated with heroes: %d, units: %d entries at: %s" % [manifest_data["heroes"].size(), manifest_data["units"].size(), output_file_path])
+    print("Manifest generated with HEROES [%d], UNITS [%d], ITEMS [%d] saved at [%s]"
+        % [manifest_data["heroes"].size(), manifest_data["units"].size(), manifest_data["items"].size(), output_file_path])

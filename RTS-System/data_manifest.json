@@ -3,6 +3,12 @@
 		"res://RTS-System/Entities/Heroes/Database/GigaTestHero.tres",
 		"res://RTS-System/Entities/Heroes/Database/TestHero.tres"
 	],
+	"items": [
+		"res://RTS-System/Items/Database/LesserHealingPotion.tres",
+		"res://RTS-System/Items/Database/LesserManaPotion.tres",
+		"res://RTS-System/Items/Database/Shield.tres",
+		"res://RTS-System/Items/Database/Sword.tres"
+	],
 	"units": [
 		"res://RTS-System/Entities/Units/Database/TargetDummy.tres",
 		"res://RTS-System/Entities/Units/Database/TestArcher.tres",

@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=5 format=3 uid="uid://c6orsbiiht4br"]
+
+[ext_resource type="Script" uid="uid://cq74nia18rg2m" path="res://RTS-System/Items/Data/ItemData.gd" id="1_81a4y"]
+[ext_resource type="Texture2D" uid="uid://bsq5ahkljv6it" path="res://RTS-System/Items/ItemData/TestItem/ItemTemplate.png" id="1_jlh6h"]
+[ext_resource type="Script" uid="uid://dlfjseaje8o68" path="res://RTS-System/Items/Data/ItemStatData.gd" id="3_00kcd"]
+
+[sub_resource type="Resource" id="Resource_cnm0v"]
+script = ExtResource("3_00kcd")
+max_health = 0.0
+max_mana = 0.0
+armor = 3
+movement_speed = 0
+health_regen = 0.0
+mana_regen = 0.0
+attack_speed = 0.0
+attack_range = 0
+current_health = 0.0
+current_mana = 0.0
+attack_damage = 0.0
+metadata/_custom_type_script = "uid://dlfjseaje8o68"
+
+[resource]
+script = ExtResource("1_81a4y")
+id = "shield"
+name = "Shield"
+description = "Gay shield of doom"
+icon = ExtResource("1_jlh6h")
+cost = 200
+category = "Defensive"
+is_consumable = false
+stats = SubResource("Resource_cnm0v")
+metadata/_custom_type_script = "uid://cq74nia18rg2m"

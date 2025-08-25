@@ -43,6 +43,8 @@ var current_health: float
 var current_mana: float
 var attack_damage: int
 
+var parent
+
 func recalculate_stats():
 	var previous_max_hp = max_health
 	var previous_max_mana = max_mana

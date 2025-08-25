@@ -21,7 +21,6 @@ func _ready():
 	else:
 		_setup_human()
 	
-	player_ui.parent = self
 	TooltipManager.register_player_tooltip(player_id, tooltip_panel)
 	
 func _setup_ai():
@@ -40,7 +39,7 @@ func _setup_human():
 	player_ui.visible = true
 	player_input.is_local_player = true
 	player_input.init_node()
-	player_ui.init_node()
+	player_ui.init_node(self)
 
 func setup_ai_script_for_mode(ai_controller):
 	var mode = GameManager.game_mode

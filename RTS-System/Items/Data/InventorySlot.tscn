@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://b54lnsucttpd"]
+
+[ext_resource type="Script" uid="uid://dipojeui02l5e" path="res://RTS-System/Items/Data/InventorySlot.gd" id="1_apgtd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uk6sk"]
+bg_color = Color(0.144063, 0.144063, 0.144062, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[node name="InventorySlot" type="Button"]
+custom_minimum_size = Vector2(70, 70)
+theme_override_styles/normal = SubResource("StyleBoxFlat_uk6sk")
+script = ExtResource("1_apgtd")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2

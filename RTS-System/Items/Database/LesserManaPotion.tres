@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=5 format=3 uid="uid://hnpi8g3r74dj"]
+
+[ext_resource type="Script" uid="uid://cq74nia18rg2m" path="res://RTS-System/Items/Data/ItemData.gd" id="1_0mnmg"]
+[ext_resource type="Texture2D" uid="uid://bsq5ahkljv6it" path="res://RTS-System/Items/ItemData/TestItem/ItemTemplate.png" id="1_2b2i2"]
+[ext_resource type="Script" uid="uid://dlfjseaje8o68" path="res://RTS-System/Items/Data/ItemStatData.gd" id="3_vfbfd"]
+
+[sub_resource type="Resource" id="Resource_h3h5q"]
+script = ExtResource("3_vfbfd")
+max_health = 0.0
+max_mana = 0.0
+armor = 0
+movement_speed = 0
+health_regen = 0.0
+mana_regen = 0.0
+attack_speed = 0.0
+attack_range = 0
+current_health = 0.0
+current_mana = 50.0
+attack_damage = 0.0
+metadata/_custom_type_script = "uid://dlfjseaje8o68"
+
+[resource]
+script = ExtResource("1_0mnmg")
+id = "lesser_mana_potion"
+name = "Lesser Mana Potion"
+description = "Color reminds me of piss"
+icon = ExtResource("1_2b2i2")
+cost = 15
+category = "Potion"
+is_consumable = true
+stats = SubResource("Resource_h3h5q")
+metadata/_custom_type_script = "uid://cq74nia18rg2m"

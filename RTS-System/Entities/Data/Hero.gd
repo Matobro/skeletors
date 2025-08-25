@@ -4,8 +4,10 @@ class_name Hero
 
 func _data_received():
 	data.stats = data.stats.duplicate() as HeroStatData
-	data.stats.recalculate_stats()
 	data.hero = self
+
+	unit_inventory = UnitInventory.new()
+	add_child(unit_inventory)
 
 func get_xp(amount):
 	data.stats.xp += amount

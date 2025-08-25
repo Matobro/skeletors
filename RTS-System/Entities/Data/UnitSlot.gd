@@ -7,10 +7,10 @@ var current_frame = 0
 @onready var hp_bar = $HpBar
 @onready var avatar = $Avatar
 
-func init_unit(port):
-	avatar.texture = port
-func _ready() -> void:
-	await get_tree().process_frame
+func init_unit(unit_ref):
+	unit = unit_ref
+	avatar.texture = unit.data.avatar
+
 	hp_bar.max_value = unit.data.stats.max_health
 	hp_bar.value = unit.data.stats.current_health
 		

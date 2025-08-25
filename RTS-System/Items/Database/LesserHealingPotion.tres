@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=5 format=3 uid="uid://4b8s2hg44bdc"]
+
+[ext_resource type="Script" uid="uid://cq74nia18rg2m" path="res://RTS-System/Items/Data/ItemData.gd" id="1_f8t3q"]
+[ext_resource type="Texture2D" uid="uid://bsq5ahkljv6it" path="res://RTS-System/Items/ItemData/TestItem/ItemTemplate.png" id="1_hevuf"]
+[ext_resource type="Script" uid="uid://dlfjseaje8o68" path="res://RTS-System/Items/Data/ItemStatData.gd" id="3_u37xx"]
+
+[sub_resource type="Resource" id="Resource_sj1kb"]
+script = ExtResource("3_u37xx")
+max_health = 0.0
+max_mana = 0.0
+armor = 0
+movement_speed = 0
+health_regen = 0.0
+mana_regen = 0.0
+attack_speed = 0.0
+attack_range = 0
+current_health = 50.0
+current_mana = 0.0
+attack_damage = 0.0
+metadata/_custom_type_script = "uid://dlfjseaje8o68"
+
+[resource]
+script = ExtResource("1_f8t3q")
+id = "lesser_healing_potion"
+name = "Lesser Healing Potion"
+description = "Who knows whats inside"
+icon = ExtResource("1_hevuf")
+cost = 20
+category = "Potion"
+is_consumable = true
+stats = SubResource("Resource_sj1kb")
+metadata/_custom_type_script = "uid://cq74nia18rg2m"

@@ -33,25 +33,26 @@ func recalculate_stats():
 	var previous_max_hp = max_health
 	var previous_max_mana = max_mana
 
-	max_health = base_max_hp + get_bonus_health()
-	attack_speed = base_attack_speed + get_bonus_attack_speed()
-	max_mana = base_max_mana + get_bonus_mana()
-	armor = base_armor + get_bonus_armor()
-	movement_speed = base_movement_speed + get_bonus_movement_speed()
-	health_regen = base_health_regen + get_bonus_health_regen()
-	mana_regen = base_mana_regen + get_bonus_mana_regen()
-	attack_range = base_range + get_bonus_attack_range()
-	attack_damage = base_damage + get_bonus_attack_damage()
+	var stat_list = {
+		"max_health": [base_max_hp, get_bonus_health(), 0],
+		"attack_speed": [base_attack_speed, get_bonus_attack_speed(), 0.01],
+		"max_mana": [base_max_mana, get_bonus_mana(), 0],
+		"armor": [base_armor, get_bonus_armor(), 0],
+		"movement_speed": [base_movement_speed, get_bonus_movement_speed(), 50],
+		"health_regen": [base_health_regen, get_bonus_health_regen(), 0],
+		"mana_regen": [base_mana_regen, get_bonus_mana_regen(), 0],
+		"attack_range": [base_range, get_bonus_attack_range(), 30],
+		"attack_damage": [base_damage, get_bonus_attack_damage(), 1],
+	}
 
-	max_health = max(max_health, 0)
-	attack_speed = max(attack_speed, 0.01)
-	max_mana = max(max_mana, 0)
-	armor = max(armor, 0)
-	movement_speed = max(movement_speed, 50)
-	health_regen = max(health_regen, 0)
-	mana_regen = max(mana_regen, 0)
-	attack_range = max(attack_range, 30)
-	attack_damage = max(attack_damage, 1)
+	for stat_name in stat_list.keys():
+		var stat_values = stat_list[stat_name]
+		var base_value = stat_values[0]
+		var bonus_value = stat_values[1]
+		var min_value = stat_values[2]
+		var item_bonus = get_item_bonus(stat_name)
+
+		self[stat_name] = max(base_value + bonus_value + item_bonus, min_value)
 
 	if previous_max_hp > 0:
 		current_health = int(current_health * max_health / previous_max_hp)
@@ -86,6 +87,11 @@ func get_bonus_health_regen() -> float:
 		return 0.0
 
 	return strength / 10.0
+
+func get_item_bonus(stat_name: String) -> float:
+	if parent.unit_inventory:
+		return parent.unit_inventory.get_item_bonus(stat_name)
+	return 0
 
 ### TO DO ###
 func get_bonus_armor() -> int:

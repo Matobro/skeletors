@@ -1,0 +1,57 @@
+[gd_scene load_steps=5 format=3 uid="uid://ly6nkar33gxb"]
+
+[ext_resource type="Texture2D" uid="uid://bsq5ahkljv6it" path="res://RTS-System/Items/ItemData/TestItem/ItemTemplate.png" id="1_1eykt"]
+[ext_resource type="FontFile" uid="uid://hryht1uvr8i8" path="res://Game/Data/Fonts/8-bit-snobbery/8 Bit Snobbery.ttf" id="2_rdvii"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1eykt"]
+bg_color = Color(0, 0, 0, 0.547)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.099986, 0.099986, 0.0999859, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_rdvii"]
+font = ExtResource("2_rdvii")
+font_color = Color(0.784314, 0.784314, 0, 1)
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Button" type="Button"]
+custom_minimum_size = Vector2(64, 64)
+offset_right = 64.0
+offset_bottom = 64.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_1eykt")
+
+[node name="Icon" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -10.5
+offset_right = 20.0
+offset_bottom = 29.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_1eykt")
+
+[node name="Cost" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -14.5
+offset_top = -34.5
+offset_right = 13.5
+offset_bottom = -11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "500"
+label_settings = SubResource("LabelSettings_rdvii")
+horizontal_alignment = 1
+vertical_alignment = 1

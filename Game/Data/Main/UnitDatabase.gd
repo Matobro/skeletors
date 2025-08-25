@@ -7,7 +7,7 @@ func _ready() -> void:
 	load_unit_data()
 
 func load_unit_data():
-	load_units_from_manifest("res://RTS-System/units_manifest.json")
+	load_units_from_manifest("res://RTS-System/data_manifest.json")
 
 func load_units_from_manifest(manifest_path: String) -> void:
 	var file = FileAccess.open(manifest_path, FileAccess.READ)

@@ -17,6 +17,8 @@ var unit_ai: UnitAI
 var unit_combat: UnitCombat
 var unit_visual: UnitVisual
 var unit_ability_manager: UnitAbilityManager
+var unit_inventory: UnitInventory
+var unit_inventory_ui: UnitInventoryUI
 
 signal died(unit)
 
@@ -35,10 +37,8 @@ func _data_received():
 	pass
 
 func init_stats():
-
 	if data.stats is BaseStatData:
 		data.stats = data.stats.duplicate()
-		data.stats.recalculate_stats()
 	
 func assign_stuff():
 	aggro_collision.set_deferred("disabled", false)
@@ -47,6 +47,7 @@ func assign_stuff():
 	animation_player.init_animations(data.unit_model_data, self)
 
 	data.parent = self
+	data.stats.parent = self
 	
 	create_unit()
 
@@ -62,6 +63,7 @@ func create_unit():
 	add_child(unit_visual)
 
 	SpatialGrid.register_unit(self)
+	data.stats.recalculate_stats()
 
 func get_stat(stat: String):
 	return data.stats[stat]
