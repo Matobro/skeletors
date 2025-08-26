@@ -1,2 +1,5 @@
 # skeletors
- game about skeleton gladiators
+
+game about skeleton gladiators
+
+(skellingtons added later)
