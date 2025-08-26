@@ -4,16 +4,13 @@ extends EditorPlugin
 var button
 
 func _enter_tree():
-    # Create a new button
     button = Button.new()
     button.text = "Generate Manifest"
     button.pressed.connect(_on_button_pressed)
     
-    # Add the button to the editor's top panel or bottom panel
     add_control_to_container(CONTAINER_TOOLBAR, button)
 
 func _exit_tree():
-    # Remove the button when plugin is disabled
     remove_control_from_container(CONTAINER_TOOLBAR, button)
     button.queue_free()
 

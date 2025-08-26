@@ -1,6 +1,7 @@
-[gd_scene load_steps=17 format=3 uid="uid://bp6xgo07rs3es"]
+[gd_scene load_steps=18 format=3 uid="uid://bp6xgo07rs3es"]
 
 [ext_resource type="Texture2D" uid="uid://bj5uubjli0n4e" path="res://Game/Data/Menus/Data/SkellingtonIdle.png" id="1_3g7qx"]
+[ext_resource type="Script" uid="uid://cvr37w70g3ev8" path="res://Game/Data/Menus/MainMenu.gd" id="1_l56yk"]
 [ext_resource type="Texture2D" uid="uid://bslwg64r2o0r" path="res://Game/Data/Menus/Data/MenuBackground.png" id="1_r8dbq"]
 [ext_resource type="Script" uid="uid://cga6yxw2cmkr6" path="res://RTS-System/Entities/Data/PlayAnimation.gd" id="3_7ihqj"]
 [ext_resource type="Texture2D" uid="uid://c1dqw07fqrok8" path="res://Game/Data/Menus/Data/MenuTitleText.png" id="4_n6o36"]
@@ -119,6 +120,7 @@ _data = {
 }
 
 [node name="MainMenu" type="Node2D"]
+script = ExtResource("1_l56yk")
 
 [node name="Menu Camera" type="Camera2D" parent="."]
 position = Vector2(960, 540)

@@ -31,6 +31,7 @@ StatModifiers="*res://RTS-System/Entities/Data/StatModifiers.gd"
 WaveSystem="*res://Game/WaveSystem/WaveSystem.gd"
 CommandsData="*res://RTS-System/Commands/Scripts/CommandsData.gd"
 ItemDatabase="*res://RTS-System/Items/Data/ItemDatabase.gd"
+NetworkManager="*res://Network/NetworkManager.gd"
 
 [display]
 

@@ -340,7 +340,7 @@ offset_top = 470.0
 offset_right = 180.0
 offset_bottom = 510.0
 
-[node name="Button" type="Button" parent="CanvasLayer/Buttons"]
+[node name="StartButton" type="Button" parent="CanvasLayer/Buttons"]
 layout_mode = 0
 offset_left = 1425.0
 offset_top = 496.0

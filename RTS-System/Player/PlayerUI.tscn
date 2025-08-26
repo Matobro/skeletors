@@ -118,6 +118,7 @@ border_width_bottom = 3
 border_color = Color(0, 0, 0, 1)
 
 [node name="PlayerUI" type="Node2D"]
+visible = false
 script = ExtResource("1_mb3tw")
 
 [node name="BottomBar" type="Panel" parent="."]

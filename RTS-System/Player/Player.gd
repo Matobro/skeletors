@@ -12,16 +12,16 @@ var hero: Hero = null
 var is_local_player: bool = false
 
 func _ready():
-	await get_tree().process_frame
-
-	UnitHandler.unit_died.connect(_on_unit_died)
-
 	if is_ai:
-		_setup_ai()
+		if multiplayer.is_server():
+			await get_tree().process_frame
+			_setup_ai()
 	else:
-		_setup_human()
-	
-	TooltipManager.register_player_tooltip(player_id, tooltip_panel)
+		if is_multiplayer_authority():
+			await get_tree().process_frame
+			_setup_human()
+			UnitHandler.unit_died.connect(_on_unit_died)
+			TooltipManager.register_player_tooltip(player_id, tooltip_panel)
 	
 func _setup_ai():
 	player_ui.visible = false
@@ -34,6 +34,7 @@ func _setup_ai():
 	setup_ai_script_for_mode(ai_controller)
 
 func _setup_human():
+	visible = true
 	player_camera.enabled = true
 	player_camera.make_current()
 	player_ui.visible = true

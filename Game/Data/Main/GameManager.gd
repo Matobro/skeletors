@@ -7,10 +7,9 @@ func _ready():
     game_mode = "Skeletors"
     dev_mode = true
 
-    #start_game()
-
 func start_game():
     MapHandler.setup_map()
     SpatialGrid.build_map()
-    PlayerManager.setup_player_manager()
-    WaveSystem.setup()
+    if multiplayer.is_server():
+        PlayerManager.setup_player_manager()
+        WaveSystem.setup()

@@ -14,22 +14,15 @@ class_name HeroInfo
 @onready var stats_right = $HeroStats/Stats2
 
 var first_load
-# func _ready() -> void:
-#     hero_name.text = ""
-#     hero_icon.texture = null
-#     str_value.text = ""
-#     agi_value.text = ""
-#     int_value.text = ""
-#     main_stat_value.text = ""
-#     description_value.text = ""
-#     stats_left.text = ""
-#     stats_right.text = ""
+var currently_selected
 
 func _ready() -> void:
 	if first_load:
+		currently_selected = first_load
 		load_hero_info(first_load)
 		
 func load_hero_info(data: UnitData):
+	currently_selected = data
 	var stats: HeroStatData = data.stats
 	hero_name.text = data.name
 	hero_icon.texture = data.unit_model_data.get_avatar()

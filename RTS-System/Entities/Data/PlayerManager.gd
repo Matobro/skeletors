@@ -1,7 +1,5 @@
 extends Node
 
-var dev_spawner = null
-
 var player_scene = preload("res://RTS-System/Player/PlayerObject.tscn")
 
 var player_colors := {
@@ -15,47 +13,38 @@ var player_colors := {
 	8: Color.GRAY,
 	10: Color.RED
 }
-var players_to_spawn = [
-	{ "id": 1, "is_ai": false, "hero": null },
-	{ "id": 10, "is_ai": true, "hero": null }
-]
 
-var players = {}
+var players_to_spawn: Array = []
+var players: Dictionary = {}
 
-### INIT ###
 func setup_player_manager() -> void:
 	await get_tree().process_frame
-	
-	if GameManager.dev_mode == true:
-		dev_spawner = get_node("/root/World/DevSpawnUnit")
+	if multiplayer.is_server():
+		# Add AI only on host
+		players_to_spawn.append({ "id": 10, "is_ai": true, "hero": null })
+		spawn_players()
 
-	spawn_players()
-
-	await get_tree().process_frame
-
-	for player in get_all_players():
-		print("Player ID: ", player.player_id, " created")
-	
-	if GameManager.dev_mode == true:
-		dev_spawner.player_input = get_player(1).player_input
-		dev_spawner.init_node()
-
-### INIT END ###
-
-### Player ###
 func spawn_players():
+	if not multiplayer.is_server():
+		return
+
 	for player_data in players_to_spawn:
 		var p = player_scene.instantiate()
 		p.player_id = player_data.id
 		p.is_ai = player_data.is_ai
-		p.is_local_player = !player_data.is_ai and player_data.id == 1
+		p.is_local_player = !player_data.is_ai and p.player_id == multiplayer.get_unique_id()
 		add_child(p)
 		players[p.player_id] = p
 		register_player(p)
 
+		if player_data.hero:
+			var spawn_pos = Vector2(0, 0) #todo
+			var hero_unit = UnitSpawner.spawn_unit(player_data.hero, spawn_pos, p.player_id)
+			p.hero = hero_unit
+
 func register_player(player_object):
 	players[player_object.player_id] = player_object
-
+	
 func get_player_color(player_id: int) -> Color:
 	return player_colors.get(player_id, Color.BLACK)
 
