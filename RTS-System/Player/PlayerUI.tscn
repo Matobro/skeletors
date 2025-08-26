@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://44m1veg1thkm"]
+[gd_scene load_steps=31 format=3 uid="uid://44m1veg1thkm"]
 
 [ext_resource type="Script" uid="uid://dtvvveravq00x" path="res://RTS-System/Player/PlayerUI.gd" id="1_mb3tw"]
 [ext_resource type="Texture2D" uid="uid://f8758o682hq6" path="res://RTS-System/Commands/UI/Move.png" id="1_qbo8c"]
@@ -108,6 +108,14 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.234246, 0.0553226, 0.0579772, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_luor8"]
+bg_color = Color(0, 0, 0, 0.486275)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0, 0, 1)
 
 [node name="PlayerUI" type="Node2D"]
 script = ExtResource("1_mb3tw")
@@ -272,6 +280,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_sxr4j")
 
 [node name="PortraitBG" type="MarginContainer" parent="PortraitPanel"]
 clip_contents = true
+layout_mode = 0
 offset_left = 5.0
 offset_top = 5.0
 offset_right = 180.0
@@ -574,3 +583,27 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 columns = 2
+
+[node name="ActionPanel" type="Panel" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_right = 200.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_luor8")
+
+[node name="ActionText" type="Label" parent="ActionPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -71,6 +71,12 @@ func _apply_command(cmd: Dictionary) -> void:
 			target_state = "Stop"
 		"Hold":
 			target_state = "Hold"
+		"GiveItem":
+			target_state = "Move"
+		"DropItem":
+			target_state = "Move"
+		"PickUpItem":
+			target_state = "Move"
 		_:
 			target_state = "Idle"
 

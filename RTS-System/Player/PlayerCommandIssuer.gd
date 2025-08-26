@@ -70,6 +70,69 @@ func issue_move_command(event_info):
 
 	parent.command_cooldown_frames = parent.COMMAND_COOLDOWN
 
+func issue_drop_item_command(event_info, slot_index):
+	if selection_manager.selected_units.size() <= 0:
+		return
+	
+	var formation = calculate_unit_formation(event_info.total_units, event_info.pos)
+	for i in range (selection_manager.selected_units.size()):
+		var unit = selection_manager.selected_units[i]
+		var target_pos = formation[i]
+		unit.command_holder.issue_command(
+			"DropItem",
+			null,
+			target_pos,
+			event_info.is_queued,
+			id,
+			true,
+			Vector2.ZERO,
+			{"item": slot_index}
+		)
+
+	parent.command_cooldown_frames = parent.COMMAND_COOLDOWN
+
+func issue_give_item_command(event_info, item: ItemData):
+	if selection_manager.selected_units.size() <= 0:
+		return
+	
+	var formation = calculate_unit_formation(event_info.total_units, event_info.pos)
+	for i in range (selection_manager.selected_units.size()):
+		var unit = selection_manager.selected_units[i]
+		var target_pos = formation[i]
+		unit.command_holder.issue_command(
+			"GiveItem",
+			event_info.click_target,
+			target_pos,
+			event_info.is_queued,
+			id,
+			true,
+			Vector2.ZERO,
+			{"item": item}
+		)
+
+	parent.command_cooldown_frames = parent.COMMAND_COOLDOWN
+
+func issue_pickup_item_command(event_info):
+	if selection_manager.selected_units.size() <= 0:
+		return
+	
+	var formation = calculate_unit_formation(event_info.total_units, event_info.pos)
+	for i in range (selection_manager.selected_units.size()):
+		var unit = selection_manager.selected_units[i]
+		var target_pos = formation[i]
+		unit.command_holder.issue_command(
+			"PickUpItem",
+			null,
+			target_pos,
+			event_info.is_queued,
+			id,
+			true,
+			Vector2.ZERO,
+			{"item": event_info.click_item}
+		)
+
+	parent.command_cooldown_frames = parent.COMMAND_COOLDOWN
+	
 func calculate_unit_formation(total_units, pos):
 	if total_units == 1:
 		return [pos]

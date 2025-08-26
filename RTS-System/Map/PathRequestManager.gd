@@ -6,10 +6,20 @@ var astar_manager
 var unit_manager
 var grid_manager
 
+const MAX_PATHS_PER_FRAME := 5
+const PATH_REQUEST_COOLDOWN := 100
+
 signal path_ready(unit, path: PackedVector2Array, request_id)
 
 ## Queues a path generation for [unit] unless [request_id] already exists in queue. [target_unit] can be specified and it will be used in pathfinding
 func queue_unit_for_path(unit, request_id, target_unit = null):
+	if !unit.has_meta("next_path_request_time"):
+		unit.set_meta("next_path_request_time", 0)
+	
+	var current_time = Time.get_ticks_msec()
+	if current_time < unit.get_meta("next_path_request_time"):
+		return
+		
 	var unit_pathfinder = unit.unit_ai.pathfinder
 	var unit_commands = unit.unit_ai.command_handler
 	var start_pos = unit.global_position
@@ -32,6 +42,9 @@ func queue_unit_for_path(unit, request_id, target_unit = null):
 			item.request_id = request_id
 			return
 
+	var delay = randi() % 50
+	unit.set_meta("next_path_request_time", current_time + PATH_REQUEST_COOLDOWN + delay)
+
 	path_queue.append({
 		"unit": unit,
 		"request_id": request_id, 
@@ -46,19 +59,13 @@ func clear_path_requests_for_unit(unit):
 		)
 
 func _process(_delta):
-	var time_budget = 0.5 / Engine.get_frames_per_second()
-	var time_spent = 0.0
-	var start_time = Time.get_ticks_usec()
-
-	if Engine.get_frames_per_second() <= 10:
-		return
-
-	while path_queue.size() > 0:
+	var processed_count = 0
+	while path_queue.size() > 0 and processed_count < MAX_PATHS_PER_FRAME:
 		var item = path_queue.pop_front()
 		var unit = item.unit
 		if !is_instance_valid(unit):
 			continue
-			
+
 		var target_unit = item.target_unit
 		var request_id = item.request_id
 
@@ -70,6 +77,4 @@ func _process(_delta):
 		var path = astar_manager.find_path(start_pos, end_pos, target_unit)
 		emit_signal("path_ready", unit, path, request_id)
 
-		time_spent = (Time.get_ticks_usec() - start_time) / 1_000_000.0
-		if time_spent >= time_budget:
-			break
+		processed_count += 1

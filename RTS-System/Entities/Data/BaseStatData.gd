@@ -68,3 +68,5 @@ func recalculate_stats():
 		current_mana = int(current_mana * max_mana / previous_max_mana)
 	else:
 		current_mana = max_mana
+
+	parent.unit_visual.hp_bar.init_hp_bar(current_health, max_health)

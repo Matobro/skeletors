@@ -51,34 +51,51 @@ func on_left_click_released(event_info):
 	if event_info.attack_moving:
 		return
 
-	# If dragging then end drag and return
 	if parent.dragging:
 		parent.end_drag(event_info.is_queued)
 		return
 	
-	# Handle double-click selection
+	if parent.drop_mode and parent.item_to_drop:
+		if event_info.click_target and event_info.click_target is Hero:
+			var inventory = event_info.click_target.unit_inventory
+			if inventory.is_space_in_inventory():
+				command_issuer.issue_give_item_command(event_info, parent.item_to_drop)
+			else:
+				print("Inventory full")
+		else:
+			print("issuing drop item")
+			command_issuer.issue_drop_item_command(event_info, parent.item_slot_index)
+		
+		parent.set_drop_mode(null, false)
+		return
+
 	if event_info.click_target and !event_info.attack_moving:
 		if selection_manager.last_clicked_unit == event_info.click_target and multi_select_timer > 0:
-			# Shift held → add to selection
 			selection_manager.select_all_units_of_type(event_info.click_target, event_info.is_queued)
 			selection_manager.last_clicked_unit = null
 			multi_select_timer = 0
-			return   # <<< stop here, don't run single-click selection!
+			return
 		
-		# First click
 		selection_manager.last_clicked_unit = event_info.click_target
 		multi_select_timer = MULTI_SELECT_TIME
 	
-	# Normal single-click selection
 	selection_manager.select_unit_at_mouse_pos(event_info.pos, event_info.is_queued)
 
 
 func on_right_click_pressed(event_info):
-	if event_info.click_target and event_info.click_target.owner_id == 10:
-		command_issuer.issue_attack_command(event_info)
-	else:
-		command_issuer.issue_move_command(event_info)
+	if parent.drop_mode:
+		parent.set_drop_mode(null, false)
+		return
 
+	if event_info.click_target and (event_info.click_target is Hero or event_info.click_target is Unit) and event_info.click_target.owner_id == 10:
+		command_issuer.issue_attack_command(event_info)
+	elif !event_info.click_target and event_info.click_item:
+		print("PickUpItem command")
+		command_issuer.issue_pickup_item_command(event_info)
+	else:
+		print("Move command")
+		command_issuer.issue_move_command(event_info)
+		
 func on_right_click_released(_event_info):
 	pass
 

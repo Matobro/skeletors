@@ -1,6 +1,32 @@
-[gd_scene load_steps=3 format=3 uid="uid://b54lnsucttpd"]
+[gd_scene load_steps=13 format=3 uid="uid://b54lnsucttpd"]
 
 [ext_resource type="Script" uid="uid://dipojeui02l5e" path="res://RTS-System/Items/Data/InventorySlot.gd" id="1_apgtd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_apgtd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2dx60"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gv7yp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0fu3t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m6qax"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f7x77"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_apgtd"]
+bg_color = Color(0.313726, 0.313726, 0.313726, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2ormr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cv532"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_japlq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uk6sk"]
 bg_color = Color(0.144063, 0.144063, 0.144062, 1)
@@ -13,6 +39,16 @@ border_color = Color(0, 0, 0, 1)
 [node name="InventorySlot" type="Button"]
 z_index = 500
 custom_minimum_size = Vector2(70, 70)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_apgtd")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_2dx60")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_gv7yp")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_0fu3t")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_m6qax")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_f7x77")
+theme_override_styles/hover = SubResource("StyleBoxFlat_apgtd")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_2ormr")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_cv532")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_japlq")
 theme_override_styles/normal = SubResource("StyleBoxFlat_uk6sk")
 script = ExtResource("1_apgtd")
 

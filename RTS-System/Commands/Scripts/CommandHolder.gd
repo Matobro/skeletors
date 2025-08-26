@@ -21,7 +21,7 @@ func _on_command_completed(command_type, fallback_command):
 		if fallback_command != {}:
 			insert_command_at_front(fallback_command)
 
-func issue_command(command_type: String = "", target = null, position: Vector2 = Vector2.ZERO, is_queued: bool = false, player_id: int = 10, is_player_command: bool = false, offset: Vector2 = Vector2.ZERO):
+func issue_command(command_type: String = "", target = null, position: Vector2 = Vector2.ZERO, is_queued: bool = false, player_id: int = 10, is_player_command: bool = false, offset: Vector2 = Vector2.ZERO, extra := {}):
 	if player_id != unit.owner_id:
 		return
 
@@ -32,6 +32,9 @@ func issue_command(command_type: String = "", target = null, position: Vector2 =
 		"is_player_command": is_player_command,
 		"offset": offset
 	}
+
+	for key in extra.keys():
+		command[key] = extra[key]
 
 	if is_queued:
 		if max_commands <= queue.size():

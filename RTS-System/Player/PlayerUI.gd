@@ -2,6 +2,8 @@ extends Node
 class_name PlayerUI
 
 @onready var ui_inventory: UnitInventoryUI = $Inventory
+@onready var action_panel = $ActionPanel
+@onready var action_text = $ActionPanel/ActionText
 
 var shop_scene = preload("res://RTS-System/Items/Data/ShopUI.tscn")
 var selected_unit: Unit
@@ -29,6 +31,7 @@ func _ready() -> void:
 	add_child(ui_tooltips)
 	add_child(shop_ui)
 
+	ui_inventory.parent = self
 	hide_ui()
 
 func _process(_delta):

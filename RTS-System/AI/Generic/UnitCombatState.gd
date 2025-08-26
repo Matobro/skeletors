@@ -16,13 +16,15 @@ var has_attacked: bool = false
 var recent_attackers: Array[Dictionary] = []
 
 const ATTACKER_MEMORY := 1.5
-const AGGRO_CHECK_INTERVAL := 0.25
+const AGGRO_CHECK_INTERVAL := 0.5
 
 func _init(_ai, _parent):
 	ai = _ai
 	parent = _parent
 
 func update(delta: float) -> void:
+	if !is_valid_target(parent):
+		return
 	advance_timers(delta)
 	clean_recent_attackers()
 
@@ -37,6 +39,7 @@ func check_for_targets():
 
 		# Check recent attackers
 		if switch_target_to_attacker():
+			print("is valid attacker")
 			return
 		
 		# Check close units
@@ -70,7 +73,7 @@ func set_target(target: Node) -> void:
 	current_target = target
 	ai.parent.unit_visual.set_target(target)
 	# Que attack command if attack moving
-	if ai.state == "Attack_move":
+	if ai.state == "Attack_move" or "Idle":
 		parent.command_holder.insert_command_at_front({
 			"type": "Attack",
 			"target_unit": target,
@@ -94,11 +97,11 @@ func switch_target_aggro_check() -> bool:
 
 func switch_target_to_attacker() -> bool:
 	for unit in recent_attackers:
-			var attacker: Node = unit["attacker"]
-			if is_valid_target(attacker):
-				if should_switch_target(attacker):
-					set_target(attacker)
-					return true
+		var attacker: Node = unit["attacker"]
+		if is_valid_target(attacker):
+			if should_switch_target(attacker):
+				set_target(attacker)
+				return true
 	return false
 
 func advance_timers(delta):
@@ -141,5 +144,4 @@ func clear_combat_state():
 	is_attack_committed = false
 	has_attacked = false
 	attack_anim_timer = 0.0
-	aggro_timer = 0.0
 	recent_attackers.clear()

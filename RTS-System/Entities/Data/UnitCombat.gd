@@ -33,7 +33,7 @@ func apply_damage(damage, attacker):
 		var final_damage = clampi(damage, 1, 9999)
 		stats.current_health -= final_damage
 		stats.current_health = clamp(stats.current_health, 0, stats.max_health)
-		parent.hp_bar.set_hp_bar(stats.current_health)
+		parent.unit_visual.hp_bar.set_hp_bar(stats.current_health)
 		DamageText.show_text(str(final_damage), parent.animation_player.global_position)
 	
 	if stats.current_health <= 0:

@@ -8,14 +8,16 @@ class MouseEventInfo:
 	var click_target: Unit
 	var is_queued: bool
 	var attack_moving: bool
+	var click_item: DroppedItem
 
-	static func create(_pos, _total_units, _click_target, _is_queued, _attack_moving) -> MouseEventInfo:
+	static func create(_pos, _total_units, _click_target, _is_queued, _attack_moving, _click_item) -> MouseEventInfo:
 		var inst = MouseEventInfo.new()
 		inst.pos = _pos
 		inst.total_units = _total_units
 		inst.click_target = _click_target
 		inst.is_queued = _is_queued
 		inst.attack_moving = _attack_moving
+		inst.click_item = _click_item
 		return inst
 
 @export var commands: CommandsData
@@ -34,6 +36,10 @@ var command_cooldown_frames := 0
 var block_input_frames: int = 0
 
 var drag_start = Vector2.ZERO
+
+var drop_mode: bool = false
+var item_to_drop: ItemData = null
+var item_slot_index: int
 
 const DOUBLE_CLICK_TIME = 0.3
 const DRAG_THRESHOLD := 50.0
@@ -92,7 +98,8 @@ func get_key_event_info() -> MouseEventInfo:
 			selection_manager.selected_units.size(),
 			null,
 			Input.is_key_pressed(KEY_SHIFT),
-			Input.is_action_pressed("a")
+			Input.is_action_pressed("a"),
+			null
 		)
 func get_mouse_event_info() -> MouseEventInfo:
 		return MouseEventInfo.create(
@@ -100,7 +107,8 @@ func get_mouse_event_info() -> MouseEventInfo:
 			selection_manager.selected_units.size(),
 			check_click_hit(get_global_mouse_position()),
 			Input.is_key_pressed(KEY_SHIFT),
-			Input.is_action_pressed("a")
+			Input.is_action_pressed("a"),
+			check_click_hit_item(get_global_mouse_position())
 		)
 
 func handle_keyboard_commands(event: InputEventKey):
@@ -149,6 +157,19 @@ func handle_mouse_input(event):
 func is_mouse_over_ui() -> bool:
 	return get_viewport().gui_get_hovered_control() != null
 
+func set_drop_mode(item: ItemData = null, slot_index: int = -1, value = false):
+	drop_mode = value
+	
+	if drop_mode:
+		item_to_drop = item if item != null else null
+		item_slot_index = slot_index
+		player_ui.action_panel.visible = true
+		player_ui.action_text.text = str("Left click to drop [", item.name, "]")
+	else:
+		item_to_drop = null
+		player_ui.action_panel.visible = false
+		player_ui.action_text.text = ""
+	
 func start_drag():
 	dragging = true
 	selection_box.visible = true
@@ -196,6 +217,28 @@ func check_click_hit(mouse_pos: Vector2):
 	if results.size() > 0:
 		var collider = results[0].collider
 		if collider and collider.unit_visual and collider.unit_visual.has_method("set_selected"):
+			return collider
+			
+	return null
+
+func check_click_hit_item(mouse_pos: Vector2):
+	var space_state = get_world_2d().direct_space_state
+	var shape := CircleShape2D.new()
+	shape.radius = 30.0
+	
+	var query = PhysicsShapeQueryParameters2D.new()
+	query.shape = shape
+	query.transform = Transform2D(0, mouse_pos)
+	query.collide_with_areas = true
+	query.collide_with_bodies = false
+
+	query.collision_mask = 1 << (4 - 1)
+	
+	var results = space_state.intersect_shape(query, 10)
+	
+	if results.size() > 0:
+		var collider = results[0].collider
+		if collider and collider is DroppedItem:
 			return collider
 			
 	return null

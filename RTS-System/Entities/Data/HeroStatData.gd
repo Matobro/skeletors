@@ -64,6 +64,7 @@ func recalculate_stats():
 	else:
 		current_mana = max_mana
 
+	parent.unit_visual.hp_bar.init_hp_bar(current_health, max_health)
 func get_bonus_health() -> int:
 	if strength * StatModifiers.str_multiplier <= 0:
 		return 0
