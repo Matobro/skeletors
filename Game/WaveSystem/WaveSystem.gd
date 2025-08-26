@@ -6,19 +6,17 @@ var wave_timer = 0.0
 var spawn_keys = []
 var spawn_index: int = 0
 
-@onready var spawn_points = {
-	"north": get_tree().root.get_node("World/EnemySpawnPoints/North"),
-	"east": get_tree().root.get_node("World/EnemySpawnPoints/East"),
-	"west": get_tree().root.get_node("World/EnemySpawnPoints/West")
+var spawn_points = {
+	"north": null,
+	"east": null,
+	"west": null
 }
 
-func _ready():
+func setup():
+	spawn_points["north"] = get_tree().root.get_node("World/EnemySpawnPoints/North")
+	spawn_points["east"] = get_tree().root.get_node("World/EnemySpawnPoints/East")
+	spawn_points["west"] = get_tree().root.get_node("World/EnemySpawnPoints/West")
 	spawn_keys = spawn_points.keys()
-
-### for dev
-func _input(event: InputEvent):
-	if event.is_action_pressed("p"):
-		start_next_wave()
 
 func start_next_wave():
 	current_wave += 1

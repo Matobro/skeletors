@@ -1,0 +1,351 @@
+[gd_scene load_steps=12 format=3 uid="uid://ktjpflirevfb"]
+
+[ext_resource type="Script" uid="uid://dfn1sdkohkbth" path="res://Game/Data/Menus/HeroList.gd" id="1_2in0j"]
+[ext_resource type="Script" uid="uid://bv5q1mlckptsu" path="res://Game/Data/Menus/LocalSetup.gd" id="1_d3k6q"]
+[ext_resource type="FontFile" uid="uid://hryht1uvr8i8" path="res://Game/Data/Fonts/8-bit-snobbery/8 Bit Snobbery.ttf" id="1_oyca2"]
+[ext_resource type="Script" uid="uid://dxo7vkibuw3ah" path="res://Game/Data/Menus/Data/HeroInfo.gd" id="2_5bpbk"]
+[ext_resource type="Texture2D" uid="uid://blfnyk7cdo4ah" path="res://RTS-System/Player/yesys.png" id="3_d4j2i"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d4j2i"]
+bg_color = Color(0.137255, 0.0980392, 0.145098, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.228071, 0.207105, 0.0407559, 1)
+expand_margin_left = 10.0
+expand_margin_top = 10.0
+expand_margin_right = 10.0
+expand_margin_bottom = 10.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_5bpbk"]
+line_spacing = 1.0
+font = ExtResource("1_oyca2")
+font_size = 40
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d3k6q"]
+bg_color = Color(0, 0, 0, 0.392157)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.354617, 0.283495, 0.0740345, 1)
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5bpbk"]
+bg_color = Color(0, 0, 0, 0.392157)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.354617, 0.283495, 0.0740345, 1)
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_d3k6q"]
+font = ExtResource("1_oyca2")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c0eqm"]
+bg_color = Color(0.352941, 0.282353, 0.0745098, 1)
+border_color = Color(0.354617, 0.283495, 0.0740345, 1)
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
+[node name="LocalSetup" type="Node2D"]
+script = ExtResource("1_d3k6q")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Menu Background" type="ColorRect" parent="CanvasLayer"]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0, 0, 0, 1)
+
+[node name="HeroList" type="Panel" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -860.0
+offset_top = -440.0
+offset_right = -295.0
+offset_bottom = 440.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_d4j2i")
+script = ExtResource("1_2in0j")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/HeroList"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/HeroList/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 32
+theme_override_constants/v_separation = 32
+columns = 3
+
+[node name="HeroInfoPanel" type="Panel" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -221.0
+offset_top = -440.0
+offset_right = 211.0
+offset_bottom = 182.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_d4j2i")
+script = ExtResource("2_5bpbk")
+
+[node name="HeroName" type="Label" parent="CanvasLayer/HeroInfoPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 14.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "TestHero"
+label_settings = SubResource("LabelSettings_5bpbk")
+horizontal_alignment = 1
+
+[node name="HeroIconBox" type="Panel" parent="CanvasLayer/HeroInfoPanel"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 0
+offset_left = 17.0
+offset_top = 82.0
+offset_right = 145.0
+offset_bottom = 210.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_d3k6q")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HeroInfoPanel/HeroIconBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_d4j2i")
+
+[node name="HeroAttributeBox" type="Panel" parent="CanvasLayer/HeroInfoPanel"]
+custom_minimum_size = Vector2(256, 128)
+layout_mode = 0
+offset_left = 159.0
+offset_top = 82.0
+offset_right = 287.0
+offset_bottom = 210.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5bpbk")
+
+[node name="Attributes" type="RichTextLabel" parent="CanvasLayer/HeroInfoPanel/HeroAttributeBox"]
+layout_mode = 0
+offset_left = 20.0
+offset_right = 120.0
+offset_bottom = 128.0
+theme_override_constants/line_separation = 8
+theme_override_fonts/normal_font = ExtResource("1_oyca2")
+bbcode_enabled = true
+text = "[color=red]Strength[/color] 
+[color=green]Agility[/color]
+[color=cyan]Intelligence[/color]"
+vertical_alignment = 1
+
+[node name="StrValue" type="Label" parent="CanvasLayer/HeroInfoPanel/HeroAttributeBox"]
+layout_mode = 0
+offset_left = 116.0
+offset_top = 22.0
+offset_right = 241.0
+offset_bottom = 45.0
+text = "5 + 3 / level"
+label_settings = SubResource("LabelSettings_d3k6q")
+vertical_alignment = 1
+
+[node name="AgiValue" type="Label" parent="CanvasLayer/HeroInfoPanel/HeroAttributeBox"]
+layout_mode = 0
+offset_left = 116.0
+offset_top = 50.0
+offset_right = 241.0
+offset_bottom = 73.0
+text = "3 + 2 / level"
+label_settings = SubResource("LabelSettings_d3k6q")
+vertical_alignment = 1
+
+[node name="IntValue" type="Label" parent="CanvasLayer/HeroInfoPanel/HeroAttributeBox"]
+layout_mode = 0
+offset_left = 116.0
+offset_top = 76.0
+offset_right = 241.0
+offset_bottom = 99.0
+text = "2 + 2 / level"
+label_settings = SubResource("LabelSettings_d3k6q")
+vertical_alignment = 1
+
+[node name="HeroMainStatBox" type="Panel" parent="CanvasLayer/HeroInfoPanel"]
+custom_minimum_size = Vector2(128, 32)
+layout_mode = 0
+offset_left = 17.0
+offset_top = 224.0
+offset_right = 145.0
+offset_bottom = 256.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5bpbk")
+
+[node name="MainStatValue" type="RichTextLabel" parent="CanvasLayer/HeroInfoPanel/HeroMainStatBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/line_separation = 0
+theme_override_fonts/normal_font = ExtResource("1_oyca2")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "[color=red]Strength[/color]
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HeroMainStatBoxFiller" type="Panel" parent="CanvasLayer/HeroInfoPanel"]
+custom_minimum_size = Vector2(128, 32)
+layout_mode = 0
+offset_left = 155.0
+offset_top = 224.0
+offset_right = 415.0
+offset_bottom = 256.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_c0eqm")
+
+[node name="HeroDescription" type="Panel" parent="CanvasLayer/HeroInfoPanel"]
+custom_minimum_size = Vector2(398, 128)
+layout_mode = 0
+offset_left = 17.0
+offset_top = 470.0
+offset_right = 415.0
+offset_bottom = 598.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5bpbk")
+
+[node name="DescriptionValue" type="RichTextLabel" parent="CanvasLayer/HeroInfoPanel/HeroDescription"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/line_separation = 0
+theme_override_fonts/normal_font = ExtResource("1_oyca2")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "This hero is super cool and not p2w at all
+check out giga dlc to get +20 dmg btw"
+horizontal_alignment = 1
+
+[node name="HeroStats" type="Panel" parent="CanvasLayer/HeroInfoPanel"]
+custom_minimum_size = Vector2(398, 184)
+layout_mode = 0
+offset_left = 17.0
+offset_top = 270.0
+offset_right = 415.0
+offset_bottom = 398.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5bpbk")
+
+[node name="Stats1" type="RichTextLabel" parent="CanvasLayer/HeroInfoPanel/HeroStats"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -199.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/line_separation = 0
+theme_override_fonts/normal_font = ExtResource("1_oyca2")
+theme_override_font_sizes/normal_font_size = 22
+bbcode_enabled = true
+text = "Range: Melee
+Damage: 10-15
+A.Speed: 1..3s/atk
+M.Speed: 330
+Armor: 1
+"
+
+[node name="Stats2" type="RichTextLabel" parent="CanvasLayer/HeroInfoPanel/HeroStats"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 199.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/line_separation = 0
+theme_override_fonts/normal_font = ExtResource("1_oyca2")
+theme_override_font_sizes/normal_font_size = 22
+bbcode_enabled = true
+text = "HP: 100
+H..Regen: 50/s
+MP: 50
+M..Regen: 50/s
+"
+
+[node name="HeroInfoPanel2" type="Panel" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 241.0
+offset_top = -440.0
+offset_right = 673.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_d4j2i")
+
+[node name="Label" type="Label" parent="CanvasLayer/HeroInfoPanel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "skills or somethin idk dkk d"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Buttons" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 140.0
+offset_top = 470.0
+offset_right = 180.0
+offset_bottom = 510.0
+
+[node name="Button" type="Button" parent="CanvasLayer/Buttons"]
+layout_mode = 0
+offset_left = 1425.0
+offset_top = 496.0
+offset_right = 1753.0
+offset_bottom = 577.0
+theme_override_fonts/font = ExtResource("1_oyca2")
+theme_override_font_sizes/font_size = 64
+text = "Start Game"

@@ -1,8 +1,5 @@
 extends Node
 
-@onready var color_rect = $"../World/CanvasLayer/DevBox/ColorRect"
-@onready var ai_text = $"../World/CanvasLayer/DevBox/ColorRect/Label"
-
 var dev_spawner = null
 
 var player_scene = preload("res://RTS-System/Player/PlayerObject.tscn")

@@ -7,18 +7,18 @@ var unit_manager
 var grid_manager
 
 const MAX_PATHS_PER_FRAME := 5
-const PATH_REQUEST_COOLDOWN := 100
+#const PATH_REQUEST_COOLDOWN := 100
 
 signal path_ready(unit, path: PackedVector2Array, request_id)
 
 ## Queues a path generation for [unit] unless [request_id] already exists in queue. [target_unit] can be specified and it will be used in pathfinding
 func queue_unit_for_path(unit, request_id, target_unit = null):
-	if !unit.has_meta("next_path_request_time"):
-		unit.set_meta("next_path_request_time", 0)
+	#if !unit.has_meta("next_path_request_time"):
+	#	unit.set_meta("next_path_request_time", 0)
 	
-	var current_time = Time.get_ticks_msec()
-	if current_time < unit.get_meta("next_path_request_time"):
-		return
+	#var current_time = Time.get_ticks_msec()
+	#if current_time < unit.get_meta("next_path_request_time"):
+	#	return
 		
 	var unit_pathfinder = unit.unit_ai.pathfinder
 	var unit_commands = unit.unit_ai.command_handler
@@ -29,7 +29,7 @@ func queue_unit_for_path(unit, request_id, target_unit = null):
 	
 	if last != null and last.has("status") and last["status"] == "queued" and last["start"].distance_to(start_pos) < 30 and last["end"].distance_to(end_pos) < 30:
 		print("Skipping path request due to path is almost same")
-		return # Same path -> skip
+		return
 
 	unit_pathfinder.last_requested_path = ({
 		"start": start_pos, 
@@ -42,8 +42,8 @@ func queue_unit_for_path(unit, request_id, target_unit = null):
 			item.request_id = request_id
 			return
 
-	var delay = randi() % 50
-	unit.set_meta("next_path_request_time", current_time + PATH_REQUEST_COOLDOWN + delay)
+	#var delay = randi() % 50
+	#unit.set_meta("next_path_request_time", current_time + PATH_REQUEST_COOLDOWN + delay)
 
 	path_queue.append({
 		"unit": unit,

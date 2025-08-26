@@ -1,0 +1,199 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=29 format=3 uid="uid://b8bgmm54mg2rt"]
+
+[ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="1_g0bkt"]
+[ext_resource type="Script" uid="uid://dqe50qceubild" path="res://RTS-System/Entities/Data/HeroStatData.gd" id="2_y2uvk"]
+[ext_resource type="PackedScene" uid="uid://chxscd5c7iu64" path="res://RTS-System/Entities/Projectiles/HomingProjectile.tscn" id="3_53gw5"]
+[ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="4_2qi85"]
+[ext_resource type="Texture2D" uid="uid://dk6w6lq288o7f" path="res://RTS-System/Entities/Units/UnitData/TestUnit/Sprites/Test_Unit_Attack.png" id="5_xolon"]
+[ext_resource type="Texture2D" uid="uid://bkqsiummdyd65" path="res://RTS-System/Entities/Units/UnitData/TestUnit/Sprites/Test_Unit_Death.png" id="6_0616r"]
+[ext_resource type="Texture2D" uid="uid://crp7vreakmdh7" path="res://RTS-System/Entities/Units/UnitData/TestUnit/Sprites/Test_Unit_Idle.png" id="7_3grh8"]
+[ext_resource type="Texture2D" uid="uid://bjp14t015lfw6" path="res://RTS-System/Entities/Units/UnitData/TestUnit/Sprites/Test_Unit_Walk.png" id="8_br5xh"]
+
+[sub_resource type="Resource" id="Resource_aksv5"]
+script = ExtResource("2_y2uvk")
+main_stat = "intelligence"
+strength = 2
+agility = 2
+intelligence = 6
+strength_per_level = 2
+agility_per_level = 1
+intelligence_per_level = 4
+base_max_hp = 50.0
+base_max_mana = 10.0
+base_health_regen = 0.1
+base_mana_regen = 0.1
+base_armor = 1
+base_movement_speed = 330
+base_attack_speed = 0.8
+base_damage = 15
+base_range = 350
+attack_dice_roll = 0.1
+xp_yield = 50
+metadata/_custom_type_script = "uid://dqe50qceubild"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_upqkg"]
+atlas = ExtResource("5_xolon")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4uv1a"]
+atlas = ExtResource("5_xolon")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ll5xe"]
+atlas = ExtResource("5_xolon")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5gcvu"]
+atlas = ExtResource("6_0616r")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_66bmb"]
+atlas = ExtResource("6_0616r")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fb6rh"]
+atlas = ExtResource("6_0616r")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_df3df"]
+atlas = ExtResource("6_0616r")
+region = Rect2(150, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yqyyn"]
+atlas = ExtResource("6_0616r")
+region = Rect2(200, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g5h8v"]
+atlas = ExtResource("6_0616r")
+region = Rect2(250, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o7p7m"]
+atlas = ExtResource("6_0616r")
+region = Rect2(300, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x5dip"]
+atlas = ExtResource("6_0616r")
+region = Rect2(350, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k0b7r"]
+atlas = ExtResource("6_0616r")
+region = Rect2(400, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jf7ai"]
+atlas = ExtResource("7_3grh8")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p8wos"]
+atlas = ExtResource("7_3grh8")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1bw5t"]
+atlas = ExtResource("8_br5xh")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gv0h8"]
+atlas = ExtResource("8_br5xh")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t5oev"]
+atlas = ExtResource("8_br5xh")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xolon"]
+resource_name = "Malfurion_spriteframes"
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_upqkg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4uv1a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ll5xe")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5gcvu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_66bmb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fb6rh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_df3df")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yqyyn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g5h8v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o7p7m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x5dip")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k0b7r")
+}],
+"loop": false,
+"name": &"dying",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jf7ai")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p8wos")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1bw5t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gv0h8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t5oev")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="Resource" id="Resource_0616r"]
+resource_name = "Malfurion_modeldata"
+script = ExtResource("4_2qi85")
+sprite_frames = SubResource("SpriteFrames_xolon")
+scale = Vector2(2, 2)
+offset = Vector2(0, 0)
+animation_attack_point = 0.5
+projectile_scene = ExtResource("3_53gw5")
+projectile_speed = 800
+metadata/_custom_type_script = "uid://dq4e1yj8njkif"
+
+[resource]
+resource_name = "Malfurion"
+script = ExtResource("1_g0bkt")
+power_level = 0
+is_spawnable_enemy = false
+unit_model_data = SubResource("Resource_0616r")
+unit_type = "hero"
+name = "Malfurion"
+description = "Has sleep dulled my senses?"
+stats = SubResource("Resource_aksv5")
+is_ranged = true
+metadata/_custom_type_script = "uid://oeoy2vl8vgue"

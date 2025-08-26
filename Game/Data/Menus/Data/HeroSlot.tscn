@@ -1,0 +1,85 @@
+[gd_scene load_steps=16 format=3 uid="uid://1lpfq6m17pu0"]
+
+[ext_resource type="Script" uid="uid://da38frxxg2lf6" path="res://Game/Data/Menus/Data/HeroSlot.gd" id="1_d2uvv"]
+[ext_resource type="Texture2D" uid="uid://blfnyk7cdo4ah" path="res://RTS-System/Player/yesys.png" id="1_qkoj7"]
+[ext_resource type="FontFile" uid="uid://hryht1uvr8i8" path="res://Game/Data/Fonts/8-bit-snobbery/8 Bit Snobbery.ttf" id="2_d2uvv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8jwg3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8rwom"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8mrhh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tvrc8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lq7q3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iv4xl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d2uvv"]
+bg_color = Color(0.392157, 0.392157, 0.392157, 0.392157)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.196078, 0.196078, 0.196078, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c2stf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wa5xv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lrxtn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fe48t"]
+bg_color = Color(0, 0, 0, 0.392157)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_il2t2"]
+font = ExtResource("2_d2uvv")
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[node name="HeroSlot" type="Button"]
+custom_minimum_size = Vector2(160, 160)
+offset_top = -1.0
+offset_right = 256.0
+offset_bottom = 255.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8jwg3")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_8rwom")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_8mrhh")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_tvrc8")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_lq7q3")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_iv4xl")
+theme_override_styles/hover = SubResource("StyleBoxFlat_d2uvv")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_c2stf")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_wa5xv")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_lrxtn")
+theme_override_styles/normal = SubResource("StyleBoxFlat_fe48t")
+script = ExtResource("1_d2uvv")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_qkoj7")
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 9.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Test Hero"
+label_settings = SubResource("LabelSettings_il2t2")
+horizontal_alignment = 1
