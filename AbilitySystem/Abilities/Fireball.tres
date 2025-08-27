@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=7 format=3 uid="uid://k14yt5r8y3ux"]
+
+[ext_resource type="Script" uid="uid://dw73gisblncyg" path="res://AbilitySystem/AbilityData.gd" id="1_4wwvr"]
+[ext_resource type="Resource" uid="uid://d0e372x5w8ryn" path="res://AbilitySystem/Effects/DamageEffect.tres" id="1_7ng0f"]
+[ext_resource type="Script" uid="uid://boe8ic1128tfs" path="res://AbilitySystem/EffectData.gd" id="1_qm22t"]
+[ext_resource type="Resource" uid="uid://d3orqcpitx7rp" path="res://AbilitySystem/Effects/StunEffect.tres" id="2_qm22t"]
+[ext_resource type="Texture2D" uid="uid://3dy43us4t0bw" path="res://AbilitySystem/Sprites/RainofFire_Icon.png" id="4_lrbgs"]
+[ext_resource type="PackedScene" uid="uid://divnoovei46ro" path="res://AbilitySystem/Projectiles/FireballProjectile.tscn" id="4_qm22t"]
+
+[resource]
+script = ExtResource("1_4wwvr")
+name = "Fireball"
+description = "Conjures a fireball at the target that deals damage and stuns."
+icon = ExtResource("4_lrbgs")
+mana_cost = 5
+cooldown = 3.0
+cast_range = 500.0
+spell_type = "TargetedProjectile"
+projectile_scene = ExtResource("4_qm22t")
+effects = Array[ExtResource("1_qm22t")]([ExtResource("1_7ng0f"), ExtResource("2_qm22t")])

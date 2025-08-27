@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EffectData" load_steps=2 format=3 uid="uid://d3orqcpitx7rp"]
+
+[ext_resource type="Script" uid="uid://boe8ic1128tfs" path="res://AbilitySystem/EffectData.gd" id="1_tvyo5"]
+
+[resource]
+script = ExtResource("1_tvyo5")
+effect_type = "Stun"
+amount = 0.0
+duration = 2.0
+extra = {}
+metadata/_custom_type_script = "uid://boe8ic1128tfs"

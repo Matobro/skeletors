@@ -22,10 +22,11 @@ func init_node() -> void:
 	if GameManager.dev_mode == false:
 		return
 
+	await get_tree().process_frame
+	player_input = PlayerManager.get_player(1).player_input
 	unit_list = $"../CanvasLayer/DevBox/VBoxContainer/OptionButton"
 	spawn_button = $"../CanvasLayer/DevBox/VBoxContainer/Button"
 	spawn_visual = $"../CanvasLayer/TextureRect"
-	#player_input = $"../PlayerObject/PlayerInput"
 	owner_select = $"../CanvasLayer/DevBox/OptionButton"
 	spawn_popup = $"../CanvasLayer/SpawnPopUp"
 	nav_map = $"../NavigationRegion2D"

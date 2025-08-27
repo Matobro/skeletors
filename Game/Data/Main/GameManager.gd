@@ -4,12 +4,18 @@ var game_mode: String
 var dev_mode: bool
 
 func _ready():
-    game_mode = "Skeletors"
-    dev_mode = true
+	game_mode = "Skeletors"
+	dev_mode = true
 
 func start_game():
-    MapHandler.setup_map()
-    SpatialGrid.build_map()
-    if multiplayer.is_server():
-        PlayerManager.setup_player_manager()
-        WaveSystem.setup()
+	MapHandler.setup_map()
+	SpatialGrid.build_map()
+	if dev_mode:
+		PlayerManager.setup_player_manager(false)
+		WaveSystem.setup()
+		var dev_tool = $"../World/DevSpawnUnit"
+		dev_tool.init_node()
+	else:
+		if multiplayer.is_server():
+			PlayerManager.setup_player_manager()
+			WaveSystem.setup()

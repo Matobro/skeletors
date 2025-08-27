@@ -17,22 +17,31 @@ var player_colors := {
 var players_to_spawn: Array = []
 var players: Dictionary = {}
 
-func setup_player_manager() -> void:
+var normal_mode
+func setup_player_manager(normal: bool = true) -> void:
+	normal_mode = normal
 	await get_tree().process_frame
-	if multiplayer.is_server():
-		# Add AI only on host
+	if normal:
+		if multiplayer.is_server() and normal:
+			players_to_spawn.append({ "id": 10, "is_ai": true, "hero": null })
+			spawn_players()
+	else:
+		players_to_spawn.append({ "id": 1, "is_ai": false, "hero": null })
 		players_to_spawn.append({ "id": 10, "is_ai": true, "hero": null })
 		spawn_players()
 
 func spawn_players():
-	if not multiplayer.is_server():
+	if !multiplayer.is_server() and normal_mode:
 		return
 
 	for player_data in players_to_spawn:
 		var p = player_scene.instantiate()
 		p.player_id = player_data.id
 		p.is_ai = player_data.is_ai
-		p.is_local_player = !player_data.is_ai and p.player_id == multiplayer.get_unique_id()
+		if !normal_mode:
+			p.is_local_player = !player_data.is_ai and p.player_id == 1
+		else:
+			p.is_local_player = !player_data.is_ai and p.player_id == multiplayer.get_unique_id()
 		add_child(p)
 		players[p.player_id] = p
 		register_player(p)

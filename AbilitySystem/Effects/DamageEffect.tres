@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EffectData" load_steps=2 format=3 uid="uid://d0e372x5w8ryn"]
+
+[ext_resource type="Script" uid="uid://boe8ic1128tfs" path="res://AbilitySystem/EffectData.gd" id="1_an060"]
+
+[resource]
+script = ExtResource("1_an060")
+effect_type = "Damage"
+amount = 25.0
+duration = 0.0
+extra = {}
+metadata/_custom_type_script = "uid://boe8ic1128tfs"

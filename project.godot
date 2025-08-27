@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Skeletors"
-run/main_scene="uid://dv3rvon240ulo"
+run/main_scene="uid://bp6xgo07rs3es"
 config/features=PackedStringArray("4.4", "Forward Plus")
 
 [autoload]
@@ -24,7 +24,6 @@ SpatialGrid="*res://RTS-System/Map/MapController.gd"
 UnitHandler="*res://Game/Data/Main/UnitHandler.gd"
 UnitSpawner="*res://Game/Data/Main/UnitSpawner.gd"
 PlayerManager="*res://RTS-System/Entities/Data/PlayerManager.gd"
-ParticleManager="*res://RTS-System/Abilities/Data/ParticleManager.gd"
 MapHandler="*res://Game/Data/Main/MapHandler.gd"
 TooltipManager="*res://RTS-System/Player/TooltipManager.gd"
 StatModifiers="*res://RTS-System/Entities/Data/StatModifiers.gd"
@@ -41,7 +40,7 @@ window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/LineCounter/plugin.cfg", "res://addons/ManifestGenerator/plugin.cfg", "res://addons/UnitCreator/plugin.cfg")
+enabled=PackedStringArray("res://addons/AbilityEditor/plugin.cfg", "res://addons/LineCounter/plugin.cfg", "res://addons/ManifestGenerator/plugin.cfg", "res://addons/UnitCreator/plugin.cfg")
 
 [global_group]
 
@@ -149,6 +148,7 @@ i={
 
 2d_physics/layer_1="UnitCollider"
 2d_physics/layer_2="AggroArea"
+2d_physics/layer_3="Spell"
 2d_physics/layer_4="Item"
 
 [rendering]

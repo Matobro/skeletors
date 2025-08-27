@@ -1,0 +1,10 @@
+extends Resource
+
+class_name EffectData
+
+@export_enum("Damage", "Heal", "Buff", "Debuff", "Stun", "Slow", "Summon", "Custom")
+var effect_type: String
+
+@export var amount: float = 0
+@export var duration: float = 0
+@export var extra: Dictionary = {}

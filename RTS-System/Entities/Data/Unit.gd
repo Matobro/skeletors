@@ -64,6 +64,11 @@ func create_unit():
 	SpatialGrid.register_unit(self)
 	data.stats.recalculate_stats()
 
+func _process(delta: float) -> void:
+	## dont ask
+	if unit_ability_manager:
+		unit_ability_manager.tick(delta)
+
 func get_stat(stat: String):
 	return data.stats[stat]
 

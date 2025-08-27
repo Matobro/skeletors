@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://divnoovei46ro"]
+
+[ext_resource type="Script" uid="uid://jrtjbedmeaof" path="res://AbilitySystem/Projectiles/FireballProjectile.gd" id="1_gld5c"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_l6rh5"]
+radius = 30.0
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_gld5c"]
+load_path = "res://.godot/imported/Shockwave.png-e92167816d92ec100bb83741323dd293.ctex"
+
+[node name="FireballProjectile" type="Area2D"]
+z_index = 500
+collision_layer = 4
+script = ExtResource("1_gld5c")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_l6rh5")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("CompressedTexture2D_gld5c")

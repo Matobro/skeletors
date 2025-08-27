@@ -13,11 +13,11 @@ var is_local_player: bool = false
 
 func _ready():
 	if is_ai:
-		if multiplayer.is_server():
+		if multiplayer.is_server() or GameManager.dev_mode:
 			await get_tree().process_frame
 			_setup_ai()
 	else:
-		if is_multiplayer_authority():
+		if is_multiplayer_authority() or GameManager.dev_mode:
 			await get_tree().process_frame
 			_setup_human()
 			UnitHandler.unit_died.connect(_on_unit_died)

@@ -2,7 +2,7 @@ extends Node
 
 class_name UnitAbilityManager
 
-var abilities: Array[Ability]
+var abilities: Array[BaseAbility]
 
 var parent
 var data
@@ -11,19 +11,20 @@ func _init(parent_ref, data_ref) -> void:
 	parent = parent_ref
 	data = data_ref
 
-	if data.unit_type == "hero":
-		var rof = load("res://RTS-System/Abilities/Resources/Rain of Fire.tres")
-		abilities.append(rof)
+	if parent is Hero:
+		var fireball = preload("res://AbilitySystem/Abilities/Fireball.tres")
+		add_ability(fireball)
 
-		var shockwave = load("res://RTS-System/Abilities/Resources/Shockwave.tres")
-		abilities.append(shockwave)
+func tick(delta: float):
+	for ability in abilities:
+		ability.tick(delta)
+		
+func cast_ability(index, pos, target):
+	print("casting ",abilities[index], " at ", pos, " target: ", target)
+	abilities[index].start_cast(parent, pos, target)
 
-func cast_ability(index: int, pos: Vector2, world_node: Node):
-	if index < 0 or index >= abilities.size():
-		return
-
-	var ability = abilities[index]
-	var ability_instance = ability.activate_ability(pos, world_node, parent)
-
-	if ability_instance != null:
-		world_node.add_child(ability_instance)
+func add_ability(ability_data: AbilityData):
+	var ability = BaseAbility.new()
+	add_child(ability)
+	ability.ability_data = ability_data
+	abilities.append(ability)
