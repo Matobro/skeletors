@@ -129,7 +129,7 @@ func handle_keyboard_commands(event: InputEventKey):
 		match event.keycode:
 			KEY_Q:
 				if selection_manager and selection_manager.selected_units.size() > 0 and is_instance_valid(selection_manager.selected_units[0]):
-					selection_manager.selected_units[0].unit_ability_manager.cast_ability(0, get_global_mouse_position(), check_click_hit(get_global_mouse_position()))
+					input_handler.on_spell_cast(selection_manager.selected_units[0], 0, get_global_mouse_position(), check_click_hit(get_global_mouse_position()))
 				
 func handle_mouse_input(event):
 	if !is_input_enabled:

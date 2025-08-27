@@ -1,10 +1,16 @@
+# Logic for Fireball ability
+
 extends Area2D
 
+## Speed of the projectile
 @export var speed: float = 400
+
+## Target of this spell
 var target: Node2D
+## Spell effects - damage, stun, slow etc
 var effects: Array[EffectData] = []
 
-var source_ability
+## Unit that casted this ability
 var caster
 
 func _ready() -> void:
@@ -14,15 +20,13 @@ func _physics_process(delta: float) -> void:
 	if !target or !is_instance_valid(target):
 		free_self()
 
-	print("Target: ", target)
 	var direction = (target.global_position - global_position).normalized()
 	global_position += direction * speed * delta
 
 func _on_collision(body):
-	print("Hit: ", body)
 	if body == target:
 		for effect in effects:
-			source_ability.apply_effect(effect, caster, Vector2.ZERO, target)
+			AbilitySystem.apply_effect(effect, caster, Vector2.ZERO, target)
 		free_self()
 		
 func free_self():

@@ -36,6 +36,9 @@ func input_received(event, event_info):
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 			on_mouse_drag(event_info)
 
+func on_spell_cast(caster, index, target_position, target_unit):
+	caster.unit_ability_manager.cast_ability(index, target_position, target_unit)
+
 func on_left_click_pressed(event_info):
 	### Attack move if holding A
 	parent.drag_start = event_info.pos
