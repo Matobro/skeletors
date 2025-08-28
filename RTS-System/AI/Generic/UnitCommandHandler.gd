@@ -40,7 +40,7 @@ func process_next_command() -> void:
 		return
 
 	# Signal previous command as completed
-	if current_command != {}:
+	if current_command.size() > 1:
 		emit_signal("command_completed", current_command.type, fallback_command)
 
 	# Advance queue
@@ -49,6 +49,13 @@ func process_next_command() -> void:
 
 	# Tell AI which state to enter
 	_apply_command(current_command)
+
+func full_clear():
+	current_command = {}
+	fallback_command = {}
+	ai.pathfinder.reset()
+	ai.combat_state.clear_combat_state()
+	ai.combat_state.clear_attack_state()
 
 func clear() -> void:
 	if dont_clear: # for spam protection
@@ -86,7 +93,11 @@ func _apply_command(cmd: Dictionary) -> void:
 		ai.set_state(target_state)
 
 func _is_spam(next_command: Dictionary) -> bool:
-	if next_command != {} and current_command != {}:
+	if (next_command != {} and 
+	current_command != {} and 
+	next_command.has("type") and 
+	current_command.has("type")):
+
 		if next_command.type == current_command.type:
 			# Attack to different unit is never spam
 			if next_command.type == "Attack":

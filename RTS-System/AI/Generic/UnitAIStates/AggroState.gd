@@ -19,8 +19,6 @@ func state_logic(delta: float) -> void:
 		print("empty")
 		ai.command_handler.process_next_command()
 		return
-
-	ai.combat_state.update(delta)
 	
 	var target_unit = ai.combat_state.current_target
 	if target_unit == null:
