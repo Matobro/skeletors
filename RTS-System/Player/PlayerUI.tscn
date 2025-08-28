@@ -1,12 +1,12 @@
 [gd_scene load_steps=30 format=3 uid="uid://44m1veg1thkm"]
 
-[ext_resource type="Script" uid="uid://dtvvveravq00x" path="res://RTS-System/Player/PlayerUI.gd" id="1_mb3tw"]
+[ext_resource type="Script" uid="uid://dtvvveravq00x" path="res://RTS-System/Player/UI/PlayerUI.gd" id="1_mb3tw"]
 [ext_resource type="Texture2D" uid="uid://f8758o682hq6" path="res://RTS-System/Commands/UI/Move.png" id="1_qbo8c"]
 [ext_resource type="Texture2D" uid="uid://wg4ahtxtfu3a" path="res://RTS-System/Commands/UI/Stop.png" id="2_2ncyk"]
 [ext_resource type="Texture2D" uid="uid://dj0gxf8y644j7" path="res://RTS-System/Commands/UI/Hold_Position.png" id="3_1i0l3"]
 [ext_resource type="Texture2D" uid="uid://cj72b3uo7vdg1" path="res://RTS-System/Commands/UI/AttackMove.png" id="4_mb3tw"]
 [ext_resource type="FontFile" uid="uid://hryht1uvr8i8" path="res://Game/Data/Fonts/8-bit-snobbery/8 Bit Snobbery.ttf" id="7_adh6j"]
-[ext_resource type="Script" uid="uid://bjosjd3mjgwnm" path="res://RTS-System/Player/TooltipPanel.gd" id="8_c35mt"]
+[ext_resource type="Script" uid="uid://bjosjd3mjgwnm" path="res://RTS-System/Player/UI/TooltipPanel.gd" id="8_c35mt"]
 [ext_resource type="Script" uid="uid://dcpo2wf1n5u81" path="res://RTS-System/Entities/Data/UnitInventoryUI.gd" id="9_luor8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0sfn1"]

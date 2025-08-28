@@ -2,32 +2,12 @@ extends Node2D
 
 class_name PlayerInput
 
-class MouseEventInfo:
-	var pos: Vector2
-	var total_units: int
-	var click_target: Unit
-	var is_queued: bool
-	var attack_moving: bool
-	var click_item: DroppedItem
-
-	static func create(_pos, _total_units, _click_target, _is_queued, _attack_moving, _click_item) -> MouseEventInfo:
-		var inst = MouseEventInfo.new()
-		inst.pos = _pos
-		inst.total_units = _total_units
-		inst.click_target = _click_target
-		inst.is_queued = _is_queued
-		inst.attack_moving = _attack_moving
-		inst.click_item = _click_item
-		return inst
-
 @export var commands: CommandsData
 @onready var selection_box = $"../CanvasLayer/BoxSelection"
 @onready var player = get_parent()
 
-var dev_disable_input: bool = false
 var is_local_player: bool = false
 var is_input_enabled: bool = false
-var fullscreen: bool = true
 
 var dragging = false
 
@@ -36,10 +16,6 @@ var command_cooldown_frames := 0
 var block_input_frames: int = 0
 
 var drag_start = Vector2.ZERO
-
-var drop_mode: bool = false
-var item_to_drop: ItemData = null
-var item_slot_index: int
 
 const DOUBLE_CLICK_TIME = 0.3
 const DRAG_THRESHOLD := 50.0
@@ -50,6 +26,8 @@ var camera = null
 var input_handler: PlayerInputHandler
 var command_issuer: PlayerCommandIssuer
 var selection_manager: SelectionManager
+var item_handler: ItemHandler
+var keyboard_handler: KeyboardHandler
 
 func init_node() -> void:
 	if !player.is_local_player:
@@ -63,7 +41,9 @@ func init_node() -> void:
 
 	selection_manager = SelectionManager.new(self, player_ui, player_id)
 	command_issuer = PlayerCommandIssuer.new(self, selection_manager, player_id)
-	input_handler = PlayerInputHandler.new(self, command_issuer, selection_manager, player_ui)
+	item_handler = ItemHandler.new(player_ui, command_issuer)
+	input_handler = PlayerInputHandler.new(self, command_issuer, selection_manager, player_ui, item_handler)
+	keyboard_handler = KeyboardHandler.new(self, command_issuer, selection_manager, input_handler)
 
 func _process(delta):
 	if block_input_frames > 0:
@@ -86,51 +66,24 @@ func _unhandled_input(event: InputEvent):
 
 	if block_input_frames > 0:
 		return
-		
+	
 	if event is InputEventKey and event.pressed:
-		handle_keyboard_commands(event)
+		keyboard_handler.handle_keyboard_commands(event)
+
 	elif event is InputEventMouseButton or event is InputEventMouseMotion:
 		handle_mouse_input(event)
 
-func get_key_event_info() -> MouseEventInfo:
-	return MouseEventInfo.create(
-			Vector2.ZERO,
-			selection_manager.selected_units.size(),
-			null,
-			Input.is_key_pressed(KEY_SHIFT),
-			Input.is_action_pressed("a"),
-			null
-		)
-func get_mouse_event_info() -> MouseEventInfo:
-		return MouseEventInfo.create(
-			get_global_mouse_position(),
-			selection_manager.selected_units.size(),
-			check_click_hit(get_global_mouse_position()),
-			Input.is_key_pressed(KEY_SHIFT),
-			Input.is_action_pressed("a"),
-			check_click_hit_item(get_global_mouse_position())
-		)
+func create_event_info() -> EventInfo:
+	var info := EventInfo.new()
+	var mouse_pos = get_global_mouse_position()
+	info.clicked_position = mouse_pos
+	info.click_target = check_click_hit(mouse_pos)
+	info.click_item = check_click_hit_item(mouse_pos)
+	info.total_units = selection_manager.selected_units.size()
+	info.shift = Input.is_action_pressed("shift")
+	info.attack_moving = Input.is_action_pressed("a")
+	return info
 
-func handle_keyboard_commands(event: InputEventKey):
-	if event.is_action_pressed("8"):
-		if fullscreen:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-			DisplayServer.window_set_size(Vector2(1920, 1080))
-		else:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-		fullscreen = !fullscreen
-	elif event.is_action_pressed("s"):
-		command_issuer.issue_stop_command(get_key_event_info())
-	elif event.is_action_pressed("h"):
-		command_issuer.issue_hold_command(get_key_event_info())
-	elif event.is_action_pressed("i"):
-		player_ui.shop_ui.visible = !player_ui.shop_ui.visible
-	elif selection_manager.selected_units.size() > 0:
-		match event.keycode:
-			KEY_Q:
-				if selection_manager and selection_manager.selected_units.size() > 0 and is_instance_valid(selection_manager.selected_units[0]):
-					input_handler.on_spell_cast(selection_manager.selected_units[0], 0, get_global_mouse_position(), check_click_hit(get_global_mouse_position()))
-				
 func handle_mouse_input(event):
 	if !is_input_enabled:
 		return
@@ -147,25 +100,12 @@ func handle_mouse_input(event):
 		selection_box.size = Vector2.ZERO
 		return
 
-	var event_info = get_mouse_event_info()
+	var event_info = create_event_info()
 	
 	input_handler.input_received(event, event_info)
 
 func is_mouse_over_ui() -> bool:
 	return get_viewport().gui_get_hovered_control() != null
-
-func set_drop_mode(item: ItemData = null, slot_index: int = -1, value = false):
-	drop_mode = value
-	
-	if drop_mode:
-		item_to_drop = item if item != null else null
-		item_slot_index = slot_index
-		player_ui.action_panel.visible = true
-		player_ui.action_text.text = str("Left click to drop [", item.name, "]")
-	else:
-		item_to_drop = null
-		player_ui.action_panel.visible = false
-		player_ui.action_text.text = ""
 	
 func start_drag():
 	dragging = true

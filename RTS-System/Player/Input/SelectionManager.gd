@@ -119,3 +119,6 @@ func is_valid_unit(unit: Unit) -> bool:
 	if unit and unit != null and is_instance_valid(unit) and unit.unit_combat and !unit.unit_combat.dead:
 		return true
 	return false
+
+func is_valid_selection() -> bool:
+	return selected_units.size() > 0 and is_instance_valid(selected_units[0])

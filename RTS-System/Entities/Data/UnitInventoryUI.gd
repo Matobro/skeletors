@@ -62,13 +62,13 @@ func _on_inventory_slot_input(event: InputEvent, slot_index):
 		# Right click = drop mode
 		if event.button_index == MOUSE_BUTTON_RIGHT and slot_item != null:
 			if player_input:
-				player_input.set_drop_mode(slot_item, slot_index, true)
+				player_input.item_handler.set_drop_mode(slot_item, slot_index, true)
 		# Left click while in drop/move mode
-		elif event.button_index == MOUSE_BUTTON_LEFT and player_input.drop_mode:
+		elif event.button_index == MOUSE_BUTTON_LEFT and player_input.item_handler.drop_mode:
 			if slot_index >= 0:
 				# Swap/move items
-				inventory.move_item(player_input.item_slot_index, slot_index)
-				player_input.set_drop_mode(null, false)
+				inventory.move_item(player_input.item_handler.item_slot_index, slot_index)
+				player_input.item_handler.set_drop_mode(null, false)
 				TooltipManager.hide_tooltip(parent.player_object.player_id)
 				_on_inventory_hover_enter(slot_index)
 

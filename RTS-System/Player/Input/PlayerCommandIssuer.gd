@@ -16,27 +16,29 @@ func issue_stop_command(event_info):
 		return
 
 	for unit in selection_manager.selected_units:
-		unit.command_holder.issue_command("Stop", event_info.click_target, event_info.pos, event_info.is_queued, id, true)
+		unit.command_holder.issue_command("Stop", event_info.click_target, event_info.clicked_position, event_info.shift, id, true)
 
 func issue_hold_command(event_info):
 	if selection_manager.selected_units.size() <= 0:
 		return
 
 	for unit in selection_manager.selected_units:
-		unit.command_holder.issue_command("Hold", event_info.click_target, event_info.pos, event_info.is_queued, id, true)
+		unit.command_holder.issue_command("Hold", event_info.click_target, event_info.clicked_position, event_info.shift, id, true)
 	
 func issue_attack_command(event_info):
+	print("attacking")
 	if selection_manager.selected_units.size() <= 0:
 		return
 
 	for unit in selection_manager.selected_units:
-		unit.command_holder.issue_command("Attack", event_info.click_target, event_info.pos, event_info.is_queued, id, true)
+		unit.command_holder.issue_command("Attack", event_info.click_target, event_info.clicked_position, event_info.shift, id, true)
 	
 func issue_attack_move_command(event_info):
+	print("attack moving")
 	if selection_manager.selected_units.size() <= 0:
 		return
 
-	var formation = calculate_unit_formation(event_info.total_units, event_info.pos)
+	var formation = calculate_unit_formation(event_info.total_units, event_info.clicked_position)
 	for i in range (selection_manager.selected_units.size()):
 		var unit = selection_manager.selected_units[i]
 		var target_pos = formation[i]
@@ -44,7 +46,7 @@ func issue_attack_move_command(event_info):
 			"Attack_move",
 			event_info.click_target,
 			target_pos,
-			event_info.is_queued,
+			event_info.shift,
 			id,
 			true
 		)
@@ -55,15 +57,15 @@ func issue_move_command(event_info):
 	if selection_manager.selected_units.size() <= 0:
 		return
 
-	var formation = calculate_unit_formation(event_info.total_units, event_info.pos)
+	var formation = calculate_unit_formation(event_info.total_units, event_info.clicked_position)
 	for i in range (selection_manager.selected_units.size()):
 		var unit = selection_manager.selected_units[i]
 		var target_pos = formation[i]
 		unit.command_holder.issue_command(
 			"Move",
-			event_info.click_target,
+			null,
 			target_pos,
-			event_info.is_queued,
+			event_info.shift,
 			id,
 			true
 		)
@@ -74,7 +76,7 @@ func issue_drop_item_command(event_info, slot_index):
 	if selection_manager.selected_units.size() <= 0:
 		return
 	
-	var formation = calculate_unit_formation(event_info.total_units, event_info.pos)
+	var formation = calculate_unit_formation(event_info.total_units, event_info.clicked_position)
 	for i in range (selection_manager.selected_units.size()):
 		var unit = selection_manager.selected_units[i]
 		var target_pos = formation[i]
@@ -82,7 +84,7 @@ func issue_drop_item_command(event_info, slot_index):
 			"DropItem",
 			null,
 			target_pos,
-			event_info.is_queued,
+			event_info.shift,
 			id,
 			true,
 			Vector2.ZERO,
@@ -95,7 +97,7 @@ func issue_give_item_command(event_info, item: ItemData):
 	if selection_manager.selected_units.size() <= 0:
 		return
 	
-	var formation = calculate_unit_formation(event_info.total_units, event_info.pos)
+	var formation = calculate_unit_formation(event_info.total_units, event_info.clicked_position)
 	for i in range (selection_manager.selected_units.size()):
 		var unit = selection_manager.selected_units[i]
 		var target_pos = formation[i]
@@ -103,7 +105,7 @@ func issue_give_item_command(event_info, item: ItemData):
 			"GiveItem",
 			event_info.click_target,
 			target_pos,
-			event_info.is_queued,
+			event_info.shift,
 			id,
 			true,
 			Vector2.ZERO,
@@ -116,7 +118,7 @@ func issue_pickup_item_command(event_info):
 	if selection_manager.selected_units.size() <= 0:
 		return
 	
-	var formation = calculate_unit_formation(event_info.total_units, event_info.pos)
+	var formation = calculate_unit_formation(event_info.total_units, event_info.clicked_position)
 	for i in range (selection_manager.selected_units.size()):
 		var unit = selection_manager.selected_units[i]
 		var target_pos = formation[i]
@@ -124,7 +126,7 @@ func issue_pickup_item_command(event_info):
 			"PickUpItem",
 			null,
 			target_pos,
-			event_info.is_queued,
+			event_info.shift,
 			id,
 			true,
 			Vector2.ZERO,
