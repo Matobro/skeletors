@@ -16,6 +16,7 @@ func _process(delta):
 		for unit in all_units:
 			if is_instance_valid(unit.unit_combat) and unit.unit_combat.has_method("regenate_health"):
 				unit.unit_combat.regenate_health()
+				unit.unit_combat.regenate_mana()
 			
 func register_unit(unit):
 	# Add unit to registry

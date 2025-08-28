@@ -64,11 +64,14 @@ func should_switch_target(new_target: Node) -> bool:
 	var new_dist = parent.global_position.distance_to(new_target.global_position)
 	return new_dist + 32 < current_dist
 
-func set_target(target: Node) -> void:
+func set_target(target: Node, force = false) -> void:
 	# Check if target is valid
 	if !is_valid_target(target):
 		return
 
+	if !force:
+		if target.owner_id == parent.owner_id:
+			return
 	# Set target
 	current_target = target
 	ai.parent.unit_visual.set_target(target)
@@ -132,7 +135,7 @@ func is_valid_target(target) -> bool:
 func set_target_from_command() -> void:
 	var cmd = ai.get_current_command()
 	if cmd != {} and cmd.has("target_unit") and is_instance_valid(cmd.target_unit):
-		set_target(cmd.target_unit)
+		set_target(cmd.target_unit, true)
 
 func is_player_command() -> bool:
 	var cmd = ai.command_handler.current_command

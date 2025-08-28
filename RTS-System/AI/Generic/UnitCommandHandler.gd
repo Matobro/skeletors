@@ -77,6 +77,8 @@ func _apply_command(cmd: Dictionary) -> void:
 			target_state = "Move"
 		"PickUpItem":
 			target_state = "Move"
+		"CastAbility":
+			target_state = "CastAbility"
 		_:
 			target_state = "Idle"
 

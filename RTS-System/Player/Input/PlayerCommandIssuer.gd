@@ -134,7 +134,19 @@ func issue_pickup_item_command(event_info):
 		)
 
 	parent.command_cooldown_frames = parent.COMMAND_COOLDOWN
-	
+
+func issue_cast_ability_command(caster, ability_index, target_pos, target_unit, shift):
+	caster.command_holder.issue_command(
+		"CastAbility",
+		target_unit,
+		target_pos,
+		shift,
+		caster.owner_id,
+		true,
+		Vector2.ZERO,
+		{"ability_index": ability_index}
+	)
+
 func calculate_unit_formation(total_units, pos):
 	if total_units == 1:
 		return [pos]

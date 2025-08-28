@@ -25,6 +25,7 @@ func init_states():
 	add_state("Hold", preload("res://RTS-System/AI/Generic/UnitAIStates/HoldState.gd").new())
 	add_state("Stop", preload("res://RTS-System/AI/Generic/UnitAIStates/StopState.gd").new())
 	add_state("Dying", preload("res://RTS-System/AI/Generic/UnitAIStates/DyingState.gd").new())
+	add_state("CastAbility", preload("res://RTS-System/AI/Generic/UnitAIStates/CastState.gd").new())
 
 	for s in states.values():
 		s.ai = self
@@ -33,7 +34,7 @@ func init_states():
 	set_ready()
 
 ## Returns current command:
-## command_type [string], target [Unit], position [Vector2], is_queued [bool]
+## type [string], target_unit [Unit], target_position [Vector2], is_queued [bool], is_player_command [bool], offset [Vector2], extra [Dictionary]
 func get_current_command() -> Dictionary:
 	var cmd = command_handler.current_command
 	return cmd if cmd != null else {}

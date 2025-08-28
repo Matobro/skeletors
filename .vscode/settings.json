@@ -1,3 +1,8 @@
 {
-  "godotTools.editorPath.godot4": "d:\\Steam\\steamapps\\common\\Godot Engine\\godot.windows.opt.tools.64.exe"
+  "godotTools.editorPath.godot4": "d:\\Steam\\steamapps\\common\\Godot Engine\\godot.windows.opt.tools.64.exe",
+  "godotTools.formatter.denseFunctionParameters": false,
+  "editor.defaultFormatter": "EddieDover.gdscript-formatter-linter",
+  "notebook.defaultFormatter": "EddieDover.gdscript-formatter-linter",
+  "editor.formatOnSave": true,
+  "godotFormatterAndLinter.gdformatPath": ""
 }

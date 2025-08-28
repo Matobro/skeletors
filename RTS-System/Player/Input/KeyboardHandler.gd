@@ -30,11 +30,17 @@ func handle_keyboard_commands(event: InputEventKey):
 	elif selection_manager.selected_units.size() > 0:
 		match event.keycode:
 			KEY_Q:
-				cast_spell(0, event_info.clicked_position, event_info.click_target)
+				cast_spell(0, event_info.clicked_position, event_info.click_target, event_info.shift)
 
-func cast_spell(index, clicked_position, clicked_target):
+func cast_spell(index, clicked_position, clicked_target, shift):
 	if selection_manager.is_valid_selection():
-		selection_manager.selected_units[0].unit_ability_manager.cast_ability(index, clicked_position, clicked_target)
+		command_issuer.issue_cast_ability_command(
+		selection_manager.selected_units[0], 
+		index, 
+		clicked_position, 
+		clicked_target, 
+		shift
+		)
 
 func toggle_fullscreen():
 	is_fullscreen = !is_fullscreen

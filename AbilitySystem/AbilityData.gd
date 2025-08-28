@@ -9,6 +9,7 @@ class_name AbilityData
 @export var mana_cost: int
 @export var cooldown: float
 @export var cast_range: float
+@export var cast_time: float
 
 @export_enum("TargetedProjectile", "GroundArea", "NoTarget", "Aura", "BuffAbility")
 var spell_type: String = "TargetedProjectile"

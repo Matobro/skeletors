@@ -29,8 +29,10 @@ func issue_command(command_type: String = "", target = null, position: Vector2 =
 		"type": command_type,
 		"target_unit": target,
 		"target_position": position,
+		"is_queued": is_queued,
 		"is_player_command": is_player_command,
-		"offset": offset
+		"offset": offset,
+		"extra": extra
 	}
 
 	for key in extra.keys():

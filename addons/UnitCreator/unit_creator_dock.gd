@@ -79,7 +79,6 @@ func _create_model_data(unit_name: String) -> Resource:
     model_data.resource_name = unit_name + "_modeldata"
     return model_data
 
-
 func _create_sprite_frames(unit_name: String) -> SpriteFrames:
     var sprite_frames := SpriteFrames.new()
     sprite_frames.resource_name = unit_name + "_spriteframes"
@@ -87,7 +86,7 @@ func _create_sprite_frames(unit_name: String) -> SpriteFrames:
     if sprite_frames.has_animation("default"):
         sprite_frames.remove_animation("default")
 
-    var animations := ["attack", "idle", "dying", "walk"]
+    var animations := ["attack", "idle", "dying", "walk", "casting"]
     for anim in animations:
         sprite_frames.add_animation(anim)
 

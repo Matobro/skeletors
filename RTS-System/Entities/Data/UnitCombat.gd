@@ -86,6 +86,12 @@ func heal_health(heal_amount):
 	stats.current_health = min(stats.current_health + heal_amount, stats.max_health)
 	parent.hp_bar.set_hp_bar(stats.current_health)
 
+func regenate_mana():
+	if stats.health_regen <= 0:
+		return
+	
+	stats.current_mana = min(stats.current_mana + stats.mana_regen, stats.max_mana)
+	
 func regenate_health():
 	if stats.health_regen <= 0:
 		return
@@ -93,8 +99,9 @@ func regenate_health():
 	stats.current_health = min(stats.current_health + stats.health_regen, stats.max_health)
 	parent.hp_bar.set_hp_bar(stats.current_health)
 
-func get_stunned(duration): #todo
+func get_stunned(_duration): #todo
 	pass
+
 func is_within_attack_range(_target) -> bool:
 	return stats.attack_range > parent.global_position.distance_to(_target)
 

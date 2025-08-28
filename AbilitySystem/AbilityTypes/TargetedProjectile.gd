@@ -4,7 +4,7 @@
 
 extends BaseAbilityType
 
-func cast(context: CastContext):	
+func cast(context: CastContext):
 	var projectile = context.ability_data.projectile_scene.instantiate()
 	projectile.global_position = context.caster.global_position
 	projectile.target = context.target_unit

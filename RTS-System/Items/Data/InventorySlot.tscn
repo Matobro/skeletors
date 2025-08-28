@@ -37,7 +37,7 @@ border_width_bottom = 2
 border_color = Color(0, 0, 0, 1)
 
 [node name="InventorySlot" type="Button"]
-z_index = 500
+z_index = 100
 custom_minimum_size = Vector2(70, 70)
 theme_override_styles/focus = SubResource("StyleBoxEmpty_apgtd")
 theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_2dx60")

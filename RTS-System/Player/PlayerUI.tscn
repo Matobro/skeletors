@@ -525,19 +525,35 @@ label_settings = SubResource("LabelSettings_c35mt")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Inventory" type="Control" parent="."]
+z_index = 99
+layout_mode = 3
+anchors_preset = 0
+offset_left = 452.0
+offset_top = 286.0
+offset_right = 492.0
+offset_bottom = 326.0
+script = ExtResource("9_luor8")
+
+[node name="SlotsContainer" type="GridContainer" parent="Inventory"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+columns = 2
+
 [node name="ToolTipPanel" type="Panel" parent="."]
 visible = false
-z_index = 500
+z_index = 650
 custom_minimum_size = Vector2(50, 50)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -5.0
-offset_top = -5.0
-offset_right = 5.0
-offset_bottom = 5.0
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -558,23 +574,6 @@ offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 vertical_alignment = 1
-
-[node name="Inventory" type="Control" parent="."]
-z_index = 499
-layout_mode = 3
-anchors_preset = 0
-offset_left = 452.0
-offset_top = 286.0
-offset_right = 492.0
-offset_bottom = 326.0
-script = ExtResource("9_luor8")
-
-[node name="SlotsContainer" type="GridContainer" parent="Inventory"]
-z_index = 500
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-columns = 2
 
 [node name="ActionPanel" type="Panel" parent="."]
 visible = false
