@@ -16,7 +16,8 @@ func _init(player_input_ref, command_issuer_ref, selection_manager_ref, input_ha
 	input_handler = input_handler_ref
 
 func handle_keyboard_commands(event: InputEventKey):
-	var event_info = create_event_info(event)
+	var event_info := create_event_info(event)
+	var selected_unit = selection_manager.get_first_selected_unit()
 
 	if event.is_action_pressed("8"):
 		toggle_fullscreen()
@@ -27,20 +28,50 @@ func handle_keyboard_commands(event: InputEventKey):
 	elif event.is_action_pressed("i"):
 		player_input.player_ui.shop_ui.visible = !player_input.player_ui.shop_ui.visible
 		pass
-	elif selection_manager.selected_units.size() > 0:
+	# If unit selected
+	elif selected_unit:
 		match event.keycode:
+			# Pass event_info, caster, index of ability (Q = index 0, W = index 1)
 			KEY_Q:
-				cast_spell(0, event_info.clicked_position, event_info.click_target, event_info.shift)
+				player_input.is_casting = false
+				input_cast_spell(event_info, selected_unit, 0)
 
-func cast_spell(index, clicked_position, clicked_target, shift):
-	if selection_manager.is_valid_selection():
-		command_issuer.issue_cast_ability_command(
-		selection_manager.selected_units[0], 
-		index, 
-		clicked_position, 
-		clicked_target, 
-		shift
-		)
+## Saves cast if not quick cast, casts spell if is quick cast or cast is saved
+func input_cast_spell(event_info: EventInfo = null, caster: Unit = null, index: int = -1):
+	if !selection_manager.is_valid_selection():
+		return
+	
+	#EventInfo
+	#Create context for the casted ability
+	if !player_input.is_casting:
+		var context = CastContext.new()
+		context.caster = caster 
+		context.index = index 
+		context.target_position = event_info.clicked_position 
+		context.target_unit = event_info.click_target
+		context.shift = event_info.shift 
+		context.ability = caster.unit_ability_manager.abilities[index]
+
+		if player_input.is_quick_cast:
+			player_input.player_ui.hide_action_panel()
+			player_input.is_casting = false
+			cast_spell(context)
+			return
+		else:
+			toggle_cast_spell(context)
+	else:
+		player_input.player_ui.hide_action_panel()
+		player_input.is_casting = false
+		cast_spell(player_input.desired_cast)
+
+func toggle_cast_spell(context):
+	player_input.player_ui.display_action_panel(context.ability.ability_data.get_info_text())
+	player_input.is_casting = true
+	player_input.desired_cast = context
+
+## Sends command request with [CastContext] to [PlayerCommandIssuer]
+func cast_spell(context: CastContext):
+	command_issuer.issue_cast_ability_command(context)
 
 func toggle_fullscreen():
 	is_fullscreen = !is_fullscreen
@@ -50,7 +81,7 @@ func toggle_fullscreen():
 		DisplayServer.window_set_size(Vector2(1920, 1080))
 	else:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-
+	
 func create_event_info(event) -> EventInfo:
 	var info := EventInfo.new()
 	info.clicked_position = player_input.get_global_mouse_position()

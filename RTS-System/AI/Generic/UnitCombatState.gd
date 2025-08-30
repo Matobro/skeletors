@@ -33,7 +33,6 @@ func update(delta: float) -> void:
 	clean_recent_attackers()
 
 	if is_player_controlled() and ai.state not in ["Attack_move"]:
-		print("lolo")
 		set_target_from_player_command()
 	else:
 		acquire_target_ai()
@@ -43,13 +42,17 @@ func is_player_controlled() -> bool:
 	return cmd != null and cmd.has("is_player_command") and cmd.is_player_command
 
 func set_target_from_player_command():
+	# Only set target if Attack or Attack_move command
 	var cmd = ai.command_handler.current_command
-	if cmd != {} and cmd.has("target_unit") and is_valid_target(cmd.target_unit):
-		current_target = cmd.target_unit
-		ai.parent.unit_visual.set_target(current_target)
-	else:
-		current_target = null
-		ai.parent.unit_visual.clear_target()
+	if cmd != {} and cmd.has("type"):
+		if cmd.type == "Attack" or cmd.type == "Attack_move":
+			current_target = cmd.target_unit if is_valid_target(cmd.target_unit) else null
+			ai.parent.unit_visual.set_target(current_target)
+			return
+
+	# Clear target
+	current_target = null
+	ai.parent.unit_visual.clear_target()
 
 func acquire_target_ai():
 	var new_target: Node = null

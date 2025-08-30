@@ -17,5 +17,6 @@ cooldown = 3.0
 cast_range = 500.0
 cast_time = 2.0
 spell_type = "TargetedProjectile"
+possible_targets = 3
 projectile_scene = ExtResource("4_qm22t")
 effects = Array[ExtResource("1_qm22t")]([ExtResource("1_7ng0f"), ExtResource("2_qm22t")])

@@ -24,14 +24,8 @@ func tick(delta: float):
 	for ability in abilities:
 		ability.tick(delta)
 		
-func cast_ability(index, target_position, target_unit):
-	var context = CastContext.new()
-	context.caster = parent
-	context.ability_data = abilities[index].ability_data
-	context.target_position = target_position
-	context.target_unit = target_unit
-
-	abilities[index].start_cast(context)
+func cast_ability(context: CastContext):
+	abilities[context.index].start_cast(context)
 
 ## Adds ability to unit via [AbilityData]
 func add_ability(ability_data: AbilityData):

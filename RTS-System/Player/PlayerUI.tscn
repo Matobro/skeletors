@@ -1,11 +1,13 @@
-[gd_scene load_steps=30 format=3 uid="uid://44m1veg1thkm"]
+[gd_scene load_steps=32 format=3 uid="uid://44m1veg1thkm"]
 
 [ext_resource type="Script" uid="uid://dtvvveravq00x" path="res://RTS-System/Player/UI/PlayerUI.gd" id="1_mb3tw"]
 [ext_resource type="Texture2D" uid="uid://f8758o682hq6" path="res://RTS-System/Commands/UI/Move.png" id="1_qbo8c"]
 [ext_resource type="Texture2D" uid="uid://wg4ahtxtfu3a" path="res://RTS-System/Commands/UI/Stop.png" id="2_2ncyk"]
+[ext_resource type="Script" uid="uid://panunnay0b0q" path="res://RTS-System/Player/UI/ActionMenuUI.gd" id="2_luor8"]
 [ext_resource type="Texture2D" uid="uid://dj0gxf8y644j7" path="res://RTS-System/Commands/UI/Hold_Position.png" id="3_1i0l3"]
 [ext_resource type="Texture2D" uid="uid://cj72b3uo7vdg1" path="res://RTS-System/Commands/UI/AttackMove.png" id="4_mb3tw"]
 [ext_resource type="FontFile" uid="uid://hryht1uvr8i8" path="res://Game/Data/Fonts/8-bit-snobbery/8 Bit Snobbery.ttf" id="7_adh6j"]
+[ext_resource type="PackedScene" uid="uid://d4ewrr2nq16cx" path="res://AbilitySystem/AbilityButtonUI.tscn" id="7_hnqvc"]
 [ext_resource type="Script" uid="uid://bjosjd3mjgwnm" path="res://RTS-System/Player/UI/TooltipPanel.gd" id="8_c35mt"]
 [ext_resource type="Script" uid="uid://dcpo2wf1n5u81" path="res://RTS-System/Entities/Data/UnitInventoryUI.gd" id="9_luor8"]
 
@@ -117,7 +119,6 @@ border_width_bottom = 3
 border_color = Color(0, 0, 0, 1)
 
 [node name="PlayerUI" type="Node2D"]
-visible = false
 script = ExtResource("1_mb3tw")
 
 [node name="BottomBar" type="Panel" parent="."]
@@ -146,8 +147,9 @@ offset_top = 270.0
 offset_right = 941.0
 offset_bottom = 520.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_0hjsp")
+script = ExtResource("2_luor8")
 
-[node name="GridContainer" type="GridContainer" parent="ActionMenu"]
+[node name="ActionButtons" type="GridContainer" parent="ActionMenu"]
 layout_mode = 0
 offset_left = 6.0
 offset_top = 7.0
@@ -155,12 +157,12 @@ offset_right = 46.0
 offset_bottom = 47.0
 columns = 4
 
-[node name="Panel" type="Panel" parent="ActionMenu/GridContainer"]
+[node name="Button0" type="Panel" parent="ActionMenu/ActionButtons"]
 custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_usimh")
 
-[node name="Move" type="TextureRect" parent="ActionMenu/GridContainer/Panel"]
+[node name="Move" type="TextureRect" parent="ActionMenu/ActionButtons/Button0"]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 2.0
@@ -170,12 +172,12 @@ texture = ExtResource("1_qbo8c")
 expand_mode = 2
 stretch_mode = 3
 
-[node name="Panel2" type="Panel" parent="ActionMenu/GridContainer"]
+[node name="Button1" type="Panel" parent="ActionMenu/ActionButtons"]
 custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_usimh")
 
-[node name="Move" type="TextureRect" parent="ActionMenu/GridContainer/Panel2"]
+[node name="Move" type="TextureRect" parent="ActionMenu/ActionButtons/Button1"]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 2.0
@@ -185,12 +187,12 @@ texture = ExtResource("2_2ncyk")
 expand_mode = 2
 stretch_mode = 3
 
-[node name="Panel3" type="Panel" parent="ActionMenu/GridContainer"]
+[node name="Button2" type="Panel" parent="ActionMenu/ActionButtons"]
 custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_usimh")
 
-[node name="Move" type="TextureRect" parent="ActionMenu/GridContainer/Panel3"]
+[node name="Move" type="TextureRect" parent="ActionMenu/ActionButtons/Button2"]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 2.0
@@ -200,12 +202,12 @@ texture = ExtResource("3_1i0l3")
 expand_mode = 2
 stretch_mode = 3
 
-[node name="Panel4" type="Panel" parent="ActionMenu/GridContainer"]
+[node name="Button3" type="Panel" parent="ActionMenu/ActionButtons"]
 custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_usimh")
 
-[node name="Move" type="TextureRect" parent="ActionMenu/GridContainer/Panel4"]
+[node name="Move" type="TextureRect" parent="ActionMenu/ActionButtons/Button3"]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 2.0
@@ -215,53 +217,45 @@ texture = ExtResource("4_mb3tw")
 expand_mode = 2
 stretch_mode = 3
 
-[node name="AbilityButton0" type="Button" parent="ActionMenu/GridContainer"]
-custom_minimum_size = Vector2(75, 75)
-layout_mode = 2
-icon_alignment = 1
-expand_icon = true
+[node name="AbilityButtons" type="GridContainer" parent="ActionMenu"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 86.0
+offset_right = 318.0
+offset_bottom = 161.0
+columns = 4
 
-[node name="AbilityButton1" type="Button" parent="ActionMenu/GridContainer"]
-custom_minimum_size = Vector2(75, 75)
+[node name="AbilityButton" parent="ActionMenu/AbilityButtons" instance=ExtResource("7_hnqvc")]
+visible = false
 layout_mode = 2
-icon_alignment = 1
-expand_icon = true
 
-[node name="AbilityButton2" type="Button" parent="ActionMenu/GridContainer"]
-custom_minimum_size = Vector2(75, 75)
+[node name="AbilityButton2" parent="ActionMenu/AbilityButtons" instance=ExtResource("7_hnqvc")]
+visible = false
 layout_mode = 2
-icon_alignment = 1
-expand_icon = true
 
-[node name="AbilityButton3" type="Button" parent="ActionMenu/GridContainer"]
-custom_minimum_size = Vector2(75, 75)
+[node name="AbilityButton3" parent="ActionMenu/AbilityButtons" instance=ExtResource("7_hnqvc")]
+visible = false
 layout_mode = 2
-icon_alignment = 1
-expand_icon = true
 
-[node name="AbilityButton4" type="Button" parent="ActionMenu/GridContainer"]
-custom_minimum_size = Vector2(75, 75)
+[node name="AbilityButton4" parent="ActionMenu/AbilityButtons" instance=ExtResource("7_hnqvc")]
+visible = false
 layout_mode = 2
-icon_alignment = 1
-expand_icon = true
 
-[node name="AbilityButton5" type="Button" parent="ActionMenu/GridContainer"]
-custom_minimum_size = Vector2(75, 75)
+[node name="AbilityButton5" parent="ActionMenu/AbilityButtons" instance=ExtResource("7_hnqvc")]
+visible = false
 layout_mode = 2
-icon_alignment = 1
-expand_icon = true
 
-[node name="AbilityButton6" type="Button" parent="ActionMenu/GridContainer"]
-custom_minimum_size = Vector2(75, 75)
+[node name="AbilityButton6" parent="ActionMenu/AbilityButtons" instance=ExtResource("7_hnqvc")]
+visible = false
 layout_mode = 2
-icon_alignment = 1
-expand_icon = true
 
-[node name="AbilityButton7" type="Button" parent="ActionMenu/GridContainer"]
-custom_minimum_size = Vector2(75, 75)
+[node name="AbilityButton7" parent="ActionMenu/AbilityButtons" instance=ExtResource("7_hnqvc")]
+visible = false
 layout_mode = 2
-icon_alignment = 1
-expand_icon = true
+
+[node name="AbilityButton8" parent="ActionMenu/AbilityButtons" instance=ExtResource("7_hnqvc")]
+visible = false
+layout_mode = 2
 
 [node name="PortraitPanel" type="Panel" parent="."]
 offset_left = -398.0

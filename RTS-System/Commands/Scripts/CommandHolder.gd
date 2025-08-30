@@ -17,9 +17,7 @@ func _init(parent: Unit) -> void:
 	commands_data = CommandsData
 
 func _on_command_completed(command_type, fallback_command):
-	if command_type == "Attack":
-		if fallback_command != {}:
-			insert_command_at_front(fallback_command)
+	pass
 
 func issue_command(command_type: String = "", target = null, position: Vector2 = Vector2.ZERO, is_queued: bool = false, player_id: int = 10, is_player_command: bool = false, offset: Vector2 = Vector2.ZERO, extra := {}):
 	if player_id != unit.owner_id:

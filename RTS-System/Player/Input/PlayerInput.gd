@@ -17,6 +17,11 @@ var block_input_frames: int = 0
 
 var drag_start = Vector2.ZERO
 
+var is_quick_cast: bool = false
+var is_casting: bool = false
+
+var desired_cast: CastContext
+
 const DOUBLE_CLICK_TIME = 0.3
 const DRAG_THRESHOLD := 50.0
 const COMMAND_COOLDOWN := 10
@@ -141,7 +146,7 @@ func world_to_screen(world_pos: Vector2) -> Vector2:
 func check_click_hit(mouse_pos: Vector2):
 	var space_state = get_world_2d().direct_space_state
 	var shape := CircleShape2D.new()
-	shape.radius = 30.0
+	shape.radius = 50.0
 	
 	var query = PhysicsShapeQueryParameters2D.new()
 	query.shape = shape
@@ -161,7 +166,7 @@ func check_click_hit(mouse_pos: Vector2):
 func check_click_hit_item(mouse_pos: Vector2):
 	var space_state = get_world_2d().direct_space_state
 	var shape := CircleShape2D.new()
-	shape.radius = 30.0
+	shape.radius = 50.0
 	
 	var query = PhysicsShapeQueryParameters2D.new()
 	query.shape = shape

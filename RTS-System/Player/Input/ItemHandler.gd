@@ -32,9 +32,8 @@ func set_drop_mode(item: ItemData = null, slot_index: int = -1, value = false):
 	if drop_mode:
 		item_to_drop = item if item != null else null
 		item_slot_index = slot_index
-		player_ui.action_panel.visible = true
-		player_ui.action_text.text = str("Left click to drop [", item.name, "]")
+		var text = str("Left click to drop [", item.name, "]")
+		player_ui.display_action_panel(text)
 	else:
 		item_to_drop = null
-		player_ui.action_panel.visible = false
-		player_ui.action_text.text = ""
+		player_ui.hide_action_panel()

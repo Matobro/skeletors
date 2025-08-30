@@ -9,7 +9,7 @@ func exit_state():
 func state_logic(delta):
 	var target = ai.combat_state.current_target
 
-	# If a valid target exists, switch to attack
+	# If a valid target exists switch to attack
 	if target != null and is_instance_valid(target) and !target.unit_combat.dead:
 		ai.command_handler.fallback_command = ai.command_handler.current_command
 		ai.get_current_command().is_player_command = false

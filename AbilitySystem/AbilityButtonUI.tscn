@@ -1,0 +1,54 @@
+[gd_scene load_steps=5 format=3 uid="uid://d4ewrr2nq16cx"]
+
+[ext_resource type="Texture2D" uid="uid://3dy43us4t0bw" path="res://AbilitySystem/Sprites/RainofFire_Icon.png" id="1_aifyb"]
+[ext_resource type="Script" uid="uid://coa23eicddqg6" path="res://AbilitySystem/AbilitySlot.gd" id="1_p0v6k"]
+[ext_resource type="FontFile" uid="uid://hryht1uvr8i8" path="res://Game/Data/Fonts/8-bit-snobbery/8 Bit Snobbery.ttf" id="2_p0v6k"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_opdkh"]
+line_spacing = 0.0
+font = ExtResource("2_p0v6k")
+outline_size = 5
+outline_color = Color(0.546409, 7.33994e-07, 3.85046e-07, 1)
+
+[node name="AbilityButton" type="Button"]
+custom_minimum_size = Vector2(71, 71)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = -35.0
+offset_right = 35.0
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_p0v6k")
+
+[node name="Icon" type="TextureProgressBar" parent="."]
+custom_minimum_size = Vector2(71, 71)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+fill_mode = 5
+nine_patch_stretch = true
+texture_under = ExtResource("1_aifyb")
+texture_progress = ExtResource("1_aifyb")
+tint_over = Color(1, 1, 1, 0)
+tint_progress = Color(0, 0, 0, 1)
+
+[node name="Cooldown" type="Label" parent="."]
+custom_minimum_size = Vector2(71, 71)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "150"
+label_settings = SubResource("LabelSettings_opdkh")
+horizontal_alignment = 1
+vertical_alignment = 1

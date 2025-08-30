@@ -135,16 +135,22 @@ func issue_pickup_item_command(event_info):
 
 	parent.command_cooldown_frames = parent.COMMAND_COOLDOWN
 
-func issue_cast_ability_command(caster, ability_index, target_pos, target_unit, shift):
-	caster.command_holder.issue_command(
+func issue_cast_ability_command(context: CastContext):
+	# Check if cast if valid before issuing command
+	if !context.ability.can_cast(context):
+		print("Cast ability command issuing cancelled")
+		return
+
+	print("Issuing cast ability command")
+	context.caster.command_holder.issue_command(
 		"CastAbility",
-		target_unit,
-		target_pos,
-		shift,
-		caster.owner_id,
+		context.target_unit,
+		context.target_position,
+		context.shift,
+		context.caster.owner_id,
 		true,
 		Vector2.ZERO,
-		{"ability_index": ability_index}
+		{"context": context}
 	)
 
 func calculate_unit_formation(total_units, pos):

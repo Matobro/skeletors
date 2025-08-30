@@ -104,7 +104,7 @@ func select_all_units_of_type(unit: Unit, shift := false) -> void:
 		apply_selection(candidates, false)
 
 func get_first_selected_unit() -> Unit:
-	return selected_units[0] if selected_units.size() > 0 else null
+	return selected_units[0] if selected_units.size() > 0  and selected_units[0] != null else null
 
 func cleanup_invalid_units():
 	var changed = false

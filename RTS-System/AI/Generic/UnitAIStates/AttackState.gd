@@ -8,7 +8,6 @@ func enter_state():
 func exit_state():
 	ai.animation_player.stop()
 
-
 func state_logic(delta: float) -> void:
 	# Update combat state timers and target
 	ai.combat_state.update(delta)
@@ -20,12 +19,8 @@ func state_logic(delta: float) -> void:
 
 	# detect target switch
 	if target_unit != ai.combat_state.current_target_previous:
-		print("yee")
 		reset_attack_state()
 	ai.combat_state.current_target_previous = target_unit
-
-	# progress attack cooldown
-	ai.combat_state.attack_timer = max(ai.combat_state.attack_timer - delta, 0.0)
 
 	# if attack is in progress, advance animation
 	if ai.combat_state.is_attack_committed:
@@ -43,7 +38,6 @@ func state_logic(delta: float) -> void:
 		# follow target if out of range
 		if not parent.unit_combat.is_within_attack_range(target_unit.global_position):
 			follow_target(target_unit, delta)
-
 
 # Reset attack state when switching target
 func reset_attack_state():
@@ -68,7 +62,6 @@ func start_attack(target_unit: Node) -> void:
 		(target_unit.global_position - parent.global_position).normalized()
 	)
 
-
 # Process attack animation: apply damage/projectile at correct frame
 func process_attack_animation(target_unit: Node) -> void:
 	var base_len = parent.animation_player.get_animation_speed("attack")
@@ -90,7 +83,6 @@ func process_attack_animation(target_unit: Node) -> void:
 	# Reset attack state after animation ends
 	if ai.combat_state.attack_anim_timer >= attack_end_time:
 		reset_attack_state()
-
 
 # Move toward the target if out of range
 func follow_target(target_unit: Node, delta: float):
@@ -114,7 +106,6 @@ func follow_target(target_unit: Node, delta: float):
 			parent.move_and_slide()
 			parent.unit_visual.handle_orientation(dir)
 
-
 func handle_no_target():
 	ai.combat_state.clear_combat_state()
 	var fallback_command = ai.command_handler.fallback_command
@@ -124,7 +115,6 @@ func handle_no_target():
 		return
 		
 	ai.command_handler.process_next_command()
-
 
 func spawn_projectile(target_unit: Node):
 	var projectile_scene = parent.data.unit_model_data.projectile_scene

@@ -39,6 +39,7 @@ func input_received(event, event_info):
 			on_mouse_drag(event_info)
 
 func on_left_click_pressed(event_info):
+	player_ui.hide_action_panel()
 	player_input.drag_start = event_info.clicked_position
 
 	if event_info.total_units > 0 and event_info.attack_moving:
@@ -49,6 +50,10 @@ func on_left_click_pressed(event_info):
 		return
 
 func on_left_click_released(event_info):
+	if player_input.is_casting:
+		player_input.keyboard_handler.input_cast_spell()
+		return
+
 	if event_info.attack_moving:
 		return
 
@@ -72,6 +77,8 @@ func on_left_click_released(event_info):
 	selection_manager.select_unit_at_mouse_pos(event_info.clicked_position, event_info.shift)
 
 func on_right_click_pressed(event_info):
+	player_ui.hide_action_panel()
+	player_input.is_casting = false
 	if item_handler.drop_mode:
 		item_handler.set_drop_mode(null, false)
 		return
