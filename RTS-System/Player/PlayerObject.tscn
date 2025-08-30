@@ -25,8 +25,7 @@ enabled = false
 position = Vector2(960, 540)
 
 [node name="BoxSelection" type="ColorRect" parent="CanvasLayer"]
-visible = false
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
-color = Color(1, 1, 1, 0.0980392)
+color = Color(0.101961, 0.631373, 0.101961, 0.196078)
