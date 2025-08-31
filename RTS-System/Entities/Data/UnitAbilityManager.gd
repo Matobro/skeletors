@@ -20,6 +20,9 @@ func _init(parent_ref, data_ref) -> void:
 		var fireball = preload("res://AbilitySystem/Abilities/Fireball.tres")
 		add_ability(fireball)
 
+		var defaura = preload("res://AbilitySystem/Abilities/Defensive Aura.tres")
+		add_ability(defaura)
+
 func tick(delta: float):
 	for ability in abilities:
 		ability.tick(delta)
@@ -29,7 +32,7 @@ func cast_ability(context: CastContext):
 
 ## Adds ability to unit via [AbilityData]
 func add_ability(ability_data: AbilityData):
-	var ability = AbilitySystem.create_ability(ability_data)
+	var ability = AbilitySystem.create_ability(ability_data, parent)
 	if ability:
 		abilities.append(ability)
 	else:

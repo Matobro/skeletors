@@ -8,6 +8,8 @@ var is_invunerable: bool = true
 var possible_targets: Array[Unit]
 var friendly_targets: Array[Unit]
 
+var active_buffs: Array = []
+
 var parent: Unit
 var stats: BaseStatData
 
@@ -15,6 +17,16 @@ func _init(parent_ref, stats_ref) -> void:
 	parent = parent_ref
 	stats = stats_ref
 	is_invunerable = false
+
+func tick(delta):
+	for i in range(active_buffs.size() - 1, -1, -1):
+		var buff = active_buffs[i]
+		buff.time_left -= delta
+		if buff.time_left <= 0:
+			remove_buff(buff.effect, buff.source)
+			active_buffs.remove_at(i)
+		else:
+			active_buffs[i] = buff
 
 func take_damage(damage: int = 0, attacker = null):
 	if dead or is_invunerable: 
@@ -82,6 +94,40 @@ func on_social_aggro(attacker: Unit):
 			parent.owner_id
 		)
 
+func add_buff(effect: EffectData, source: Unit):
+	var stat = effect.stat
+	var amount = effect.amount
+
+	for buff in active_buffs:
+		if buff.effect == effect and buff.source == source:
+			buff.time_left = effect.duration
+			return
+
+	if !stats.buff_bonus.has(stat):
+		stats.buff_bonus[stat] = 0
+	stats.buff_bonus[stat] += amount
+	stats.recalculate_stats()
+
+	if effect.duration > 0:
+		active_buffs.append({
+			"effect": effect,
+			"time_left": effect.duration,
+			"source": source
+			})
+
+func remove_buff(effect: EffectData, source: Unit):
+	for i in range(active_buffs.size() - 1, -1, -1):
+		var buff = active_buffs[i]
+		if buff.effect == effect and buff.source == source:
+			var stat = effect.stat
+			var amount = effect.amount
+			if stats.buff_bonus.has(stat):
+				stats.buff_bonus[stat] -= amount
+				if abs(stats.buff_bonus[stat]) < 0.01:
+					stats.buff_bonus.erase(stat)
+			stats.recalculate_stats()
+			break
+	
 func heal_health(heal_amount):
 	stats.current_health = min(stats.current_health + heal_amount, stats.max_health)
 	parent.hp_bar.set_hp_bar(stats.current_health)

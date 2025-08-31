@@ -1,6 +1,10 @@
 ## Base for TargetedAbilities
 ## Is casted on target unit
 ## Instantiates projectile that holds its own logic
+## Is valid cast is unique for each ability type
+## For example, targetedprojectile should check
+## that the targeted unit is valid
+## and not the target position
 
 extends BaseAbilityType
 

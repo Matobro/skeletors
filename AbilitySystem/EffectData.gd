@@ -7,4 +7,5 @@ var effect_type: String
 
 @export var amount: float = 0
 @export var duration: float = 0
+@export var stat: String = ""
 @export var extra: Dictionary = {}

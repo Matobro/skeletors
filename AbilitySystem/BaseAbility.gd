@@ -16,7 +16,21 @@ var current_cast: CastContext
 
 signal cast_done()
 
+func _init(data, type, source_unit) -> void:
+	ability_data = data
+	ability_type = type
+
+	# If passive, cast it immediately to activate it
+	if data.is_passive:
+		var context = CastContext.new()
+		context.caster = source_unit
+		context.ability = self
+		ability_type.cast(context)
+	
 func tick(delta: float):
+	if ability_data.is_passive:
+		return
+
 	if current_cooldown > 0:
 		current_cooldown = max(current_cooldown - delta, 0)
 	if currently_casting:

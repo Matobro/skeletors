@@ -51,8 +51,9 @@ func recalculate_stats():
 		var bonus_value = stat_values[1]
 		var min_value = stat_values[2]
 		var item_bonus = get_item_bonus(stat_name)
+		var buff_value = buff_bonus.get(stat_name, 0)
 
-		self[stat_name] = max(base_value + bonus_value + item_bonus, min_value)
+		self[stat_name] = max(base_value + bonus_value + item_bonus + buff_value, min_value)
 
 	if previous_max_hp > 0:
 		current_health = int(current_health * max_health / previous_max_hp)

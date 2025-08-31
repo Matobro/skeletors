@@ -68,6 +68,8 @@ func _process(delta: float) -> void:
 	## dont ask
 	if unit_ability_manager:
 		unit_ability_manager.tick(delta)
+	if unit_combat:
+		unit_combat.tick(delta)
 
 func get_stat(stat: String):
 	return data.stats[stat]

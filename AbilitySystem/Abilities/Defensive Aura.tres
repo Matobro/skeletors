@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=5 format=3 uid="uid://leijpu5lpeho"]
+
+[ext_resource type="Script" uid="uid://boe8ic1128tfs" path="res://AbilitySystem/EffectData.gd" id="1_wrjsl"]
+[ext_resource type="Texture2D" uid="uid://blfnyk7cdo4ah" path="res://RTS-System/Player/yesys.png" id="2_jaba2"]
+[ext_resource type="Script" uid="uid://dw73gisblncyg" path="res://AbilitySystem/AbilityData.gd" id="2_y3qiq"]
+
+[sub_resource type="Resource" id="Resource_ih0p4"]
+script = ExtResource("1_wrjsl")
+effect_type = "Buff"
+amount = 4.0
+duration = 1.0
+stat = "armor"
+extra = {}
+metadata/_custom_type_script = "uid://boe8ic1128tfs"
+
+[resource]
+script = ExtResource("2_y3qiq")
+name = "Defensive Aura"
+description = "Projects an area around the caster. Units within the area gets armor bonus"
+icon = ExtResource("2_jaba2")
+mana_cost = 0
+cooldown = 0.0
+cast_range = 0.0
+cast_time = 0.0
+is_passive = true
+spell_type = "Aura"
+possible_targets = 6
+effects = Array[ExtResource("1_wrjsl")]([SubResource("Resource_ih0p4")])

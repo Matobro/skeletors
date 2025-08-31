@@ -43,21 +43,33 @@ var current_health: float
 var current_mana: float
 var attack_damage: int
 
+var buff_bonus := {}
+
 var parent
 
 func recalculate_stats():
 	var previous_max_hp = max_health
 	var previous_max_mana = max_mana
 
-	max_health = base_max_hp
-	attack_speed = base_attack_speed
-	max_mana = base_max_mana
-	armor = base_armor
-	movement_speed = base_movement_speed
-	health_regen = base_health_regen
-	mana_regen = base_mana_regen
-	attack_range = base_range
-	attack_damage = base_damage
+	var stat_list = {
+		"max_health": [base_max_hp, 0],
+		"attack_speed": [base_attack_speed, 0.01],
+		"max_mana": [base_max_mana, 0],
+		"armor": [base_armor, 0],
+		"movement_speed": [base_movement_speed, 50],
+		"health_regen": [base_health_regen, 0],
+		"mana_regen": [base_mana_regen, 0],
+		"attack_range": [base_range, 30],
+		"attack_damage": [base_damage, 1],
+	}
+
+	for stat_name in stat_list.keys():
+		var stat_values = stat_list[stat_name] 
+		var base_value = stat_values[0]
+		var min_value = stat_values[1]
+		var buff_value = buff_bonus.get(stat_name, 0)
+
+		self[stat_name] = max(base_value + buff_value, min_value)
 
 	if previous_max_hp > 0:
 		current_health = int(current_health * max_health / previous_max_hp)

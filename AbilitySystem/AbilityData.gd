@@ -10,6 +10,7 @@ class_name AbilityData
 @export var cooldown: float
 @export var cast_range: float
 @export var cast_time: float
+@export var is_passive: bool
 
 @export_enum("TargetedProjectile", "GroundArea", "NoTarget", "Aura", "BuffAbility")
 var spell_type: String = "TargetedProjectile"

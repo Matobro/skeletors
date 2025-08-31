@@ -1,13 +1,13 @@
 extends Node
 
 var SPELL_TYPE = {
-	"TargetedProjectile": preload("res://AbilitySystem/AbilityTypes/TargetedProjectile.gd")
+	"TargetedProjectile": preload("res://AbilitySystem/AbilityTypes/TargetedProjectile.gd"),
+	"Aura": preload("res://AbilitySystem/AbilityTypes/AuraAbility.gd")
 }
 
-func create_ability(ability_data: AbilityData) -> BaseAbility:
-	var ability = BaseAbility.new()
-	ability.ability_data = ability_data
-	ability.ability_type = get_ability_type(ability_data.spell_type)
+func create_ability(ability_data: AbilityData, source_unit) -> BaseAbility:
+	var ability_type = get_ability_type(ability_data.spell_type)
+	var ability = BaseAbility.new(ability_data, ability_type, source_unit)
 	return ability
 	
 func get_ability_type(spell_type: String) -> BaseAbilityType:
@@ -27,10 +27,10 @@ func apply_effect(effect: EffectData, caster, target_position: Vector2, target_u
 				target_unit.unit_combat.heal_health(effect.amount)
 		"Buff":
 			if target_unit:
-				target_unit.unit_combat.add_buff(effect)
+				target_unit.unit_combat.add_buff(effect, caster)
 		"Debuff":
 			if target_unit:
-				target_unit.unit_combat.add_debuff(effect)
+				target_unit.unit_combat.add_buff(effect, caster)
 		"Stun":
 			if target_unit:
 				target_unit.unit_combat.get_stunned(effect.duration)
