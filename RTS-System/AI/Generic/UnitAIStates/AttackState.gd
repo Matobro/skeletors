@@ -124,6 +124,7 @@ func spawn_projectile(target_unit: Node):
 
 	var projectile = projectile_scene.instantiate()
 	projectile.global_position = parent.global_position
+	projectile.scale = parent.data.unit_model_data.projectile_size
 	projectile.target = target_unit
 	projectile.speed = parent.data.unit_model_data.projectile_speed
 	projectile.damage = parent.get_stat("attack_damage")

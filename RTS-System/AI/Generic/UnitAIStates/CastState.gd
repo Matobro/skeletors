@@ -46,12 +46,13 @@ func state_logic(delta):
 		ai.pathfinder.follow_path(delta)
 
 func on_arrival():
-	ai.animation_player.play_animation("casting", 1.0)
+	var ability = ability_to_cast
 	if(!arrived):
 		print("Arrived at casting location")
-		var ability = ability_to_cast
 		ability.connect("cast_done", Callable(self, "on_cast_finished"), CONNECT_ONE_SHOT)
 		arrived = true
+		var anim_speed = ai.animation_player.get_animation_speed("casting") / ability.ability_data.cast_time
+		ai.animation_player.play_animation("casting", anim_speed)
 		parent.unit_ability_manager.cast_ability(command["context"])
 
 func clear_state():

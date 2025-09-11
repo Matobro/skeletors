@@ -4,6 +4,7 @@
 		"res://RTS-System/Entities/Heroes/Database/GigaTestHero.tres",
 		"res://RTS-System/Entities/Heroes/Database/Illidan.tres",
 		"res://RTS-System/Entities/Heroes/Database/Malfurion.tres",
+		"res://RTS-System/Entities/Heroes/Database/SkeletonMage.tres",
 		"res://RTS-System/Entities/Heroes/Database/TestHero.tres"
 	],
 	"items": [

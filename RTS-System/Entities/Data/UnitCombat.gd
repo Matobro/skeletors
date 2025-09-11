@@ -19,6 +19,7 @@ func _init(parent_ref, stats_ref) -> void:
 	is_invunerable = false
 
 func tick(delta):
+	if dead: return
 	for i in range(active_buffs.size() - 1, -1, -1):
 		var buff = active_buffs[i]
 		buff.time_left -= delta
@@ -40,7 +41,7 @@ func take_damage(damage: int = 0, attacker = null):
 		parent.unit_ai.combat_state.on_attacked_by(attacker)
 
 func apply_damage(damage, attacker):
-
+	if dead: return
 	if damage > 0:
 		var final_damage = clampi(damage, 1, 9999)
 		stats.current_health -= final_damage
@@ -54,6 +55,7 @@ func apply_damage(damage, attacker):
 	alert_nearby_allies(attacker)
 
 func handle_death():
+	if dead: return
 	parent.unit_visual.set_selected(false)
 	parent.hp_bar.set_bar_visible(false)
 	dead = true
@@ -61,12 +63,14 @@ func handle_death():
 	parent.unit_ai.set_state("Dying")
 
 func perform_attack():
+	if dead: return
 	if parent.unit_ai.combat_state.current_target != null:
 		var attack_target = parent.unit_ai.combat_state.current_target
 		var damage = StatModifiers.calculate_damage(stats.attack_dice_roll, stats.attack_damage)
 		attack_target.unit_combat.take_damage(damage, parent)
 
 func should_aggro(attacker) -> bool:
+	if dead: return false
 	if attacker and parent.unit_ai.current_state == parent.unit_ai.states["Idle"] and attacker.owner_id != parent.owner_id:
 		return true
 	
@@ -85,6 +89,7 @@ func alert_nearby_allies(attacker: Unit) -> void:
 		unit.unit_combat.on_social_aggro(attacker)
 
 func on_social_aggro(attacker: Unit):
+	if dead: return
 	if parent.unit_ai.current_state == parent.unit_ai.states["Idle"]:
 		parent.command_holder.issue_command(
 			"Attack",
@@ -95,6 +100,7 @@ func on_social_aggro(attacker: Unit):
 		)
 
 func add_buff(effect: EffectData, source: Unit):
+	if dead: return
 	var stat = effect.stat
 	var amount = effect.amount
 
@@ -116,6 +122,7 @@ func add_buff(effect: EffectData, source: Unit):
 			})
 
 func remove_buff(effect: EffectData, source: Unit):
+	if dead: return
 	for i in range(active_buffs.size() - 1, -1, -1):
 		var buff = active_buffs[i]
 		if buff.effect == effect and buff.source == source:

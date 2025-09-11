@@ -35,7 +35,7 @@ func set_selection_circle_position(unit):
 func get_animation_speed(anim: String) -> float:
 	var base_frames = sprite_frames.get_frame_count(anim)
 	var base_fps = sprite_frames.get_animation_speed(anim)
-	return base_frames / float(base_fps)
+	return float(base_frames) / float(base_fps)
 
 ## Plays [animation] with [animation_speed]. 0.1 = 0.1x speed, 2.0 = 2x speed
 func play_animation(animation_name: String = "idle", animation_speed: float = 1.0):

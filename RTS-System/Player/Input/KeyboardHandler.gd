@@ -52,13 +52,21 @@ func input_cast_spell(event_info: EventInfo = null, caster: Unit = null, index: 
 		context.shift = event_info.shift 
 		context.ability = caster.unit_ability_manager.abilities[index]
 
+		if !context.ability.can_cast(context):
+			player_input.player_ui.hide_action_panel()
+			player_input.is_casting = false
+			return
+			
+		# Quick cast if enabled
 		if player_input.is_quick_cast:
 			player_input.player_ui.hide_action_panel()
 			player_input.is_casting = false
 			cast_spell(context)
 			return
+		# Toggle casting mode
 		else:
 			toggle_cast_spell(context)
+	# If in casting mode
 	else:
 		player_input.player_ui.hide_action_panel()
 		player_input.is_casting = false

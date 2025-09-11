@@ -1,0 +1,297 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=43 format=3 uid="uid://dkfhxkmff3cc5"]
+
+[ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="1_7h2ya"]
+[ext_resource type="Script" uid="uid://dqe50qceubild" path="res://RTS-System/Entities/Data/HeroStatData.gd" id="2_yhfjd"]
+[ext_resource type="PackedScene" uid="uid://bs8prqiprl2i" path="res://RTS-System/Entities/Projectiles/DarkMagicProjectile.tscn" id="3_msndy"]
+[ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="4_5gh5h"]
+[ext_resource type="Texture2D" uid="uid://0kvak80ofjax" path="res://RTS-System/Entities/Heroes/UnitData/SkeletonMage/Sprites/SkeletonMage_attack.png" id="5_msndy"]
+[ext_resource type="Texture2D" uid="uid://c53ibf1m7k1va" path="res://RTS-System/Entities/Heroes/UnitData/SkeletonMage/Sprites/SkeletonMage_casting.png" id="6_ll2t7"]
+[ext_resource type="Texture2D" uid="uid://hye5d4n0wmux" path="res://RTS-System/Entities/Heroes/UnitData/SkeletonMage/Sprites/SkeletonMage_dying.png" id="7_b7ms6"]
+[ext_resource type="Texture2D" uid="uid://brd1f2co3ly72" path="res://RTS-System/Entities/Heroes/UnitData/SkeletonMage/Sprites/SkeletonMage_idle.png" id="8_3o7as"]
+[ext_resource type="Texture2D" uid="uid://bfbec3qxbr2cd" path="res://RTS-System/Entities/Heroes/UnitData/SkeletonMage/Sprites/SkeletonMage_walk.png" id="9_nwjk6"]
+
+[sub_resource type="Resource" id="Resource_aksv5"]
+script = ExtResource("2_yhfjd")
+main_stat = "intelligence"
+strength = 1
+agility = 2
+intelligence = 7
+strength_per_level = 1
+agility_per_level = 2
+intelligence_per_level = 4
+base_max_hp = 30.0
+base_max_mana = 15.0
+base_health_regen = 0.1
+base_mana_regen = 0.2
+base_armor = 1
+base_movement_speed = 350
+base_attack_speed = 0.7
+base_damage = 10
+base_range = 550
+attack_dice_roll = 0.12
+xp_yield = 50
+metadata/_custom_type_script = "uid://dqe50qceubild"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yq57e"]
+atlas = ExtResource("5_msndy")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uthhv"]
+atlas = ExtResource("5_msndy")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_au4ow"]
+atlas = ExtResource("5_msndy")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sxbyo"]
+atlas = ExtResource("5_msndy")
+region = Rect2(150, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1fvbf"]
+atlas = ExtResource("6_ll2t7")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_who2u"]
+atlas = ExtResource("6_ll2t7")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6w1yg"]
+atlas = ExtResource("6_ll2t7")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dojeg"]
+atlas = ExtResource("6_ll2t7")
+region = Rect2(150, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gbtys"]
+atlas = ExtResource("6_ll2t7")
+region = Rect2(200, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5t238"]
+atlas = ExtResource("6_ll2t7")
+region = Rect2(250, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vh0l3"]
+atlas = ExtResource("6_ll2t7")
+region = Rect2(300, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_86ovg"]
+atlas = ExtResource("7_b7ms6")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y30vj"]
+atlas = ExtResource("7_b7ms6")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_703sj"]
+atlas = ExtResource("7_b7ms6")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eg3g8"]
+atlas = ExtResource("7_b7ms6")
+region = Rect2(150, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y763r"]
+atlas = ExtResource("7_b7ms6")
+region = Rect2(200, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fivff"]
+atlas = ExtResource("7_b7ms6")
+region = Rect2(250, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nevxn"]
+atlas = ExtResource("7_b7ms6")
+region = Rect2(300, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_743r1"]
+atlas = ExtResource("7_b7ms6")
+region = Rect2(350, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pped6"]
+atlas = ExtResource("7_b7ms6")
+region = Rect2(400, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yrv44"]
+atlas = ExtResource("8_3o7as")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kxhhq"]
+atlas = ExtResource("8_3o7as")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fn68n"]
+atlas = ExtResource("8_3o7as")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kg0cy"]
+atlas = ExtResource("8_3o7as")
+region = Rect2(150, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nqsm3"]
+atlas = ExtResource("8_3o7as")
+region = Rect2(200, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fp26n"]
+atlas = ExtResource("9_nwjk6")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6xya6"]
+atlas = ExtResource("9_nwjk6")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2g4i2"]
+atlas = ExtResource("9_nwjk6")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mbeiv"]
+atlas = ExtResource("9_nwjk6")
+region = Rect2(150, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xl35i"]
+atlas = ExtResource("9_nwjk6")
+region = Rect2(200, 0, 50, 50)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_y4b11"]
+resource_name = "SkeletonMage_spriteframes"
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yq57e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uthhv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_au4ow")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sxbyo")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fvbf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_who2u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6w1yg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dojeg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gbtys")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5t238")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vh0l3")
+}],
+"loop": false,
+"name": &"casting",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_86ovg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y30vj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_703sj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eg3g8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y763r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fivff")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nevxn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_743r1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pped6")
+}],
+"loop": false,
+"name": &"dying",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yrv44")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kxhhq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fn68n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kg0cy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nqsm3")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fp26n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6xya6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2g4i2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mbeiv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xl35i")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="Resource" id="Resource_msndy"]
+resource_name = "SkeletonMage_modeldata"
+script = ExtResource("4_5gh5h")
+sprite_frames = SubResource("SpriteFrames_y4b11")
+scale = Vector2(4, 4)
+offset = Vector2(0, 0)
+animation_attack_point = 0.3
+projectile_scene = ExtResource("3_msndy")
+projectile_speed = 800
+projectile_size = Vector2(2, 2)
+metadata/_custom_type_script = "uid://dq4e1yj8njkif"
+
+[resource]
+resource_name = "SkeletonMage"
+script = ExtResource("1_7h2ya")
+power_level = 0
+is_spawnable_enemy = false
+unit_model_data = SubResource("Resource_msndy")
+unit_type = "hero"
+name = "Skeleton Mage"
+description = ""
+stats = SubResource("Resource_aksv5")
+is_ranged = true
+metadata/_custom_type_script = "uid://oeoy2vl8vgue"

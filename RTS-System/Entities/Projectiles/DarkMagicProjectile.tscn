@@ -1,0 +1,57 @@
+[gd_scene load_steps=10 format=3 uid="uid://bs8prqiprl2i"]
+
+[ext_resource type="Script" uid="uid://b7cj7ydsx3hjq" path="res://RTS-System/Entities/Data/HomingProjectile.gd" id="1_6qhme"]
+[ext_resource type="Texture2D" uid="uid://b6in0hsrm2jpk" path="res://RTS-System/Entities/Projectiles/Sprites/MageProjectile.png" id="2_l4hip"]
+[ext_resource type="Script" uid="uid://cga6yxw2cmkr6" path="res://RTS-System/Entities/Data/PlayAnimation.gd" id="3_l4hip"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_td2fl"]
+atlas = ExtResource("2_l4hip")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tiapq"]
+atlas = ExtResource("2_l4hip")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r6m87"]
+atlas = ExtResource("2_l4hip")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lc5sb"]
+atlas = ExtResource("2_l4hip")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6u3p5"]
+atlas = ExtResource("2_l4hip")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_uxkqx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_td2fl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tiapq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6m87")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lc5sb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6u3p5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="HomingProjectile" type="Node2D"]
+z_index = 100
+script = ExtResource("1_6qhme")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_uxkqx")
+frame_progress = 0.894479
+script = ExtResource("3_l4hip")

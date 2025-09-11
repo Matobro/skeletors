@@ -1,6 +1,6 @@
 extends RefCounted
 
-## @tutorial: [caster], [index], [target_position], [target_unit], [shift], [ability_data]
+## @tutorial: [caster], [index], [target_position], [target_unit], [shift], [ability]
 class_name CastContext
 
 var caster: Unit

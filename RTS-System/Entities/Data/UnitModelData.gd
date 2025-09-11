@@ -12,9 +12,11 @@ class_name UnitModelData
 ## At which point (in seconds) of the animation damage is dealt or for ranged units when projectile is fired
 @export var animation_attack_point: float = 0.5
 ## Projectile scene for ranged attacks - not needed if melee
-@export var projectile_scene = preload("res://RTS-System/Entities/Projectiles/HomingProjectile.tscn")
+@export var projectile_scene: PackedScene
 ## Projectile speed
 @export var projectile_speed = 300
+## Projectile size
+@export var projectile_size = Vector2.ONE
 
 func get_avatar() -> Texture2D:
 	var avatar = sprite_frames.get_frame_texture("idle", 0)

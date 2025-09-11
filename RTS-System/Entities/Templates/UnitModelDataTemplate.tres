@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="UnitModelData" load_steps=3 format=3 uid="uid://m8wren26b01b"]
 
-[ext_resource type="PackedScene" uid="uid://chxscd5c7iu64" path="res://RTS-System/Entities/Projectiles/HomingProjectile.tscn" id="1_0lgf8"]
+[ext_resource type="PackedScene" uid="uid://chxscd5c7iu64" path="res://RTS-System/Entities/Projectiles/ArrowProjectile.tscn" id="1_0lgf8"]
 [ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="2_78u20"]
 
 [resource]

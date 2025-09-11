@@ -1,8 +1,7 @@
-[gd_resource type="Resource" script_class="UnitData" load_steps=39 format=3 uid="uid://dqi8t2hrqk87p"]
+[gd_resource type="Resource" script_class="UnitData" load_steps=38 format=3 uid="uid://dqi8t2hrqk87p"]
 
 [ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="1_65cuf"]
 [ext_resource type="Script" uid="uid://dqe50qceubild" path="res://RTS-System/Entities/Data/HeroStatData.gd" id="2_hfqve"]
-[ext_resource type="PackedScene" uid="uid://chxscd5c7iu64" path="res://RTS-System/Entities/Projectiles/HomingProjectile.tscn" id="3_jvn7s"]
 [ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="4_l5nal"]
 [ext_resource type="Texture2D" uid="uid://dk6w6lq288o7f" path="res://RTS-System/Entities/Units/UnitData/TestUnit/Sprites/Test_Unit_Attack.png" id="5_s3cu8"]
 [ext_resource type="Texture2D" uid="uid://lcbstwmpfai6" path="res://RTS-System/Entities/Units/UnitData/TestUnit/Sprites/TestUnit_casting.png" id="6_68xbd"]
@@ -250,7 +249,6 @@ sprite_frames = SubResource("SpriteFrames_s3cu8")
 scale = Vector2(3, 3)
 offset = Vector2(0, -20)
 animation_attack_point = 0.5
-projectile_scene = ExtResource("3_jvn7s")
 projectile_speed = 800
 metadata/_custom_type_script = "uid://dq4e1yj8njkif"
 
