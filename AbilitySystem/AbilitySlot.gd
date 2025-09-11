@@ -8,6 +8,7 @@ var data: AbilityData
 var max_cooldown
 
 func _ready() -> void:
+    ## Clear slot
     ability = null
     data = null
     max_cooldown = 0
@@ -17,6 +18,7 @@ func _process(_delta: float) -> void:
     if !ability or !data:
         return
 
+    ## Show cooldown animation
     var cooldown = ability.current_cooldown
     if cooldown > 0:
         cooldown_label.text = str("%0.1f" %cooldown)
@@ -26,6 +28,7 @@ func _process(_delta: float) -> void:
     
     cooldown_label.visible = false
 
+## Links ui slot to unit ability
 func set_slot(new_ability, new_data):
     # Clear previous data
     ability = null
@@ -38,3 +41,6 @@ func set_slot(new_ability, new_data):
         data = new_data
         max_cooldown = data.cooldown
         button_icon.value = ability.current_cooldown
+        disabled = data.is_passive
+        button_icon.texture_under = data.icon
+        button_icon.texture_progress = data.icon

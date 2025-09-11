@@ -3,11 +3,12 @@ extends Panel
 @onready var label = $Label
 
 func show_tooltip(text: String, _position: Vector2):
-	label.text = text
+	label.bbcode_text = text
 
-	size = label.get_minimum_size() + Vector2(50, 50)
+	var new_size = Vector2(label.get_content_width(), label.get_content_height())
+	size = new_size + Vector2(50, 50)
+
 	global_position = Vector2(_position.x, _position.y - (size.y + 5))
-
 	visible = true
 
 func hide_tooltip():

@@ -48,8 +48,8 @@ var buff_bonus := {}
 var parent
 
 func recalculate_stats():
-	var previous_max_hp = max_health
-	var previous_max_mana = max_mana
+	# var previous_max_hp = max_health
+	# var previous_max_mana = max_mana
 
 	var stat_list = {
 		"max_health": [base_max_hp, 0],
@@ -71,14 +71,14 @@ func recalculate_stats():
 
 		self[stat_name] = max(base_value + buff_value, min_value)
 
-	if previous_max_hp > 0:
-		current_health = int(current_health * max_health / previous_max_hp)
-	else:
-		current_health = max_health
+	# if previous_max_hp > 0:
+	# 	current_health = int(current_health * max_health / previous_max_hp)
+	# else:
+	# 	current_health = max_health
 
-	if previous_max_mana > 0:
-		current_mana = int(current_mana * max_mana / previous_max_mana)
-	else:
-		current_mana = max_mana
+	# if previous_max_mana > 0:
+	# 	current_mana = int(current_mana * max_mana / previous_max_mana)
+	# else:
+	# 	current_mana = max_mana
 
 	parent.unit_visual.hp_bar.init_hp_bar(current_health, max_health)

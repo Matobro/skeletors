@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="TargetedProjectile" load_steps=2 format=3 uid="uid://jiuhg4w3ghnp"]
+
+[ext_resource type="Script" uid="uid://cseajtob06bea" path="res://AbilitySystem/AbilityTypes/TargetedProjectile.gd" id="1_rlc6b"]
+
+[resource]
+script = ExtResource("1_rlc6b")
+metadata/_custom_type_script = "uid://cseajtob06bea"

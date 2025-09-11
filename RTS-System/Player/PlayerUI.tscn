@@ -1,9 +1,8 @@
-[gd_scene load_steps=32 format=3 uid="uid://44m1veg1thkm"]
+[gd_scene load_steps=31 format=3 uid="uid://44m1veg1thkm"]
 
 [ext_resource type="Script" uid="uid://dtvvveravq00x" path="res://RTS-System/Player/UI/PlayerUI.gd" id="1_mb3tw"]
 [ext_resource type="Texture2D" uid="uid://f8758o682hq6" path="res://RTS-System/Commands/UI/Move.png" id="1_qbo8c"]
 [ext_resource type="Texture2D" uid="uid://wg4ahtxtfu3a" path="res://RTS-System/Commands/UI/Stop.png" id="2_2ncyk"]
-[ext_resource type="Script" uid="uid://panunnay0b0q" path="res://RTS-System/Player/UI/ActionMenuUI.gd" id="2_luor8"]
 [ext_resource type="Texture2D" uid="uid://dj0gxf8y644j7" path="res://RTS-System/Commands/UI/Hold_Position.png" id="3_1i0l3"]
 [ext_resource type="Texture2D" uid="uid://cj72b3uo7vdg1" path="res://RTS-System/Commands/UI/AttackMove.png" id="4_mb3tw"]
 [ext_resource type="FontFile" uid="uid://hryht1uvr8i8" path="res://Game/Data/Fonts/8-bit-snobbery/8 Bit Snobbery.ttf" id="7_adh6j"]
@@ -147,7 +146,6 @@ offset_top = 270.0
 offset_right = 941.0
 offset_bottom = 520.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_0hjsp")
-script = ExtResource("2_luor8")
 
 [node name="ActionButtons" type="GridContainer" parent="ActionMenu"]
 layout_mode = 0
@@ -554,7 +552,7 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_c35mt")
 script = ExtResource("8_c35mt")
 
-[node name="Label" type="Label" parent="ToolTipPanel"]
+[node name="Label" type="RichTextLabel" parent="ToolTipPanel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -567,6 +565,9 @@ offset_right = 100.0
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
 vertical_alignment = 1
 
 [node name="ActionPanel" type="Panel" parent="."]

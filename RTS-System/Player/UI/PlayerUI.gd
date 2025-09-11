@@ -1,11 +1,9 @@
 extends Node
 class_name PlayerUI
 
-@onready var ui_inventory: UnitInventoryUI = $Inventory
-@onready var action_panel = $ActionPanel
-@onready var action_text = $ActionPanel/ActionText
-@onready var action_menu = $ActionMenu
-
+var ui_inventory: UnitInventoryUI
+var action_panel
+var action_text
 var shop_scene = preload("res://RTS-System/Items/Data/ShopUI.tscn")
 var selected_unit: Unit
 var selected_units: Array
@@ -15,36 +13,47 @@ var ui_stats: UIUnitStats
 var ui_tooltips: UIStatTooltips
 var ui_control_group: UIControlGroup
 var shop_ui: ShopUI
+var action_menu: ActionMenuUI
+
+var node_ready: bool = false
 
 func init_node(parent_ref):
+	ui_inventory = $Inventory
+	action_panel = $ActionPanel
+	action_text = $ActionPanel/ActionText
+
 	player_object = parent_ref
 	player_object.player_input.selection_manager.selection_changed.connect(on_selection_changed)
 
-func _ready() -> void:
 	ui_stats = UIUnitStats.new()
 	ui_control_group = UIControlGroup.new(self)
 	ui_tooltips = UIStatTooltips.new(self, ui_stats)
 	shop_ui = shop_scene.instantiate()
 	shop_ui.parent = self
+	action_menu = ActionMenuUI.new(self)
 
 	add_child(ui_stats)
 	add_child(ui_control_group)
 	add_child(ui_tooltips)
 	add_child(shop_ui)
+	add_child(action_menu)
 
 	ui_inventory.parent = self
+
+	node_ready = true
 	hide_ui()
 
 func _process(_delta):
-	if selected_units.size() > 1 and selected_unit:
-		ui_stats.show_ui_bars(selected_unit)
-		ui_stats.hide_unit_stats()
-		ui_control_group.show_control_group(selected_units)
-	elif selected_units.size() == 1 and selected_unit:
-		ui_stats.show_unit_stats(selected_unit)
-		ui_control_group.hide_control_group()
-	else:
-		hide_ui()
+	if node_ready:
+		if selected_units.size() > 1 and selected_unit:
+			ui_stats.show_ui_bars(selected_unit)
+			ui_stats.hide_unit_stats()
+			ui_control_group.show_control_group(selected_units)
+		elif selected_units.size() == 1 and selected_unit:
+			ui_stats.show_unit_stats(selected_unit)
+			ui_control_group.hide_control_group()
+		else:
+			hide_ui()
 
 func on_selection_changed(new_selection: Array) -> void:
 	selected_units = new_selection
@@ -65,8 +74,6 @@ func on_selection_changed(new_selection: Array) -> void:
 
 		elif selected_unit == null or selected_unit is not Hero:
 			ui_inventory.set_inventory(null)
-
-		
 
 func hide_ui():
 	ui_control_group.hide_control_group()

@@ -22,9 +22,10 @@ text = "Abilities"
 custom_minimum_size = Vector2(50, 200)
 layout_mode = 2
 allow_reselect = true
-item_count = 2
-item_0/text = "Fireball.tres"
-item_1/text = "Thunderbolt.tres"
+item_count = 3
+item_0/text = "Defensive Aura.tres"
+item_1/text = "Fireball.tres"
+item_2/text = "Thunderbolt.tres"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2

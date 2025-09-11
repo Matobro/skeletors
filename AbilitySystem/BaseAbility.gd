@@ -10,22 +10,20 @@ class_name BaseAbility
 
 var current_cooldown: float = 0.0
 var cast_timer: float = 0.0
-var ability_type: BaseAbilityType
 var currently_casting: bool = false
 var current_cast: CastContext
 
 signal cast_done()
 
-func _init(data, type, source_unit) -> void:
+func _init(data, source_unit) -> void:
 	ability_data = data
-	ability_type = type
 
 	# If passive, cast it immediately to activate it
 	if data.is_passive:
 		var context = CastContext.new()
 		context.caster = source_unit
 		context.ability = self
-		ability_type.cast(context)
+		ability_data.ability_type.cast(context)
 	
 func tick(delta: float):
 	if ability_data.is_passive:
@@ -38,7 +36,7 @@ func tick(delta: float):
 
 ## Returns true if off cooldown and unit has enough mana to cast and the cast is valid (depends on ability type, check if valid target etc)
 func can_cast(context) -> bool:
-	return current_cooldown <= 0 and context.caster.data.stats.current_mana >= ability_data.mana_cost and !currently_casting and ability_type and ability_type.is_valid_cast(context)
+	return current_cooldown <= 0 and context.caster.data.stats.current_mana >= ability_data.mana_cost and !currently_casting and ability_data.ability_type and ability_data.ability_type.is_valid_cast(context)
 
 ## Called when player sends cast ability command
 ## Returns true or false, depending if the casting was successful
@@ -65,7 +63,7 @@ func channel_ability(delta):
 
 func execute_ability(context: CastContext):
 	currently_casting = false
-	ability_type.cast(context)
+	ability_data.ability_type.cast(context)
 	current_cooldown = ability_data.cooldown
 	context.caster.data.stats.current_mana -= ability_data.mana_cost
 	emit_signal("cast_done")

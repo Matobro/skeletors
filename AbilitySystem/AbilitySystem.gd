@@ -1,22 +1,9 @@
 extends Node
 
-var SPELL_TYPE = {
-	"TargetedProjectile": preload("res://AbilitySystem/AbilityTypes/TargetedProjectile.gd"),
-	"Aura": preload("res://AbilitySystem/AbilityTypes/AuraAbility.gd")
-}
-
 func create_ability(ability_data: AbilityData, source_unit) -> BaseAbility:
-	var ability_type = get_ability_type(ability_data.spell_type)
-	var ability = BaseAbility.new(ability_data, ability_type, source_unit)
+	var ability = BaseAbility.new(ability_data, source_unit)
 	return ability
-	
-func get_ability_type(spell_type: String) -> BaseAbilityType:
-	if SPELL_TYPE.has(spell_type):
-		return SPELL_TYPE[spell_type].new()
-	
-	print("Returning null")
-	return null
-	
+
 func apply_effect(effect: EffectData, caster, target_position: Vector2, target_unit = null):
 	match effect.effect_type:
 		"Damage":

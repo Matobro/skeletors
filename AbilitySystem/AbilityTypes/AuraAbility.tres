@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="AuraAbility" load_steps=2 format=3 uid="uid://c6gufi58fl1g2"]
+
+[ext_resource type="Script" uid="uid://ope72g1ebno3" path="res://AbilitySystem/AbilityTypes/AuraAbility.gd" id="1_6r3bn"]
+
+[resource]
+script = ExtResource("1_6r3bn")
+aura_radius = 400.0
+metadata/_custom_type_script = "uid://ope72g1ebno3"

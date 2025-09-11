@@ -63,6 +63,8 @@ func create_unit():
 
 	SpatialGrid.register_unit(self)
 	data.stats.recalculate_stats()
+	data.stats.current_health = data.stats.max_health
+	data.stats.current_mana = data.stats.max_mana
 
 func _process(delta: float) -> void:
 	## dont ask

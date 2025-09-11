@@ -8,19 +8,26 @@
 
 extends BaseAbilityType
 
+class_name TargetedProjectile
+
+@export var projectile_scene: PackedScene
+
 func cast(context: CastContext):
-	var projectile = context.ability.ability_data.projectile_scene.instantiate()
+	var projectile = projectile_scene.instantiate()
 	projectile.global_position = context.caster.global_position
 	projectile.target = context.target_unit
 	projectile.effects = context.ability.ability_data.effects.duplicate()
 	projectile.caster = context.caster
 	context.caster.get_tree().current_scene.add_child(projectile)
 
+func get_cast_label(_is_passive: bool) -> String:
+	return "[TARGETED]"
+
 func is_valid_cast(context: CastContext) -> bool:
 	# Check spell specific rules
 	if !(context.caster or 
 	context.ability or 
-	context.ability.ability_data.projectile_scene or 
+	projectile_scene or 
 	context.target_unit or 
 	context.target_unit.unit_combat or 
 	!context.target_unit.unit_combat.dead): \

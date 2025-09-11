@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://d4ewrr2nq16cx"]
+[gd_scene load_steps=6 format=3 uid="uid://d4ewrr2nq16cx"]
 
 [ext_resource type="Texture2D" uid="uid://3dy43us4t0bw" path="res://AbilitySystem/Sprites/RainofFire_Icon.png" id="1_aifyb"]
 [ext_resource type="Script" uid="uid://coa23eicddqg6" path="res://AbilitySystem/AbilitySlot.gd" id="1_p0v6k"]
 [ext_resource type="FontFile" uid="uid://hryht1uvr8i8" path="res://Game/Data/Fonts/8-bit-snobbery/8 Bit Snobbery.ttf" id="2_p0v6k"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_75ja1"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_opdkh"]
 line_spacing = 0.0
@@ -23,6 +25,7 @@ offset_right = 35.0
 offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_75ja1")
 script = ExtResource("1_p0v6k")
 
 [node name="Icon" type="TextureProgressBar" parent="."]
