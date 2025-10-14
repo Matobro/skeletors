@@ -23,6 +23,12 @@ func tick(delta):
 	for i in range(active_buffs.size() - 1, -1, -1):
 		var buff = active_buffs[i]
 		buff.time_left -= delta
+
+		if buff.source == null or !is_instance_valid(buff.source) or buff.source.unit_combat.dead:
+			remove_buff(buff.effect, buff.source)
+			active_buffs.remove_at(i)
+			continue
+
 		if buff.time_left <= 0:
 			remove_buff(buff.effect, buff.source)
 			active_buffs.remove_at(i)
