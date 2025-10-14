@@ -1,23 +1,13 @@
 extends AnimatedSprite2D
 
-var selection_circle_front = null
-var selection_circle_back = null
-
 func init_animations(data, unit):
 	if !data or !data.sprite_frames:
 		print("No sprite_frames found in UnitModelData")
 
-	selection_circle_front = $"../SelectionCircleFront"
-	selection_circle_back = $"../SelectionCircleBack"
 	sprite_frames = data.sprite_frames
-	selection_circle_front.scale = data.scale
-	selection_circle_back.scale = data.scale
-	scale_upwards(self, data.scale)
-	set_selection_circle_position(unit)
+	scale = data.scale
+	unit.collider.global_position = unit.global_position
 	play("idle")
-
-func scale_upwards(sprite_to_scale, target_scale):
-	sprite_to_scale.scale = target_scale
 
 func get_frame_size():
 	var _sprite = sprite_frames.get_frame_texture(
@@ -25,12 +15,6 @@ func get_frame_size():
 		frame
 	)
 	return _sprite.get_size()
-
-func set_selection_circle_position(unit):
-	var unit_height = get_frame_size().y * scale.y
-	selection_circle_front.position.y = position.y + (unit_height / 2) + unit.data.unit_model_data.offset.y
-	selection_circle_back.position.y = selection_circle_front.position.y
-	unit.collider.global_position = unit.global_position
 
 func get_animation_speed(anim: String) -> float:
 	var base_frames = sprite_frames.get_frame_count(anim)
@@ -41,3 +25,20 @@ func get_animation_speed(anim: String) -> float:
 func play_animation(animation_name: String = "idle", animation_speed: float = 1.0):
 	set_speed_scale(animation_speed)
 	play(animation_name)
+
+## Returns position of sprite (center, top, bottom)
+func get_pos(unit, pos: String = "center") -> Vector2:
+	var frame_height = get_frame_size().y * unit.data.unit_model_data.scale.y
+
+	var base_pos = Vector2(position.x, position.y + unit.data.unit_model_data.offset.y)
+	var half_height = frame_height / 2.5
+
+	match pos:
+		"center":
+			return base_pos
+		"top":
+			return Vector2(base_pos.x, base_pos.y - half_height)
+		"bottom":
+			return Vector2(base_pos.x, base_pos.y + half_height)
+		_:
+			return base_pos

@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://tx6pawsvix8f"]
+
+[ext_resource type="Shader" uid="uid://22ro5s4s2v1e" path="res://RTS-System/Shaders/BuffShader.gdshader" id="1_xsumn"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_xsumn")
+shader_parameter/render_top = false
+shader_parameter/render_bottom = true

@@ -9,3 +9,4 @@ var effect_type: String
 @export var duration: float = 0
 @export var stat: String = ""
 @export var extra: Dictionary = {}
+@export var effect_sprite: SpriteFrames

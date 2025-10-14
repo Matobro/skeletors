@@ -1,14 +1,50 @@
-[gd_resource type="Resource" script_class="AbilityData" load_steps=7 format=3 uid="uid://leijpu5lpeho"]
+[gd_resource type="Resource" script_class="AbilityData" load_steps=13 format=3 uid="uid://leijpu5lpeho"]
 
+[ext_resource type="Texture2D" uid="uid://cnc8b0div0vog" path="res://AbilitySystem/Sprites/DefensiveAura_CasterEffect.png" id="1_fxk2f"]
 [ext_resource type="Script" uid="uid://ope72g1ebno3" path="res://AbilitySystem/AbilityTypes/AuraAbility.gd" id="1_ih0p4"]
 [ext_resource type="Script" uid="uid://boe8ic1128tfs" path="res://AbilitySystem/EffectData.gd" id="1_wrjsl"]
+[ext_resource type="Texture2D" uid="uid://cisqo5u1ejww2" path="res://AbilitySystem/Sprites/DefensiveAura_ReceiverEffect.png" id="2_sdgkk"]
 [ext_resource type="Script" uid="uid://dw73gisblncyg" path="res://AbilitySystem/AbilityData.gd" id="2_y3qiq"]
 [ext_resource type="Texture2D" uid="uid://dxmsgcse3vk20" path="res://AbilitySystem/Sprites/DefensiveAura.png" id="3_ih0p4"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_quwlh"]
+atlas = ExtResource("1_fxk2f")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1qaqp"]
+atlas = ExtResource("1_fxk2f")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_uqimh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_quwlh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1qaqp")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
 [sub_resource type="Resource" id="Resource_wr78r"]
 script = ExtResource("1_ih0p4")
+aura_caster_effect = SubResource("SpriteFrames_uqimh")
 aura_radius = 400.0
 metadata/_custom_type_script = "uid://ope72g1ebno3"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fxk2f"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_sdgkk")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="Resource" id="Resource_jaba2"]
 script = ExtResource("1_wrjsl")
@@ -17,6 +53,7 @@ amount = 2.0
 duration = 3.0
 stat = "armor"
 extra = {}
+effect_sprite = SubResource("SpriteFrames_fxk2f")
 metadata/_custom_type_script = "uid://boe8ic1128tfs"
 
 [resource]

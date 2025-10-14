@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bj7ef3mp2wfwp"]
+[gd_scene load_steps=16 format=3 uid="uid://bj7ef3mp2wfwp"]
 
 [ext_resource type="Script" uid="uid://dwbfae2lvjiyj" path="res://RTS-System/Entities/Data/Unit.gd" id="1_fgnkd"]
 [ext_resource type="Material" uid="uid://l4jbrlx4ers1" path="res://RTS-System/Shaders/UnitOutlineShader.tres" id="3_e4orr"]
@@ -6,9 +6,16 @@
 [ext_resource type="Texture2D" uid="uid://dp4remcsms5gm" path="res://RTS-System/Commands/Sprites/SelectionCircle.png" id="6_6h2nf"]
 [ext_resource type="Texture2D" uid="uid://c2vkmk7h6u0ja" path="res://RTS-System/Commands/Sprites/TargetMarker.png" id="6_psfdc"]
 [ext_resource type="Script" uid="uid://ctgb4rxeelfog" path="res://RTS-System/Entities/Data/HpBarVisual.gd" id="6_vb87f"]
+[ext_resource type="Shader" uid="uid://22ro5s4s2v1e" path="res://RTS-System/Shaders/BuffShader.gdshader" id="6_yulot"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r47uv"]
 size = Vector2(25, 25)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tiefo"]
+resource_local_to_scene = true
+shader = ExtResource("6_yulot")
+shader_parameter/render_top = true
+shader_parameter/render_bottom = false
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_u5kfr"]
 
@@ -27,6 +34,12 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.184, 0.184, 0.184, 0.5)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yulot"]
+resource_local_to_scene = true
+shader = ExtResource("6_yulot")
+shader_parameter/render_top = false
+shader_parameter/render_bottom = true
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_fgnkd"]
 radius = 342.067
 
@@ -38,6 +51,9 @@ script = ExtResource("1_fgnkd")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_index = 100
 shape = SubResource("RectangleShape2D_r47uv")
+
+[node name="BuffLayerBack" type="Node2D" parent="."]
+material = SubResource("ShaderMaterial_tiefo")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = ExtResource("3_e4orr")
@@ -70,6 +86,9 @@ anchors_preset = 0
 offset_right = 107.0
 offset_bottom = 10.0
 script = ExtResource("6_vb87f")
+
+[node name="BuffLayerFront" type="Node2D" parent="."]
+material = SubResource("ShaderMaterial_yulot")
 
 [node name="AggroRange" type="Area2D" parent="."]
 modulate = Color(1, 1, 1, 0.25)

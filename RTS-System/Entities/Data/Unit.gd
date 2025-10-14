@@ -8,6 +8,8 @@ class_name Unit
 @onready var hp_bar: Control = $AnimatedSprite2D/HpBar/Control
 @onready var collider = $CollisionShape2D
 @onready var target_marker = $TargetMarker
+@onready var buff_layer_back = $BuffLayerBack
+@onready var buff_layer_front = $BuffLayerFront
 
 var owner_id: int
 var data : UnitData

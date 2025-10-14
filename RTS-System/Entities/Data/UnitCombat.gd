@@ -114,17 +114,24 @@ func add_buff(effect: EffectData, source: Unit):
 		if buff.effect == effect and buff.source == source:
 			buff.time_left = effect.duration
 			return
-
+	
 	if !stats.buff_bonus.has(stat):
 		stats.buff_bonus[stat] = 0
 	stats.buff_bonus[stat] += amount
 	stats.recalculate_stats()
+	
+	var fx_front = null
+	var fx_back = null
+	if effect.effect_sprite:
+		fx_front = parent.unit_visual.attach_fx(effect.effect_sprite, "bottom", 0)
+		fx_back = parent.unit_visual.attach_fx(effect.effect_sprite, "bottom", 1)
 
 	if effect.duration > 0:
 		active_buffs.append({
 			"effect": effect,
 			"time_left": effect.duration,
-			"source": source
+			"source": source,
+			"fx": [fx_back, fx_front]
 			})
 
 func remove_buff(effect: EffectData, source: Unit):
@@ -132,6 +139,7 @@ func remove_buff(effect: EffectData, source: Unit):
 	for i in range(active_buffs.size() - 1, -1, -1):
 		var buff = active_buffs[i]
 		if buff.effect == effect and buff.source == source:
+			parent.unit_visual.remove_fx(buff.fx)
 			var stat = effect.stat
 			var amount = effect.amount
 			if stats.buff_bonus.has(stat):
