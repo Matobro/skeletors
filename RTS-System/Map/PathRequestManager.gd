@@ -50,7 +50,7 @@ func queue_unit_for_path(unit, request_id, target_unit = null):
 		"request_id": request_id, 
 		"target_unit": target_unit
 		})
-
+	print("Added path[", unit, " request id: ", request_id, " target: ", target_unit, "] to queue")
 	return
 
 func clear_path_requests_for_unit(unit):

@@ -21,7 +21,7 @@ var stuck_check_timer: float = 0.0
 var last_position: Vector2 = Vector2.INF
 
 # Constants
-const PATH_TIMEOUT := 1.5
+const PATH_TIMEOUT := 1.0
 const STUCK_TIME_THRESHOLD := 1.0
 const STUCK_DISTANCE_THRESHOLD := 10.0
 const PATH_RECALC_THRESHOLD := 40.0
@@ -38,7 +38,7 @@ func reset():
 	current_request_id = 0
 	last_requested_path = {"start": Vector2.INF, "end": Vector2.INF, "status": "none"}
 	last_requested_target = Vector2.ZERO
-	path_timeout_timer = 0.0
+	path_timeout_timer = PATH_TIMEOUT
 	stuck_check_timer = 0.0
 	last_position = Vector2.INF
 
@@ -49,6 +49,7 @@ func request_path() -> void:
 	if ai.get_current_command() == {}:
 		return
 
+	print("Requested path for: ", parent)
 	var target = ai.get_current_command().target_position
 	path_requested = true
 	path_timeout_timer = 0.0
@@ -63,10 +64,14 @@ func get_walk_animation_speed() -> float:
 
 func follow_path(delta: float) -> void:
 	ai.animation_player.play_animation("walk", get_walk_animation_speed())
+	path_timeout_timer += delta
 
 	# Request path if no path yet
 	if path.size() <= 0:
-		request_path()
+		if path_timeout_timer >= PATH_TIMEOUT:
+			path_requested = false
+			request_path()
+
 		ai.animation_player.stop()
 		return
 
@@ -87,21 +92,12 @@ func follow_path(delta: float) -> void:
 	if parent.global_position.distance_to(next_point) < 10:
 		path_index += 1
 
-	# Timeout check if waiting for a path
-	if path_requested:
-		path_timeout_timer += delta
-		if path_timeout_timer >= PATH_TIMEOUT:
-			print("Path request timed out, retrying")
-			path_requested = false
-			request_path()
-
 	# Stuck check
 	_check_stuck(delta)
 	SpatialGrid.update_unit_position(parent)
 
 func on_path_ready(unit: Unit, new_path: PackedVector2Array, request_id: int) -> void:
 	if request_id != current_request_id or new_path.size() <= 0 or unit != parent:
-		path_requested = false
 		return 
 
 	path = new_path
