@@ -51,7 +51,7 @@ func on_left_click_pressed(event_info):
 
 func on_left_click_released(event_info):
 	if player_input.is_casting:
-		player_input.keyboard_handler.input_cast_spell()
+		player_input.keyboard_handler.cast_spell(player_input.desired_cast)
 		return
 
 	if event_info.attack_moving:

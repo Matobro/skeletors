@@ -41,8 +41,14 @@ func handle_keyboard_commands(event: InputEventKey):
 func input_cast_spell(event_info: EventInfo = null, caster: Unit = null, index: int = -1):
 	if !selection_manager.is_valid_selection():
 		print("Invalid selection")
+		player_input.is_casting = false
 		return
 	
+	if !index < caster.unit_ability_manager.abilities.size():
+		print("Unit has no ability for this slot")
+		player_input.is_casting = false
+		return
+
 	#EventInfo
 	#Create context for the casted ability
 	if !player_input.is_casting:
