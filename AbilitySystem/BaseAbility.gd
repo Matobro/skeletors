@@ -34,9 +34,12 @@ func tick(delta: float):
 	if currently_casting:
 		channel_ability(delta)
 
-## Returns true if off cooldown and unit has enough mana to cast and the cast is valid (depends on ability type, check if valid target etc)
+## Returns true if off cooldown and unit has enough mana to cast
 func can_cast(context) -> bool:
-	return current_cooldown <= 0 and context.caster.data.stats.current_mana >= ability_data.mana_cost and !currently_casting and ability_data.ability_type and ability_data.ability_type.is_valid_cast(context)
+	return current_cooldown <= 0 and context.caster.data.stats.current_mana >= ability_data.mana_cost and !currently_casting
+
+func is_valid_cast(context) -> bool:
+	return ability_data.ability_type and ability_data.ability_type.is_valid_cast(context)
 
 ## Called when player sends cast ability command
 ## Returns true or false, depending if the casting was successful

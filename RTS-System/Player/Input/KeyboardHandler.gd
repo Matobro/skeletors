@@ -33,12 +33,14 @@ func handle_keyboard_commands(event: InputEventKey):
 		match event.keycode:
 			# Pass event_info, caster, index of ability (Q = index 0, W = index 1)
 			KEY_Q:
+				print("Pressing Q")
 				player_input.is_casting = false
 				input_cast_spell(event_info, selected_unit, 0)
 
 ## Saves cast if not quick cast, casts spell if is quick cast or cast is saved
 func input_cast_spell(event_info: EventInfo = null, caster: Unit = null, index: int = -1):
 	if !selection_manager.is_valid_selection():
+		print("Invalid selection")
 		return
 	
 	#EventInfo
@@ -52,7 +54,9 @@ func input_cast_spell(event_info: EventInfo = null, caster: Unit = null, index: 
 		context.shift = event_info.shift 
 		context.ability = caster.unit_ability_manager.abilities[index]
 
-		if !context.ability.can_cast(context):
+		#Check for cooldown and mana and for valid cast if quick cast
+		if !context.ability.can_cast(context) or (player_input.is_quick_cast and !context.ability.is_valid_cast(context)):
+			print("Cant cast")
 			player_input.player_ui.hide_action_panel()
 			player_input.is_casting = false
 			return
@@ -65,6 +69,7 @@ func input_cast_spell(event_info: EventInfo = null, caster: Unit = null, index: 
 			return
 		# Toggle casting mode
 		else:
+			print("Toggling cast spell")
 			toggle_cast_spell(context)
 	# If in casting mode
 	else:
@@ -79,6 +84,13 @@ func toggle_cast_spell(context):
 
 ## Sends command request with [CastContext] to [PlayerCommandIssuer]
 func cast_spell(context: CastContext):
+	print("casting spell")
+	if !context.ability.is_valid_cast(context):
+		print("Invalid cast")
+		player_input.player_ui.hide_action_panel()
+		player_input.is_casting = false
+		return
+
 	command_issuer.issue_cast_ability_command(context)
 
 func toggle_fullscreen():
