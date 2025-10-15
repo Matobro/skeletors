@@ -73,7 +73,7 @@ func input_cast_spell(event_info: EventInfo = null, caster: Unit = null, index: 
 			player_input.is_casting = false
 			cast_spell(context)
 			return
-		# Toggle casting mode
+		# Toggle casting mode if all good
 		else:
 			print("Toggling cast spell")
 			toggle_cast_spell(context)

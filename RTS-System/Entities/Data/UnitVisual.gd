@@ -58,8 +58,10 @@ func set_selected(value: bool):
 	else:
 		target_marker.visible = false
 
-	selection_circle_back.modulate = Color(1, 1, 1) if selected else Color(0.5, 0.5, 0.5)
-	selection_circle_front.modulate = Color(1, 1, 1) if selected else Color(0.5, 0.5, 0.5)
+	var selected_color = Color(1, 1, 1, 1)
+	var circle_unselected_color = Color(0.5, 0.5, 0.5)
+	selection_circle_back.modulate = selected_color if selected else circle_unselected_color
+	selection_circle_front.modulate = selected_color if selected else circle_unselected_color
 
 func set_target(new_target):
 	target = new_target
@@ -93,6 +95,8 @@ func set_unit_color(owner_id):
 func attach_fx(fx, pos, value):
 	var fx_instance = AnimatedSprite2D.new()
 	fx_instance.sprite_frames = fx
+
+	#no judging
 	if value == 0:
 		parent.buff_layer_front.add_child(fx_instance)
 		fx_instance.material = parent.buff_layer_front.material
