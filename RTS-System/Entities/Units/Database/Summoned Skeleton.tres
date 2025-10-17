@@ -1,29 +1,39 @@
-[gd_resource type="Resource" script_class="UnitData" load_steps=46 format=3 uid="uid://c0fjtjxpcekvq"]
+[gd_resource type="Resource" script_class="UnitData" load_steps=62 format=3 uid="uid://c0fjtjxpcekvq"]
 
 [ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="1_r382u"]
 [ext_resource type="PackedScene" uid="uid://chxscd5c7iu64" path="res://RTS-System/Entities/Projectiles/ArrowProjectile.tscn" id="2_eed3g"]
-[ext_resource type="Script" uid="uid://01ohikrtxe7k" path="res://RTS-System/Entities/Data/BaseStatData.gd" id="2_jvhlr"]
+[ext_resource type="Script" uid="uid://dqe50qceubild" path="res://RTS-System/Entities/Data/HeroStatData.gd" id="2_lm832"]
 [ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="3_mu366"]
 [ext_resource type="Texture2D" uid="uid://b83nrb1pj3ukc" path="res://RTS-System/Entities/Units/UnitData/Summoned Skeleton/Sprites/SummonedSkeleton_attack.png" id="4_b20p3"]
 [ext_resource type="Texture2D" uid="uid://dynoi4symhquf" path="res://RTS-System/Entities/Units/UnitData/Summoned Skeleton/Sprites/SummonedSkeleton_casting.png" id="5_jvhlr"]
 [ext_resource type="Texture2D" uid="uid://bm6hpajlv3yay" path="res://RTS-System/Entities/Units/UnitData/Summoned Skeleton/Sprites/SummonedSkeleton_dying.png" id="6_mexpd"]
+[ext_resource type="Texture2D" uid="uid://bbx6olussya8q" path="res://RTS-System/Entities/Units/UnitData/Summoned Skeleton/Sprites/SummonedSkeleton_casting_end.png" id="7_lm832"]
 [ext_resource type="Texture2D" uid="uid://brsy02j14dcr0" path="res://RTS-System/Entities/Units/UnitData/Summoned Skeleton/Sprites/SummonedSkeleton_idle.png" id="7_vv6qp"]
 [ext_resource type="Texture2D" uid="uid://bfkykilwadh06" path="res://RTS-System/Entities/Units/UnitData/Summoned Skeleton/Sprites/SummonedSkeleton_walk.png" id="8_lm832"]
+[ext_resource type="Texture2D" uid="uid://b3n22s07hs7cn" path="res://RTS-System/Entities/Units/UnitData/Summoned Skeleton/Sprites/SummonedSkeleton_casting_loop.png" id="8_rnmog"]
+[ext_resource type="Texture2D" uid="uid://dmjhx50ah70ow" path="res://RTS-System/Entities/Units/UnitData/Summoned Skeleton/Sprites/SummonedSkeleton_casting_start.png" id="9_8on6l"]
 
-[sub_resource type="Resource" id="Resource_mexpd"]
-script = ExtResource("2_jvhlr")
+[sub_resource type="Resource" id="Resource_rnmog"]
+script = ExtResource("2_lm832")
+main_stat = "intelligence"
+strength = 5
+agility = 5
+intelligence = 5
+strength_per_level = 5
+agility_per_level = 5
+intelligence_per_level = 5
 base_max_hp = 5.0
-base_max_mana = 0.0
+base_max_mana = 50.0
 base_health_regen = 0.1
 base_mana_regen = 0.1
 base_armor = 1
 base_movement_speed = 330
 base_attack_speed = 1.0
 base_damage = 2
-base_range = 80
+base_range = 50
 attack_dice_roll = 0.1
 xp_yield = 50
-metadata/_custom_type_script = "uid://01ohikrtxe7k"
+metadata/_custom_type_script = "uid://dqe50qceubild"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rnmog"]
 atlas = ExtResource("4_b20p3")
@@ -80,6 +90,58 @@ region = Rect2(350, 0, 50, 50)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ec1fd"]
 atlas = ExtResource("5_jvhlr")
 region = Rect2(400, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nyevv"]
+atlas = ExtResource("7_lm832")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_45w8n"]
+atlas = ExtResource("7_lm832")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_janef"]
+atlas = ExtResource("7_lm832")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0pv2x"]
+atlas = ExtResource("7_lm832")
+region = Rect2(150, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cgfk4"]
+atlas = ExtResource("8_rnmog")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_squpy"]
+atlas = ExtResource("8_rnmog")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1xulr"]
+atlas = ExtResource("8_rnmog")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yqq3x"]
+atlas = ExtResource("8_rnmog")
+region = Rect2(150, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m1lv5"]
+atlas = ExtResource("8_rnmog")
+region = Rect2(200, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jhgep"]
+atlas = ExtResource("8_rnmog")
+region = Rect2(250, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_733vp"]
+atlas = ExtResource("9_8on6l")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fyl5j"]
+atlas = ExtResource("9_8on6l")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5nmyd"]
+atlas = ExtResource("9_8on6l")
+region = Rect2(100, 0, 50, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gxl3t"]
 atlas = ExtResource("6_mexpd")
@@ -214,6 +276,60 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_nyevv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_45w8n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_janef")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0pv2x")
+}],
+"loop": false,
+"name": &"casting-end",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cgfk4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_squpy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1xulr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yqq3x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m1lv5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jhgep")
+}],
+"loop": true,
+"name": &"casting-loop",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_733vp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fyl5j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5nmyd")
+}],
+"loop": false,
+"name": &"casting-start",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_gxl3t")
 }, {
 "duration": 1.0,
@@ -303,9 +419,9 @@ script = ExtResource("1_r382u")
 power_level = 0
 is_spawnable_enemy = false
 unit_model_data = SubResource("Resource_jnlm4")
-unit_type = "unit"
+unit_type = "hero"
 name = "Summoned Skeleton"
 description = ""
-stats = SubResource("Resource_mexpd")
+stats = SubResource("Resource_rnmog")
 is_ranged = false
 metadata/_custom_type_script = "uid://oeoy2vl8vgue"
