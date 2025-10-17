@@ -67,6 +67,7 @@ func start_casting_animation(cast_time: float):
 	#Play casting-start
 	print("Playing casting-start")
 	ai.animation_player.play_animation("casting-start", 1)
+	var start_duration = ai.animation_player.get_animation_speed("casting-start")
 	await ai.animation_player.animation_finished
 	if !is_casting: return
 
@@ -74,15 +75,8 @@ func start_casting_animation(cast_time: float):
 	print("Playing casting-loop")
 	ai.animation_player.play_animation("casting-loop", 1)
 	var buffer = ai.animation_player.get_animation_speed("casting-loop")
-	await ai.get_tree().create_timer(max(0.0, cast_time - buffer)).timeout
+	await ai.get_tree().create_timer(max(0.0, cast_time - buffer - start_duration)).timeout
 	if !is_casting: return
-
-	#Play casting-end
-	print("Playing casting-end")
-	ai.animation_player.play_animation("casting-end", 1)
-	await ai.animation_player.animation_finished
-	if is_casting:
-		on_cast_finished()
 
 func clear_state():
 	var ability = ability_to_cast
@@ -99,8 +93,13 @@ func clear_state():
 	ai.animation_player.play_animation("idle", 1.0)
 
 func on_cast_finished():
-	print("Cast finished")
+	#Play casting-end
+	print("Playing casting-end")
+	ai.animation_player.play_animation("casting-end", 1)
+	await ai.animation_player.animation_finished
+	
 	clear_state()
+	print("Cast finished")
 
 	ai.animation_player.play_animation("idle", 1.0)
 	ai.command_handler.process_next_command()
