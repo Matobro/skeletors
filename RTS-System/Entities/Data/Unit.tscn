@@ -62,6 +62,7 @@ script = ExtResource("4_r47uv")
 
 [node name="HpBar" type="ProgressBar" parent="AnimatedSprite2D"]
 visible = false
+self_modulate = Color(1, 1, 1, 0.5)
 offset_left = -26.5
 offset_top = -25.0
 offset_right = 80.5
