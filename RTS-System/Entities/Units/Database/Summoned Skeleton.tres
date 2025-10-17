@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="1_r382u"]
 [ext_resource type="PackedScene" uid="uid://chxscd5c7iu64" path="res://RTS-System/Entities/Projectiles/ArrowProjectile.tscn" id="2_eed3g"]
-[ext_resource type="Script" uid="uid://dqe50qceubild" path="res://RTS-System/Entities/Data/HeroStatData.gd" id="2_lm832"]
+[ext_resource type="Script" uid="uid://01ohikrtxe7k" path="res://RTS-System/Entities/Data/BaseStatData.gd" id="2_jvhlr"]
 [ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="3_mu366"]
 [ext_resource type="Texture2D" uid="uid://b83nrb1pj3ukc" path="res://RTS-System/Entities/Units/UnitData/Summoned Skeleton/Sprites/SummonedSkeleton_attack.png" id="4_b20p3"]
 [ext_resource type="Texture2D" uid="uid://dynoi4symhquf" path="res://RTS-System/Entities/Units/UnitData/Summoned Skeleton/Sprites/SummonedSkeleton_casting.png" id="5_jvhlr"]
@@ -13,17 +13,10 @@
 [ext_resource type="Texture2D" uid="uid://b3n22s07hs7cn" path="res://RTS-System/Entities/Units/UnitData/Summoned Skeleton/Sprites/SummonedSkeleton_casting_loop.png" id="8_rnmog"]
 [ext_resource type="Texture2D" uid="uid://dmjhx50ah70ow" path="res://RTS-System/Entities/Units/UnitData/Summoned Skeleton/Sprites/SummonedSkeleton_casting_start.png" id="9_8on6l"]
 
-[sub_resource type="Resource" id="Resource_rnmog"]
-script = ExtResource("2_lm832")
-main_stat = "intelligence"
-strength = 5
-agility = 5
-intelligence = 5
-strength_per_level = 5
-agility_per_level = 5
-intelligence_per_level = 5
+[sub_resource type="Resource" id="Resource_lm832"]
+script = ExtResource("2_jvhlr")
 base_max_hp = 5.0
-base_max_mana = 50.0
+base_max_mana = 0.0
 base_health_regen = 0.1
 base_mana_regen = 0.1
 base_armor = 1
@@ -33,7 +26,7 @@ base_damage = 2
 base_range = 80
 attack_dice_roll = 0.1
 xp_yield = 50
-metadata/_custom_type_script = "uid://dqe50qceubild"
+metadata/_custom_type_script = "uid://01ohikrtxe7k"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rnmog"]
 atlas = ExtResource("4_b20p3")
@@ -419,9 +412,9 @@ script = ExtResource("1_r382u")
 power_level = 0
 is_spawnable_enemy = false
 unit_model_data = SubResource("Resource_jnlm4")
-unit_type = "hero"
+unit_type = "unit"
 name = "Summoned Skeleton"
 description = ""
-stats = SubResource("Resource_rnmog")
+stats = SubResource("Resource_lm832")
 is_ranged = false
 metadata/_custom_type_script = "uid://oeoy2vl8vgue"

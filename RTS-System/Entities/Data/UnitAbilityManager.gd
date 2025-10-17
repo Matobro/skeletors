@@ -16,12 +16,8 @@ func _init(parent_ref, data_ref) -> void:
 	parent = parent_ref
 	data = data_ref
 
-	if parent is Hero:
-		var fireball = preload("res://AbilitySystem/Abilities/Fireball.tres")
-		add_ability(fireball)
-
-		var defaura = preload("res://AbilitySystem/Abilities/Defensive Aura.tres")
-		add_ability(defaura)
+	for ability in data.abilities:
+		add_ability(ability)
 
 func tick(delta: float):
 	for ability in abilities:

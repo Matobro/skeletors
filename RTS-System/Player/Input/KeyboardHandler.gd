@@ -93,11 +93,11 @@ func cast_spell(context: CastContext):
 	print("casting spell")
 	if !context.ability.is_valid_cast(context):
 		print("Invalid cast")
-		player_input.player_ui.hide_action_panel()
-		player_input.is_casting = false
 		return
 
 	command_issuer.issue_cast_ability_command(context)
+	player_input.player_ui.hide_action_panel()
+	player_input.is_casting = false
 
 func toggle_fullscreen():
 	is_fullscreen = !is_fullscreen

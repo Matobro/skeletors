@@ -21,6 +21,8 @@ var avatar: SpriteFrames
 ## If unit uses ranged attacks
 @export var is_ranged: bool
 
+##Units abilities
+@export var abilities: Array[AbilityData]
 var parent = null
 var hero: Hero = null
 

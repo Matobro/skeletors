@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=7 format=3 uid="uid://bsmsgv3g8ywuy"]
+
+[ext_resource type="Script" uid="uid://bvt5ahp8o4q33" path="res://AbilitySystem/AbilityTypes/SummonAbility.gd" id="1_l6sue"]
+[ext_resource type="Script" uid="uid://boe8ic1128tfs" path="res://AbilitySystem/EffectData.gd" id="1_wrjsl"]
+[ext_resource type="Script" uid="uid://dw73gisblncyg" path="res://AbilitySystem/AbilityData.gd" id="2_y3qiq"]
+[ext_resource type="Resource" uid="uid://c0fjtjxpcekvq" path="res://RTS-System/Entities/Units/Database/Summoned Skeleton.tres" id="2_ytwgr"]
+[ext_resource type="Texture2D" uid="uid://d0srlr5t3mkfm" path="res://RTS-System/Entities/Units/UnitData/Summoned Skeleton/Sprites/SummonedSkeleton.png" id="4_f0jvo"]
+
+[sub_resource type="Resource" id="Resource_eluhw"]
+script = ExtResource("1_l6sue")
+summoned_unit = ExtResource("2_ytwgr")
+units_summoned = 2
+metadata/_custom_type_script = "uid://bvt5ahp8o4q33"
+
+[resource]
+script = ExtResource("2_y3qiq")
+name = "Summon Skeleton"
+description = ""
+icon = ExtResource("4_f0jvo")
+mana_cost = 10
+cooldown = 60.0
+cast_range = 300.0
+cast_time = 3.0
+is_passive = false
+effects = Array[ExtResource("1_wrjsl")]([])
+ability_type = SubResource("Resource_eluhw")
+possible_targets = 0

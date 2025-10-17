@@ -1,14 +1,19 @@
-[gd_resource type="Resource" script_class="UnitData" load_steps=43 format=3 uid="uid://dkfhxkmff3cc5"]
+[gd_resource type="Resource" script_class="UnitData" load_steps=58 format=3 uid="uid://dkfhxkmff3cc5"]
 
 [ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="1_7h2ya"]
+[ext_resource type="Script" uid="uid://dw73gisblncyg" path="res://AbilitySystem/AbilityData.gd" id="1_nwjk6"]
 [ext_resource type="Script" uid="uid://dqe50qceubild" path="res://RTS-System/Entities/Data/HeroStatData.gd" id="2_yhfjd"]
+[ext_resource type="Resource" uid="uid://bsmsgv3g8ywuy" path="res://AbilitySystem/Abilities/Summon Skeleton.tres" id="2_yq57e"]
 [ext_resource type="PackedScene" uid="uid://bs8prqiprl2i" path="res://RTS-System/Entities/Projectiles/DarkMagicProjectile.tscn" id="3_msndy"]
 [ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="4_5gh5h"]
 [ext_resource type="Texture2D" uid="uid://0kvak80ofjax" path="res://RTS-System/Entities/Heroes/UnitData/SkeletonMage/Sprites/SkeletonMage_attack.png" id="5_msndy"]
 [ext_resource type="Texture2D" uid="uid://c53ibf1m7k1va" path="res://RTS-System/Entities/Heroes/UnitData/SkeletonMage/Sprites/SkeletonMage_casting.png" id="6_ll2t7"]
+[ext_resource type="Texture2D" uid="uid://pq1drudcw1nu" path="res://RTS-System/Entities/Heroes/UnitData/SkeletonMage/Sprites/SkeletonMage_casting_end.png" id="7_3o7as"]
 [ext_resource type="Texture2D" uid="uid://hye5d4n0wmux" path="res://RTS-System/Entities/Heroes/UnitData/SkeletonMage/Sprites/SkeletonMage_dying.png" id="7_b7ms6"]
 [ext_resource type="Texture2D" uid="uid://brd1f2co3ly72" path="res://RTS-System/Entities/Heroes/UnitData/SkeletonMage/Sprites/SkeletonMage_idle.png" id="8_3o7as"]
+[ext_resource type="Texture2D" uid="uid://xk1tau02t7kt" path="res://RTS-System/Entities/Heroes/UnitData/SkeletonMage/Sprites/SkeletongMage_casting_loop.png" id="8_nwjk6"]
 [ext_resource type="Texture2D" uid="uid://bfbec3qxbr2cd" path="res://RTS-System/Entities/Heroes/UnitData/SkeletonMage/Sprites/SkeletonMage_walk.png" id="9_nwjk6"]
+[ext_resource type="Texture2D" uid="uid://dtnjo2mshfxbt" path="res://RTS-System/Entities/Heroes/UnitData/SkeletonMage/Sprites/SkeletonMage_casting_start.png" id="9_yq57e"]
 
 [sub_resource type="Resource" id="Resource_aksv5"]
 script = ExtResource("2_yhfjd")
@@ -75,6 +80,46 @@ region = Rect2(250, 0, 50, 50)
 [sub_resource type="AtlasTexture" id="AtlasTexture_vh0l3"]
 atlas = ExtResource("6_ll2t7")
 region = Rect2(300, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l8avf"]
+atlas = ExtResource("7_3o7as")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_20btb"]
+atlas = ExtResource("7_3o7as")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x5aux"]
+atlas = ExtResource("7_3o7as")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uwm5v"]
+atlas = ExtResource("8_nwjk6")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rkxjs"]
+atlas = ExtResource("8_nwjk6")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x7jdn"]
+atlas = ExtResource("8_nwjk6")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kjlmr"]
+atlas = ExtResource("9_yq57e")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ieys"]
+atlas = ExtResource("9_yq57e")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g7au4"]
+atlas = ExtResource("9_yq57e")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g3q1d"]
+atlas = ExtResource("9_yq57e")
+region = Rect2(150, 0, 50, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_86ovg"]
 atlas = ExtResource("7_b7ms6")
@@ -200,6 +245,51 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_l8avf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_20btb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x5aux")
+}],
+"loop": false,
+"name": &"casting-end",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uwm5v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rkxjs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x7jdn")
+}],
+"loop": true,
+"name": &"casting-loop",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kjlmr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ieys")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g7au4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g3q1d")
+}],
+"loop": false,
+"name": &"casting-start",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_86ovg")
 }, {
 "duration": 1.0,
@@ -294,4 +384,5 @@ name = "Skeleton Mage"
 description = ""
 stats = SubResource("Resource_aksv5")
 is_ranged = true
+abilities = Array[ExtResource("1_nwjk6")]([ExtResource("2_yq57e")])
 metadata/_custom_type_script = "uid://oeoy2vl8vgue"
