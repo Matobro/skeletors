@@ -15,7 +15,7 @@ func init_hp_bar(hp, _max_hp):
 func set_hp_bar(hp):
 	hp_bar.value = hp
 
-	if hp >= max_hp:
+	if hp >= max_hp or hp == 0:
 		set_bar_visible(false)
 	else:
 		set_bar_visible(true)

@@ -52,6 +52,6 @@ func is_valid_target(caster, target) -> bool:
 
 func get_info_text() -> String:
 	var text = str(
-		"Right click to cast ", name
+		"Left click to cast ", name
 	)
 	return text
