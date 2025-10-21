@@ -45,13 +45,18 @@ func init_node(parent_ref):
 
 func _process(_delta):
 	if node_ready:
+		# Multiple selected
 		if selected_units.size() > 1 and selected_unit:
 			ui_stats.show_ui_bars(selected_unit)
 			ui_stats.hide_unit_stats()
 			ui_control_group.show_control_group(selected_units)
+
+		# One unit selected
 		elif selected_units.size() == 1 and selected_unit:
 			ui_stats.show_unit_stats(selected_unit)
 			ui_control_group.hide_control_group()
+		
+		# None selected
 		else:
 			hide_ui()
 

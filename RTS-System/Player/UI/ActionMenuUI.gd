@@ -75,12 +75,14 @@ func format_effect(effect: EffectData) -> String:
 			return "Damage: " + format_value(effect.amount)
 		"Heal":
 			return "Heal: " + format_value(effect.amount)
+		"Heal_Mana":
+			return "Mana Heal: " + format_value(effect.amount)
 		"Buff":
 			return get_buff_type(effect)
 		"Stun":
 			return "Stun: " + format_value(effect.duration) + "s"
 		"Summon":
-			#return "Summons: " +
+			#return "Summons: " + 
 			pass 
 	return ""
 

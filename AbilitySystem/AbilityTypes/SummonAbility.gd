@@ -7,12 +7,7 @@ class_name SummonAbility
 @export var duration: float
 
 func cast(context: CastContext):
-	for i in units_summoned:
-		var summon = UnitSpawner.spawn_unit(summoned_unit, context.target_position, context.caster.owner_id)
-		context.target_position.y += 100
-
-		summon.data.is_summon = true
-		summon.data.lifetime = duration
+	AbilitySystem.apply_effect(context.ability.ability_data.effects[0], context.caster, context.target_position, null, context.ability)
 
 func get_cast_label(_is_passive: bool) -> String:
 	return "[SUMMON]"

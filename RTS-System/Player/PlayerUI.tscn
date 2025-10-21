@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://44m1veg1thkm"]
+[gd_scene load_steps=33 format=3 uid="uid://44m1veg1thkm"]
 
 [ext_resource type="Script" uid="uid://dtvvveravq00x" path="res://RTS-System/Player/UI/PlayerUI.gd" id="1_mb3tw"]
 [ext_resource type="Texture2D" uid="uid://f8758o682hq6" path="res://RTS-System/Commands/UI/Move.png" id="1_qbo8c"]
@@ -84,6 +84,12 @@ outline_color = Color(0, 0, 0, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_amrgt"]
 outline_size = 6
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hnqvc"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eevjq"]
+bg_color = Color(0.234049, 0.34689, 0.606081, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_amrgt"]
 bg_color = Color(0.577234, 0.0388159, 0.047227, 1)
@@ -276,6 +282,7 @@ sprite_frames = SubResource("SpriteFrames_3tuem")
 centered = false
 
 [node name="HeroStats" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -424,6 +431,38 @@ offset_top = 457.0
 offset_right = -99.0
 offset_bottom = 484.0
 text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Timer" type="ProgressBar" parent="UnitStats"]
+visible = false
+offset_left = -118.0
+offset_top = 305.0
+offset_right = 117.0
+offset_bottom = 332.0
+theme_override_styles/background = SubResource("StyleBoxFlat_hnqvc")
+theme_override_styles/fill = SubResource("StyleBoxFlat_eevjq")
+step = 1.0
+value = 57.0
+show_percentage = false
+
+[node name="TimerValue" type="Label" parent="UnitStats"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -45.5
+offset_top = 285.0
+offset_right = 4.5
+offset_bottom = 312.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "1"
+label_settings = SubResource("LabelSettings_amrgt")
 horizontal_alignment = 1
 vertical_alignment = 1
 

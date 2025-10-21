@@ -14,7 +14,8 @@ var parent: Unit
 var stats: BaseStatData
 
 var is_summon = false
-var lifetime = 10
+var lifetime_max = 10.0
+var lifetime = 10.0
 
 func _init(parent_ref, stats_ref) -> void:
 	parent = parent_ref
@@ -22,6 +23,7 @@ func _init(parent_ref, stats_ref) -> void:
 	is_invunerable = false
 	is_summon = parent.data.is_summon
 	lifetime = parent.data.lifetime
+	lifetime_max = lifetime
 
 func tick(delta):
 	if dead: return
@@ -118,8 +120,15 @@ func on_social_aggro(attacker: Unit):
 			parent.owner_id
 		)
 
-func summon_unit(amount: int, duration: float, unit: UnitData, pos: Vector2):
-	pass
+func summon_unit(amount: int, duration: float, unit: UnitData, pos: Vector2, caster_id: int):
+	for i in amount:
+		var summon = UnitSpawner.spawn_unit(unit, pos, caster_id)
+
+		summon.data.is_summon = true
+		summon.data.lifetime = duration
+		for z in range(2):
+			await get_tree().physics_frame
+
 func add_buff(effect: EffectData, source: Unit):
 	if dead: return
 	var stat = effect.stat

@@ -32,7 +32,9 @@ class_name UIUnitStats
 	"name": $"../UnitStats/Name",
 	"hp_bar": $"../UIBars/HpValue",
 	"mp_bar": $"../UIBars/ManaValue",
-	"level": $"../HeroStats/Level"
+	"level": $"../HeroStats/Level",
+	"timer": $"../UnitStats/Timer",
+	"timerValue": $"../UnitStats/TimerValue"
 }
 
 func show_portrait(unit: Unit):
@@ -88,6 +90,18 @@ func show_unit_stats(unit: Unit):
 		stat_labels["hero_stats"].visible = true
 	else:
 		stat_labels["hero_stats"].visible = false
+
+	if unit.data.is_summon:
+		stat_labels["timer"].visible = true
+		stat_labels["timerValue"].visible = true
+
+		stat_labels["timer"].max_value = unit.unit_combat.lifetime_max
+		stat_labels["timer"].value = unit.unit_combat.lifetime
+		stat_labels["timerValue"].text = str("%0.1f" % unit.unit_combat.lifetime)
+
+	else:
+		stat_labels["timer"].visible = false
+		stat_labels["timerValue"].visible = false
 
 ## Zoom = how close the portrait is
 ## y_offset_ratio more than 0.5 moves sprite up, less than 0.5 moves sprite down
