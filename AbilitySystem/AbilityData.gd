@@ -11,6 +11,7 @@ class_name AbilityData
 @export var cast_range: float
 @export var cast_time: float
 @export var is_passive: bool
+@export var is_instant_cast: bool
 
 @export var effects: Array[EffectData]
 

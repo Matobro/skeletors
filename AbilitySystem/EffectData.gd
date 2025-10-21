@@ -2,7 +2,7 @@ extends Resource
 
 class_name EffectData
 
-@export_enum("Damage", "Heal", "Buff", "Debuff", "Stun", "Slow", "Summon", "Custom")
+@export_enum("Damage", "Heal", "Buff", "Debuff", "Stun", "Slow", "Summon", "Heal_Mana", "Custom")
 var effect_type: String
 
 @export var amount: float = 0

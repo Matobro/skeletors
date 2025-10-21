@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="UnitData" load_steps=58 format=3 uid="uid://dkfhxkmff3cc5"]
+[gd_resource type="Resource" script_class="UnitData" load_steps=59 format=3 uid="uid://dkfhxkmff3cc5"]
 
 [ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="1_7h2ya"]
 [ext_resource type="Script" uid="uid://dw73gisblncyg" path="res://AbilitySystem/AbilityData.gd" id="1_nwjk6"]
 [ext_resource type="Script" uid="uid://dqe50qceubild" path="res://RTS-System/Entities/Data/HeroStatData.gd" id="2_yhfjd"]
 [ext_resource type="Resource" uid="uid://bsmsgv3g8ywuy" path="res://AbilitySystem/Abilities/Summon Skeleton.tres" id="2_yq57e"]
 [ext_resource type="PackedScene" uid="uid://bs8prqiprl2i" path="res://RTS-System/Entities/Projectiles/DarkMagicProjectile.tscn" id="3_msndy"]
+[ext_resource type="Resource" uid="uid://clusllcktvr8h" path="res://AbilitySystem/Abilities/Soultap.tres" id="3_uthhv"]
 [ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="4_5gh5h"]
 [ext_resource type="Texture2D" uid="uid://0kvak80ofjax" path="res://RTS-System/Entities/Heroes/UnitData/SkeletonMage/Sprites/SkeletonMage_attack.png" id="5_msndy"]
 [ext_resource type="Texture2D" uid="uid://c53ibf1m7k1va" path="res://RTS-System/Entities/Heroes/UnitData/SkeletonMage/Sprites/SkeletonMage_casting.png" id="6_ll2t7"]
@@ -384,5 +385,5 @@ name = "Skeleton Mage"
 description = ""
 stats = SubResource("Resource_aksv5")
 is_ranged = true
-abilities = Array[ExtResource("1_nwjk6")]([ExtResource("2_yq57e")])
+abilities = Array[ExtResource("1_nwjk6")]([ExtResource("2_yq57e"), ExtResource("3_uthhv")])
 metadata/_custom_type_script = "uid://oeoy2vl8vgue"

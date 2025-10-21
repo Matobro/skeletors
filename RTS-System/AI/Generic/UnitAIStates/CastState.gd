@@ -40,7 +40,7 @@ func state_logic(delta):
 		ai.set_state("Idle")
 		return
 
-	if parent.global_position.distance_to(target_position) <= ability_to_cast.ability_data.cast_range:
+	if ability_to_cast.ability_data.is_instant_cast or parent.global_position.distance_to(target_position) <= ability_to_cast.ability_data.cast_range:
 		on_arrival()
 	else:
 		ai.pathfinder.follow_path(delta)

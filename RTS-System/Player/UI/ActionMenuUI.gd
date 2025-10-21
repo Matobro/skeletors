@@ -79,6 +79,9 @@ func format_effect(effect: EffectData) -> String:
 			return get_buff_type(effect)
 		"Stun":
 			return "Stun: " + format_value(effect.duration) + "s"
+		"Summon":
+			#return "Summons: " +
+			pass 
 	return ""
 
 func format_value(value: float) -> String:

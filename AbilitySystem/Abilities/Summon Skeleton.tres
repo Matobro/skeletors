@@ -10,6 +10,7 @@
 script = ExtResource("1_l6sue")
 summoned_unit = ExtResource("2_ytwgr")
 units_summoned = 2
+duration = 5.0
 metadata/_custom_type_script = "uid://bvt5ahp8o4q33"
 
 [resource]
@@ -22,6 +23,7 @@ cooldown = 5.0
 cast_range = 300.0
 cast_time = 0.0
 is_passive = false
+is_instant_cast = false
 effects = Array[ExtResource("1_wrjsl")]([])
 ability_type = SubResource("Resource_eluhw")
 possible_targets = 0

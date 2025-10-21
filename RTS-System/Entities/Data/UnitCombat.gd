@@ -13,13 +13,26 @@ var active_buffs: Array = []
 var parent: Unit
 var stats: BaseStatData
 
+var is_summon = false
+var lifetime = 10
+
 func _init(parent_ref, stats_ref) -> void:
 	parent = parent_ref
 	stats = stats_ref
 	is_invunerable = false
+	is_summon = parent.data.is_summon
+	lifetime = parent.data.lifetime
 
 func tick(delta):
 	if dead: return
+
+	if is_summon:
+		lifetime -= delta
+
+		if lifetime <= 0:
+			handle_death()
+			return
+
 	for i in range(active_buffs.size() - 1, -1, -1):
 		var buff = active_buffs[i]
 		buff.time_left -= delta
@@ -105,6 +118,8 @@ func on_social_aggro(attacker: Unit):
 			parent.owner_id
 		)
 
+func summon_unit(amount: int, duration: float, unit: UnitData, pos: Vector2):
+	pass
 func add_buff(effect: EffectData, source: Unit):
 	if dead: return
 	var stat = effect.stat
@@ -152,6 +167,9 @@ func remove_buff(effect: EffectData, source: Unit):
 func heal_health(heal_amount):
 	stats.current_health = min(stats.current_health + heal_amount, stats.max_health)
 	parent.hp_bar.set_hp_bar(stats.current_health)
+
+func heal_mana(heal_amount):
+	stats.current_mana = min(stats.current_mana + heal_amount, stats.max_mana)
 
 func regenate_mana():
 	if stats.health_regen <= 0:

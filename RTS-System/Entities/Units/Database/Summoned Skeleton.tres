@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="UnitData" load_steps=62 format=3 uid="uid://c0fjtjxpcekvq"]
+[gd_resource type="Resource" script_class="UnitData" load_steps=63 format=3 uid="uid://c0fjtjxpcekvq"]
 
 [ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="1_r382u"]
+[ext_resource type="Script" uid="uid://dw73gisblncyg" path="res://AbilitySystem/AbilityData.gd" id="1_rnmog"]
 [ext_resource type="PackedScene" uid="uid://chxscd5c7iu64" path="res://RTS-System/Entities/Projectiles/ArrowProjectile.tscn" id="2_eed3g"]
 [ext_resource type="Script" uid="uid://01ohikrtxe7k" path="res://RTS-System/Entities/Data/BaseStatData.gd" id="2_jvhlr"]
 [ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="3_mu366"]
@@ -417,4 +418,5 @@ name = "Summoned Skeleton"
 description = ""
 stats = SubResource("Resource_lm832")
 is_ranged = false
+abilities = Array[ExtResource("1_rnmog")]([])
 metadata/_custom_type_script = "uid://oeoy2vl8vgue"

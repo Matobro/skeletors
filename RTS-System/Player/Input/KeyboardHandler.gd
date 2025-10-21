@@ -33,9 +33,11 @@ func handle_keyboard_commands(event: InputEventKey):
 		match event.keycode:
 			# Pass event_info, caster, index of ability (Q = index 0, W = index 1)
 			KEY_Q:
-				print("Pressing Q")
 				player_input.is_casting = false
 				input_cast_spell(event_info, selected_unit, 0)
+			KEY_W:
+				player_input.is_casting = false
+				input_cast_spell(event_info, selected_unit, 1)
 
 ## Saves cast if not quick cast, casts spell if is quick cast or cast is saved
 func input_cast_spell(event_info: EventInfo = null, caster: Unit = null, index: int = -1):
@@ -68,7 +70,7 @@ func input_cast_spell(event_info: EventInfo = null, caster: Unit = null, index: 
 			return
 			
 		# Quick cast if enabled
-		if player_input.is_quick_cast:
+		if player_input.is_quick_cast or context.ability.ability_data.is_instant_cast:
 			player_input.player_ui.hide_action_panel()
 			player_input.is_casting = false
 			cast_spell(context)

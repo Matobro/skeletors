@@ -3,8 +3,8 @@ extends Node
 func create_ability(ability_data: AbilityData, source_unit) -> BaseAbility:
 	var ability = BaseAbility.new(ability_data, source_unit)
 	return ability
-
-func apply_effect(effect: EffectData, caster, target_position: Vector2, target_unit = null):
+## Applies [effect] originating from [caster] to [target_unit]
+func apply_effect(effect: EffectData, caster, target_position: Vector2, target_unit = null, ability = null):
 	match effect.effect_type:
 		"Damage":
 			if target_unit:
@@ -26,7 +26,9 @@ func apply_effect(effect: EffectData, caster, target_position: Vector2, target_u
 				target_unit.unit_combat.apply_slow(effect.amount, effect.duration)
 		"Summon":
 			pass
-			#_spawn_summon(effect, caster, target_position)
+		"Heal_Mana":
+			if target_unit:
+				target_unit.unit_combat.heal_mana(effect.amount)
 		"Custom":
 			if effect.extra.has("callback"):
 				var cb = effect.extra["callback"]

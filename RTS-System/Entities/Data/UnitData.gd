@@ -6,6 +6,9 @@ class_name UnitData
 @export var power_level: int = 0
 ## If it should be included in wave enemy pool
 @export var is_spawnable_enemy: bool = false
+## Used by summon abilities etc
+var is_summon: bool = false
+var lifetime: float = 10.0
 ## Unit 'model' data, such as sprite, animations, projectile
 @export var unit_model_data: UnitModelData
 ## either 'hero', 'unit' or 'neutral'.
