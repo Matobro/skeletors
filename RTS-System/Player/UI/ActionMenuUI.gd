@@ -59,15 +59,34 @@ func get_slot_text(slot) -> String:
 	if data.cooldown > 0:
 		parts.append("[img]" + COOLDOWN_ICON_PATH +"[/img] " + str(data.cooldown) + "s" + "\n\n")
 
-	# Description
-	parts.append(data.description + "\n")
+	if data.ability_type is not SummonAbility:
+		# Description
+		parts.append(data.description + "\n")
 
-	# Effects
-	parts.append("\n")
-	for effect in data.effects:
-		parts.append(format_effect(effect) + "\n")
-
+		# Effects
+		parts.append("\n")
+		for effect in data.effects:
+			parts.append(format_effect(effect) + "\n")
+		
+	# Special ability types
+	parts.append(format_special_data(data))
 	return "".join(parts) # the fuck is this syntax
+
+func format_special_data(data) -> String:
+	var spell = data.ability_type
+	if spell is SummonAbility:
+		var summon_data = spell.summoned_unit
+		var txt = str(
+			"Summons [color=yellow]%d[/color] [color=red]%s[/color] \n\n[color=grey]Duration: [/color][color=yellow]%0.1fs[/color]\n[color=green]Health[/color]: %d\n[color=red]DPS:[/color] %0.1f"
+		) % [
+		spell.units_summoned,
+		spell.summoned_unit.name,
+		spell.duration,
+		summon_data.stats.base_max_hp,
+		summon_data.stats.base_damage * summon_data.stats.base_attack_speed
+		]
+		return txt
+	return ""
 
 func format_effect(effect: EffectData) -> String:
 	match effect.effect_type:
@@ -81,9 +100,6 @@ func format_effect(effect: EffectData) -> String:
 			return get_buff_type(effect)
 		"Stun":
 			return "Stun: " + format_value(effect.duration) + "s"
-		"Summon":
-			#return "Summons: " + 
-			pass 
 	return ""
 
 func format_value(value: float) -> String:
