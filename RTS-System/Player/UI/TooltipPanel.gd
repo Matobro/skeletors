@@ -6,7 +6,7 @@ func show_tooltip(text: String, _position: Vector2):
 	label.bbcode_text = text
 
 	var new_size = Vector2(label.get_content_width(), label.get_content_height())
-	size = new_size + Vector2(50, 50)
+	size = new_size + Vector2(75, 75)
 
 	global_position = Vector2(_position.x, _position.y - (size.y + 5))
 	visible = true

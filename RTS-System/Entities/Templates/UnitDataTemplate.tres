@@ -1,6 +1,23 @@
-[gd_resource type="Resource" script_class="UnitData" load_steps=2 format=3 uid="uid://bsdtg70yyhq67"]
+[gd_resource type="Resource" script_class="UnitData" load_steps=5 format=3 uid="uid://bsdtg70yyhq67"]
 
+[ext_resource type="Script" uid="uid://dw73gisblncyg" path="res://AbilitySystem/AbilityData.gd" id="1_i70by"]
 [ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="1_rglsf"]
+[ext_resource type="Script" uid="uid://01ohikrtxe7k" path="res://RTS-System/Entities/Data/BaseStatData.gd" id="3_jfcg3"]
+
+[sub_resource type="Resource" id="Resource_fgt6y"]
+script = ExtResource("3_jfcg3")
+base_max_hp = 150.0
+base_max_mana = 0.0
+base_health_regen = 0.1
+base_mana_regen = 0.1
+base_armor = 1
+base_movement_speed = 330
+base_attack_speed = 1.0
+base_damage = 10
+base_range = 80
+attack_dice_roll = 0.1
+xp_yield = 50
+metadata/_custom_type_script = "uid://01ohikrtxe7k"
 
 [resource]
 script = ExtResource("1_rglsf")
@@ -9,5 +26,7 @@ is_spawnable_enemy = false
 unit_type = "unit"
 name = ""
 description = ""
+stats = SubResource("Resource_fgt6y")
 is_ranged = false
+abilities = Array[ExtResource("1_i70by")]([])
 metadata/_custom_type_script = "uid://oeoy2vl8vgue"

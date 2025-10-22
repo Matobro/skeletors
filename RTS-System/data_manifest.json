@@ -1,11 +1,7 @@
 {
 	"heroes": [
-		"res://RTS-System/Entities/Heroes/Database/Arthas.tres",
 		"res://RTS-System/Entities/Heroes/Database/GigaTestHero.tres",
-		"res://RTS-System/Entities/Heroes/Database/Illidan.tres",
-		"res://RTS-System/Entities/Heroes/Database/Malfurion.tres",
-		"res://RTS-System/Entities/Heroes/Database/SkeletonMage.tres",
-		"res://RTS-System/Entities/Heroes/Database/TestHero.tres"
+		"res://RTS-System/Entities/Heroes/Database/SkeletonMage.tres"
 	],
 	"items": [
 		"res://RTS-System/Items/Database/LesserHealingPotion.tres",

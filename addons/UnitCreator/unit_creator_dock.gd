@@ -86,11 +86,13 @@ func _create_sprite_frames(unit_name: String) -> SpriteFrames:
     if sprite_frames.has_animation("default"):
         sprite_frames.remove_animation("default")
 
-    var animations := ["attack", "idle", "dying", "walk", "casting"]
+    var animations := ["attack", "idle", "dying", "walk", "casting-start", "casting-loop", "casting-end"]
     for anim in animations:
         sprite_frames.add_animation(anim)
 
     sprite_frames.set_animation_loop("attack", false)
     sprite_frames.set_animation_loop("dying", false)
+    sprite_frames.set_animation_loop("casting-start", false)
+    sprite_frames.set_animation_loop("casting-end", false)
 
     return sprite_frames

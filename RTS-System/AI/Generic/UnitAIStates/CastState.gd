@@ -13,7 +13,10 @@ var command
 signal cast_cancelled()
 
 func enter_state():
-	print("Entered casting state")
+	if is_casting and ability_to_cast != null:
+		ability_to_cast.cancel_cast()
+		clear_state()
+
 	is_casting = false
 	command = ai.get_current_command()
 	target_position = command["target_position"]
@@ -24,6 +27,7 @@ func enter_state():
 	if ability_to_cast == null:
 		print("Ability to cast is null")
 		exit_state()
+		return
 
 	print("Casting: ", ability_to_cast)
 	connect("cast_cancelled", Callable(ability_to_cast, "cancel_cast"), CONNECT_ONE_SHOT)
@@ -36,8 +40,14 @@ func exit_state():
 	parent.velocity = Vector2.ZERO
 
 func state_logic(delta):
-	if ai.get_current_command() == {}:
+	var current_command = ai.get_current_command()
+	if current_command == {}:
 		ai.set_state("Idle")
+		return
+
+	if current_command != command:
+		exit_state()
+		ai.set_state("CastAbility")
 		return
 
 	if ability_to_cast.ability_data.is_instant_cast or parent.global_position.distance_to(target_position) <= ability_to_cast.ability_data.cast_range:
