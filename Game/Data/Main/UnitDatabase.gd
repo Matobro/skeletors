@@ -1,15 +1,11 @@
 extends Node
 
-var hero_list: Array = []
-var unit_list: Array = []
+var data_manifest: Dictionary;
 
 func _ready() -> void:
-	load_unit_data()
-
-func load_unit_data():
-	load_units_from_manifest("res://RTS-System/data_manifest.json")
-
-func load_units_from_manifest(manifest_path: String) -> void:
+	load_manifest("res://RTS-System/data_manifest.json")
+	
+func load_manifest(manifest_path: String) -> void:
 	var file = FileAccess.open(manifest_path, FileAccess.READ)
 	if not file:
 		push_error("Cannot open manifest file: " + manifest_path)
@@ -23,39 +19,40 @@ func load_units_from_manifest(manifest_path: String) -> void:
 	if error != OK:
 		push_error("Failed to parse manifest JSON: " + json.get_error_message())
 		return
-	
-	var manifest = json.get_data()
-	
-	hero_list.clear()
-	unit_list.clear()
-	
-	# Load heroes
-	if manifest.has("heroes"):
-		for path in manifest["heroes"]:
+
+	data_manifest = json.get_data()
+
+
+func get_heroes() -> Array[UnitData]:
+	var heroes: Array[UnitData] = [];
+
+	if data_manifest.has("heroes"):
+		for path in data_manifest["heroes"]:
 			var unit = ResourceLoader.load(path)
 			if unit and unit is UnitData:
-				print("Loaded: ", unit.name)
-				hero_list.append(unit)
+				print("Loaded: Hero - ", unit.name)
+				heroes.append(unit)
 			else:
 				print("Failed to load hero: ", path)
-	
-	# Load units
-	if manifest.has("units"):
-		for path in manifest["units"]:
+
+	if heroes.is_empty():
+		push_error("No heroes found in database")
+		return []
+
+	return heroes
+
+func get_units() -> Array[UnitData]:
+	var units: Array[UnitData] = [];
+
+	if data_manifest.has("units"):
+		for path in data_manifest["units"]:
 			var unit = ResourceLoader.load(path)
 			if unit and unit is UnitData:
-				print("Loaded: ", unit.name)
-				unit_list.append(unit)
+				print("Loaded: Unit - ", unit.name)
+				units.append(unit)
 			else:
 				print("Failed to load unit: ", path)
-
-
-func join_path(a: String, b: String) -> String:
-	if a.ends_with("/"):
-		return a + b
-	else:
-		return a + "/" + b
-
-func get_enemy_units_for_wave(wave: int) -> Array:
-	var enemies = unit_list.filter(func(u): return u.power_level <= wave and u.is_spawnable_enemy)
-	return enemies
+	if units.is_empty():
+		push_error("No units found in database")
+		return []
+	return units

@@ -12,12 +12,12 @@ config_version=5
 
 config/name="Skeletors"
 run/main_scene="uid://bp6xgo07rs3es"
-config/features=PackedStringArray("4.4", "Forward Plus")
+config/features=PackedStringArray("4.5", "Forward Plus")
 
 [autoload]
 
-GameManager="*res://Game/Data/Main/GameManager.gd"
 UnitDatabase="*res://Game/Data/Main/UnitDatabase.gd"
+GameManager="*res://Game/Data/Main/GameManager.gd"
 DamageText="*res://RTS-System/Entities/Data/DamageTextPool.gd"
 SpatialGridDebugRenderer="*res://Dev/Tools/SpatialGridDebugRenderer.gd"
 SpatialGrid="*res://RTS-System/Map/MapController.gd"

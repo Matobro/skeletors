@@ -36,9 +36,3 @@ func load_items_from_manifest(manifest_path: String) -> void:
 				items[item.id] = item
 			else:
 				print("Failed to load item: ", path)
-
-func join_path(a: String, b: String) -> String:
-	if a.ends_with("/"):
-		return a + b
-	else:
-		return a + "/" + b

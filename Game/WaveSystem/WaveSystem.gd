@@ -20,7 +20,7 @@ func setup():
 
 func start_next_wave():
 	current_wave += 1
-	var composition = get_wave_composition(current_wave)
+	var composition: Array[UnitData] = get_wave_composition(current_wave)
 	spawn_wave(composition)
 
 func spawn_wave(composition):
@@ -34,11 +34,11 @@ func get_next_spawn_point() -> Node2D:
 	spawn_index = (spawn_index + 1) % spawn_keys.size()
 	return spawn_points[key]
 
-func get_wave_composition(wave: int) -> Array:
-	var possible_enemies = UnitDatabase.get_enemy_units_for_wave(wave)
+func get_wave_composition(wave: int) -> Array[UnitData]:
+	var possible_enemies: Array[UnitData] = get_enemy_units_for_wave(wave)
 	var budget = 2 + wave * 5
 
-	var composition = []
+	var composition: Array[UnitData] = []
 
 	while budget > 0 and possible_enemies.size() > 0:
 		var enemy = possible_enemies[randi() % possible_enemies.size()]
@@ -51,3 +51,8 @@ func get_wave_composition(wave: int) -> Array:
 
 	print("Possible enemies for wave ", wave, " : ", possible_enemies.size())
 	return composition
+
+
+func get_enemy_units_for_wave(wave: int) -> Array[UnitData]:
+	var enemies = UnitDatabase.get_units().filter(func(u): return u.power_level <= wave and u.is_spawnable_enemy)
+	return enemies

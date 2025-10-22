@@ -1,12 +1,12 @@
 extends Node
 
-var grid_width: int
-var grid_height: int
+var grid_width: float
+var grid_height: float
 var cell_size: float
-var half_width
-var half_height
+var half_width: float
+var half_height: float
 
-func build_grid_from_tilemap(size_multiplier: int  = 1) -> Dictionary:
+func build_grid_from_tilemap(size_multiplier: float = 1) -> Dictionary:
 	var grid = {}
 	var map_rect = MapHandler.used_cells
 	grid_width = map_rect.size.x * size_multiplier
@@ -21,8 +21,8 @@ func build_grid_from_tilemap(size_multiplier: int  = 1) -> Dictionary:
 
 	for x in range(grid_width):
 		for y in range(grid_height):
-			var tile_x = int(x / size_multiplier) + map_rect.position.x
-			var tile_y = int(y / size_multiplier) + map_rect.position.y
+			var tile_x = x / size_multiplier + map_rect.position.x
+			var tile_y = y / size_multiplier + map_rect.position.y
 			var tile_cell = Vector2(tile_x, tile_y)
 
 			if tilemap.get_cell_source_id(tile_cell) == 0:
@@ -38,12 +38,12 @@ func _get_cell_coords(_position: Vector2) -> Vector2:
 	return Vector2(floor(relative_pos.x / cell_size), floor(relative_pos.y / cell_size)) - Vector2(half_width, half_height)
 
 func _get_cell_id(cell: Vector2) -> int:
-	var shifted_x = int(cell.x + half_width)
-	var shifted_y = int(cell.y + half_height)
+	var shifted_x = cell.x + half_width
+	var shifted_y = cell.y + half_height
 	return shifted_x + shifted_y * grid_width
 
 func _is_in_grid(cell: Vector2) -> bool:
-	return int(cell.x) >= -int(half_width) and int(cell.x) < int(half_width) and int(cell.y) >= -int(half_height) and int(cell.y) < int(half_height)
+	return cell.x >= -half_width and cell.x < half_width and cell.y >= -half_height and cell.y < half_height
 
 func _get_cells_covered(_position: Vector2, radius_world_units: float) -> Array:
 	var radius_in_cells = radius_world_units / cell_size
