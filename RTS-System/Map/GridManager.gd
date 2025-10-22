@@ -21,7 +21,6 @@ func build_grid_from_tilemap(size_multiplier: int  = 1) -> Dictionary:
 
 	for x in range(grid_width):
 		for y in range(grid_height):
-			# Map back to tilemap cell
 			var tile_x = int(x / size_multiplier) + map_rect.position.x
 			var tile_y = int(y / size_multiplier) + map_rect.position.y
 			var tile_cell = Vector2(tile_x, tile_y)

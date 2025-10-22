@@ -109,6 +109,9 @@ func follow_target(target_unit: Node, delta: float):
 			parent.velocity = dir * parent.get_stat("movement_speed")
 			parent.move_and_slide()
 			parent.unit_visual.handle_orientation(dir)
+			parent.animation_player.play_animation("walk", 1.0)
+
+	SpatialGrid.update_unit_position(parent)
 
 func handle_no_target():
 	ai.combat_state.clear_combat_state()

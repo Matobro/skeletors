@@ -13,12 +13,6 @@ signal path_ready(unit, path: PackedVector2Array, request_id)
 
 ## Queues a path generation for [unit] unless [request_id] already exists in queue. [target_unit] can be specified and it will be used in pathfinding
 func queue_unit_for_path(unit, request_id, target_unit = null):
-	#if !unit.has_meta("next_path_request_time"):
-	#	unit.set_meta("next_path_request_time", 0)
-	
-	#var current_time = Time.get_ticks_msec()
-	#if current_time < unit.get_meta("next_path_request_time"):
-	#	return
 		
 	var unit_pathfinder = unit.unit_ai.pathfinder
 	var unit_commands = unit.unit_ai.command_handler
@@ -42,15 +36,12 @@ func queue_unit_for_path(unit, request_id, target_unit = null):
 			item.request_id = request_id
 			return
 
-	#var delay = randi() % 50
-	#unit.set_meta("next_path_request_time", current_time + PATH_REQUEST_COOLDOWN + delay)
-
 	path_queue.append({
 		"unit": unit,
 		"request_id": request_id, 
 		"target_unit": target_unit
 		})
-	print("Added path[", unit, " request id: ", request_id, " target: ", target_unit, "] to queue")
+	#print("Added path[", unit, " request id: ", request_id, " target: ", target_unit, "] to queue")
 	return
 
 func clear_path_requests_for_unit(unit):

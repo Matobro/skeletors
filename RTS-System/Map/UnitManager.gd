@@ -15,7 +15,7 @@ func register_unit(unit) -> void:
 		if not grid.has(cell):
 			grid[cell] = []
 		grid[cell].append(unit)
-	astar_manager.update_occupied_cells(covered_cells, true, unit)
+	astar_manager.update_occupied_cells(covered_cells, true)
 	unit.set_meta("grid_coords", covered_cells)
 
 func deregister_unit(unit) -> void:
@@ -28,7 +28,7 @@ func deregister_unit(unit) -> void:
 				grid[cell].erase(unit)
 				if grid[cell].size() == 0:
 					grid.erase(cell)
-		astar_manager.update_occupied_cells(coords_list, false, unit)
+		astar_manager.update_occupied_cells(coords_list, false)
 
 func update_unit_position(unit) -> void:
 	var radius = 32.0 #unit.unit_visual.unit_scale
@@ -44,7 +44,7 @@ func update_unit_position(unit) -> void:
 		if grid.has(cell):
 			grid[cell].erase(unit)
 			if grid[cell].size() == 0:
-				astar_manager.update_occupied_cells([cell], false, unit)
+				astar_manager.update_occupied_cells([cell], false)
 				grid.erase(cell)
 
 	# Add unit to new cells
@@ -52,7 +52,7 @@ func update_unit_position(unit) -> void:
 		if not grid.has(cell):
 			grid[cell] = []
 		grid[cell].append(unit)
-		astar_manager.update_occupied_cells([cell], true, unit)
+		astar_manager.update_occupied_cells([cell], true)
 
 	# Update metadata
 	unit.set_meta("grid_coords", new_coords)

@@ -59,9 +59,7 @@ func update_occupied_cells(cells: Array, occupied: bool, occupied_by: Unit = nul
 		if occupied:
 			# Disable point when a unit occupies it
 			astar.set_point_weight_scale(id, 5.0)
-			if occupied_by == null or not grid[cell].has(occupied_by):
-				print("disabling")
-				astar.set_point_disabled(id, true)
+			astar.set_point_disabled(id, true)
 		else:
 			# Free the point
 			astar.set_point_weight_scale(id, 1.0)
@@ -127,7 +125,6 @@ func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null, moving_
 			if previously_disabled[id]:
 				astar.set_point_disabled(id, false)
 
-	# Now find the path
 	var start_id = grid_manager._get_cell_id(start_cell)
 	var end_id = grid_manager._get_cell_id(end_cell)
 	if not astar.has_point(start_id) or not astar.has_point(end_id):
