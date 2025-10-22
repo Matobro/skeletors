@@ -29,7 +29,7 @@ func handle_keyboard_commands(event: InputEventKey):
 		player_input.player_ui.shop_ui.visible = !player_input.player_ui.shop_ui.visible
 		pass
 	# If unit selected
-	elif selected_unit:
+	elif selected_unit and selected_unit.owner_id == player_input.player_id:
 		match event.keycode:
 			# Pass event_info, caster, index of ability (Q = index 0, W = index 1)
 			KEY_Q:

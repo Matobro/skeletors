@@ -11,6 +11,8 @@ var abilities: Array[BaseAbility]
 
 var parent
 var data
+var spell_being_cast: BaseAbility
+var casting: bool = false
 
 func _init(parent_ref, data_ref) -> void:
 	parent = parent_ref
@@ -24,6 +26,8 @@ func tick(delta: float):
 		ability.tick(delta)
 		
 func cast_ability(context: CastContext):
+	spell_being_cast = context.ability
+	casting = true
 	abilities[context.index].start_cast(context)
 
 ## Adds ability to unit via [AbilityData]

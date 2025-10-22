@@ -211,7 +211,7 @@ func closest_enemy_in_aggro_range() -> Unit:
 
 	var attack_target = parent.unit_ai.combat_state.current_target
 	for unit in possible_targets:
-		if unit.unit_combat.dead:
+		if !is_instance_valid(unit.unit_combat) or unit.unit_combat.dead:
 			if attack_target == unit:
 				attack_target = null
 			possible_targets.erase(unit)

@@ -13,11 +13,13 @@ var cast_timer: float = 0.0
 var currently_casting: bool = false
 var current_cast: CastContext
 
+var parent
+
 signal cast_done()
 
 func _init(data, source_unit) -> void:
 	ability_data = data
-
+	parent = source_unit
 	# If passive, cast it immediately to activate it
 	if data.is_passive:
 		var context = CastContext.new()
@@ -69,9 +71,11 @@ func execute_ability(context: CastContext):
 	ability_data.ability_type.cast(context)
 	current_cooldown = ability_data.cooldown
 	context.caster.data.stats.current_mana -= ability_data.mana_cost
+	parent.unit_ability_manager.casting = false
 	emit_signal("cast_done")
 	pass
 
 func cancel_cast():
 	current_cast = null
 	currently_casting = false
+	parent.unit_ability_manager.casting = false

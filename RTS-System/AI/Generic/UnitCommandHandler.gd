@@ -100,6 +100,8 @@ func _is_spam(next_command: Dictionary) -> bool:
 
 		if next_command.type == current_command.type:
 			# Attack to different unit is never spam
+			if next_command.type == "CastAbility":
+				return false
 			if next_command.type == "Attack":
 				if next_command.has("target_unit") and current_command.has("target_unit"):
 					if next_command.target_unit != current_command.target_unit:

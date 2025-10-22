@@ -50,12 +50,16 @@ func _process(_delta):
 			ui_stats.show_ui_bars(selected_unit)
 			ui_stats.hide_unit_stats()
 			ui_control_group.show_control_group(selected_units)
+			ui_stats.hide_cast_bar()
 
 		# One unit selected
 		elif selected_units.size() == 1 and selected_unit:
 			ui_stats.show_unit_stats(selected_unit)
 			ui_control_group.hide_control_group()
-		
+			if selected_unit.unit_ability_manager.casting:
+				ui_stats.show_cast_bar(selected_unit.unit_ability_manager.spell_being_cast)
+			else:
+				ui_stats.hide_cast_bar()
 		# None selected
 		else:
 			hide_ui()
@@ -84,6 +88,7 @@ func hide_ui():
 	ui_control_group.hide_control_group()
 	ui_stats.hide_unit_stats()
 	ui_stats.hide_ui_bars()
+	ui_stats.hide_cast_bar()
 
 func display_action_panel(text):
 	action_text.text = text

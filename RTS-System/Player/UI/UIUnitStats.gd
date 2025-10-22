@@ -34,7 +34,9 @@ class_name UIUnitStats
 	"mp_bar": $"../UIBars/ManaValue",
 	"level": $"../HeroStats/Level",
 	"timer": $"../UnitStats/Timer",
-	"timerValue": $"../UnitStats/TimerValue"
+	"timerValue": $"../UnitStats/TimerValue",
+	"castBar": $"../CastBar",
+	"castBarLabel": $"../CastBar/CastBarLabel"
 }
 
 func show_portrait(unit: Unit):
@@ -54,6 +56,21 @@ func hide_unit_stats():
 func hide_ui_bars():
 	stat_labels["ui_bars"].visible = false
 	portrait_panel.visible = false
+
+func hide_cast_bar():
+	stat_labels["castBar"].visible = false
+	stat_labels["castBarLabel"].visible = false
+
+func show_cast_bar(ability):
+	if ability == null or ability.cast_timer <= 0:
+		return
+	stat_labels["castBar"].visible = true
+	stat_labels["castBarLabel"].visible = true
+
+	stat_labels["castBar"].max_value = ability.ability_data.cast_time
+	stat_labels["castBar"].value = ability.cast_timer
+
+	stat_labels["castBarLabel"].text = str("%0.1f" % ability.cast_timer)
 
 func show_ui_bars(unit: Unit):
 	stat_names["hp_bar"].max_value = unit.data.stats.max_health
@@ -97,7 +114,7 @@ func show_unit_stats(unit: Unit):
 
 		stat_labels["timer"].max_value = unit.unit_combat.lifetime_max
 		stat_labels["timer"].value = unit.unit_combat.lifetime
-		stat_labels["timerValue"].text = str("%0.1f" % unit.unit_combat.lifetime)
+		stat_labels["timerValue"].text = str("%0.1d" % int(unit.unit_combat.lifetime))
 
 	else:
 		stat_labels["timer"].visible = false

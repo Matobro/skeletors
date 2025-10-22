@@ -6,6 +6,7 @@ func enter_state():
 	parent.velocity = Vector2.ZERO
 
 func exit_state():
+	reset_attack_state()
 	ai.animation_player.stop()
 
 func state_logic(delta: float) -> void:
@@ -38,13 +39,17 @@ func state_logic(delta: float) -> void:
 		# follow target if out of range
 		if not parent.unit_combat.is_within_attack_range(target_unit.global_position):
 			follow_target(target_unit, delta)
+		else:
+			parent.unit_visual.handle_orientation(
+				(target_unit.global_position - parent.global_position).normalized()
+			)
 
 # Reset attack state when switching target
 func reset_attack_state():
 	ai.combat_state.is_attack_committed = false
 	ai.combat_state.has_attacked = false
 	ai.combat_state.attack_anim_timer = 0.0
-
+	parent.animation_player.play("idle")
 
 # Start attack animation and commit the attack
 func start_attack(target_unit: Node) -> void:

@@ -442,7 +442,7 @@ offset_right = 117.0
 offset_bottom = 332.0
 theme_override_styles/background = SubResource("StyleBoxFlat_hnqvc")
 theme_override_styles/fill = SubResource("StyleBoxFlat_eevjq")
-step = 1.0
+step = 0.1
 value = 57.0
 show_percentage = false
 
@@ -630,5 +630,35 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CastBar" type="ProgressBar" parent="."]
+self_modulate = Color(1, 1, 1, 0.5)
+offset_left = -118.0
+offset_top = 209.0
+offset_right = 117.0
+offset_bottom = 236.0
+theme_override_styles/background = SubResource("StyleBoxFlat_hnqvc")
+theme_override_styles/fill = SubResource("StyleBoxFlat_eevjq")
+value = 57.0
+show_percentage = false
+
+[node name="CastBarLabel" type="Label" parent="CastBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -13.5
+offset_right = 25.0
+offset_bottom = 13.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "1"
+label_settings = SubResource("LabelSettings_amrgt")
 horizontal_alignment = 1
 vertical_alignment = 1

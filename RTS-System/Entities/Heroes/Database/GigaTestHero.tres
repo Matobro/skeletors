@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="UnitData" load_steps=38 format=3 uid="uid://dqi8t2hrqk87p"]
+[gd_resource type="Resource" script_class="UnitData" load_steps=39 format=3 uid="uid://dqi8t2hrqk87p"]
 
 [ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="1_65cuf"]
+[ext_resource type="Script" uid="uid://dw73gisblncyg" path="res://AbilitySystem/AbilityData.gd" id="1_jr6jy"]
 [ext_resource type="Script" uid="uid://dqe50qceubild" path="res://RTS-System/Entities/Data/HeroStatData.gd" id="2_hfqve"]
 [ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="4_l5nal"]
 [ext_resource type="Texture2D" uid="uid://dk6w6lq288o7f" path="res://RTS-System/Entities/Units/UnitData/TestUnit/Sprites/Test_Unit_Attack.png" id="5_s3cu8"]
@@ -250,6 +251,7 @@ scale = Vector2(3, 3)
 offset = Vector2(0, -20)
 animation_attack_point = 0.5
 projectile_speed = 800
+projectile_size = Vector2(1, 1)
 metadata/_custom_type_script = "uid://dq4e1yj8njkif"
 
 [resource]
@@ -263,4 +265,5 @@ name = "Giga TestHero"
 description = ""
 stats = SubResource("Resource_aksv5")
 is_ranged = false
+abilities = Array[ExtResource("1_jr6jy")]([])
 metadata/_custom_type_script = "uid://oeoy2vl8vgue"

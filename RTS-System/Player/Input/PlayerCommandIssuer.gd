@@ -26,7 +26,6 @@ func issue_hold_command(event_info):
 		unit.command_holder.issue_command("Hold", event_info.click_target, event_info.clicked_position, event_info.shift, id, true)
 	
 func issue_attack_command(event_info):
-	print("attacking")
 	if selection_manager.selected_units.size() <= 0:
 		return
 
@@ -35,7 +34,6 @@ func issue_attack_command(event_info):
 			unit.command_holder.issue_command("Attack", event_info.click_target, event_info.clicked_position, event_info.shift, id, true)
 	
 func issue_attack_move_command(event_info):
-	print("attack moving")
 	if selection_manager.selected_units.size() <= 0:
 		return
 
