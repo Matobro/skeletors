@@ -13,23 +13,28 @@ class_name HeroInfo
 @onready var stats_left = $HeroStats/Stats1
 @onready var stats_right = $HeroStats/Stats2
 
-var currently_selected
+var selected_hero
 		
-func load_hero_info(data: UnitData):
-	currently_selected = data
-	var stats: HeroStatData = data.stats
-	hero_name.text = data.name
-	hero_icon.texture = data.unit_model_data.get_avatar()
+func _ready() -> void:
+	var hero_list = UnitDatabase.get_heroes()
+	load_hero_info(hero_list.get(0))
+
+func load_hero_info(hero: UnitData):
+	selected_hero = hero
+	var stats: HeroStatData = hero.stats
+		
+	hero_name.text = hero.name
+	hero_icon.texture = hero.unit_model_data.get_avatar()
 	str_value.text = str(stats.strength, " + ", stats.strength_per_level, " / level")
 	agi_value.text = str(stats.agility, " + ", stats.agility_per_level, " / level")
 	int_value.text = str(stats.intelligence, " + ", stats.intelligence_per_level, " / level")
 	main_stat_value.text = get_main_stat_text(stats.main_stat)
-	description_value.text = data.description
+	description_value.text = hero.description
 
 	var damage_range = StatModifiers.get_damage_range(stats.base_damage, stats.attack_dice_roll)
 
 	stats_left.text = str(
-	"Range: ", get_range_text(data), "\n",
+	"Range: ", get_range_text(hero), "\n",
 	"Damage: ", damage_range[0], "-", damage_range[1], "\n",
 	"A..Speed: ", stats.base_attack_speed, " atk/s\n",
 	"M..Speed: ", stats.base_movement_speed, "\n",
@@ -57,3 +62,6 @@ func get_main_stat_text(stat):
 			return str("[color=cyan]", "Intelligence", "[/color]")
 		_:
 			return str("huh...")
+
+func get_selected_hero() -> UnitData:
+	return selected_hero

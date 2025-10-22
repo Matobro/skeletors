@@ -6,8 +6,7 @@ class_name HeroList
 @onready var hero_info = $"../HeroInfoPanel"
 
 func _ready() -> void:
-	var hero_list = UnitDatabase.get_heroes();
-	populate_hero_list_ui(hero_list)
+	populate_hero_list_ui(UnitDatabase.get_heroes())
 	
 func populate_hero_list_ui(hero_list: Array[UnitData]):
 	if hero_list.size() <= 0:

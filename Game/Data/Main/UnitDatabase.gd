@@ -30,12 +30,16 @@ func get_heroes() -> Array[UnitData]:
 		for path in data_manifest["heroes"]:
 			var unit = ResourceLoader.load(path)
 			if unit and unit is UnitData:
-				print("Loaded: ", unit.name)
+				print("Loaded: Hero - ", unit.name)
 				heroes.append(unit)
 			else:
 				print("Failed to load hero: ", path)
-	return heroes
 
+	if heroes.is_empty():
+		push_error("No heroes found in database")
+		return []
+
+	return heroes
 
 func get_units() -> Array[UnitData]:
 	var units: Array[UnitData] = [];
@@ -44,8 +48,11 @@ func get_units() -> Array[UnitData]:
 		for path in data_manifest["units"]:
 			var unit = ResourceLoader.load(path)
 			if unit and unit is UnitData:
-				print("Loaded: ", unit.name)
+				print("Loaded: Unit - ", unit.name)
 				units.append(unit)
 			else:
 				print("Failed to load unit: ", path)
+	if units.is_empty():
+		push_error("No units found in database")
+		return []
 	return units

@@ -6,7 +6,7 @@ var cell_size: float
 var half_width
 var half_height
 
-func build_grid_from_tilemap(size_multiplier: int  = 1) -> Dictionary:
+func build_grid_from_tilemap(size_multiplier: int = 1) -> Dictionary:
 	var grid = {}
 	var map_rect = MapHandler.used_cells
 	grid_width = map_rect.size.x * size_multiplier

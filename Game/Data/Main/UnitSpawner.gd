@@ -6,7 +6,6 @@ var unit_scenes = {
 }
 
 func spawn_unit(unit_data: UnitData = null, pos: Vector2 = Vector2.ZERO, player_id = 10) -> Unit:
-
 	# Create unit
 	var scene = unit_scenes.get(unit_data.unit_type, unit_scenes["unit"])
 	var unit = scene.instantiate()
