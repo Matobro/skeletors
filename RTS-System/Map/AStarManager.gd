@@ -192,11 +192,9 @@ func _get_nearest_spawnable_cell(desired_cell: Vector2) -> Vector2:
 	while queue.size() > 0:
 		var current = queue.pop_front()
 
-		# ✅ Return as soon as we find a spawnable one
 		if _is_spawnable_cell(current):
 			return current
 
-		# Explore neighbors (cardinal + diagonal)
 		for dir in [
 			Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1),
 			Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)

@@ -40,25 +40,22 @@ func handle_keyboard_commands(event: InputEventKey):
 				input_cast_spell(event_info, selected_unit, 1)
 
 ## Saves cast if not quick cast, casts spell if is quick cast or cast is saved
-func input_cast_spell(event_info: EventInfo = null, caster: Unit = null, index: int = -1):
+func input_cast_spell(event_info: EventInfo = null, caster: Unit = null, index: int = -1, is_button_cast: bool = false):
 	if !selection_manager.is_valid_selection():
 		print("Invalid selection")
 		player_input.is_casting = false
 		return
 	
-	if !index < caster.unit_ability_manager.abilities.size():
+	if index < 0 or index >= caster.unit_ability_manager.abilities.size():
 		print("Unit has no ability for this slot")
 		player_input.is_casting = false
 		return
 
-	#EventInfo
 	#Create context for the casted ability
 	if !player_input.is_casting:
 		var context = CastContext.new()
 		context.caster = caster 
 		context.index = index 
-		context.target_position = event_info.clicked_position 
-		context.target_unit = event_info.click_target
 		context.shift = event_info.shift 
 		context.ability = caster.unit_ability_manager.abilities[index]
 
@@ -70,7 +67,7 @@ func input_cast_spell(event_info: EventInfo = null, caster: Unit = null, index: 
 			return
 			
 		# Quick cast if enabled
-		if player_input.is_quick_cast or context.ability.ability_data.is_instant_cast:
+		if (player_input.is_quick_cast and !is_button_cast) or context.ability.ability_data.is_instant_cast:
 			player_input.player_ui.hide_action_panel()
 			player_input.is_casting = false
 			cast_spell(context)
@@ -92,7 +89,11 @@ func toggle_cast_spell(context):
 
 ## Sends command request with [CastContext] to [PlayerCommandIssuer]
 func cast_spell(context: CastContext):
-	print("casting spell")
+	var mouse_pos = player_input.get_global_mouse_position()
+	# Set cast position and target
+	context.target_unit = player_input.check_click_hit(mouse_pos)
+	context.target_position = mouse_pos
+	# Check if cast is valid
 	if !context.ability.is_valid_cast(context):
 		print("Invalid cast")
 		return

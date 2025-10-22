@@ -19,10 +19,12 @@ func _ready():
 	ability_grid = $"../ActionMenu/AbilityButtons"
 
 	if ability_grid:
-		for slot in ability_grid.get_children(false):
+		for i in range(ability_grid.get_child_count()):
+			var slot = ability_grid.get_child(i)
 			ability_slots.append(slot)
 			slot.connect("mouse_entered", Callable(self, "on_mouse_hover").bind(slot))
 			slot.connect("mouse_exited", Callable(self, "on_mouse_hover_exit"))
+			slot.connect("gui_input", Callable(self, "on_ability_button_clicked").bind(i))
 
 ## Clears ui and then links selected unit abilities to ui slots
 func update_action_menu(abilities: Array[BaseAbility] = []):
@@ -35,6 +37,26 @@ func update_action_menu(abilities: Array[BaseAbility] = []):
 func clear_abilities():
 	for slot in ability_slots:
 		slot.set_slot(null, null)
+
+func on_ability_button_clicked(event: InputEvent, index: int):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		var player_input = player_ui.player_object.player_input
+		var caster = player_input.selection_manager.get_first_selected_unit()
+		if not caster:
+			return
+		
+		# Create event info for casting
+		var event_info = EventInfo.new()
+		event_info.clicked_position = player_input.get_global_mouse_position()
+		event_info.click_target = player_input.check_click_hit(event_info.clicked_position)
+		event_info.click_item = player_input.check_click_hit_item(event_info.clicked_position)
+		event_info.total_units = player_input.selection_manager.selected_units.size()
+		event_info.shift = Input.is_action_pressed("shift")
+		event_info.attack_moving = Input.is_action_pressed("a")
+
+		# Start casting mode for this ability - also use is_button_cast flag to disable quick cast
+		var keyhandler = player_input.keyboard_handler
+		keyhandler.input_cast_spell(event_info, caster, index, true)
 
 func on_mouse_hover(slot):
 	var text = get_slot_text(slot)

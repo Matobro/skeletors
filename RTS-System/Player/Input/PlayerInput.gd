@@ -17,7 +17,7 @@ var block_input_frames: int = 0
 
 var drag_start = Vector2.ZERO
 
-var is_quick_cast: bool = false
+var is_quick_cast: bool = true
 var is_casting: bool = false
 
 var desired_cast: CastContext

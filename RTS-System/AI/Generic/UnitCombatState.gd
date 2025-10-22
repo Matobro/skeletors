@@ -32,7 +32,7 @@ func update(delta: float) -> void:
 	attack_timer = max(attack_timer - delta, 0.0)
 	clean_recent_attackers()
 
-	if is_player_controlled() and ai.state not in ["Attack_move"]:
+	if is_player_controlled() and ai.state not in ["Attack_move", "CastAbility"]:
 		set_target_from_player_command()
 	else:
 		acquire_target_ai()
