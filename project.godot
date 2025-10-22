@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Skeletors"
 run/main_scene="uid://bp6xgo07rs3es"
-config/features=PackedStringArray("4.4", "Forward Plus")
+config/features=PackedStringArray("4.5", "Forward Plus")
 
 [autoload]
 
