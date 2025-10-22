@@ -49,6 +49,7 @@ func request_path() -> void:
 	if ai.get_current_command() == {}:
 		return
 
+	SpatialGrid.deregister_unit(parent)
 	print("Requested path for: ", parent)
 	var target = ai.get_current_command().target_position
 	path_requested = true
@@ -104,6 +105,7 @@ func on_path_ready(unit: Unit, new_path: PackedVector2Array, request_id: int) ->
 	path_index = 0
 	path_requested = false
 	last_requested_path.status = "ready"
+	SpatialGrid.register_unit(parent)
 	print("Path received with %d waypoints" % path.size())
 
 	SpatialGridDebugRenderer._receive_path(unit, path)

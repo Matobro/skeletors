@@ -17,7 +17,7 @@ func clear_control_group():
 func hide_control_group():
 	current_control_group.visible = false
 	
-func show_control_group(selected_units: Array):
+func show_control_group(selected_units: Array): ## what the fuck - todo
 	clear_control_group()
 	for unit in selected_units:
 		if !is_valid_unit(unit):

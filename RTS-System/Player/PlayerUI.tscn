@@ -436,6 +436,7 @@ vertical_alignment = 1
 
 [node name="Timer" type="ProgressBar" parent="UnitStats"]
 visible = false
+layout_mode = 0
 offset_left = -118.0
 offset_top = 305.0
 offset_right = 117.0
