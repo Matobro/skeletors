@@ -37,7 +37,7 @@ func state_logic(delta: float) -> void:
 			follow_target(target_unit, delta)
 	else:
 		# follow target if out of range
-		if not parent.unit_combat.is_within_attack_range(target_unit.global_position):
+		if !parent.unit_combat.is_within_attack_range(target_unit.global_position):
 			follow_target(target_unit, delta)
 		else:
 			parent.unit_visual.handle_orientation(

@@ -75,6 +75,7 @@ func add_rally_point(command_type: String, pos, is_queued):
 			rp.init_node(commands_data.rally_point, false)
 
 func show_command_visual(command_type: String, target_pos: Vector2):
+	if unit.owner_id != 1: return # gotta move this whole command visual shit to player object, otherwise every player sees every command - todo
 	var visual = commands_data.command_object.instantiate()
 	MapHandler.add_child(visual)
 	visual.global_position = target_pos

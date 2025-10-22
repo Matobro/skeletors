@@ -88,7 +88,7 @@ func should_switch_target(new_target: Node) -> bool:
 	# Switch if new target is closer (with buffer)
 	var current_dist = parent.global_position.distance_to(current_target.global_position)
 	var new_dist = parent.global_position.distance_to(new_target.global_position)
-	return new_dist + 64 < current_dist
+	return new_dist + 16 < current_dist
 
 func on_attacked_by(attacker: Node):
 	if !is_valid_target(attacker):

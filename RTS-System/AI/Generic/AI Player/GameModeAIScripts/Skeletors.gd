@@ -18,8 +18,8 @@ func update(delta):
 		for unit in units:
 			var target = find_closest_enemy(unit)
 			#validation hell, todo
-			if target and is_instance_valid(target) and target.unit_combat and !target.unit_combat.dead and is_instance_valid(unit) and unit.unit_ai and (unit.unit_ai.state == "Idle" or unit.unit_ai.state == "Move"):
-				unit.command_holder.issue_command("Attack", target, target.global_position, false, 10, true)
+			if target and is_instance_valid(target) and target.unit_combat and !target.unit_combat.dead and is_instance_valid(unit) and unit.unit_ai and (unit.unit_ai.state == "Idle"):
+				unit.command_holder.issue_command("Attack_move", target, target.global_position, false, 10, false)
 
 func find_closest_enemy(unit) -> Unit:
 	var all_units = UnitHandler.all_units
