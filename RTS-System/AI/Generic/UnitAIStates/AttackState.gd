@@ -111,8 +111,6 @@ func follow_target(target_unit: Node, delta: float):
 			parent.unit_visual.handle_orientation(dir)
 			parent.animation_player.play_animation("walk", 1.0)
 
-	SpatialGrid.update_unit_position(parent)
-
 func handle_no_target():
 	ai.combat_state.clear_combat_state()
 	var fallback_command = ai.command_handler.fallback_command

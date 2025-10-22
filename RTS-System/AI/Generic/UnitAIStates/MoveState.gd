@@ -6,7 +6,6 @@ func enter_state():
 func exit_state():
 	ai.command_handler.clear()
 	parent.velocity = Vector2.ZERO
-	SpatialGrid.update_unit_position(parent)
 
 func state_logic(delta):
 	if ai.get_current_command() == {}:

@@ -95,17 +95,16 @@ func follow_path(delta: float) -> void:
 
 	# Stuck check
 	_check_stuck(delta)
-	SpatialGrid.update_unit_position(parent)
 
 func on_path_ready(unit: Unit, new_path: PackedVector2Array, request_id: int) -> void:
 	if request_id != current_request_id or new_path.size() <= 0 or unit != parent:
 		return 
 
+	SpatialGrid.register_unit(parent)
 	path = new_path
 	path_index = 0
 	path_requested = false
 	last_requested_path.status = "ready"
-	SpatialGrid.register_unit(parent)
 	print("Path received with %d waypoints" % path.size())
 
 	SpatialGridDebugRenderer._receive_path(unit, path)

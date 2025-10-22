@@ -50,7 +50,7 @@ func build_walkable_cells():
 		if not grid[cell] and astar.has_point(grid_manager._get_cell_id(cell)):
 			walkable_cells.append(cell)
 
-func update_occupied_cells(cells: Array, occupied: bool, occupied_by: Unit = null) -> void:
+func update_occupied_cells(cells: Array, occupied: bool, _occupied_by: Unit = null) -> void:
 	for cell in cells:
 		var id = grid_manager._get_cell_id(cell)
 		if not astar.has_point(id):

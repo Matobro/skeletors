@@ -27,6 +27,9 @@ func set_ready():
 func _physics_process(delta):
 	if !initialized or current_state == null:
 		return
+	
+	# hope this wont cause lag
+	SpatialGrid.update_unit_position(parent)
 	self.combat_state.update(delta)
 	current_state.state_logic(delta)
 	devstate.text = state
