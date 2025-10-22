@@ -6,7 +6,7 @@ class_name HeroList
 @onready var hero_info = $"../HeroInfoPanel"
 
 func _ready() -> void:
-	var hero_list = UnitDatabase.hero_list;
+	var hero_list = UnitDatabase.get_heroes();
 	populate_hero_list_ui(hero_list)
 	
 func populate_hero_list_ui(hero_list: Array[UnitData]):
