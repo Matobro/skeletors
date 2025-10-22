@@ -12,4 +12,5 @@ offset = Vector2(0, -10)
 animation_attack_point = 0.325
 projectile_scene = ExtResource("1_kqqcs")
 projectile_speed = 800
+projectile_size = Vector2(1, 1)
 metadata/_custom_type_script = "uid://dq4e1yj8njkif"

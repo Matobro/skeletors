@@ -49,8 +49,7 @@ func reset_attack_state():
 	ai.combat_state.is_attack_committed = false
 	ai.combat_state.has_attacked = false
 	ai.combat_state.attack_anim_timer = 0.0
-	parent.animation_player.play("idle")
-
+	
 # Start attack animation and commit the attack
 func start_attack(target_unit: Node) -> void:
 	ai.animation_player.stop()

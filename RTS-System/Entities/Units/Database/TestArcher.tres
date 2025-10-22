@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="UnitData" load_steps=5 format=3 uid="uid://dlp6in1581rus"]
+[gd_resource type="Resource" script_class="UnitData" load_steps=6 format=3 uid="uid://dlp6in1581rus"]
 
 [ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="1_haq5l"]
+[ext_resource type="Script" uid="uid://dw73gisblncyg" path="res://AbilitySystem/AbilityData.gd" id="1_o5hy6"]
 [ext_resource type="Script" uid="uid://01ohikrtxe7k" path="res://RTS-System/Entities/Data/BaseStatData.gd" id="3_ti037"]
 [ext_resource type="Resource" uid="uid://bo3i4u6hpifra" path="res://RTS-System/Entities/Units/UnitData/TestArcher/TestArcher_Model_Data.tres" id="5_7vga4"]
 
@@ -29,4 +30,5 @@ name = "Test Archer"
 description = "Is a archer"
 stats = SubResource("Resource_yhm5l")
 is_ranged = true
+abilities = Array[ExtResource("1_o5hy6")]([])
 metadata/_custom_type_script = "uid://oeoy2vl8vgue"

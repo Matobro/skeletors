@@ -36,6 +36,6 @@ func _draw() -> void:
 	
 	var width = size.x
 	var height = size.y
-	for i in range(1, 10):
+	for i in range(1, 5):
 		var x = (i / float(10)) * width
 		draw_line(Vector2(x, 0), Vector2(x, height), line_color, line_width)
