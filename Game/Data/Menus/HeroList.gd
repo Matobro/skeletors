@@ -5,14 +5,11 @@ class_name HeroList
 @onready var grid_container = $ScrollContainer/GridContainer
 @onready var hero_info = $"../HeroInfoPanel"
 
-var hero_list
 func _ready() -> void:
-	populate_hero_list()
-	hero_info.first_load = hero_list[0]
+	var hero_list = UnitDatabase.hero_list;
+	populate_hero_list_ui(hero_list)
 	
-func populate_hero_list():
-	hero_list = UnitDatabase.hero_list
-
+func populate_hero_list_ui(hero_list: Array[UnitData]):
 	if hero_list.size() <= 0:
 		print("Hero list is empty.")
 		return

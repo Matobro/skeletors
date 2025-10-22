@@ -13,13 +13,7 @@ class_name HeroInfo
 @onready var stats_left = $HeroStats/Stats1
 @onready var stats_right = $HeroStats/Stats2
 
-var first_load
 var currently_selected
-
-func _ready() -> void:
-	if first_load:
-		currently_selected = first_load
-		load_hero_info(first_load)
 		
 func load_hero_info(data: UnitData):
 	currently_selected = data

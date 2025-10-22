@@ -13,6 +13,7 @@ func start_game():
 	if dev_mode:
 		PlayerManager.setup_player_manager(false)
 		WaveSystem.setup()
+		# WaveSystem.start_next_wave();
 		var dev_tool = $"../World/DevSpawnUnit"
 		dev_tool.init_node()
 	else:

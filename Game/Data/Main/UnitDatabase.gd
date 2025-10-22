@@ -1,7 +1,7 @@
 extends Node
 
-var hero_list: Array = []
-var unit_list: Array = []
+var hero_list: Array[UnitData] = []
+var unit_list: Array[UnitData] = []
 
 func _ready() -> void:
 	load_unit_data()
@@ -49,13 +49,6 @@ func load_units_from_manifest(manifest_path: String) -> void:
 			else:
 				print("Failed to load unit: ", path)
 
-
-func join_path(a: String, b: String) -> String:
-	if a.ends_with("/"):
-		return a + b
-	else:
-		return a + "/" + b
-
-func get_enemy_units_for_wave(wave: int) -> Array:
+func get_enemy_units_for_wave(wave: int) -> Array[UnitData]:
 	var enemies = unit_list.filter(func(u): return u.power_level <= wave and u.is_spawnable_enemy)
 	return enemies
