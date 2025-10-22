@@ -59,14 +59,13 @@ func get_slot_text(slot) -> String:
 	if data.cooldown > 0:
 		parts.append("[img]" + COOLDOWN_ICON_PATH +"[/img] " + str(data.cooldown) + "s" + "\n\n")
 
-	if data.ability_type is not SummonAbility:
-		# Description
-		parts.append(data.description + "\n")
+	# Description
+	parts.append(data.description + "\n")
 
-		# Effects
-		parts.append("\n")
-		for effect in data.effects:
-			parts.append(format_effect(effect) + "\n")
+	# Effects
+	parts.append("\n")
+	for effect in data.effects:
+		parts.append(format_effect(effect) + "\n")
 		
 	# Special ability types
 	parts.append(format_special_data(data))

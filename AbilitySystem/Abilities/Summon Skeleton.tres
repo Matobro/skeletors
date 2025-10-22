@@ -25,7 +25,7 @@ metadata/_custom_type_script = "uid://boe8ic1128tfs"
 [resource]
 script = ExtResource("2_y3qiq")
 name = "Summon Skeleton"
-description = ""
+description = "Summons skeletons at targeted location."
 icon = ExtResource("4_f0jvo")
 mana_cost = 10
 cooldown = 5.0

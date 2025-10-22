@@ -51,7 +51,7 @@ func _process_item_command(cmd: Dictionary):
 				ai.pathfinder.request_path()
 
 		"PickUpItem":
-			if is_instance_valid(cmd["item"]) and parent.unit_inventory.is_space_in_inventory():
+			if is_instance_valid(cmd["item"]) and parent.unit_inventory and parent.unit_inventory.is_space_in_inventory():
 				if parent.global_position.distance_to(cmd["item"].global_position) <= 100:
 					parent.unit_inventory.add_item(cmd["item"].item)
 					cmd["item"].queue_free()

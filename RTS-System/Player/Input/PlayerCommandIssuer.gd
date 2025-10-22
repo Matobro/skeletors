@@ -31,7 +31,8 @@ func issue_attack_command(event_info):
 		return
 
 	for unit in selection_manager.selected_units:
-		unit.command_holder.issue_command("Attack", event_info.click_target, event_info.clicked_position, event_info.shift, id, true)
+		if unit != event_info.click_target:
+			unit.command_holder.issue_command("Attack", event_info.click_target, event_info.clicked_position, event_info.shift, id, true)
 	
 func issue_attack_move_command(event_info):
 	print("attack moving")

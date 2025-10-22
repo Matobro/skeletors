@@ -13,27 +13,28 @@ var command
 signal cast_cancelled()
 
 func enter_state():
+	# If casting already cancel it
 	if is_casting and ability_to_cast != null:
 		ability_to_cast.cancel_cast()
 		clear_state()
 
 	is_casting = false
+
+	# Get context for cast from command
 	command = ai.get_current_command()
 	target_position = command["target_position"]
 	target_unit = command["target_unit"]
 	ability_to_cast_index = command["context"].index
 	ability_to_cast = command["context"].ability
 
+	# If no ability (somehow)
 	if ability_to_cast == null:
-		print("Ability to cast is null")
 		exit_state()
 		return
 
-	print("Casting: ", ability_to_cast)
 	connect("cast_cancelled", Callable(ability_to_cast, "cancel_cast"), CONNECT_ONE_SHOT)
 
 func exit_state():
-	print("Exiting casting state")
 	emit_signal("cast_cancelled")
 	clear_state()
 	ai.command_handler.clear()
@@ -45,13 +46,17 @@ func state_logic(delta):
 		ai.set_state("Idle")
 		return
 
+	# New cast while already casting, re-enter state
 	if current_command != command:
 		exit_state()
 		ai.set_state("CastAbility")
 		return
 
+	# Start casting if close enough to target or is no targeted cast
 	if ability_to_cast.ability_data.is_instant_cast or parent.global_position.distance_to(target_position) <= ability_to_cast.ability_data.cast_range:
 		on_arrival()
+	
+	# Otherwise get closer to target
 	else:
 		ai.pathfinder.follow_path(delta)
 
@@ -59,8 +64,6 @@ func on_arrival():
 	var ability = ability_to_cast
 
 	if(!arrived):
-		print("Arrived at casting location")
-
 		#Connect signal for ability
 		ability.connect("cast_done", Callable(self, "on_cast_finished"), CONNECT_ONE_SHOT)
 		arrived = true
@@ -73,25 +76,29 @@ func on_arrival():
 
 func start_casting_animation(cast_time: float):
 	is_casting = true
+	if cast_time > 0:
+		#Play casting-start
+		print("Playing casting-start")
+		ai.animation_player.play_animation("casting-start", 1)
+		var start_duration = ai.animation_player.get_animation_speed("casting-start")
+		await ai.animation_player.animation_finished
+		if !is_casting: return
 
-	#Play casting-start
-	print("Playing casting-start")
-	ai.animation_player.play_animation("casting-start", 1)
-	var start_duration = ai.animation_player.get_animation_speed("casting-start")
-	await ai.animation_player.animation_finished
-	if !is_casting: return
-
-	#Play casting-loop
-	print("Playing casting-loop")
-	ai.animation_player.play_animation("casting-loop", 1)
-	var buffer = ai.animation_player.get_animation_speed("casting-loop")
-	await ai.get_tree().create_timer(max(0.0, cast_time - buffer - start_duration)).timeout
-	if !is_casting: return
+		#Play casting-loop
+		print("Playing casting-loop")
+		ai.animation_player.play_animation("casting-loop", 1)
+		var buffer = ai.animation_player.get_animation_speed("casting-loop")
+		await ai.get_tree().create_timer(max(0.0, cast_time - buffer - start_duration)).timeout
+		if !is_casting: return
 
 func clear_state():
 	var ability = ability_to_cast
-	if ability_to_cast != null and ability.is_connected("cast_done", Callable(self, "on_cast_finished")):
-		ability.disconnect("cast_done", Callable(self, "on_cast_finished"))
+	if ability_to_cast != null:
+		if ability.is_connected("cast_done", Callable(self, "on_cast_finished")):
+			ability.disconnect("cast_done", Callable(self, "on_cast_finished"))
+		if is_connected("cast_cancelled", Callable(ability_to_cast, "cancel_cast")):
+			disconnect("cast_cancelled", Callable(ability_to_cast, "cancel_cast"))
+		
 
 	is_casting = false
 	ability_to_cast = null
@@ -104,12 +111,10 @@ func clear_state():
 
 func on_cast_finished():
 	#Play casting-end
-	print("Playing casting-end")
 	ai.animation_player.play_animation("casting-end", 1)
 	await ai.animation_player.animation_finished
 	
 	clear_state()
-	print("Cast finished")
 
 	ai.animation_player.play_animation("idle", 1.0)
 	ai.command_handler.process_next_command()
