@@ -49,7 +49,7 @@ func reset_attack_state():
 	ai.combat_state.is_attack_committed = false
 	ai.combat_state.has_attacked = false
 	ai.combat_state.attack_anim_timer = 0.0
-	
+
 # Start attack animation and commit the attack
 func start_attack(target_unit: Node) -> void:
 	ai.animation_player.stop()
@@ -75,7 +75,7 @@ func process_attack_animation(target_unit: Node) -> void:
 	var attack_end_time = base_len / spd
 
 	# Apply damage/projectile at attack point, only if target in range
-	if not ai.combat_state.has_attacked and parent.unit_combat.is_within_attack_range(target_unit.global_position) and ai.combat_state.attack_anim_timer >= attack_point_time:
+	if not ai.combat_state.has_attacked and ai.combat_state.attack_anim_timer >= attack_point_time:
 		if parent.data.is_ranged:
 			spawn_projectile(target_unit)
 		else:

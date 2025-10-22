@@ -74,7 +74,7 @@ func _process(_delta):
 
 		var start_pos = unit.global_position
 		var end_pos = unit.unit_ai.command_handler.current_command.target_position if unit.unit_ai.command_handler.current_command != {} else start_pos
-		var path = astar_manager.find_path(start_pos, end_pos, target_unit)
+		var path = astar_manager.find_path(start_pos, end_pos, target_unit, unit)
 		emit_signal("path_ready", unit, path, request_id)
 
 		processed_count += 1

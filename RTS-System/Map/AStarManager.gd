@@ -50,7 +50,7 @@ func build_walkable_cells():
 		if not grid[cell] and astar.has_point(grid_manager._get_cell_id(cell)):
 			walkable_cells.append(cell)
 
-func update_occupied_cells(cells: Array, occupied: bool) -> void:
+func update_occupied_cells(cells: Array, occupied: bool, occupied_by: Unit = null) -> void:
 	for cell in cells:
 		var id = grid_manager._get_cell_id(cell)
 		if not astar.has_point(id):
@@ -59,7 +59,9 @@ func update_occupied_cells(cells: Array, occupied: bool) -> void:
 		if occupied:
 			# Disable point when a unit occupies it
 			astar.set_point_weight_scale(id, 5.0)
-			astar.set_point_disabled(id, true)
+			if occupied_by == null or not grid[cell].has(occupied_by):
+				print("disabling")
+				astar.set_point_disabled(id, true)
 		else:
 			# Free the point
 			astar.set_point_weight_scale(id, 1.0)
@@ -92,36 +94,67 @@ func update_occupied_cells(cells: Array, occupied: bool) -> void:
 					if not astar.are_points_connected(neighbor_id, id):
 						astar.connect_points(neighbor_id, id, false)
 
-func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null) -> PackedVector2Array:
+func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null, moving_unit = null) -> PackedVector2Array:
 	var start_cell = grid_manager._get_cell_coords(start_pos)
 	var end_cell = grid_manager._get_cell_coords(target_unit.global_position if target_unit else end_pos)
 
-	var nearest = _get_nearest_reachable_free_cell(end_cell, start_cell)
-	if nearest == start_cell:
-		return PackedVector2Array()
+	var start_cells = []
+	if moving_unit:
+		start_cells = moving_unit.get_meta("grid_coords") if moving_unit.has_meta("grid_coords") else [start_cell]
+	else:
+		start_cells = [start_cell]
 
-	# Allow the target cell to be considered free (even if occupied by the target)
-	end_cell = _get_nearest_reachable_free_cell(end_cell, start_cell)
+	# Temporarily free all cells occupied by this unit
+	var previously_disabled = {}
+	for cell in start_cells:
+		var id = grid_manager._get_cell_id(cell)
+		if astar.has_point(id):
+			previously_disabled[id] = astar.is_point_disabled(id)
+			if previously_disabled[id]:
+				astar.set_point_disabled(id, false)
 
+	# Also allow the target area (so you can path to it)
+	var end_cells = []
+	if target_unit:
+		end_cells = target_unit.get_meta("grid_coords") if target_unit.has_meta("grid_coords") else [end_cell]
+	else:
+		end_cells = [end_cell]
+
+	for cell in end_cells:
+		var id = grid_manager._get_cell_id(cell)
+		if astar.has_point(id):
+			previously_disabled[id] = astar.is_point_disabled(id)
+			if previously_disabled[id]:
+				astar.set_point_disabled(id, false)
+
+	# Now find the path
 	var start_id = grid_manager._get_cell_id(start_cell)
 	var end_id = grid_manager._get_cell_id(end_cell)
-
 	if not astar.has_point(start_id) or not astar.has_point(end_id):
-		return PackedVector2Array()  # Path blocked
+		_restore_disabled_points(previously_disabled)
+		return PackedVector2Array()
 
 	var raw_path = astar.get_id_path(start_id, end_id)
-	if raw_path.size() == 0:
+	_restore_disabled_points(previously_disabled)
+
+	if raw_path.is_empty():
 		return PackedVector2Array()
 
 	var world_path = PackedVector2Array()
 	for id in raw_path:
 		world_path.append(astar.get_point_position(id))
 
-	# Start exactly at current position
 	if world_path.size() > 0:
 		world_path[0] = start_pos
 
 	return smooth_path(world_path)
+
+
+func _restore_disabled_points(disabled_dict: Dictionary) -> void:
+	for id in disabled_dict.keys():
+		if disabled_dict[id]:
+			astar.set_point_disabled(id, true)
+
 
 # Finds the nearest free tile that is reachable from start_cell
 func _get_nearest_reachable_free_cell(target_cell: Vector2, start_cell: Vector2) -> Vector2:

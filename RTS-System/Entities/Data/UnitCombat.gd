@@ -210,17 +210,19 @@ func closest_enemy_in_aggro_range() -> Unit:
 	var closest_distance := INF
 
 	var attack_target = parent.unit_ai.combat_state.current_target
+	
+	var index = 0
 	for unit in possible_targets:
-		if !is_instance_valid(unit.unit_combat) or unit.unit_combat.dead:
+		if !is_instance_valid(unit) or unit.unit_combat.dead:
 			if attack_target == unit:
 				attack_target = null
-			possible_targets.erase(unit)
+			possible_targets.remove_at(index)
 		else:
 			var dist := parent.position.distance_to(unit.position)
 			if dist < closest_distance:
 				closest_distance = dist
 				closest_unit = unit
-
+		index += 1
 	return closest_unit
 
 func closest_enemy_in_attack_range() -> Unit:

@@ -31,7 +31,7 @@ func _ready():
 
 func build_map():
 	await get_tree().process_frame
-	astar_manager.grid = grid_manager.build_grid_from_tilemap()
+	astar_manager.grid = grid_manager.build_grid_from_tilemap(2)
 	astar_manager.build_astar_graph()
 	astar_manager.build_walkable_cells()
 
