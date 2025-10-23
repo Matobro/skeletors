@@ -101,6 +101,7 @@ shape = SubResource("CircleShape2D_fgnkd")
 debug_color = Color(0.995729, 0, 0.200035, 0.42)
 
 [node name="DevState" type="Label" parent="."]
+visible = false
 offset_left = -126.0
 offset_top = -303.0
 offset_right = 126.0

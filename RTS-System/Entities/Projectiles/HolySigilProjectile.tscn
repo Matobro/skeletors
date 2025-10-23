@@ -1,0 +1,63 @@
+[gd_scene load_steps=11 format=3 uid="uid://b36d1cxlst4oc"]
+
+[ext_resource type="Script" uid="uid://b7cj7ydsx3hjq" path="res://RTS-System/Entities/Data/HomingProjectile.gd" id="1_5p2h5"]
+[ext_resource type="Texture2D" uid="uid://3luuvt6jc2rh" path="res://RTS-System/Entities/Projectiles/Sprites/HolySigilProjectile.png" id="2_25stq"]
+[ext_resource type="Script" uid="uid://cga6yxw2cmkr6" path="res://RTS-System/Entities/Data/PlayAnimation.gd" id="3_1y80l"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rp0k4"]
+atlas = ExtResource("2_25stq")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hwhqv"]
+atlas = ExtResource("2_25stq")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7w8h5"]
+atlas = ExtResource("2_25stq")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d6rat"]
+atlas = ExtResource("2_25stq")
+region = Rect2(150, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h5mh2"]
+atlas = ExtResource("2_25stq")
+region = Rect2(200, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yx7c7"]
+atlas = ExtResource("2_25stq")
+region = Rect2(250, 0, 50, 50)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2bhm8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rp0k4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hwhqv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7w8h5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d6rat")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h5mh2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yx7c7")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="HomingProjectile" type="Node2D"]
+z_index = 100
+script = ExtResource("1_5p2h5")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_2bhm8")
+script = ExtResource("3_1y80l")

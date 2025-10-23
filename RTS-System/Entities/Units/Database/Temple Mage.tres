@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="UnitData" load_steps=46 format=3 uid="uid://c6jnoan7ppt7u"]
+[gd_resource type="Resource" script_class="UnitData" load_steps=51 format=3 uid="uid://c6jnoan7ppt7u"]
 
 [ext_resource type="Script" uid="uid://dw73gisblncyg" path="res://AbilitySystem/AbilityData.gd" id="1_a1h2y"]
 [ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="2_eddnu"]
 [ext_resource type="Script" uid="uid://01ohikrtxe7k" path="res://RTS-System/Entities/Data/BaseStatData.gd" id="3_21miy"]
-[ext_resource type="PackedScene" uid="uid://bs8prqiprl2i" path="res://RTS-System/Entities/Projectiles/DarkMagicProjectile.tscn" id="4_yqrhn"]
+[ext_resource type="PackedScene" uid="uid://b36d1cxlst4oc" path="res://RTS-System/Entities/Projectiles/HolySigilProjectile.tscn" id="4_dfw2f"]
 [ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="5_dfw2f"]
+[ext_resource type="Texture2D" uid="uid://blmdc0c3no7rc" path="res://RTS-System/Entities/Units/UnitData/Temple Mage/Sprites/TempleMage_attack.png" id="6_dfw2f"]
 [ext_resource type="Texture2D" uid="uid://drb10e6u1s42n" path="res://RTS-System/Entities/Units/UnitData/Temple Mage/Sprites/TempleMage_walk.png" id="6_yqrhn"]
 [ext_resource type="Texture2D" uid="uid://cck25qr0kjqva" path="res://RTS-System/Entities/Units/UnitData/Temple Mage/Sprites/TempleMage_dying.png" id="7_dfw2f"]
 [ext_resource type="Texture2D" uid="uid://ccodjku0aar2y" path="res://RTS-System/Entities/Units/UnitData/Temple Mage/Sprites/TempleMage_idle.png" id="8_m025f"]
@@ -15,15 +16,31 @@ base_max_hp = 350.0
 base_health_regen = 1.0
 base_armor = 5
 base_movement_speed = 250
-base_attack_speed = 0.4
+base_attack_speed = 0.7
 base_damage = 55
 base_range = 800
 attack_dice_roll = 0.2
 metadata/_custom_type_script = "uid://01ohikrtxe7k"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_qek3x"]
-atlas = ExtResource("6_yqrhn")
+[sub_resource type="AtlasTexture" id="AtlasTexture_m025f"]
+atlas = ExtResource("6_dfw2f")
 region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qek3x"]
+atlas = ExtResource("6_dfw2f")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oat48"]
+atlas = ExtResource("6_dfw2f")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eef0v"]
+atlas = ExtResource("6_dfw2f")
+region = Rect2(150, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c0ctp"]
+atlas = ExtResource("6_dfw2f")
+region = Rect2(200, 0, 50, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wlwrh"]
 atlas = ExtResource("7_dfw2f")
@@ -162,17 +179,23 @@ resource_name = "Temple Mage_spriteframes"
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_qek3x")
+"texture": SubResource("AtlasTexture_m025f")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qek3x")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_qek3x")
+"texture": SubResource("AtlasTexture_oat48")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eef0v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c0ctp")
 }],
 "loop": false,
 "name": &"attack",
-"speed": 5.0
+"speed": 12.0
 }, {
 "frames": [],
 "loop": false,
@@ -309,9 +332,9 @@ resource_name = "Temple Mage_modeldata"
 script = ExtResource("5_dfw2f")
 sprite_frames = SubResource("SpriteFrames_m025f")
 scale = Vector2(5, 5)
-projectile_scene = ExtResource("4_yqrhn")
+projectile_scene = ExtResource("4_dfw2f")
 projectile_speed = 800
-projectile_size = Vector2(5, 5)
+projectile_size = Vector2(2.5, 2.5)
 metadata/_custom_type_script = "uid://dq4e1yj8njkif"
 
 [resource]
