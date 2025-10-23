@@ -14,7 +14,7 @@
 script = ExtResource("3_yqosc")
 base_max_hp = 150.0
 base_damage = 10
-base_range = 80
+base_range = 100
 metadata/_custom_type_script = "uid://01ohikrtxe7k"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tat4i"]
