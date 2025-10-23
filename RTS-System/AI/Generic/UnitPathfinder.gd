@@ -48,7 +48,7 @@ func request_path() -> void:
 
 	if ai.get_current_command() == {}:
 		return
-
+	
 	SpatialGrid.deregister_unit(parent)
 	print("Requested path for: ", parent)
 	var target = ai.get_current_command().target_position
@@ -98,6 +98,7 @@ func follow_path(delta: float) -> void:
 
 func on_path_ready(unit: Unit, new_path: PackedVector2Array, request_id: int) -> void:
 	if request_id != current_request_id or new_path.size() <= 0 or unit != parent:
+		#print(parent.data.name, " received invalid path", " [ id: ", request_id , " current id: ", current_request_id, " path size: ", new_path.size(), " path for unit: ", unit.data.name, "]")
 		return 
 
 	SpatialGrid.register_unit(parent)

@@ -102,7 +102,7 @@ func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null, moving_
 	else:
 		start_cells = [start_cell]
 
-	# Temporarily free all cells occupied by this unit
+	# Free all cells occupied by this unit
 	var previously_disabled = {}
 	for cell in start_cells:
 		var id = grid_manager._get_cell_id(cell)
@@ -111,7 +111,7 @@ func find_path(start_pos: Vector2, end_pos: Vector2, target_unit = null, moving_
 			if previously_disabled[id]:
 				astar.set_point_disabled(id, false)
 
-	# Also allow the target area (so you can path to it)
+	# Free all cells occupied by this unit
 	var end_cells = []
 	if target_unit:
 		end_cells = target_unit.get_meta("grid_coords") if target_unit.has_meta("grid_coords") else [end_cell]

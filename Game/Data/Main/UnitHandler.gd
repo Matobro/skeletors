@@ -58,5 +58,5 @@ func _on_unit_died(unit):
 			if is_instance_valid(hero) and hero.owner_id != 10:
 				hero.get_xp(unit.data.stats.xp_yield)
 
-func get_units_by_player(owner_id):
+func get_units_by_player(owner_id) -> Array:
 	return units_by_player.get(owner_id, [])
