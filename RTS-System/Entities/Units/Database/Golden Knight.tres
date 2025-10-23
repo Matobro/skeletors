@@ -1,0 +1,223 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=34 format=3 uid="uid://c8fykb7yvusdd"]
+
+[ext_resource type="Script" uid="uid://dw73gisblncyg" path="res://AbilitySystem/AbilityData.gd" id="1_bwspc"]
+[ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="2_ee76l"]
+[ext_resource type="Script" uid="uid://01ohikrtxe7k" path="res://RTS-System/Entities/Data/BaseStatData.gd" id="3_87i83"]
+[ext_resource type="PackedScene" uid="uid://chxscd5c7iu64" path="res://RTS-System/Entities/Projectiles/ArrowProjectile.tscn" id="4_myjdm"]
+[ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="5_hw7vn"]
+[ext_resource type="Texture2D" uid="uid://b5ghij4aa4i1a" path="res://RTS-System/Entities/Units/UnitData/Golden Knight/Sprites/GoldenKnight_attack.png" id="6_hw7vn"]
+[ext_resource type="Texture2D" uid="uid://m0x6ps1dekq2" path="res://RTS-System/Entities/Units/UnitData/Golden Knight/Sprites/GoldenKnight_dying.png" id="7_4lv4i"]
+[ext_resource type="Texture2D" uid="uid://ctd5usw0wjen1" path="res://RTS-System/Entities/Units/UnitData/Golden Knight/Sprites/GoldenKnight_idle.png" id="8_p6gqm"]
+[ext_resource type="Texture2D" uid="uid://c25klopbnryj0" path="res://RTS-System/Entities/Units/UnitData/Golden Knight/Sprites/GoldenKnight_walk.png" id="9_tx8ua"]
+
+[sub_resource type="Resource" id="Resource_fgt6y"]
+script = ExtResource("3_87i83")
+base_max_hp = 150.0
+base_damage = 10
+base_range = 80
+metadata/_custom_type_script = "uid://01ohikrtxe7k"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iva1y"]
+atlas = ExtResource("6_hw7vn")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_afr6p"]
+atlas = ExtResource("6_hw7vn")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s22qw"]
+atlas = ExtResource("6_hw7vn")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0nbxw"]
+atlas = ExtResource("7_4lv4i")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ty3xw"]
+atlas = ExtResource("7_4lv4i")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ykn1e"]
+atlas = ExtResource("7_4lv4i")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yya8j"]
+atlas = ExtResource("7_4lv4i")
+region = Rect2(150, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lexou"]
+atlas = ExtResource("7_4lv4i")
+region = Rect2(200, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nhhon"]
+atlas = ExtResource("7_4lv4i")
+region = Rect2(250, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c57gg"]
+atlas = ExtResource("7_4lv4i")
+region = Rect2(300, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1idp5"]
+atlas = ExtResource("7_4lv4i")
+region = Rect2(350, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lo78d"]
+atlas = ExtResource("7_4lv4i")
+region = Rect2(400, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rvgjr"]
+atlas = ExtResource("7_4lv4i")
+region = Rect2(450, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y3so1"]
+atlas = ExtResource("7_4lv4i")
+region = Rect2(500, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yn4px"]
+atlas = ExtResource("7_4lv4i")
+region = Rect2(550, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j3ra2"]
+atlas = ExtResource("7_4lv4i")
+region = Rect2(600, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ahasx"]
+atlas = ExtResource("8_p6gqm")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qlnmr"]
+atlas = ExtResource("8_p6gqm")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_onosl"]
+atlas = ExtResource("9_tx8ua")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j1t36"]
+atlas = ExtResource("9_tx8ua")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6olf"]
+atlas = ExtResource("9_tx8ua")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4lv4i"]
+resource_name = "Golden Knight_spriteframes"
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iva1y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_afr6p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s22qw")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"casting-end",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"casting-loop",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"casting-start",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0nbxw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ty3xw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ykn1e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yya8j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lexou")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nhhon")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c57gg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1idp5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lo78d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rvgjr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y3so1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yn4px")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j3ra2")
+}],
+"loop": false,
+"name": &"dying",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ahasx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qlnmr")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_onosl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j1t36")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e6olf")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="Resource" id="Resource_p6gqm"]
+resource_name = "Golden Knight_modeldata"
+script = ExtResource("5_hw7vn")
+sprite_frames = SubResource("SpriteFrames_4lv4i")
+scale = Vector2(3, 3)
+offset = Vector2(0, -20)
+projectile_scene = ExtResource("4_myjdm")
+projectile_speed = 800
+metadata/_custom_type_script = "uid://dq4e1yj8njkif"
+
+[resource]
+resource_name = "Golden Knight"
+script = ExtResource("2_ee76l")
+unit_model_data = SubResource("Resource_p6gqm")
+unit_type = "unit"
+name = "Golden Knight"
+stats = SubResource("Resource_fgt6y")
+metadata/_custom_type_script = "uid://oeoy2vl8vgue"

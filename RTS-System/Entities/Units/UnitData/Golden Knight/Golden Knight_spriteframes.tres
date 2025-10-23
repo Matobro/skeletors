@@ -1,0 +1,40 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dwuerl7b8fh88"]
+
+[resource]
+resource_name = "Golden Knight_spriteframes"
+animations = [{
+"frames": [],
+"loop": false,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"casting-end",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"casting-loop",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"casting-start",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"dying",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]

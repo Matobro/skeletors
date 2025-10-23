@@ -10,6 +10,7 @@
 		"res://RTS-System/Items/Database/Sword.tres"
 	],
 	"units": [
+		"res://RTS-System/Entities/Units/Database/Golden Knight.tres",
 		"res://RTS-System/Entities/Units/Database/Holy Knight.tres",
 		"res://RTS-System/Entities/Units/Database/Summoned Skeleton.tres",
 		"res://RTS-System/Entities/Units/Database/TargetDummy.tres",
