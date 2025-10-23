@@ -6,7 +6,7 @@ class_name BaseStatData
 @export_category("Stats")
 @export_group("Base Stats")
 ## Units base hp, without any bonuses
-@export var base_max_hp: float = 5 
+@export var base_max_hp: float = 5
 ## Units base mp, without any bonuses
 @export var base_max_mana: float = 0
 ## Units base hp regen, without any bonuses
@@ -25,7 +25,7 @@ class_name BaseStatData
 @export var base_range: int = 50
 ## Damage variance in percentage. 0.1 = 10%
 ## 100 damage + 0.1 dice roll = [90-110]
-@export_range (0.0, 1.0) var attack_dice_roll: float = 0.1
+@export_range(0.0, 1.0) var attack_dice_roll: float = 0.1
 ## How much unit gives xp when killed
 @export var xp_yield: int = 50
 
@@ -50,7 +50,6 @@ var parent
 func recalculate_stats():
 	# var previous_max_hp = max_health
 	# var previous_max_mana = max_mana
-
 	var stat_list = {
 		"max_health": [base_max_hp, 0],
 		"attack_speed": [base_attack_speed, 0.01],
@@ -64,7 +63,7 @@ func recalculate_stats():
 	}
 
 	for stat_name in stat_list.keys():
-		var stat_values = stat_list[stat_name] 
+		var stat_values = stat_list[stat_name]
 		var base_value = stat_values[0]
 		var min_value = stat_values[1]
 		var buff_value = buff_bonus.get(stat_name, 0)
@@ -82,3 +81,6 @@ func recalculate_stats():
 	# 	current_mana = max_mana
 
 	parent.unit_visual.hp_bar.init_hp_bar(current_health, max_health)
+
+func is_alive() -> bool:
+	return current_health > 0

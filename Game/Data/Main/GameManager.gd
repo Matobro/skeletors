@@ -12,11 +12,13 @@ func start_game():
 	SpatialGrid.build_map()
 	if dev_mode:
 		PlayerManager.setup_player_manager(false)
-		WaveSystem.setup()
-		WaveSystem.start_next_wave();
+		LevelManager.start_game();
+		# WaveSystem.setup()
+		# WaveSystem.start_next_wave();
 		var dev_tool = $"../World/DevSpawnUnit"
 		dev_tool.init_node()
 	else:
 		if multiplayer.is_server():
 			PlayerManager.setup_player_manager()
-			WaveSystem.setup()
+			LevelManager.start_game();
+			# WaveSystem.setup()
