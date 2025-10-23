@@ -115,6 +115,7 @@ offset_bottom = 34.0
 text = "Player"
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer/DevBox"]
+visible = false
 layout_mode = 0
 offset_left = 13.0
 offset_top = 95.0
@@ -151,11 +152,11 @@ offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "0 - display pathfinding info
-9 - show grid connections
+9 - show grid
 (will nuke fps, 0 must be on)
-8 - fullscreen/windowed
-p - start next wave
-o - disable/enable ai
+8 - fullscreen/windowed 
+(wont work in editor)
+k - kill selected unit
 i - open shop"
 
 [node name="Label" type="Label" parent="CanvasLayer"]

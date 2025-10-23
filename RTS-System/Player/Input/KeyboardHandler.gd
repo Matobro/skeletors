@@ -39,6 +39,13 @@ func handle_keyboard_commands(event: InputEventKey):
 				player_input.is_casting = false
 				input_cast_spell(event_info, selected_unit, 1)
 
+	if selected_unit:
+		match event.keycode:
+			#dev shit
+			KEY_K:
+				selected_unit.unit_combat.take_damage(5000000)
+
+
 ## Saves cast if not quick cast, casts spell if is quick cast or cast is saved
 func input_cast_spell(event_info: EventInfo = null, caster: Unit = null, index: int = -1, is_button_cast: bool = false):
 	if !selection_manager.is_valid_selection():

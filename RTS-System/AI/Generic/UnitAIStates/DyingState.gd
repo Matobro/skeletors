@@ -1,6 +1,7 @@
 extends UnitState
 
 func enter_state():
+	SpatialGrid.update_unit_position(parent)
 	SpatialGrid.deregister_unit(parent)
 	parent.set_physics_process(false)
 	parent.set_collision_layer(0)
