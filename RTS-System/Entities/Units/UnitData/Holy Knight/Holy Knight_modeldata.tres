@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="UnitModelData" load_steps=4 format=3 uid="uid://juecjji542k4"]
+
+[ext_resource type="PackedScene" uid="uid://chxscd5c7iu64" path="res://RTS-System/Entities/Projectiles/ArrowProjectile.tscn" id="1_cmcm0"]
+[ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="2_uw7u2"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tin5y"]
+resource_name = "Holy Knight_spriteframes"
+animations = [{
+"frames": [],
+"loop": false,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"casting-end",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"casting-loop",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"casting-start",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"dying",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[resource]
+resource_name = "Holy Knight_modeldata"
+script = ExtResource("2_uw7u2")
+sprite_frames = SubResource("SpriteFrames_tin5y")
+scale = Vector2(2, 2)
+projectile_scene = ExtResource("1_cmcm0")
+projectile_speed = 800
+metadata/_custom_type_script = "uid://dq4e1yj8njkif"

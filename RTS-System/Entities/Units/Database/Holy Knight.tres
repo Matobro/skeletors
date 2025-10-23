@@ -1,0 +1,230 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=35 format=3 uid="uid://d05f8ftl2steh"]
+
+[ext_resource type="Script" uid="uid://dw73gisblncyg" path="res://AbilitySystem/AbilityData.gd" id="1_uv73n"]
+[ext_resource type="Script" uid="uid://oeoy2vl8vgue" path="res://RTS-System/Entities/Data/UnitData.gd" id="2_dq1l6"]
+[ext_resource type="Script" uid="uid://01ohikrtxe7k" path="res://RTS-System/Entities/Data/BaseStatData.gd" id="3_yqosc"]
+[ext_resource type="PackedScene" uid="uid://chxscd5c7iu64" path="res://RTS-System/Entities/Projectiles/ArrowProjectile.tscn" id="4_c0de5"]
+[ext_resource type="Script" uid="uid://dq4e1yj8njkif" path="res://RTS-System/Entities/Data/UnitModelData.gd" id="5_ifowe"]
+[ext_resource type="Texture2D" uid="uid://bimh8o2thja8e" path="res://RTS-System/Entities/Units/UnitData/Holy Knight/Sprites/Knight_attack.png" id="6_ifowe"]
+[ext_resource type="Texture2D" uid="uid://cc38sv1qxyrps" path="res://RTS-System/Entities/Units/UnitData/Holy Knight/Sprites/Knight_dying.png" id="7_tin5y"]
+[ext_resource type="Texture2D" uid="uid://qoy3uodup250" path="res://RTS-System/Entities/Units/UnitData/Holy Knight/Sprites/Knight_idle.png" id="8_jymhu"]
+[ext_resource type="Texture2D" uid="uid://bgjxdovnrxeyp" path="res://RTS-System/Entities/Units/UnitData/Holy Knight/Sprites/Knight_walk.png" id="9_i2104"]
+
+[sub_resource type="Resource" id="Resource_fgt6y"]
+script = ExtResource("3_yqosc")
+base_max_hp = 150.0
+base_damage = 10
+base_range = 80
+metadata/_custom_type_script = "uid://01ohikrtxe7k"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tat4i"]
+atlas = ExtResource("6_ifowe")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cgbjy"]
+atlas = ExtResource("6_ifowe")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lxd0d"]
+atlas = ExtResource("6_ifowe")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yltfy"]
+atlas = ExtResource("7_tin5y")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g2trc"]
+atlas = ExtResource("7_tin5y")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xix8k"]
+atlas = ExtResource("7_tin5y")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lt8h8"]
+atlas = ExtResource("7_tin5y")
+region = Rect2(150, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yyxnw"]
+atlas = ExtResource("7_tin5y")
+region = Rect2(200, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dhln8"]
+atlas = ExtResource("7_tin5y")
+region = Rect2(250, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8pcyk"]
+atlas = ExtResource("7_tin5y")
+region = Rect2(300, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v1tfw"]
+atlas = ExtResource("7_tin5y")
+region = Rect2(350, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6cd7e"]
+atlas = ExtResource("7_tin5y")
+region = Rect2(400, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_trgp6"]
+atlas = ExtResource("7_tin5y")
+region = Rect2(450, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_co7d8"]
+atlas = ExtResource("7_tin5y")
+region = Rect2(500, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jbveo"]
+atlas = ExtResource("7_tin5y")
+region = Rect2(550, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kswrn"]
+atlas = ExtResource("7_tin5y")
+region = Rect2(600, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x3sjj"]
+atlas = ExtResource("7_tin5y")
+region = Rect2(650, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7qymk"]
+atlas = ExtResource("8_jymhu")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p6wf5"]
+atlas = ExtResource("8_jymhu")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2o53a"]
+atlas = ExtResource("9_i2104")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bh6xl"]
+atlas = ExtResource("9_i2104")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_12rbu"]
+atlas = ExtResource("9_i2104")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tin5y"]
+resource_name = "Holy Knight_spriteframes"
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tat4i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cgbjy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lxd0d")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"casting-end",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"casting-loop",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"casting-start",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yltfy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g2trc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xix8k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lt8h8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yyxnw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dhln8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8pcyk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v1tfw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6cd7e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_trgp6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_co7d8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jbveo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kswrn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x3sjj")
+}],
+"loop": false,
+"name": &"dying",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7qymk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6wf5")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2o53a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bh6xl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_12rbu")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="Resource" id="Resource_jymhu"]
+resource_name = "Holy Knight_modeldata"
+script = ExtResource("5_ifowe")
+sprite_frames = SubResource("SpriteFrames_tin5y")
+scale = Vector2(3, 3)
+offset = Vector2(0, -20)
+projectile_scene = ExtResource("4_c0de5")
+projectile_speed = 800
+metadata/_custom_type_script = "uid://dq4e1yj8njkif"
+
+[resource]
+resource_name = "Holy Knight"
+script = ExtResource("2_dq1l6")
+unit_model_data = SubResource("Resource_jymhu")
+unit_type = "unit"
+name = "Holy Knight"
+stats = SubResource("Resource_fgt6y")
+metadata/_custom_type_script = "uid://oeoy2vl8vgue"
