@@ -14,6 +14,7 @@
 		"res://RTS-System/Entities/Units/Database/Holy Knight.tres",
 		"res://RTS-System/Entities/Units/Database/Summoned Skeleton.tres",
 		"res://RTS-System/Entities/Units/Database/TargetDummy.tres",
+		"res://RTS-System/Entities/Units/Database/Temple Mage.tres",
 		"res://RTS-System/Entities/Units/Database/TestArcher.tres",
 		"res://RTS-System/Entities/Units/Database/Test_Unit.tres"
 	]

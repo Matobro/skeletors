@@ -5,7 +5,7 @@ uniform vec4 outline_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 
 void fragment() {
 	vec4 tex_color = texture(TEXTURE, UV);
-	bool is_main = tex_color.a > 0.1;
+	bool is_main = tex_color.a > 0.35;
 	bool has_opaque_neighbor = false;
 
 	// Only check neighbors if this pixel is transparent
@@ -18,7 +18,7 @@ void fragment() {
 				}
 				vec2 offset = vec2(x, y) * TEXTURE_PIXEL_SIZE;
 				vec4 neighbor = texture(TEXTURE, UV + offset);
-				if (neighbor.a > 0.99) { // higher threshold avoids haloing
+				if (neighbor.a > 0.5) { // higher threshold avoids haloing
 					has_opaque_neighbor = true;
 					break;
 				}
