@@ -1,5 +1,7 @@
 extends Node
 
+@export var unit_scene: PackedScene;
+
 var current_level: Level;
 
 signal level_changed(new_level: Level)
@@ -8,7 +10,7 @@ signal wave_changed(new_wave: Wave)
 func start_game():
 	current_level = generate_level(1)
 	print("Started " + describe_level(current_level))
-	_load_level(current_level);
+	load_level(current_level);
 	emit_signal("level_changed", current_level)
 
 func update():
@@ -25,7 +27,7 @@ func update():
 func next_level():
 	var next_num = current_level.number + 1
 	current_level = generate_level(next_num)
-	_load_level(current_level);
+	load_level(current_level);
 	print("Advanced to " + describe_level(current_level))
 	emit_signal("level_changed", current_level)
 
@@ -49,6 +51,7 @@ func generate_level(level_number: int) -> Level:
 			if available_enemies.is_empty():
 				break
 			var random_enemy = available_enemies.pick_random()
+
 			wave_enemies.append(random_enemy)
 		
 		waves.append(Wave.new(wave_enemies))
@@ -58,7 +61,7 @@ func generate_level(level_number: int) -> Level:
 func describe_level(level: Level) -> String:
 	return "Level %d (%d waves)" % [level.number, level.waves.size()]
 
-func _load_level(level: Level) -> void:
+func load_level(level: Level) -> void:
 	var wave = level.get_current_wave()
 	for enemy in wave.enemies:
 		var spawn_point = get_tree().root.get_node("World/EnemySpawnPoints/East").global_position

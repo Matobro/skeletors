@@ -22,7 +22,7 @@ func _on_command_issued(_command_type, _target, _position, is_queued: bool, _is_
 		process_next_command()
 
 func process_next_command() -> void:
-	if ai.parent.data.unit_type == "neutral":
+	if ai.parent.data.unit_type == UnitDatabase.UnitType.NEUTRAL:
 		return
 
 	dont_clear = false
@@ -93,11 +93,10 @@ func _apply_command(cmd: Dictionary) -> void:
 		ai.set_state(target_state)
 
 func _is_spam(next_command: Dictionary) -> bool:
-	if (next_command != {} and 
-	current_command != {} and 
-	next_command.has("type") and 
+	if (next_command != {} and
+	current_command != {} and
+	next_command.has("type") and
 	current_command.has("type")):
-
 		if next_command.type == current_command.type:
 			# Attack to different unit is never spam
 			if next_command.type == "CastAbility":

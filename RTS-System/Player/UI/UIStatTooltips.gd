@@ -24,7 +24,7 @@ func connect_stat_tooltips():
 
 func gather_stat_info(data, stat_name):
 	var main_stat = ""
-	if data.unit_type == "hero":
+	if data.unit_type == UnitDatabase.UnitType.HERO:
 		main_stat = data.stats.main_stat
 	match stat_name:
 		"damage":
@@ -51,22 +51,22 @@ func gather_stat_info(data, stat_name):
 				"\nEvery ", StatModifiers.main_stat_multiplier, " agility increases damage by 1. \n",
 				"\nAttack speed is increased by ", StatModifiers.agi_multiplier, " for every agility.\n",
 				"\nEvery ", StatModifiers.armor_modifier, " agility increases armor by 1")
-			else:	
+			else:
 				return str("Agility: ", data.stats.agility, "\n",
 				"\nAttack speed is increased by ", StatModifiers.agi_multiplier, " for every agility. \n",
-				"\nEvery ", StatModifiers.armor_modifier, " agility increases armor by 1") 
+				"\nEvery ", StatModifiers.armor_modifier, " agility increases armor by 1")
 		"int":
 			if main_stat == "intelligence":
 				return str("Intelligence: ", data.stats.intelligence, "\n",
 				"\nEvery ", StatModifiers.main_stat_multiplier, " intelligence increases damage by 1. \n",
 				"\nMana is increased by ", StatModifiers.int_multiplier, " for every intelligence.\n",
 				"\nMana regeneration is increased by ", StatModifiers.regen_modifier, " for every intelligence.")
-			else:	
+			else:
 				return str("Intelligence: ", data.stats.intelligence, "\n",
 				"\nMana is increased by ", StatModifiers.int_multiplier, " for every intelligence.\n",
 				"\nMana regeneration is increased by ", StatModifiers.regen_modifier, " for every intelligence.")
 		"xp_bar":
-			return str("--------------------[" ,data.stats.xp, " / ", data.parent.get_xp_for_next_level(), "]--------------------")
+			return str("--------------------[", data.stats.xp, " / ", data.parent.get_xp_for_next_level(), "]--------------------")
 		"hp_bar":
 			return str("Health regeneration: ", data.stats.health_regen, "/s")
 		"mp_bar":

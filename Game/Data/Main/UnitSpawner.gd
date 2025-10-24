@@ -1,13 +1,20 @@
 extends Node
 
 var unit_scenes = {
-	"hero": preload("res://RTS-System/Entities/Data/Hero.tscn"),
-	"unit": preload("res://RTS-System/Entities/Data/Unit.tscn")
+	UnitDatabase.UnitType.HERO: preload("res://RTS-System/Entities/Data/Hero.tscn"),
+	UnitDatabase.UnitType.UNIT: preload("res://RTS-System/Entities/Data/Unit.tscn")
 }
+
+func create_unit(unit_data) -> Unit:
+	var scene = unit_scenes.get(unit_data.unit_type)
+	var unit = scene.instantiate()
+	unit.data = unit_data
+
+	return unit
 
 func spawn_unit(unit_data: UnitData = null, pos: Vector2 = Vector2.ZERO, player_id = 10) -> Unit:
 	# Create unit
-	var scene = unit_scenes.get(unit_data.unit_type, unit_scenes["unit"])
+	var scene = unit_scenes.get(unit_data.unit_type, unit_scenes[UnitDatabase.UnitType.UNIT])
 	var unit = scene.instantiate()
 	unit.data = unit_data
 	unit.global_position = get_spawn_point(pos)

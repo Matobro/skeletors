@@ -1,5 +1,11 @@
 extends Node
 
+enum UnitType {
+	HERO,
+	UNIT,
+	NEUTRAL
+}
+
 var data_manifest: Dictionary;
 
 func _ready() -> void:

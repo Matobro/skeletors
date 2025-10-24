@@ -23,7 +23,7 @@ func register_unit(unit):
 	all_units.append(unit)
 
 	# If hero add to hero registry
-	if unit.data.unit_type == "hero" and !heroes.has(unit):
+	if unit.data.unit_type == UnitDatabase.UnitType.HERO and !heroes.has(unit):
 		print("Added hero")
 		heroes.append(unit)
 
