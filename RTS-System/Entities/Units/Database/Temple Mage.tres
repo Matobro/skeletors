@@ -334,7 +334,7 @@ sprite_frames = SubResource("SpriteFrames_m025f")
 scale = Vector2(5, 5)
 projectile_scene = ExtResource("4_dfw2f")
 projectile_speed = 800
-projectile_size = Vector2(2.5, 2.5)
+projectile_size = Vector2(2, 2)
 metadata/_custom_type_script = "uid://dq4e1yj8njkif"
 
 [resource]
