@@ -11,19 +11,26 @@ var friendly_targets: Array[Unit]
 var active_buffs: Array = []
 
 var parent: Unit
+var data: UnitData
 var stats: BaseStatData
 
-var is_summon = false
-var lifetime_max = 10.0
-var lifetime = 10.0
+var is_summon: bool = false
+var lifetime_max: float = 10.0
+var lifetime: float = 10.0
 
-func _init(parent_ref, stats_ref) -> void:
+var first_tick: bool = false
+func _init(parent_ref, data_ref, stats_ref):
 	parent = parent_ref
+	data = data_ref
 	stats = stats_ref
 	is_invunerable = false
-	is_summon = parent.data.is_summon
-	lifetime = parent.data.lifetime
-	lifetime_max = lifetime
+	late_data()
+
+func late_data():
+	await parent.get_tree().physics_frame # todo
+	is_summon = data.is_summon
+	lifetime = data.lifetime
+	lifetime_max = data.lifetime
 
 func tick(delta):
 	if dead: return
@@ -125,10 +132,10 @@ func on_social_aggro(attacker: Unit):
 func summon_unit(amount: int, duration: float, unit: UnitData, pos: Vector2, caster_id: int):
 	for i in amount:
 		var summon = UnitSpawner.spawn_unit(unit, pos, caster_id)
-
+		
 		summon.data.is_summon = true
 		summon.data.lifetime = duration
-		for z in range(2):
+		for z in range(2): ## noo
 			await get_tree().physics_frame
 
 func add_buff(effect: EffectData, source: Unit):

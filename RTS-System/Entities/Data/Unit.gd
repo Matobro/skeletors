@@ -23,7 +23,6 @@ func create_unit():
 	if !DevLogger.run_logged("_finalize_spawn", func(): _finalize_spawn()): return
 
 func _setup_data():
-	var start_time = Time.get_ticks_msec()
 	if data and data.stats:
 		data = data.duplicate()
 		data.parent = self
@@ -44,7 +43,7 @@ func _setup_components():
 
 	command_holder = CommandHolder.new(self)
 	unit_ai = UnitAI.new(self, command_holder, animation_player)
-	unit_combat = UnitCombat.new(self, data.stats)
+	unit_combat = UnitCombat.new(self, data, data.stats)
 	unit_visual = UnitVisual.new(self, animation_player, hp_bar, target_marker, circle_front, circle_back, buff_front, buff_back)
 	unit_ability_manager = UnitAbilityManager.new(self, data)
 
@@ -58,7 +57,7 @@ func _setup_scene():
 	add_child(unit_ai)
 	add_child(unit_combat)
 	add_child(unit_visual)
-	if unit_ability_manager:
+	if unit_ability_manager: # why is there if statement, too scared to remove it # todo
 		add_child(unit_ability_manager)
 	
 	aggro_collider.disabled = false

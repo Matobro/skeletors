@@ -376,7 +376,6 @@ metadata/_custom_type_script = "uid://dq4e1yj8njkif"
 resource_name = "SkeletonMage"
 script = ExtResource("1_7h2ya")
 unit_model_data = SubResource("Resource_msndy")
-unit_type = 0
 name = "Skeleton Mage"
 stats = SubResource("Resource_aksv5")
 is_ranged = true
