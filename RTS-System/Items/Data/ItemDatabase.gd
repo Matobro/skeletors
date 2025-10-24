@@ -8,6 +8,10 @@ func _ready() -> void:
 func load_item_data():
 	load_items_from_manifest("res://RTS-System/data_manifest.json")
 
+	if items.size() > 0:
+		print("Item database successfully loaded with: [%d] entries" % items.size())
+		GameManager.on_item_database_loaded()
+
 func load_items_from_manifest(manifest_path: String) -> void:
 	var file = FileAccess.open(manifest_path, FileAccess.READ)
 	if not file:
@@ -32,7 +36,7 @@ func load_items_from_manifest(manifest_path: String) -> void:
 		for path in manifest["items"]:
 			var item = ResourceLoader.load(path)
 			if item and item is ItemData:
-				print("Loaded: ", item.name, " (", item.id, ")")
+				#print("Loaded: ", item.name, " (", item.id, ")")
 				items[item.id] = item
 			else:
 				print("Failed to load item: ", path)

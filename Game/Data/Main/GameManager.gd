@@ -7,6 +7,13 @@ func _ready():
 	game_mode = "Skeletors"
 	dev_mode = true
 
+func on_unit_database_loaded():
+	start_game()
+
+func on_item_database_loaded():
+	## probably setup shop or something
+	pass
+
 func start_game():
 	MapHandler.setup_map()
 	SpatialGrid.build_map()

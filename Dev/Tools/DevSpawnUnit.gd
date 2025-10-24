@@ -35,8 +35,8 @@ func init_node() -> void:
 func on_ready():
 	await get_tree().process_frame
 	spawning_unit = false
-	unit_data_list = UnitDatabase.get_units()
-	unit_data_list += UnitDatabase.get_heroes()
+	unit_data_list = UnitDatabase.units
+	unit_data_list += UnitDatabase.heroes
 
 	for data in unit_data_list:
 		unit_list.add_item(data.name)
