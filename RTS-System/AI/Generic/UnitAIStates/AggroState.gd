@@ -3,7 +3,7 @@ extends UnitState
 const PATH_RECALC_THRESHOLD := 32
 
 func enter_state():
-	var scale = parent.get_stat("movement_speed") / 330.0
+	var scale = parent.data.get_stat("movement_speed") / 330.0
 	var animation_speed = pow(scale, StatModifiers.movement_speed_animation_modifier)
 	ai.animation_player.play_animation("walk", animation_speed)
 	
@@ -42,7 +42,7 @@ func state_logic(delta: float) -> void:
 	# Nudge toward target if path ended but still out of range
 	if ai.pathfinder.path_index >= ai.pathfinder.path.size() and !parent.is_within_attack_range(target_unit.global_position):
 		var dir = (target_unit.global_position - parent.global_position).normalized()
-		parent.velocity = dir * parent.get_stat("movement_speed")
+		parent.velocity = dir * parent.data.get_stat("movement_speed")
 		parent.move_and_slide()
 		parent.unit_visual.handle_orientation(dir)
 	else:

@@ -35,9 +35,6 @@ func register_unit(unit):
 	# Connect signals
 	unit.died.connect(_on_unit_died)
 
-	# Initialize unit
-	unit.init_unit()
-
 func unregister_unit(unit):
 	# Remove from registry
 	all_units.erase(unit)

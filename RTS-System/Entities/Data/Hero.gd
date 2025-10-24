@@ -2,13 +2,6 @@ extends Unit
 
 class_name Hero
 
-func _data_received():
-	data.stats = data.stats.duplicate() as HeroStatData
-	data.hero = self
-
-	unit_inventory = UnitInventory.new(self)
-	add_child(unit_inventory)
-
 func get_xp(amount):
 	data.stats.xp += amount
 	while data.stats.xp >= get_xp_for_level(data.stats.level + 1):

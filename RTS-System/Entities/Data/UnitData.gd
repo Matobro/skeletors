@@ -29,5 +29,8 @@ var avatar: SpriteFrames
 var parent = null
 var hero: Hero = null
 
+func get_stat(stat: String):
+	return stats[stat]
+
 func get_unit_type() -> String:
 	return unit_type

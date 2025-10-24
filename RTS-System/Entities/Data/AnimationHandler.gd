@@ -1,12 +1,11 @@
 extends AnimatedSprite2D
 
-func init_animations(data, unit):
+func init_animations(data):
 	if !data or !data.sprite_frames:
 		print("No sprite_frames found in UnitModelData")
 
 	sprite_frames = data.sprite_frames
 	scale = data.scale
-	unit.collider.global_position = unit.global_position
 	play("idle")
 
 func get_frame_size():

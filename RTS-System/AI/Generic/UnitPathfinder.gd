@@ -58,7 +58,7 @@ func request_path() -> void:
 	last_requested_path = {"start": parent.global_position, "end": target, "status": "requested"}
 
 func get_walk_animation_speed() -> float:
-	var scale = parent.get_stat("movement_speed") / 330.0
+	var scale = parent.data.get_stat("movement_speed") / 330.0
 	var animation_speed = pow(scale, StatModifiers.movement_speed_animation_modifier)
 	return animation_speed
 
@@ -84,7 +84,7 @@ func follow_path(delta: float) -> void:
 	# Movement logic
 	var next_point: Vector2 = path[path_index]
 	var dir: Vector2 = (next_point - parent.global_position).normalized()
-	parent.velocity = dir * parent.get_stat("movement_speed")
+	parent.velocity = dir * parent.data.get_stat("movement_speed")
 	parent.move_and_slide()
 	parent.unit_visual.handle_orientation(dir)
 

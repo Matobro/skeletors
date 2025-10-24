@@ -2,15 +2,6 @@ extends CharacterBody2D
 
 class_name Unit
 
-###UNIT DATA###
-@onready var animation_player: AnimatedSprite2D = $AnimatedSprite2D
-@onready var aggro_collision: CollisionShape2D = $AggroRange/CollisionShape2D
-@onready var hp_bar: Control = $AnimatedSprite2D/HpBar/Control
-@onready var collider = $CollisionShape2D
-@onready var target_marker = $TargetMarker
-@onready var buff_layer_back = $BuffLayerBack
-@onready var buff_layer_front = $BuffLayerFront
-
 var owner_id: int
 var data : UnitData
 
@@ -21,63 +12,78 @@ var unit_visual: UnitVisual
 var unit_ability_manager: UnitAbilityManager
 var unit_inventory: UnitInventory
 
+var spawned: bool = false
+
 signal died(unit)
 
-func init_unit():
-	data = data.duplicate()
-	await get_tree().process_frame
-
-	_data_received()
-	await get_tree().process_frame
-
-	init_stats()
-	assign_stuff()
-
-func _data_received():
-	# hook for Hero
-	pass
-
-func init_stats():
-	if data.stats is BaseStatData:
-		data.stats = data.stats.duplicate()
-	
-func assign_stuff():
-	aggro_collision.set_deferred("disabled", false)
-
-	data.avatar = data.unit_model_data.sprite_frames
-	animation_player.init_animations(data.unit_model_data, self)
-
-	data.parent = self
-	data.stats.parent = self
-	
-	create_unit()
-
 func create_unit():
+	if !DevLogger.run_logged("_setup_data", func(): _setup_data()): return
+	if !DevLogger.run_logged("_setup_components", func(): _setup_components()): return
+	if !DevLogger.run_logged("_setup_scene", func(): _setup_scene()): return
+	if !DevLogger.run_logged("_finalize_spawn", func(): _finalize_spawn()): return
+
+func _setup_data():
+	var start_time = Time.get_ticks_msec()
+	if data and data.stats:
+		data = data.duplicate()
+		data.parent = self
+
+		data.stats = data.stats.duplicate()
+		data.stats.parent = self
+	else:
+		return
+
+func _setup_components():
+	var animation_player = $AnimatedSprite2D
+	var hp_bar = $AnimatedSprite2D/HpBar/Control
+	var target_marker = $TargetMarker
+	var circle_front =  $SelectionCircleFront
+	var circle_back = $SelectionCircleBack
+	var buff_front = $BuffLayerFront
+	var buff_back = $BuffLayerBack
+
 	command_holder = CommandHolder.new(self)
-	unit_ai = UnitAI.new(self, command_holder)
-	unit_ai.init_ai()
+	unit_ai = UnitAI.new(self, command_holder, animation_player)
 	unit_combat = UnitCombat.new(self, data.stats)
-	unit_visual = UnitVisual.new(self, animation_player, hp_bar, target_marker)
+	unit_visual = UnitVisual.new(self, animation_player, hp_bar, target_marker, circle_front, circle_back, buff_front, buff_back)
 	unit_ability_manager = UnitAbilityManager.new(self, data)
+
+	if self is Hero:
+		unit_inventory = UnitInventory.new(self)
+		data.hero = self
+
+func _setup_scene():
+	var aggro_collider = $AggroRange/CollisionShape2D
+	var animation_player = $AnimatedSprite2D
 	add_child(unit_ai)
 	add_child(unit_combat)
 	add_child(unit_visual)
-
+	if unit_ability_manager:
+		add_child(unit_ability_manager)
+	
+	aggro_collider.disabled = false
+	animation_player.init_animations(data.unit_model_data)
 	SpatialGrid.register_unit(self)
+
 	data.stats.recalculate_stats()
 	data.stats.current_health = data.stats.max_health
 	data.stats.current_mana = data.stats.max_mana
 
+func _finalize_spawn():
+	unit_ai.init_ai()
+	unit_ai.set_ready()
+	unit_visual.initialize_visuals()
+	spawned = true
+
 func _process(delta: float) -> void:
 	## dont ask
-	if unit_ability_manager:
-		unit_ability_manager.tick(delta)
-	if unit_combat:
-		unit_combat.tick(delta)
+	if spawned:
+		if unit_ability_manager:
+			unit_ability_manager.tick(delta)
+		if unit_combat:
+			unit_combat.tick(delta)
 
-func get_stat(stat: String):
-	return data.stats[stat]
-
+# Collision stuff
 func is_valid_unit(unit) -> bool:
 	if !is_instance_valid(unit) or unit == null or !unit.unit_combat or unit.unit_combat.dead:
 		return false

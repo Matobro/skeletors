@@ -59,7 +59,7 @@ func start_attack(target_unit: Node) -> void:
 	ai.combat_state.has_attacked = false
 	ai.combat_state.attack_anim_timer = 0.0
 
-	var attack_speed = max(parent.get_stat("attack_speed"), 0.01)
+	var attack_speed = max(parent.data.get_stat("attack_speed"), 0.01)
 	ai.animation_player.play_animation("attack", attack_speed)
 
 	parent.unit_visual.handle_orientation(
@@ -68,9 +68,9 @@ func start_attack(target_unit: Node) -> void:
 
 # Process attack animation: apply damage/projectile at correct frame
 func process_attack_animation(target_unit: Node) -> void:
-	var base_len = parent.animation_player.get_animation_speed("attack")
+	var base_len = ai.animation_player.get_animation_speed("attack")
 	var attack_point = clamp(parent.data.unit_model_data.animation_attack_point, 0.0, 0.999)
-	var spd = max(parent.get_stat("attack_speed"), 0.01)
+	var spd = max(parent.data.get_stat("attack_speed"), 0.01)
 	var attack_point_time = (base_len * attack_point) / spd
 	var attack_end_time = base_len / spd
 
@@ -91,10 +91,10 @@ func process_attack_animation(target_unit: Node) -> void:
 # Move toward the target if out of range
 func follow_target(target_unit: Node, delta: float):
 	var distance = parent.global_position.distance_to(target_unit.global_position)
-	if distance > parent.get_stat("attack_range"):
+	if distance > parent.data.get_stat("attack_range"):
 		# Recalculate path if needed
 		if ai.pathfinder.path_index >= ai.pathfinder.path.size() or\
-			ai.pathfinder.last_requested_target.distance_to(target_unit.global_position) > parent.get_stat("attack_range") + PATH_RECALC_THRESHOLD:
+			ai.pathfinder.last_requested_target.distance_to(target_unit.global_position) > parent.data.get_stat("attack_range") + PATH_RECALC_THRESHOLD:
 
 			ai.pathfinder.last_requested_target = target_unit.global_position
 			ai.command_handler.current_command.target_position = target_unit.global_position
@@ -106,10 +106,10 @@ func follow_target(target_unit: Node, delta: float):
 		else:
 			# Direct move if path not ready
 			var dir = (target_unit.global_position - parent.global_position).normalized()
-			parent.velocity = dir * parent.get_stat("movement_speed")
+			parent.velocity = dir * parent.data.get_stat("movement_speed")
 			parent.move_and_slide()
 			parent.unit_visual.handle_orientation(dir)
-			parent.animation_player.play_animation("walk", 1.0)
+			ai.animation_player.play_animation("walk", 1.0)
 
 func handle_no_target():
 	ai.combat_state.clear_combat_state()
@@ -132,7 +132,7 @@ func spawn_projectile(target_unit: Node):
 	projectile.scale = parent.data.unit_model_data.projectile_size
 	projectile.target = target_unit
 	projectile.speed = parent.data.unit_model_data.projectile_speed
-	projectile.damage = parent.get_stat("attack_damage")
+	projectile.damage = parent.data.get_stat("attack_damage")
 	projectile.owner_unit = parent
 	projectile.homing = true
 

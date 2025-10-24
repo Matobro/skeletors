@@ -2,8 +2,10 @@ extends Node
 
 class_name UnitVisual
 
-var selection_circle_front = null
-var selection_circle_back = null
+var selection_circle_front: Node2D
+var selection_circle_back: Node2D
+var buff_front: Node2D
+var buff_back: Node2D
 
 var selected: bool = true
 var facing_right: bool = true
@@ -14,32 +16,32 @@ var unit_scale: float = 16
 
 var parent: Unit
 var animation_player: AnimatedSprite2D
-var hp_bar
+var hp_bar: Control
 var target_marker
 
-func _init(parent_ref, animation_player_ref, hp_bar_ref, target_marker_ref) -> void:
+func _init(parent_ref, animation_player_ref, hp_bar_ref, target_marker_ref, circle_front_ref, circle_back_ref, buff_front_ref, buff_back_ref):
 	parent = parent_ref
-	animation_player = animation_player_ref
 	hp_bar = hp_bar_ref
 	target_marker = target_marker_ref
+	selection_circle_front = circle_front_ref
+	selection_circle_back = circle_back_ref
+	buff_front = buff_front_ref
+	buff_back = buff_back_ref
+	animation_player = animation_player_ref
 
 	unit_scale = parent.data.unit_model_data.get_unit_radius_world_space() /2
 
-	set_unit_color(parent_ref.owner_id)
-	
-	hp_bar.init_hp_bar(parent.data.stats.current_health, parent.data.stats.max_health)
-
-func _ready() -> void:
-	selection_circle_front = $"../SelectionCircleFront"
-	selection_circle_back = $"../SelectionCircleBack"
-
+func initialize_visuals():
 	var scale = parent.data.unit_model_data.scale
 	selection_circle_front.scale = scale
 	selection_circle_back.scale = scale
 
-	var unit_height = parent.animation_player.get_frame_size().y * parent.data.unit_model_data.scale.y
-	selection_circle_front.position.y = parent.animation_player.position.y + (unit_height / 2) + parent.data.unit_model_data.offset.y
+	var unit_height = animation_player.get_frame_size().y * parent.data.unit_model_data.scale.y
+	selection_circle_front.position.y = animation_player.position.y + (unit_height / 2) + parent.data.unit_model_data.offset.y
 	selection_circle_back.position.y = selection_circle_front.position.y
+
+	set_unit_color(parent.owner_id)
+	hp_bar.init_hp_bar(parent.data.stats.current_health, parent.data.stats.max_health)
 
 	set_selected(false)
 
@@ -98,10 +100,10 @@ func attach_fx(fx, pos, value):
 
 	#no judging
 	if value == 0:
-		parent.buff_layer_front.add_child(fx_instance)
+		buff_front.add_child(fx_instance)
 		fx_instance.material = parent.buff_layer_front.material
 	else:
-		parent.buff_layer_back.add_child(fx_instance)
+		buff_back.add_child(fx_instance)
 		fx_instance.material = parent.buff_layer_back.material
 	
 	fx_instance.scale = animation_player.scale

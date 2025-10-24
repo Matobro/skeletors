@@ -30,8 +30,6 @@ func init_states():
 	for s in states.values():
 		s.ai = self
 		s.parent = parent
-	
-	set_ready()
 
 ## Returns current command:
 ## type [string], target_unit [Unit], target_position [Vector2], is_queued [bool], is_player_command [bool], offset [Vector2], extra [Dictionary]
