@@ -15,8 +15,8 @@ func on_item_database_loaded():
 	pass
 
 func start_game():
-	MapHandler.setup_map()
-	SpatialGrid.build_map()
+	await MapHandler.setup_map()
+	await SpatialGrid.build_map()
 	if dev_mode:
 		PlayerManager.setup_player_manager(false)
 		WaveSystem.setup()

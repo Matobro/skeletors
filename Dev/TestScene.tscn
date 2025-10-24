@@ -1,6 +1,5 @@
-[gd_scene load_steps=14 format=4 uid="uid://dv3rvon240ulo"]
+[gd_scene load_steps=13 format=4 uid="uid://dv3rvon240ulo"]
 
-[ext_resource type="Script" uid="uid://d33kq3qwvynth" path="res://Dev/TestScene.gd" id="1_1r4kt"]
 [ext_resource type="Script" uid="uid://cyy8ru024m6fd" path="res://Dev/Tools/DevSpawnUnit.gd" id="2_1r4kt"]
 [ext_resource type="Script" uid="uid://b4hen6yn0dyic" path="res://Dev/Fps.gd" id="3_fmrvc"]
 [ext_resource type="Texture2D" uid="uid://d07ycx08vnjo8" path="res://RTS-System/Terrain/Tilesets/BoundaryTile.png" id="4_lmhu4"]
@@ -60,7 +59,6 @@ sources/1 = SubResource("TileSetAtlasSource_1r4kt")
 
 [node name="World" type="Node2D"]
 y_sort_enabled = true
-script = ExtResource("1_1r4kt")
 
 [node name="DevSpawnUnit" type="Node2D" parent="."]
 process_mode = 1
