@@ -38,6 +38,12 @@ func handle_keyboard_commands(event: InputEventKey):
 			KEY_W:
 				player_input.is_casting = false
 				input_cast_spell(event_info, selected_unit, 1)
+			KEY_E:
+				player_input.is_casting = false
+				input_cast_spell(event_info, selected_unit, 2)
+			KEY_R:
+				player_input.is_casting = false
+				input_cast_spell(event_info, selected_unit, 3)
 
 	if selected_unit:
 		match event.keycode:

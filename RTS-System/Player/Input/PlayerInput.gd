@@ -145,7 +145,6 @@ func world_to_screen(world_pos: Vector2) -> Vector2:
 	return screen_center + (world_pos - cam_pos) * zoom
 
 func check_click_hit(mouse_pos: Vector2):
-	if is_casting: return null
 	var space_state = get_world_2d().direct_space_state
 	var shape := CircleShape2D.new()
 	shape.radius = 50.0
@@ -166,7 +165,6 @@ func check_click_hit(mouse_pos: Vector2):
 	return null
 
 func check_click_hit_item(mouse_pos: Vector2):
-	if is_casting: return null
 	var space_state = get_world_2d().direct_space_state
 	var shape := CircleShape2D.new()
 	shape.radius = 50.0

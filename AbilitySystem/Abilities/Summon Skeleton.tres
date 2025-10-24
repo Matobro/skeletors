@@ -16,10 +16,6 @@ metadata/_custom_type_script = "uid://bvt5ahp8o4q33"
 [sub_resource type="Resource" id="Resource_l6sue"]
 script = ExtResource("1_wrjsl")
 effect_type = "Summon"
-amount = 0.0
-duration = 0.0
-stat = ""
-extra = {}
 metadata/_custom_type_script = "uid://boe8ic1128tfs"
 
 [resource]
@@ -31,8 +27,5 @@ mana_cost = 10
 cooldown = 5.0
 cast_range = 300.0
 cast_time = 3.0
-is_passive = false
-is_instant_cast = false
 effects = Array[ExtResource("1_wrjsl")]([SubResource("Resource_l6sue")])
 ability_type = SubResource("Resource_eluhw")
-possible_targets = 0
