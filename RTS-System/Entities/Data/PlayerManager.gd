@@ -18,17 +18,18 @@ var players_to_spawn: Array = []
 var players: Dictionary = {}
 
 var normal_mode
+
 func setup_player_manager(normal: bool = true) -> void:
 	normal_mode = normal
 	await get_tree().process_frame
 	if normal:
 		if multiplayer.is_server() and normal:
-			players_to_spawn.append({ "id": 10, "is_ai": true, "hero": null })
-			spawn_players()
+			players_to_spawn.append({"id": 10, "is_ai": true, "hero": null})
+			await spawn_players()
 	else:
-		players_to_spawn.append({ "id": 1, "is_ai": false, "hero": null })
-		players_to_spawn.append({ "id": 10, "is_ai": true, "hero": null })
-		spawn_players()
+		players_to_spawn.append({"id": 1, "is_ai": false, "hero": null})
+		players_to_spawn.append({"id": 10, "is_ai": true, "hero": null})
+		await spawn_players()
 
 func spawn_players():
 	if !multiplayer.is_server() and normal_mode:
@@ -47,7 +48,7 @@ func spawn_players():
 		register_player(p)
 
 		if player_data.hero:
-			var spawn_pos = Vector2(0, 0) #todo
+			var spawn_pos = Vector2(0, 0) # todo
 			var hero_unit = UnitSpawner.spawn_unit(player_data.hero, spawn_pos, p.player_id)
 			p.hero = hero_unit
 

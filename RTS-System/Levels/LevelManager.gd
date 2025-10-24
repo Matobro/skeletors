@@ -12,7 +12,6 @@ func start_game():
 	emit_signal("level_changed", current_level)
 
 func update():
-	# Call this periodically (e.g., every frame or after enemy deaths)
 	var wave = current_level.get_current_wave()
 	if wave and wave.is_cleared():
 		print("Wave cleared!")
@@ -31,12 +30,29 @@ func next_level():
 	emit_signal("level_changed", current_level)
 
 func generate_level(level_number: int) -> Level:
-	# For now, just generate dummy waves with empty enemies
 	var waves: Array[Wave] = []
-	var enemies = UnitDatabase.get_units().filter(func(u): return u.power_level <= level_number and u.is_spawnable_enemy)
+	
+	# All available enemy types for this level
+	var available_enemies = UnitDatabase.get_units().filter(
+		func(u): return u.power_level <= level_number and u.is_spawnable_enemy
+	)
 
-	for i in range(2): # e.g., Hardcode 2 waves per level
-		waves.append(Wave.new(enemies))
+	# Each level has 2 waves (you can make this dynamic later)
+	var wave_count := 2
+
+	for i in range(wave_count):
+		var enemy_count := level_number * 2 # e.g. Level 5 → 15 enemies total in wave
+		var wave_enemies: Array[UnitData] = []
+
+		for j in range(enemy_count):
+			# Pick a random enemy from the available pool
+			if available_enemies.is_empty():
+				break
+			var random_enemy = available_enemies.pick_random()
+			wave_enemies.append(random_enemy)
+		
+		waves.append(Wave.new(wave_enemies))
+
 	return Level.new(level_number, waves)
 
 func describe_level(level: Level) -> String:

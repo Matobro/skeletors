@@ -30,7 +30,6 @@ func get_heroes() -> Array[UnitData]:
 		for path in data_manifest["heroes"]:
 			var unit = ResourceLoader.load(path)
 			if unit and unit is UnitData:
-				print("Loaded: Hero - ", unit.name)
 				heroes.append(unit)
 			else:
 				print("Failed to load hero: ", path)
@@ -48,7 +47,6 @@ func get_units() -> Array[UnitData]:
 		for path in data_manifest["units"]:
 			var unit = ResourceLoader.load(path)
 			if unit and unit is UnitData:
-				print("Loaded: Unit - ", unit.name)
 				units.append(unit)
 			else:
 				print("Failed to load unit: ", path)
