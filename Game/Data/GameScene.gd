@@ -1,4 +1,4 @@
 extends Node2D
 
 func _ready() -> void:
-    GameManager.request_start_game(false)
+    GameManager.start_game();

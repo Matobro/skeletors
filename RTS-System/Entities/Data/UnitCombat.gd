@@ -51,7 +51,7 @@ func tick(delta):
 			active_buffs[i] = buff
 
 func take_damage(damage: int = 0, attacker = null):
-	if dead or is_invunerable: 
+	if dead or is_invunerable:
 		return
 
 	var reduction = 1.0 - StatModifiers.calculate_armor(stats.armor)
@@ -82,6 +82,8 @@ func handle_death():
 	dead = true
 	parent.emit_signal("died", parent)
 	parent.unit_ai.set_state("Dying")
+	# Might need to check for enemies only here?
+	LevelManager.update();
 
 func perform_attack():
 	if dead: return
@@ -193,7 +195,7 @@ func regenate_health():
 	stats.current_health = min(stats.current_health + stats.health_regen, stats.max_health)
 	parent.unit_visual.hp_bar.set_hp_bar(stats.current_health)
 
-func get_stunned(_duration): #todo
+func get_stunned(_duration): # todo
 	pass
 
 func is_within_attack_range(_target) -> bool:

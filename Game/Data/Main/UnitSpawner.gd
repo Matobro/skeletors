@@ -1,9 +1,22 @@
 extends Node
 
 var unit_scenes = {
-	"hero": preload("res://RTS-System/Entities/Data/Hero.tscn"),
-	"unit": preload("res://RTS-System/Entities/Data/Unit.tscn")
+	UnitDatabase.UnitType.HERO: preload("res://RTS-System/Entities/Data/Hero.tscn"),
+	UnitDatabase.UnitType.UNIT: preload("res://RTS-System/Entities/Data/Unit.tscn")
 }
+
+func create_unit(unit_data, player_id = 10) -> Unit:
+	var scene = unit_scenes.get(unit_data.unit_type)
+	var unit = scene.instantiate()
+	unit.data = unit_data
+	get_tree().current_scene.add_child(unit)
+	unit.owner_id = player_id
+	UnitHandler.register_unit(unit)
+
+	return unit
+
+func spawn(unit: Unit, pos: Vector2 = Vector2.ZERO) -> void:
+	unit.global_position = get_spawn_point(pos)
 
 func spawn_unit(unit_data: UnitData = null, pos: Vector2 = Vector2.ZERO, player_id = 10) -> Unit:
 	var start_time := Time.get_ticks_usec()
@@ -17,11 +30,11 @@ func spawn_unit(unit_data: UnitData = null, pos: Vector2 = Vector2.ZERO, player_
 		DevLogger.warn("Unknown unit_type ['%s'], reverting to default 'unit' scene" % unit_data.unit_type, "UnitSpawner")
 
 	# Create unit
-	var scene = unit_scenes.get(unit_data.unit_type, unit_scenes["unit"])
+	var scene = unit_scenes.get(unit_data.unit_type, unit_scenes[UnitDatabase.UnitType.UNIT])
 	var unit = scene.instantiate()
 
 	if unit == null:
-		DevLogger.error("Failed to instantiate unit " ,"UnitSpawner")
+		DevLogger.error("Failed to instantiate unit ", "UnitSpawner")
 		return null
 	
 	# Assign data

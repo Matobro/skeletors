@@ -11,8 +11,7 @@ var is_summon: bool = false
 var lifetime: float = 10.0
 ## Unit 'model' data, such as sprite, animations, projectile
 @export var unit_model_data: UnitModelData
-## either 'hero', 'unit' or 'neutral'.
-@export var unit_type: String
+@export var unit_type: UnitDatabase.UnitType
 ## Unit display name
 @export var name: String
 ## Description, not implemented yet
@@ -31,6 +30,3 @@ var hero: Hero = null
 
 func get_stat(stat: String):
 	return stats[stat]
-
-func get_unit_type() -> String:
-	return unit_type

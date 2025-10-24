@@ -14,7 +14,6 @@ var is_local_player: bool = false
 func _ready():
 	if is_ai:
 		if multiplayer.is_server() or GameManager.dev_mode:
-			await get_tree().process_frame
 			_setup_ai()
 	else:
 		if is_multiplayer_authority() or GameManager.dev_mode:
@@ -46,7 +45,7 @@ func setup_ai_script_for_mode(ai_controller):
 	var mode = GameManager.game_mode
 
 	match mode:
-		"Skeletors": 
+		"Skeletors":
 			ai_controller.set_ai_script(preload("res://RTS-System/AI/Generic/AI Player/GameModeAIScripts/Skeletors.gd").new())
 			print("AI script set to: ", mode)
 		_:

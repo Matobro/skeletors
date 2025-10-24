@@ -25,10 +25,10 @@ func setup_player_manager(test_mode: bool = false) -> void:
 	is_test_mode = test_mode
 	await get_tree().process_frame
 	if !is_test_mode:
-		players_to_spawn.append({ "id": 10, "is_ai": true, "hero": null })
+		players_to_spawn.append({"id": 10, "is_ai": true, "hero": null})
 	else:
-		players_to_spawn.append({ "id": 1, "is_ai": false, "hero": null })
-		players_to_spawn.append({ "id": 10, "is_ai": true, "hero": null })
+		players_to_spawn.append({"id": 1, "is_ai": false, "hero": null})
+		players_to_spawn.append({"id": 10, "is_ai": true, "hero": null})
 
 	spawn_players()
 
@@ -49,7 +49,7 @@ func spawn_players():
 		register_player(p)
 
 		if player_data.hero:
-			var spawn_pos = Vector2(0, 0) #todo
+			var spawn_pos = Vector2(0, 0) # todo
 			var hero_unit = UnitSpawner.spawn_unit(player_data.hero, spawn_pos, p.player_id)
 			p.hero = hero_unit
 
