@@ -54,5 +54,5 @@ func get_wave_composition(wave: int) -> Array[UnitData]:
 
 
 func get_enemy_units_for_wave(wave: int) -> Array[UnitData]:
-	var enemies = UnitDatabase.get_units().filter(func(u): return u.power_level <= wave and u.is_spawnable_enemy)
+	var enemies = UnitDatabase.get_unit_data().filter(func(u): return u.power_level <= wave and u.is_spawnable_enemy)
 	return enemies

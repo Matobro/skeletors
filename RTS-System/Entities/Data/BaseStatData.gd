@@ -81,6 +81,3 @@ func recalculate_stats():
 	# 	current_mana = max_mana
 
 	parent.unit_visual.hp_bar.init_hp_bar(current_health, max_health)
-
-func is_alive() -> bool:
-	return current_health > 0

@@ -5,12 +5,18 @@ var unit_scenes = {
 	UnitDatabase.UnitType.UNIT: preload("res://RTS-System/Entities/Data/Unit.tscn")
 }
 
-func create_unit(unit_data) -> Unit:
+func create_unit(unit_data, player_id = 10) -> Unit:
 	var scene = unit_scenes.get(unit_data.unit_type)
 	var unit = scene.instantiate()
 	unit.data = unit_data
+	get_tree().current_scene.add_child(unit)
+	unit.owner_id = player_id
+	UnitHandler.register_unit(unit)
 
 	return unit
+
+func spawn(unit: Unit, pos: Vector2 = Vector2.ZERO) -> void:
+	unit.global_position = get_spawn_point(pos)
 
 func spawn_unit(unit_data: UnitData = null, pos: Vector2 = Vector2.ZERO, player_id = 10) -> Unit:
 	# Create unit

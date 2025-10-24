@@ -16,7 +16,7 @@ class_name HeroInfo
 var selected_hero
 		
 func _ready() -> void:
-	var hero_list = UnitDatabase.get_heroes()
+	var hero_list = UnitDatabase.get_hero_data()
 	load_hero_info(hero_list.get(0))
 
 func load_hero_info(hero: UnitData):

@@ -29,7 +29,7 @@ func load_manifest(manifest_path: String) -> void:
 	data_manifest = json.get_data()
 
 
-func get_heroes() -> Array[UnitData]:
+func get_hero_data() -> Array[UnitData]:
 	var heroes: Array[UnitData] = [];
 
 	if data_manifest.has("heroes"):
@@ -46,7 +46,7 @@ func get_heroes() -> Array[UnitData]:
 
 	return heroes
 
-func get_units() -> Array[UnitData]:
+func get_unit_data() -> Array[UnitData]:
 	var units: Array[UnitData] = [];
 
 	if data_manifest.has("units"):
