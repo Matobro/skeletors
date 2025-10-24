@@ -13,10 +13,10 @@ var holder: CommandHolder
 var animation_player = null
 var devstate
 
-func _init(unit, command_holder) -> void:
+func _init(unit, command_holder, animation_player_ref) -> void:
 	parent = unit
 	holder = command_holder
-	animation_player = parent.animation_player
+	animation_player = animation_player_ref
 	devstate = parent.get_node("DevState")
 
 func set_ready():

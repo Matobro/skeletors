@@ -15,18 +15,12 @@ metadata/_custom_type_script = "uid://cseajtob06bea"
 script = ExtResource("1_qm22t")
 effect_type = "Damage"
 amount = 25.0
-duration = 0.0
-stat = ""
-extra = {}
 metadata/_custom_type_script = "uid://boe8ic1128tfs"
 
 [sub_resource type="Resource" id="Resource_7ng0f"]
 script = ExtResource("1_qm22t")
 effect_type = "Stun"
-amount = 0.0
 duration = 3.0
-stat = ""
-extra = {}
 metadata/_custom_type_script = "uid://boe8ic1128tfs"
 
 [resource]
@@ -38,7 +32,6 @@ mana_cost = 15
 cooldown = 3.0
 cast_range = 500.0
 cast_time = 5.0
-is_passive = false
 effects = Array[ExtResource("1_qm22t")]([SubResource("Resource_wmbqm"), SubResource("Resource_7ng0f")])
 ability_type = SubResource("Resource_lrbgs")
 possible_targets = 3

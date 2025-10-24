@@ -54,7 +54,7 @@ func drop_item(slot_index: int, world_position: Vector2) -> bool:
 	var dropped_item = dropped_item_scene.instantiate()
 	dropped_item.global_position = world_position
 	dropped_item.set_item(item)
-	get_tree().current_scene.add_child(dropped_item)
+	parent.get_tree().current_scene.add_child(dropped_item)
 	return true
 
 func give_item(item: ItemData, target_inventory: UnitInventory) -> bool:

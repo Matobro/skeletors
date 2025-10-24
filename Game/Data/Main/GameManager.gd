@@ -8,15 +8,24 @@ func _ready():
 	dev_mode = true
 
 func start_game():
-	MapHandler.setup_map()
-	SpatialGrid.build_map()
-	if dev_mode:
-		await PlayerManager.setup_player_manager(false)
-		var dev_tool = $"../World/DevSpawnUnit"
-		dev_tool.init_node()
+	if !multiplayer.is_server():
+		return
 
-		LevelManager.start_game();
+	# Generate grid for pathfinding
+	await MapHandler.setup_map()
+	await SpatialGrid.build_map()
+
+	# Spawn player
+	if dev_mode:
+		await PlayerManager.setup_player_manager(true)
 	else:
-		if multiplayer.is_server():
-			PlayerManager.setup_player_manager()
-			LevelManager.start_game();
+		await PlayerManager.setup_player_manager(false)
+
+	# Activate dev tools
+	if dev_mode:
+		var dev_unit_spawner = $"../World/DevSpawnUnit"
+		dev_unit_spawner.init_node()
+
+	# Do other stuff (start the game loop etc)
+
+	LevelManager.start_game();

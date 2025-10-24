@@ -40,7 +40,7 @@ class_name UIUnitStats
 }
 
 func show_portrait(unit: Unit):
-	portrait_sprite.sprite_frames = unit.data.avatar
+	portrait_sprite.sprite_frames = unit.data.unit_model_data.sprite_frames
 	portrait_sprite.play("idle")
 	var portrait_color = PlayerManager.get_player_color(unit.owner_id)
 	var faded_color = portrait_color.lerp(Color.BLACK, 0.75)

@@ -17,16 +17,10 @@
 [sub_resource type="Resource" id="Resource_lm832"]
 script = ExtResource("2_jvhlr")
 base_max_hp = 200.0
-base_max_mana = 0.0
-base_health_regen = 0.1
-base_mana_regen = 0.1
-base_armor = 1
 base_movement_speed = 280
 base_attack_speed = 0.7
 base_damage = 15
 base_range = 100
-attack_dice_roll = 0.1
-xp_yield = 50
 metadata/_custom_type_script = "uid://01ohikrtxe7k"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rnmog"]
@@ -404,19 +398,14 @@ offset = Vector2(0, -25)
 animation_attack_point = 0.25
 projectile_scene = ExtResource("2_eed3g")
 projectile_speed = 800
-projectile_size = Vector2(1, 1)
 metadata/_custom_type_script = "uid://dq4e1yj8njkif"
 
 [resource]
 resource_name = "Summoned Skeleton"
 script = ExtResource("1_r382u")
-power_level = 0
-is_spawnable_enemy = false
 unit_model_data = SubResource("Resource_jnlm4")
 unit_type = 1
 name = "Skele"
 description = " "
 stats = SubResource("Resource_lm832")
-is_ranged = false
-abilities = Array[ExtResource("1_rnmog")]([])
 metadata/_custom_type_script = "uid://oeoy2vl8vgue"

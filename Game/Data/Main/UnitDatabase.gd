@@ -10,7 +10,7 @@ var data_manifest: Dictionary;
 
 func _ready() -> void:
 	load_manifest("res://RTS-System/data_manifest.json")
-	
+
 func load_manifest(manifest_path: String) -> void:
 	var file = FileAccess.open(manifest_path, FileAccess.READ)
 	if not file:
@@ -27,7 +27,6 @@ func load_manifest(manifest_path: String) -> void:
 		return
 
 	data_manifest = json.get_data()
-
 
 func get_hero_data() -> Array[UnitData]:
 	var heroes: Array[UnitData] = [];

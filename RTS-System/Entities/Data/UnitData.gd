@@ -27,3 +27,6 @@ var avatar: SpriteFrames
 @export var abilities: Array[AbilityData]
 var parent = null
 var hero: Hero = null
+
+func get_stat(stat: String):
+	return stats[stat]

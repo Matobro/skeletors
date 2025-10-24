@@ -12,29 +12,19 @@ metadata/_custom_type_script = "uid://bde1ntmjybf8b"
 script = ExtResource("1_wrjsl")
 effect_type = "Heal_Mana"
 amount = 10.0
-duration = 0.0
-stat = ""
-extra = {}
 metadata/_custom_type_script = "uid://boe8ic1128tfs"
 
 [sub_resource type="Resource" id="Resource_euc7q"]
 script = ExtResource("1_wrjsl")
 effect_type = "Damage"
 amount = 10.0
-duration = 0.0
-stat = ""
-extra = {}
 metadata/_custom_type_script = "uid://boe8ic1128tfs"
 
 [resource]
 script = ExtResource("2_y3qiq")
 name = "Soultap"
 description = "Tap into your soul, damaging yourself and regenating mana."
-mana_cost = 0
 cooldown = 1.0
-cast_range = 0.0
-cast_time = 0.0
-is_passive = false
 is_instant_cast = true
 effects = Array[ExtResource("1_wrjsl")]([SubResource("Resource_kru4v"), SubResource("Resource_euc7q")])
 ability_type = SubResource("Resource_gph1f")

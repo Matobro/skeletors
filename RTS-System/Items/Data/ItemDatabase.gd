@@ -32,7 +32,7 @@ func load_items_from_manifest(manifest_path: String) -> void:
 		for path in manifest["items"]:
 			var item = ResourceLoader.load(path)
 			if item and item is ItemData:
-				print("Loaded: ", item.name, " (", item.id, ")")
+				#print("Loaded: ", item.name, " (", item.id, ")")
 				items[item.id] = item
 			else:
 				print("Failed to load item: ", path)

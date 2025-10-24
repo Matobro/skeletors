@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dynb8wklp3xsb"]
+
+[ext_resource type="Script" uid="uid://840nlrrxjj8k" path="res://AbilitySystem/Projectiles/ChainLightningProjectile.gd" id="1_8q2hr"]
+
+[node name="ChainLightning" type="Node2D"]
+z_index = 100
+script = ExtResource("1_8q2hr")
+
+[node name="Line2D" type="Line2D" parent="."]

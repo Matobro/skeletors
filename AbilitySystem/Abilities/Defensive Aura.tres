@@ -32,7 +32,6 @@ animations = [{
 [sub_resource type="Resource" id="Resource_wr78r"]
 script = ExtResource("1_ih0p4")
 aura_caster_effect = SubResource("SpriteFrames_uqimh")
-aura_radius = 400.0
 metadata/_custom_type_script = "uid://ope72g1ebno3"
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fxk2f"]
@@ -52,7 +51,6 @@ effect_type = "Buff"
 amount = 2.0
 duration = 3.0
 stat = "armor"
-extra = {}
 effect_sprite = SubResource("SpriteFrames_fxk2f")
 metadata/_custom_type_script = "uid://boe8ic1128tfs"
 
@@ -61,10 +59,6 @@ script = ExtResource("2_y3qiq")
 name = "Defensive Aura"
 description = "Projects an area around the caster. Units within the area gets armor bonus"
 icon = ExtResource("3_ih0p4")
-mana_cost = 0
-cooldown = 0.0
-cast_range = 0.0
-cast_time = 0.0
 is_passive = true
 effects = Array[ExtResource("1_wrjsl")]([SubResource("Resource_jaba2")])
 ability_type = SubResource("Resource_wr78r")

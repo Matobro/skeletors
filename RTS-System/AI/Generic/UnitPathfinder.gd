@@ -50,7 +50,6 @@ func request_path() -> void:
 		return
 	
 	SpatialGrid.deregister_unit(parent)
-	print("Requested path for: ", parent)
 	var target = ai.get_current_command().target_position
 	path_requested = true
 	path_timeout_timer = 0.0
@@ -59,7 +58,7 @@ func request_path() -> void:
 	last_requested_path = {"start": parent.global_position, "end": target, "status": "requested"}
 
 func get_walk_animation_speed() -> float:
-	var scale = parent.get_stat("movement_speed") / 330.0
+	var scale = parent.data.get_stat("movement_speed") / 330.0
 	var animation_speed = pow(scale, StatModifiers.movement_speed_animation_modifier)
 	return animation_speed
 
@@ -85,7 +84,7 @@ func follow_path(delta: float) -> void:
 	# Movement logic
 	var next_point: Vector2 = path[path_index]
 	var dir: Vector2 = (next_point - parent.global_position).normalized()
-	parent.velocity = dir * parent.get_stat("movement_speed")
+	parent.velocity = dir * parent.data.get_stat("movement_speed")
 	parent.move_and_slide()
 	parent.unit_visual.handle_orientation(dir)
 
@@ -98,7 +97,6 @@ func follow_path(delta: float) -> void:
 
 func on_path_ready(unit: Unit, new_path: PackedVector2Array, request_id: int) -> void:
 	if request_id != current_request_id or new_path.size() <= 0 or unit != parent:
-		#print(parent.data.name, " received invalid path", " [ id: ", request_id , " current id: ", current_request_id, " path size: ", new_path.size(), " path for unit: ", unit.data.name, "]")
 		return 
 
 	SpatialGrid.register_unit(parent)
@@ -106,7 +104,7 @@ func on_path_ready(unit: Unit, new_path: PackedVector2Array, request_id: int) ->
 	path_index = 0
 	path_requested = false
 	last_requested_path.status = "ready"
-	print("Path received with %d waypoints" % path.size())
+	#print("Path received with %d waypoints" % path.size()) prints received path, annoyning to look at so its commented out for now
 
 	SpatialGridDebugRenderer._receive_path(unit, path)
 
@@ -120,7 +118,6 @@ func _check_stuck(delta: float) -> void:
 	if stuck_check_timer >= STUCK_TIME_THRESHOLD:
 		var moved = parent.global_position.distance_to(last_position)
 		if moved < STUCK_DISTANCE_THRESHOLD:
-			print("Unit stuck, requesting path")
 			path_requested = false
 			request_path()
 

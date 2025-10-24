@@ -68,7 +68,7 @@ func apply_damage(damage, attacker):
 		stats.current_health -= final_damage
 		stats.current_health = clamp(stats.current_health, 0, stats.max_health)
 		parent.unit_visual.hp_bar.set_hp_bar(stats.current_health)
-		DamageText.show_text(str(final_damage), parent.animation_player.global_position)
+		DamageText.show_text(str(final_damage), parent.global_position)
 	
 	if stats.current_health <= 0:
 		handle_death()
@@ -78,7 +78,7 @@ func apply_damage(damage, attacker):
 func handle_death():
 	if dead: return
 	parent.unit_visual.set_selected(false)
-	parent.hp_bar.set_bar_visible(false)
+	parent.unit_visual.hp_bar.set_bar_visible(false)
 	dead = true
 	parent.emit_signal("died", parent)
 	parent.unit_ai.set_state("Dying")
@@ -193,7 +193,7 @@ func regenate_health():
 		return
 	
 	stats.current_health = min(stats.current_health + stats.health_regen, stats.max_health)
-	parent.hp_bar.set_hp_bar(stats.current_health)
+	parent.unit_visual.hp_bar.set_hp_bar(stats.current_health)
 
 func get_stunned(_duration): # todo
 	pass
