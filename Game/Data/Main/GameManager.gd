@@ -15,15 +15,31 @@ func on_item_database_loaded():
 	pass
 
 func start_game():
+	# Setup essential shit (map, players, maybe later spawn 'doodads' like trees etc)
+
+	# Generate grid for pathfinding
 	await MapHandler.setup_map()
 	await SpatialGrid.build_map()
+
+	# Spawn players
+	PlayerManager.setup_player_manager(false)
+
+	# Activate dev tools
 	if dev_mode:
-		PlayerManager.setup_player_manager(false)
-		WaveSystem.setup()
-		WaveSystem.start_next_wave();
-		var dev_tool = $"../World/DevSpawnUnit"
-		dev_tool.init_node()
-	else:
-		if multiplayer.is_server():
-			PlayerManager.setup_player_manager()
-			WaveSystem.setup()
+		var dev_unit_spawner = $"../World/DevSpawnUnit"
+		dev_unit_spawner.init_node()
+
+	##########################################################
+	# Worry about network shit when its time to implement it #
+	# this is here for reminder how the shit works           #
+	# else:													 #
+	# 	if multiplayer.is_server():						     #
+	# 		PlayerManager.setup_player_manager()			 #
+	##########################################################
+
+	# Do other stuff (start the game loop etc)
+
+	# replace with the new system
+	WaveSystem.setup()
+	WaveSystem.start_next_wave()
+	#
