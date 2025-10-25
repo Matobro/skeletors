@@ -77,11 +77,12 @@ func apply_damage(damage, attacker):
 		parent.unit_visual.hp_bar.set_hp_bar(stats.current_health)
 		DamageText.show_text(str(final_damage), parent.global_position)
 	
+	alert_nearby_allies(attacker)
+
 	if stats.current_health <= 0:
 		handle_death()
 
-	alert_nearby_allies(attacker)
-
+	
 func handle_death():
 	if dead: return
 	parent.unit_visual.set_selected(false)
