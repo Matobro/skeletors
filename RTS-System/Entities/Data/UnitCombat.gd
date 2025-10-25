@@ -90,8 +90,6 @@ func handle_death():
 	dead = true
 	parent.emit_signal("died", parent)
 	parent.unit_ai.set_state("Dying")
-	# Might need to check for enemies only here?
-	LevelManager.update();
 
 func perform_attack():
 	if dead: return

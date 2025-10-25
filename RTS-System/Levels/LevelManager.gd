@@ -15,7 +15,7 @@ func start_game():
 	# notify first wave
 	emit_signal("wave_changed", current_level.get_current_wave())
 
-func update():
+func check_for_next_wave():
 	if not current_level:
 		return
 	var wave = current_level.get_current_wave()
@@ -88,8 +88,8 @@ func _on_enemy_died(enemy):
 		if wave.enemies.has(enemy):
 			wave.remove_enemy(enemy)
 			print("Removing enemy from wave: " + enemy.name)
-			return
-	print("Warning: died enemy not found in any wave: " + enemy.name)
+	
+	check_for_next_wave();
 
 func _get_random_spawn_point() -> Vector2:
 	var spawn_points := {
