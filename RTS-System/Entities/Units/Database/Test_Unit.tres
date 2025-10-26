@@ -13,7 +13,6 @@ base_movement_speed = 300
 base_attack_speed = 1.2
 base_attack_damage = 10
 base_attack_range = 100
-xp_yield = 5000
 metadata/_custom_type_script = "uid://01ohikrtxe7k"
 
 [resource]
