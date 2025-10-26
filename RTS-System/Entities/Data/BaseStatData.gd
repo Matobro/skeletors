@@ -6,7 +6,7 @@ class_name BaseStatData
 @export_category("Stats")
 @export_group("Base Stats")
 ## Units base hp, without any bonuses
-@export var base_max_hp: float = 5
+@export var base_max_health: float = 5
 ## Units base mp, without any bonuses
 @export var base_max_mana: float = 0
 ## Units base hp regen, without any bonuses
@@ -20,9 +20,9 @@ class_name BaseStatData
 ## Units base attack speed (attacks per second, higher = faster), without any bonuses
 @export var base_attack_speed: float = 1.0
 ## Units base damage, without any bonuses
-@export var base_damage: int = 2
+@export var base_attack_damage: int = 2
 ## Units base range, without any bonuses
-@export var base_range: int = 50
+@export var base_attack_range: int = 50
 ## Damage variance in percentage. 0.1 = 10%
 ## 100 damage + 0.1 dice roll = [90-110]
 @export_range(0.0, 1.0) var attack_dice_roll: float = 0.1
@@ -48,19 +48,25 @@ var buff_bonus := {}
 var parent
 
 func recalculate_stats():
-	# var previous_max_hp = max_health
-	# var previous_max_mana = max_mana
 	var stat_list = {
-		"max_health": [base_max_hp, 0],
+		"max_health": [base_max_health, 0],
 		"attack_speed": [base_attack_speed, 0.01],
 		"max_mana": [base_max_mana, 0],
 		"armor": [base_armor, 0],
 		"movement_speed": [base_movement_speed, 50],
 		"health_regen": [base_health_regen, 0],
 		"mana_regen": [base_mana_regen, 0],
-		"attack_range": [base_range, 30],
-		"attack_damage": [base_damage, 1],
+		"attack_range": [base_attack_range, 30],
+		"attack_damage": [base_attack_damage, 1],
 	}
+
+	var hp_percent = 1.0
+	if max_health > 0:
+		hp_percent = current_health / max_health
+
+	var mp_percent = 1.0
+	if max_mana > 0:
+		mp_percent = current_mana / max_mana
 
 	for stat_name in stat_list.keys():
 		var stat_values = stat_list[stat_name]
@@ -70,14 +76,7 @@ func recalculate_stats():
 
 		self[stat_name] = max(base_value + buff_value, min_value)
 
-	# if previous_max_hp > 0:
-	# 	current_health = int(current_health * max_health / previous_max_hp)
-	# else:
-	# 	current_health = max_health
+	current_health = max_health * hp_percent
+	current_mana = max_mana * mp_percent
 
-	# if previous_max_mana > 0:
-	# 	current_mana = int(current_mana * max_mana / previous_max_mana)
-	# else:
-	# 	current_mana = max_mana
-
-	parent.unit_visual.hp_bar.init_hp_bar(current_health, max_health)
+	parent.unit_visual.hp_bar.hp_bar_set_new_values(current_health, max_health)

@@ -30,19 +30,16 @@ func gain_stats(_str, _agi, _int):
 	recalculate_stats()
 
 func recalculate_stats():
-	# var previous_max_hp = max_health
-	# var previous_max_mana = max_mana
-
 	var stat_list = {
-		"max_health": [base_max_hp, get_bonus_health(), 0],
+		"max_health": [base_max_health, get_bonus_health(), 0],
 		"attack_speed": [base_attack_speed, get_bonus_attack_speed(), 0.01],
 		"max_mana": [base_max_mana, get_bonus_mana(), 0],
 		"armor": [base_armor, get_bonus_armor(), 0],
 		"movement_speed": [base_movement_speed, get_bonus_movement_speed(), 50],
 		"health_regen": [base_health_regen, get_bonus_health_regen(), 0],
 		"mana_regen": [base_mana_regen, get_bonus_mana_regen(), 0],
-		"attack_range": [base_range, get_bonus_attack_range(), 30],
-		"attack_damage": [base_damage, get_bonus_attack_damage(), 1],
+		"attack_range": [base_attack_range, get_bonus_attack_range(), 30],
+		"attack_damage": [base_attack_damage, get_bonus_attack_damage(), 1],
 	}
 
 	for stat_name in stat_list.keys():
@@ -55,17 +52,7 @@ func recalculate_stats():
 
 		self[stat_name] = max(base_value + bonus_value + item_bonus + buff_value, min_value)
 
-	# if previous_max_hp > 0:
-	# 	current_health = int(current_health * max_health / previous_max_hp)
-	# else:
-	# 	current_health = max_health
-
-	# if previous_max_mana > 0:
-	# 	current_mana = int(current_mana * max_mana / previous_max_mana)
-	# else:
-	# 	current_mana = max_mana
-
-	parent.unit_visual.hp_bar.init_hp_bar(current_health, max_health)
+	parent.unit_visual.hp_bar.hp_bar_set_new_values(current_health, max_health)
 	
 func get_bonus_health() -> int:
 	if strength * StatModifiers.str_multiplier <= 0:

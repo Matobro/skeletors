@@ -67,72 +67,30 @@ func on_mouse_hover_exit():
 	TooltipManager.hide_tooltip(player_id)
 
 func get_slot_text(slot) -> String:
+	var ability = slot.ability
 	var data = slot.data
-	var parts := []
-	
-	# Name + targeting
-	parts.append("[center][b]" + data.name + "[/b]"+ "\n" + data.ability_type.get_cast_label(data.is_passive) + "[/center]\n\n")
+	var spell_type = data.ability_type
 
-	# Mana
+	var parts := []
+
+	# Name and label
+	parts.append("[center][b]%s[/b]\n%s[/center]\n\n" % [
+		data.name,
+		data.ability_type.get_cast_label(data.is_passive)
+	])
+
+	# Cost, cd, cast time
 	if data.mana_cost > 0:
-		parts.append("[img]" + MANA_ICON_PATH +"[/img] " + str(data.mana_cost) + "\n")
-	
-	# Cooldown
+		parts.append("[img]%s[/img] %d\n" % [MANA_ICON_PATH, data.mana_cost])
 	if data.cooldown > 0:
-		parts.append("[img]" + COOLDOWN_ICON_PATH +"[/img] " + str(data.cooldown) + "s" + "\n\n")
+		parts.append("[img]%s[/img] %0.1fs\n" % [COOLDOWN_ICON_PATH, data.cooldown])
+	if data.cast_time > 0:
+		parts.append("Cast time: %0.1fs\n" % data.cast_time)
 
 	# Description
-	parts.append(data.description + "\n")
+	parts.append("\n%s\n\n" % data.description)
 
-	# Effects
-	parts.append("\n")
-	for effect in data.effects:
-		parts.append(format_effect(effect) + "\n")
-		
-	# Special ability types
-	parts.append(format_special_data(data))
-	return "".join(parts) # the fuck is this syntax
+	# Ability specific
+	parts.append(spell_type.get_tooltip(ability))
 
-func format_special_data(data) -> String:
-	var spell = data.ability_type
-	if spell is SummonAbility:
-		var summon_data = spell.summoned_unit
-		var txt = str(
-			"Summons [color=yellow]%d[/color] [color=red]%s[/color] \n\n[color=grey]Duration: [/color][color=yellow]%0.1fs[/color]\n[color=green]Health[/color]: %d\n[color=red]DPS:[/color] %0.1f"
-		) % [
-		spell.units_summoned,
-		spell.summoned_unit.name,
-		spell.duration,
-		summon_data.stats.base_max_hp,
-		summon_data.stats.base_damage * summon_data.stats.base_attack_speed
-		]
-		return txt
-	return ""
-
-func format_effect(effect: EffectData) -> String:
-	match effect.effect_type:
-		"Damage":
-			return "Damage: " + format_value(effect.amount)
-		"Heal":
-			return "Heal: " + format_value(effect.amount)
-		"Heal_Mana":
-			return "Mana Heal: " + format_value(effect.amount)
-		"Buff":
-			return get_buff_type(effect)
-		"Stun":
-			return "Stun: " + format_value(effect.duration) + "s"
-	return ""
-
-func format_value(value: float) -> String:
-	if is_equal_approx(value, round(value)):
-		return str(int(value))
-	else:
-		return str(value)
-
-func get_buff_type(effect: EffectData) -> String:
-	match effect.stat:
-		"armor":
-			return "Armor: " + format_value(effect.amount)
-
-	return ""
-	
+	return "".join(parts)

@@ -4,12 +4,12 @@ func create_ability(ability_data: AbilityData, source_unit) -> BaseAbility:
 	var ability = BaseAbility.new(ability_data, source_unit)
 	return ability
 ## Applies [effect] originating from [caster] to [target_unit]
-func apply_effect(effect: EffectData, caster, target_position: Vector2, target_unit = null, ability = null):
+func apply_effect(effect: EffectData, caster, target_position: Vector2, target_unit = null):
 
 	match effect.effect_type:
 		"Damage":
 			if target_unit:
-				target_unit.unit_combat.take_damage(effect.amount)
+				target_unit.unit_combat.take_damage(effect.amount, caster, "magical")
 		"Heal":
 			if target_unit:
 				target_unit.unit_combat.heal_health(effect.amount)
@@ -26,10 +26,7 @@ func apply_effect(effect: EffectData, caster, target_position: Vector2, target_u
 			if target_unit:
 				target_unit.unit_combat.apply_slow(effect.amount, effect.duration)
 		"Summon":
-			if caster:
-				var data = ability.ability_data
-				var type = data.ability_type
-				caster.unit_combat.summon_unit(type.units_summoned, type.duration, type.summoned_unit, target_position, caster.owner_id)
+			pass
 		"Heal_Mana":
 			if target_unit:
 				target_unit.unit_combat.heal_mana(effect.amount)

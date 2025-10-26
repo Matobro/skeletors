@@ -6,6 +6,12 @@
 
 [sub_resource type="Resource" id="Resource_gph1f"]
 script = ExtResource("1_euc7q")
+scaling = {
+"intelligence": {
+"Damage": 0.008,
+"Heal_Mana": 0.01
+}
+}
 metadata/_custom_type_script = "uid://bde1ntmjybf8b"
 
 [sub_resource type="Resource" id="Resource_kru4v"]

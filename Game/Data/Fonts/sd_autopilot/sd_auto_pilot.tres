@@ -1,0 +1,6 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://wjggtavsem38"]
+
+[ext_resource type="FontFile" uid="uid://dtt4jwiovkifj" path="res://Game/Data/Fonts/sd_autopilot/sd_auto_pilot.ttf" id="1_a3tx8"]
+
+[resource]
+base_font = ExtResource("1_a3tx8")

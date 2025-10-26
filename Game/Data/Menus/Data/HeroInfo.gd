@@ -31,7 +31,7 @@ func load_hero_info(hero: UnitData):
 	main_stat_value.text = get_main_stat_text(stats.main_stat)
 	description_value.text = hero.description
 
-	var damage_range = StatModifiers.get_damage_range(stats.base_damage, stats.attack_dice_roll)
+	var damage_range = StatModifiers.get_damage_range(stats.base_attack_damage, stats.attack_dice_roll)
 
 	stats_left.text = str(
 	"Range: ", get_range_text(hero), "\n",
@@ -41,14 +41,14 @@ func load_hero_info(hero: UnitData):
 	"Armor: ", stats.base_armor)
 
 	stats_right.text = str(
-	"HP: ", stats.base_max_hp, "\n",
+	"HP: ", stats.base_max_health, "\n",
 	"H..Regen: ", stats.base_health_regen, "/s\n",
 	"MP: ", stats.base_max_mana, "\n",
 	"M..Regen: ", stats.base_mana_regen, "/s\n")
 
 func get_range_text(data) -> String:
 	if data.is_ranged:
-		return str(data.stats.base_range)
+		return str(data.stats.base_attack_range)
 	else:
 		return str("Melee")
 

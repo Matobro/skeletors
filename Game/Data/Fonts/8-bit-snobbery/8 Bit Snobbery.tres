@@ -1,0 +1,6 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://dp632itp3pqk"]
+
+[ext_resource type="FontFile" uid="uid://hryht1uvr8i8" path="res://Game/Data/Fonts/8-bit-snobbery/8 Bit Snobbery.ttf" id="1_fj1nr"]
+
+[resource]
+base_font = ExtResource("1_fj1nr")

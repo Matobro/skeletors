@@ -7,12 +7,15 @@ var line_color: Color = Color.BLACK
 var line_width: float = 2.0
 
 func init_hp_bar(hp, _max_hp):
+	hp_bar_set_new_values(hp, _max_hp)
+	queue_redraw()
+
+func hp_bar_set_new_values(_hp, _max_hp):
 	max_hp = _max_hp
 	hp_bar.max_value = max_hp
-	set_hp_bar(hp)
-	queue_redraw()
-	
-func set_hp_bar(hp):
+	set_hp_bar(_hp)
+
+func set_hp_bar(hp): # who the fuck named these
 	hp_bar.value = hp
 
 	if hp >= max_hp or hp == 0:

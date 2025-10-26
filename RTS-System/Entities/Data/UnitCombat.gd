@@ -18,7 +18,6 @@ var is_summon: bool = false
 var lifetime_max: float = 10.0
 var lifetime: float = 10.0
 
-var first_tick: bool = false
 func _init(parent_ref, data_ref, stats_ref):
 	parent = parent_ref
 	data = data_ref
@@ -57,12 +56,18 @@ func tick(delta):
 		else:
 			active_buffs[i] = buff
 
-func take_damage(damage: int = 0, attacker = null):
+func take_damage(damage: int = 0, attacker = null, damage_type: String = "physical"):
 	if dead or is_invunerable:
 		return
 
-	var reduction = 1.0 - StatModifiers.calculate_armor(stats.armor)
-	var final_damage = damage * reduction
+	# Starts at 1.0 (100%), 0.5 for example would mean you take 50% of the damage
+	var attack_effectiveness: float = 1.0
+	var final_damage: float = 0
+
+	if damage_type == "physical":
+		attack_effectiveness = 1.0 - StatModifiers.calculate_armor(stats.armor)
+
+	final_damage = damage * attack_effectiveness
 	apply_damage(final_damage, attacker)
 
 	if attacker != null and attacker.owner_id != parent.owner_id:
@@ -127,15 +132,6 @@ func on_social_aggro(attacker: Unit):
 			false,
 			parent.owner_id
 		)
-
-func summon_unit(amount: int, duration: float, unit: UnitData, pos: Vector2, caster_id: int):
-	for i in amount:
-		var summon = UnitSpawner.spawn_unit(unit, pos, caster_id)
-		
-		summon.data.is_summon = true
-		summon.data.lifetime = duration
-		for z in range(2): ## noo
-			await get_tree().physics_frame
 
 func add_buff(effect: EffectData, source: Unit):
 	if dead: return

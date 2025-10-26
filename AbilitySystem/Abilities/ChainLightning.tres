@@ -26,7 +26,6 @@ description = "Yee"
 mana_cost = 18
 cooldown = 12.0
 cast_range = 1000.0
-cast_time = 2.0
 effects = Array[ExtResource("1_wrjsl")]([SubResource("Resource_kl263")])
 ability_type = SubResource("Resource_x6sv5")
 possible_targets = 3

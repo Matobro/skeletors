@@ -43,6 +43,13 @@ func can_cast(context) -> bool:
 func is_valid_cast(context) -> bool:
 	return ability_data.ability_type and ability_data.ability_type.is_valid_cast(context)
 
+func get_stat_scaling(stat_name: String) -> float:
+	if !ability_data.stat_scaling.has(stat_name):
+		return 0.0
+	var base_scaling = ability_data.stat_scaling[stat_name]
+	var stat_value = parent.data.get_stat(stat_name)
+	return base_scaling * stat_value
+
 ## Called when player sends cast ability command
 ## Returns true or false, depending if the casting was successful
 func start_cast(context: CastContext):

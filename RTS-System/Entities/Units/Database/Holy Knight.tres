@@ -12,9 +12,9 @@
 
 [sub_resource type="Resource" id="Resource_fgt6y"]
 script = ExtResource("3_yqosc")
-base_max_hp = 150.0
-base_damage = 10
-base_range = 100
+base_max_health = 80.0
+base_attack_damage = 15
+base_attack_range = 100
 metadata/_custom_type_script = "uid://01ohikrtxe7k"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tat4i"]

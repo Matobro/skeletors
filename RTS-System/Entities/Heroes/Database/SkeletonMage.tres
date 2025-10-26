@@ -26,13 +26,13 @@ intelligence = 7
 strength_per_level = 1
 agility_per_level = 2
 intelligence_per_level = 4
-base_max_hp = 500.0
+base_max_health = 500.0
 base_max_mana = 20.0
 base_mana_regen = 0.2
 base_movement_speed = 350
 base_attack_speed = 0.5
-base_damage = 18
-base_range = 550
+base_attack_damage = 10
+base_attack_range = 500
 attack_dice_roll = 0.12
 metadata/_custom_type_script = "uid://dqe50qceubild"
 
