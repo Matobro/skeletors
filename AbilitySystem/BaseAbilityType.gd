@@ -49,6 +49,4 @@ func get_spell_scaling(ability: BaseAbility) -> Dictionary:
 				"source_value": stat_value
 			}
 
-	print("Caster stats:", caster_stats)
-	print("Scaling dict keys:", result.keys())
 	return result

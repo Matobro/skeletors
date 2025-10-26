@@ -86,6 +86,8 @@ func get_slot_text(slot) -> String:
 		parts.append("[img]%s[/img] %0.1fs\n" % [COOLDOWN_ICON_PATH, data.cooldown])
 	if data.cast_time > 0:
 		parts.append("Cast time: %0.1fs\n" % data.cast_time)
+	else:
+		parts.append("Instant Cast\n")
 
 	# Description
 	parts.append("\n%s\n\n" % data.description)

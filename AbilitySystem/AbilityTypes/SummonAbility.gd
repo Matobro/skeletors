@@ -95,7 +95,7 @@ func get_tooltip(ability: BaseAbility) -> String:
 	txt += "[/font_size]"
 
 	# Summon stats
-	txt += "\n\n[font_size=14]Summon Stats:\n"
+	txt += "\n[font_size=14]Summon Stats:\n"
 
 	# Hp + damage
 	if scaling_data.has("max_health"):
